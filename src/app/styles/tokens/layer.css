@@ -1,0 +1,8 @@
+:root {
+  --layer-base: 0;
+  --layer-raised: 10;
+  --layer-sticky: 100;
+  --layer-overlay: 900;
+  --layer-modal: 1000;
+  --layer-toast: 1100;
+}
