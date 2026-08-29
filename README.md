@@ -1,5 +1,36 @@
-# Vue 3 + TypeScript + Vite
+# Game Blind
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+blind - the game
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Разделы
+
+- [Разворачивание проекта](./docs/projectSetup/index.md)
+- [Настройка проекта](./docs/settingsProject/index.md)
+- [Работа в проекте(CONTRIBUTING)](CONTRIBUTING.md)
+- [Архетектура](./docs/architecture/index.md)
+- [Плагины](./docs/plugins/index.md)
+- [Генеторы](./docs/generators/index.md)
+
+## История изменений
+
+Подробности в файле [CHANGELOG.md](CHANGELOG.md)
+
+## Настройка конфигурации
+
+См. [Документацию по конфигурации Vite](https://vite.dev/config/).
+
+## Рекомендации
+
+### IDE
+
+[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (отключите Vetur).
+
+### Браузер
+
+- Браузеры на основе Chromium (Chrome, Edge, Brave и др.):
+- [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+- [Включить Custom Object Formatter в Chrome DevTools](http://bit.ly/object-formatters)
+
+### Поддержка типов для импортов `.vue` в TS
+
+TypeScript по умолчанию не может обрабатывать информацию о типах для импортов `.vue`, поэтому мы заменяем CLI `tsc` на `vue-tsc` для проверки типов. В редакторах необходимо установить [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar), чтобы языковой сервис TypeScript распознавал типы `.vue`.
