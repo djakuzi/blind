@@ -1,5 +1,5 @@
 import { moduleTo } from "./modules/to.modules"
 
-export const LibBoolean = {
+export const LibArray = {
     ...moduleTo
 }
