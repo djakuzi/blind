@@ -1,4 +1,5 @@
-import { LibBoolean } from '../../shared/lib/boolean'
+
+import { LibBoolean } from '@/shared/lib/boolean'
 import type { AppConfig, AppMode } from '../types'
 
 export function createAppConfig(mode: AppMode): AppConfig {

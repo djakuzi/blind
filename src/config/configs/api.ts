@@ -14,7 +14,7 @@ export function createApiConfig(mode: AppMode): ApiConfig {
     )
   }
 
-  const baseUrl =  `${apiTarget}`
+  const baseUrl = `${apiTarget}`
   const api = `${apiTarget}/api/`
 
   return {
