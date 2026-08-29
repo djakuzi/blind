@@ -2,4 +2,9 @@
 @import './core/reset.css';
 @import './core/base.css';
 
+@import './tokens/borders.css';
 @import './tokens/colors.css';
+@import './tokens/spacing.css';
+@import './tokens/radius.css';
+@import './tokens/layer.css';
+@import './tokens/typography.css';
