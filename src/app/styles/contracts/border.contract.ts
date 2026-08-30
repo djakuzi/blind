@@ -1,0 +1,68 @@
+export const BORDER_WIDTH_TOKENS = [
+  'none',
+  'thin',
+  'medium',
+  'thick',
+  'heavy',
+] as const;
+
+export const BORDER_STYLE_TOKENS = ['solid', 'dashed'] as const;
+
+export type tBorderWidthToken = (typeof BORDER_WIDTH_TOKENS)[number];
+export type tBorderStyleToken = (typeof BORDER_STYLE_TOKENS)[number];
+
+export type tBorderWidthValue =
+  | tBorderWidthToken
+  | `var(--${string})`
+  | `${number}px`
+  | `${number}rem`
+  | `calc(${string})`
+  | 'inherit'
+  | 'initial'
+  | 'unset'
+  | (string & {});
+
+export type tBorderStyleValue =
+  | tBorderStyleToken
+  | 'dotted'
+  | 'double'
+  | 'none'
+  | 'inherit'
+  | 'initial'
+  | 'unset'
+  | (string & {});
+
+const BORDER_WIDTH_TOKEN_SET = new Set<string>(BORDER_WIDTH_TOKENS);
+const BORDER_STYLE_TOKEN_SET = new Set<string>(BORDER_STYLE_TOKENS);
+
+export function isBorderWidthToken(value: string): value is tBorderWidthToken {
+  return BORDER_WIDTH_TOKEN_SET.has(value);
+}
+
+export function isBorderStyleToken(value: string): value is tBorderStyleToken {
+  return BORDER_STYLE_TOKEN_SET.has(value);
+}
+
+export function borderWidthTokenVar(token: tBorderWidthToken): `var(--app-border-width-${tBorderWidthToken})` {
+  return `var(--app-border-width-${token})`;
+}
+
+export function borderStyleTokenVar(token: tBorderStyleToken): `var(--app-border-style-${tBorderStyleToken})` {
+  return `var(--app-border-style-${token})`;
+}
+
+export function resolveBorderWidthValue(borderWidth?: tBorderWidthValue) {
+  if (!borderWidth) {
+    return undefined;
+  }
+
+  return isBorderWidthToken(borderWidth) ? borderWidthTokenVar(borderWidth) : borderWidth;
+}
+
+export function resolveBorderStyleValue(borderStyle?: tBorderStyleValue) {
+  if (!borderStyle) {
+    return undefined;
+  }
+
+  return isBorderStyleToken(borderStyle) ? borderStyleTokenVar(borderStyle) : borderStyle;
+}
