@@ -2,12 +2,12 @@
 
 В проекте используется такой набор технологий:
 
-1. `Vue 3.5.x` - UI-слой приложения.
-2. `TypeScript 6.0.x` - основной язык кода.
-3. `Vite 8.1.x` - сборка и локальный dev-сервер.
-4. `Pinia 4.0.x` - управление состоянием.
-5. `Vue Router 5.x` - маршрутизация.
-6. `@vitejs/plugin-vue 6.x` - интеграция Vue с Vite.
+1. `Vue <span hidden data-doc-marker="stack-vue:start"></span>`3.5.x`<span hidden data-doc-marker="stack-vue:end"></span>` - UI-слой приложения.
+2. `TypeScript <span hidden data-doc-marker="stack-typescript:start"></span>`6.0.x`<span hidden data-doc-marker="stack-typescript:end"></span>` - основной язык кода.
+3. `Vite <span hidden data-doc-marker="stack-vite:start"></span>`8.1.x`<span hidden data-doc-marker="stack-vite:end"></span>` - сборка и локальный dev-сервер.
+4. `Pinia <span hidden data-doc-marker="stack-pinia:start"></span>`4.0.x`<span hidden data-doc-marker="stack-pinia:end"></span>` - управление состоянием.
+5. `Vue Router <span hidden data-doc-marker="stack-vue-router:start"></span>`5.x`<span hidden data-doc-marker="stack-vue-router:end"></span>` - маршрутизация.
+6. `@vitejs/plugin-vue <span hidden data-doc-marker="stack-plugin-vue:start"></span>`6.x`<span hidden data-doc-marker="stack-plugin-vue:end"></span>` - интеграция Vue с Vite.
 
 ### Поддержка окружения
 

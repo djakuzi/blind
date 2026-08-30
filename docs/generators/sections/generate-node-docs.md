@@ -1,15 +1,25 @@
-# Генератор версии Node.js для документации
+# Генератор версий документации
 
 ## Описание
-[Генератор версии Node.js](../../../scripts/generators/generateNodeDocs.js) является скриптом `npm run app:generate:node-docs`, при запуске которого в документации обновляется актуальная минимальная версия `Node.js` из `package.json`.
+[Генератор версий документации](../../../scripts/generators/generateDocsVersions.js) является скриптом `npm run app:generate:docs-versions`, при запуске которого в документации обновляются актуальные версии из `package.json`.
 
 ## Источник данных
 
-Источником истины является поле `engines.node` в `package.json`.
+Источником истины являются поля `dependencies`, `devDependencies` и `engines` в `package.json`.
 
 Пример:
 
 ```json
+"dependencies": {
+  "vue": "^3.5.39",
+  "pinia": "^4.0.3",
+  "vue-router": "^5.3.0"
+},
+"devDependencies": {
+  "@vitejs/plugin-vue": "^6.0.7",
+  "typescript": "~6.0.2",
+  "vite": "^8.1.1"
+},
 "engines": {
   "node": ">=22.12.0"
 }
@@ -20,15 +30,21 @@
 Генератор:
 
 1. читает `package.json`;
-2. берет значение из `engines.node`;
-3. ищет в `docs/**/*.md` маркеры нужного типа;
-4. заменяет содержимое между маркерами на актуальную версию `Node.js`.
+2. берет версии `Node.js` и ключевых пакетов стека;
+3. ищет в документации фиксированные маркеры версий;
+4. заменяет содержимое между ними на актуальные значения.
 
 ## Маркеры
 
-По умолчанию используется маркер `node-version`.
+Для разных версий используются свои маркеры, например:
 
-Маркер ставится вокруг отображаемого значения версии `Node.js`, а в preview остается видна только сама версия.
+- `node-version`
+- `stack-vue`
+- `stack-typescript`
+- `stack-vite`
+- `stack-pinia`
+- `stack-vue-router`
+- `stack-plugin-vue`
 
 Иллюстрация:
 
@@ -36,8 +52,8 @@
 
 Короткий пример:
 
-1. В `package.json` указана версия `>=22.12.0`.
-2. Генератор находит маркер `node-version`.
+1. В `package.json` указана версия `^3.5.39`.
+2. Генератор преобразует ее в формат `3.5.x` для `stack.md`.
 3. В документации обновляется только значение версии.
 
 ### Исходник `.md`
@@ -45,27 +61,13 @@
 Пример строки в markdown-файле:
 
 ```md
-1. `Node.js` версии <span hidden data-doc-marker="node-version:start"></span>`>=22.12.0`<span hidden data-doc-marker="node-version:end"></span>.
+1. `Vue <span hidden data-doc-marker="stack-vue:start"></span>3.5.x<span hidden data-doc-marker="stack-vue:end"></span>` - UI-слой приложения.
 ```
 
 ## Запуск
 
-Стандартный запуск:
-
 ```bash
-npm run app:generate:node-docs
-```
-
-Запуск с переопределением маркера:
-
-```bash
-npm run app:generate:node-docs -- -m node-version
-```
-
-Также можно использовать длинный флаг:
-
-```bash
-npm run app:generate:node-docs -- --marker node-version
+npm run app:generate:docs-versions
 ```
 
 ## Обратная совместимость
@@ -73,11 +75,11 @@ npm run app:generate:node-docs -- --marker node-version
 Дополнительно в `package.json` сохранен алиас:
 
 ```bash
-npm run generate:node-docs
+npm run app:generate:node-docs
 ```
 
-Он проксирует вызов в основную команду `npm run app:generate:node-docs`.
+Он проксирует вызов в основную команду `npm run app:generate:docs-versions`.
 
 ## Когда использовать
 
-Запускайте генератор после изменения `engines.node` в `package.json` или после добавления новых markdown-файлов с таким же маркером.
+Запускайте генератор после изменения версий в `package.json` или после добавления новых документируемых маркеров версий.

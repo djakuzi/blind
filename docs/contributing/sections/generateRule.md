@@ -13,6 +13,7 @@
 - `app:generate:icons`
 - `app:generate:colors`
 - `app:generate:node-docs`
+- `app:generate:docs-versions`
 
 ## Размещение генераторов
 
