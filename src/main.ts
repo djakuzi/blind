@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-import router from './app/router/index'
+import router from './app/router'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -14,4 +14,4 @@ async function bootstrap() {
   app.mount('#app')
 }
 
-void bootstrap()
+bootstrap()
