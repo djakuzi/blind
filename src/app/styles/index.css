@@ -2,6 +2,7 @@
 @import './core/reset.css';
 @import './core/base.css';
 
+@import './tokens/scale.css';
 @import './tokens/borders.css';
 @import './tokens/colors.css';
 @import './tokens/spacing.css';

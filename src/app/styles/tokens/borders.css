@@ -1,10 +1,10 @@
 :root {
   /* Border width */
   --app-border-width-none: 0;
-  --app-border-width-thin: 0.0625rem;
-  --app-border-width-medium: 0.125rem;
-  --app-border-width-thick: 0.1875rem;
-  --app-border-width-heavy: 0.25rem;
+  --app-border-width-thin: calc(0.0625rem * var(--app-scale));
+  --app-border-width-medium: calc(0.125rem * var(--app-scale));
+  --app-border-width-thick: calc(0.1875rem * var(--app-scale));
+  --app-border-width-heavy: calc(0.25rem * var(--app-scale));
 
   /* Border style */
   --app-border-style-solid: solid;

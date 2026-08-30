@@ -9,15 +9,15 @@
   --app-font-weight-bold: 700;
 
   /* Font size */
-  --app-font-size-xs: 0.75rem;   /* 12px */
-  --app-font-size-sm: 0.875rem;  /* 14px */
-  --app-font-size-md: 1rem;      /* 16px */
-  --app-font-size-lg: 1.125rem;  /* 18px */
-  --app-font-size-xl: 1.25rem;   /* 20px */
-  --app-font-size-2xl: 1.5rem;   /* 24px */
-  --app-font-size-3xl: 2rem;     /* 32px */
-  --app-font-size-4xl: 2.5rem;   /* 40px */
-  --app-font-size-5xl: 3rem;     /* 48px */
+  --app-font-size-xs: calc(0.75rem * var(--app-scale));   /* 12px */
+  --app-font-size-sm: calc(0.875rem * var(--app-scale));  /* 14px */
+  --app-font-size-md: calc(1rem * var(--app-scale));      /* 16px */
+  --app-font-size-lg: calc(1.125rem * var(--app-scale));  /* 18px */
+  --app-font-size-xl: calc(1.25rem * var(--app-scale));   /* 20px */
+  --app-font-size-2xl: calc(1.5rem * var(--app-scale));   /* 24px */
+  --app-font-size-3xl: calc(2rem * var(--app-scale));     /* 32px */
+  --app-font-size-4xl: calc(2.5rem * var(--app-scale));   /* 40px */
+  --app-font-size-5xl: calc(3rem * var(--app-scale));     /* 48px */
 
   /* Line height */
   --app-line-height-tight: 1;
