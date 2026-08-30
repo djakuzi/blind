@@ -7,32 +7,32 @@ const MARKERS = [
   {
     filePath: path.resolve('docs/architecture/sections/stack.md'),
     marker: 'stack-vue',
-    value: (packageJson) => toMinorVersion(packageJson.dependencies.vue),
+    value: (packageJson) => `Vue ${toMinorVersion(packageJson.dependencies.vue)}`,
   },
   {
     filePath: path.resolve('docs/architecture/sections/stack.md'),
     marker: 'stack-typescript',
-    value: (packageJson) => toMinorVersion(packageJson.devDependencies.typescript),
+    value: (packageJson) => `TypeScript ${toMinorVersion(packageJson.devDependencies.typescript)}`,
   },
   {
     filePath: path.resolve('docs/architecture/sections/stack.md'),
     marker: 'stack-vite',
-    value: (packageJson) => toMinorVersion(packageJson.devDependencies.vite),
+    value: (packageJson) => `Vite ${toMinorVersion(packageJson.devDependencies.vite)}`,
   },
   {
     filePath: path.resolve('docs/architecture/sections/stack.md'),
     marker: 'stack-pinia',
-    value: (packageJson) => toMinorVersion(packageJson.dependencies.pinia),
+    value: (packageJson) => `Pinia ${toMinorVersion(packageJson.dependencies.pinia)}`,
   },
   {
     filePath: path.resolve('docs/architecture/sections/stack.md'),
     marker: 'stack-vue-router',
-    value: (packageJson) => toMajorVersion(packageJson.dependencies['vue-router']),
+    value: (packageJson) => `Vue Router ${toMajorVersion(packageJson.dependencies['vue-router'])}`,
   },
   {
     filePath: path.resolve('docs/architecture/sections/stack.md'),
     marker: 'stack-plugin-vue',
-    value: (packageJson) => toMajorVersion(packageJson.devDependencies['@vitejs/plugin-vue']),
+    value: (packageJson) => `@vitejs/plugin-vue ${toMajorVersion(packageJson.devDependencies['@vitejs/plugin-vue'])}`,
   },
   {
     filePath: path.resolve('docs/architecture/sections/stack.md'),
@@ -47,22 +47,22 @@ const MARKERS = [
   {
     filePath: path.resolve('docs/projectSetup/index.md'),
     marker: 'setup-vue',
-    value: (packageJson) => normalizeVersion(packageJson.dependencies.vue),
+    value: (packageJson) => `Vue ${normalizeVersion(packageJson.dependencies.vue)}`,
   },
   {
     filePath: path.resolve('docs/projectSetup/index.md'),
     marker: 'setup-vite',
-    value: (packageJson) => normalizeVersion(packageJson.devDependencies.vite),
+    value: (packageJson) => `Vite ${normalizeVersion(packageJson.devDependencies.vite)}`,
   },
   {
     filePath: path.resolve('docs/projectSetup/index.md'),
     marker: 'setup-pinia',
-    value: (packageJson) => normalizeVersion(packageJson.dependencies.pinia),
+    value: (packageJson) => `Pinia ${normalizeVersion(packageJson.dependencies.pinia)}`,
   },
   {
     filePath: path.resolve('docs/projectSetup/index.md'),
     marker: 'setup-vue-router',
-    value: (packageJson) => normalizeVersion(packageJson.dependencies['vue-router']),
+    value: (packageJson) => `vue-router ${normalizeVersion(packageJson.dependencies['vue-router'])}`,
   },
 ]
 

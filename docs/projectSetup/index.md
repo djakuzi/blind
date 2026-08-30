@@ -33,12 +33,11 @@
 
 Проект использует:
 
-- `Vue 3.5.29`;
-- `Vue <span hidden data-doc-marker="setup-vue:start"></span>`3.5.39`<span hidden data-doc-marker="setup-vue:end"></span>`;
+- <span hidden data-doc-marker="setup-vue:start"></span>`Vue 3.5.39`<span hidden data-doc-marker="setup-vue:end"></span>;
 - `Capacitor 8.2.0`;
-- `Vite <span hidden data-doc-marker="setup-vite:start"></span>`8.1.1`<span hidden data-doc-marker="setup-vite:end"></span>`;
-- `Pinia <span hidden data-doc-marker="setup-pinia:start"></span>`4.0.3`<span hidden data-doc-marker="setup-pinia:end"></span>`;
-- `vue-router <span hidden data-doc-marker="setup-vue-router:start"></span>`5.3.0`<span hidden data-doc-marker="setup-vue-router:end"></span>`.
+- <span hidden data-doc-marker="setup-vite:start"></span>`Vite 8.1.1`<span hidden data-doc-marker="setup-vite:end"></span>;
+- <span hidden data-doc-marker="setup-pinia:start"></span>`Pinia 4.0.3`<span hidden data-doc-marker="setup-pinia:end"></span>;
+- <span hidden data-doc-marker="setup-vue-router:start"></span>`vue-router 5.3.0`<span hidden data-doc-marker="setup-vue-router:end"></span>.
 
 ## Настройка окружения
 

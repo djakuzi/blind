@@ -53,7 +53,7 @@
 Короткий пример:
 
 1. В `package.json` указана версия `^3.5.39`.
-2. Генератор преобразует ее в формат `3.5.x` для `stack.md`.
+2. Генератор преобразует ее в формат `Vue 3.5.x` для `stack.md`.
 3. В документации обновляется только значение версии.
 
 ### Исходник `.md`
@@ -61,7 +61,7 @@
 Пример строки в markdown-файле:
 
 ```md
-1. `Vue <span hidden data-doc-marker="stack-vue:start"></span>3.5.x<span hidden data-doc-marker="stack-vue:end"></span>` - UI-слой приложения.
+1. <span hidden data-doc-marker="stack-vue:start"></span>`Vue 3.5.x`<span hidden data-doc-marker="stack-vue:end"></span> - UI-слой приложения.
 ```
 
 ## Запуск
