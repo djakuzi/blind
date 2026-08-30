@@ -25,6 +25,7 @@
 Ориентир по выбору документации перед задачей:
 
 - если задача связана с архитектурой приложения и структурой `src/app`, сначала открыть `docs/architecture/sections/app-flow.md`
+- если задача связана со структурой `src/core`, платформенными интеграциями, browser/native API или обертками над внешними SDK, сначала открыть `docs/architecture/sections/core-flow.md`
 - если задача связана со стеком, версиями зависимостей или требованиями окружения, сначала открыть `docs/projectSetup/index.md` в нем есть разделы
 - если задача связана с игровым контуром, сначала открыть `docs/architecture/sections/game-flow.md`
 - если задача связана с генераторами, сначала открыть `docs/contributing/sections/generateRule.md` и нужный раздел из `docs/generators`
