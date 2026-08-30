@@ -1,3 +1,3 @@
-import * as ToolSystem from './features'
+import * as ToolSystem from './features';
 
-export { ToolSystem }
+export { ToolSystem };
