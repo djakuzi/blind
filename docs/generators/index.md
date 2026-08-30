@@ -7,4 +7,4 @@
 
 - [Генератор цветов проекта](./sections/generate-color-contracts.md)
 - [Генератор иконок проекта](./sections/generate-icons.md)
-
+- [Генератор версии Node.js для документации](./sections/generate-node-docs.md)
