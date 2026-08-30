@@ -1,8 +1,10 @@
-# Плагины
+# Генераторы
 
-Раздел посвящен [генератором проекта](../../scripts/generators/). 
+Раздел посвящен [генератором проекта](../../scripts/generators/).
+Правила работ с генераторами находится [здесь](../contributing/generateRule.md)
 
 ## Разделы
 
 - [Генератор цветов проекта](./sections/generate-color-contracts.md)
 - [Генератор иконок проекта](./sections/generate-icons.md)
+

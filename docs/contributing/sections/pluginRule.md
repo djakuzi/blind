@@ -1,0 +1,1 @@
+# Правила Native plugin
