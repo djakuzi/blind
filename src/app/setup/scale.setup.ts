@@ -26,5 +26,5 @@ export async function setupScale(pinia: Pinia) {
   const { value } = await ToolSystem.getSystemScale();
   const appScaleValue = resolveAppScale(savedAppScaleMode, value);
 
-  DomProperty.setProperty(APP_SCALE_CSS_VARIABLE_NAME, String(resolveAppScale(savedAppScaleMode, value)));
+  DomProperty.setProperty(APP_SCALE_CSS_VARIABLE_NAME, String(appScaleValue));
 }
