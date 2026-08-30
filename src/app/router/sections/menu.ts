@@ -1,11 +1,12 @@
+import type { RouteRecordRaw } from 'vue-router'
 import { KEY_ROUTE } from '../constants/route.const'
 
-const LayotRoot = () => import('@/app/layouts/LayoutRoot.vue')
+const LayoutBase = () => import('@/app/layouts/LayoutBase.vue')
 const ViewMenu = () => import('@/app/view/menu/ViewMenu.vue')
 
 export const routeMenu: RouteRecordRaw = {
   path: 'menu',
-  component: LayotRoot,
+  component: LayoutBase,
   children: [
     {
       path: '',

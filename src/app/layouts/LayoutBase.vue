@@ -6,6 +6,9 @@ import { RouterView} from 'vue-router'
 <template>
     <main class="layout">
         <RouterView>
+            <div class="layout__screen">
+
+            </div>
         </RouterView>
     </main>
 </template>

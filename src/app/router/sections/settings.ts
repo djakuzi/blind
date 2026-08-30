@@ -1,16 +1,17 @@
+import type { RouteRecordRaw } from 'vue-router'
 import { KEY_ROUTE } from '../constants/route.const'
 
-const LayotRoot = () => import('@/app/layouts/LayoutRoot.vue')
-const ViewSettins = () => import('@/app/view/settings/ViewSettins.vue')
+const LayoutBase = () => import('@/app/layouts/LayoutBase.vue');
+const ViewSettings = () => import('@/app/view/settings/ViewSettings.vue');
 
-export const routeGame: RouteRecordRaw = {
-  path: 'menu',
-  component: LayotRoot,
+export const routeSettings: RouteRecordRaw = {
+  path: 'settings',
+  component: LayoutBase,
   children: [
     {
       path: '',
-      name: KEY_ROUTE.menu.index,
-      component: ViewSettins,
+      name: KEY_ROUTE.settings.index,
+      component: ViewSettings,
     },
   ],
 }
