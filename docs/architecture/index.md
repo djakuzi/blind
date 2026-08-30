@@ -5,4 +5,5 @@
 ## Разделы
 
 - [Стек приложения](./sections/stack.md)
-- [Архитектура и data-flow](./sections/data-flow.md)
+- [Архитектура интерфейса](./sections/app-flow.md)
+- [Архитектура игры](./sections/game-flow.md)
