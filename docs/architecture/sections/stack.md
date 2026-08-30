@@ -7,8 +7,7 @@
 3. `Vite 8.1.x` - сборка и локальный dev-сервер.
 4. `Pinia 4.0.x` - управление состоянием.
 5. `Vue Router 5.x` - маршрутизация.
-6. `vue-tsc 3.x` - типовая проверка Vue SFC и TypeScript перед production-сборкой.
-7. `@vitejs/plugin-vue 6.x` - интеграция Vue с Vite.
+6. `@vitejs/plugin-vue 6.x` - интеграция Vue с Vite.
 
 ### Поддержка окружения
 
