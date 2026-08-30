@@ -1,43 +1,16 @@
-import type { RouteRecordRaw } from 'vue-router'
-import { ROUTE_NAMES, TAB_KEYS } from '@/app/router/constants/navigation'
+import { KEY_ROUTE } from '../constants/route.const'
 
-const RootLayout = () => import('@/app/layouts/RootLayout.vue')
-const CatalogView = () => import('@/views/catalog/CatalogView.vue')
-const ProductDetailView = () => import('@/views/catalog/ProductDetailView.vue')
+const LayotRoot = () => import('@/app/layouts/LayoutRoot.vue')
+const ViewMenu = () => import('@/app/view/menu/ViewMenu.vue')
 
-export const catalogRoute: RouteRecordRaw = {
-  path: 'catalog',
-  component: RootLayout,
-  meta: {
-    tab: TAB_KEYS.catalog,
-  },
+export const routeMenu: RouteRecordRaw = {
+  path: 'menu',
+  component: LayotRoot,
   children: [
     {
       path: '',
-      name: ROUTE_NAMES.catalog.index,
-      component: CatalogView,
-      meta: {
-        tab: TAB_KEYS.catalog,
-        preserveSceneOnQueryChange: true,
-        header: {
-          visible: true,
-          showBack: true,
-          actions: ['search', 'filter', 'sort'],
-        },
-      },
-    },
-    {
-      path: 'products/:productId',
-      name: ROUTE_NAMES.catalog.productDetail,
-      component: ProductDetailView,
-      meta: {
-        tab: TAB_KEYS.catalog,
-        header: {
-          visible: true,
-          showBack: true,
-          actions: ['fitting', 'favorite'],
-        },
-      },
+      name: KEY_ROUTE.menu.index,
+      component: ViewMenu,
     },
   ],
 }
