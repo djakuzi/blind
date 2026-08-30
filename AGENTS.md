@@ -19,7 +19,6 @@
 - `docs/contributing/sections/generateRule.md`
 - `docs/contributing/sections/pluginRule.md`
 - `docs/architecture/index.md`
-- `docs/architecture/sections/app-flow.md`
 
 Если задача затрагивает конкретную область проекта, агент должен дополнительно открыть и изучить связанные разделы из `docs`, относящиеся к этой области.
 
@@ -28,20 +27,6 @@
 1. Не переписывать кодовую базу целиком под документ без явного запроса.
 2. Сообщить о расхождении.
 3. Предлагать точечные и безопасные изменения.
-
-## Технологический стек
-
-Проект использует:
-
-- `Vue 3`
-- `TypeScript`
-- `Vite`
-
-Команды проекта:
-
-- `npm run dev` - локальная разработка
-- `npm run build` - production build и проверка TypeScript
-- `npm run preview` - локальный preview build
 
 ## Базовые правила работы
 
