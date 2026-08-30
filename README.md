@@ -9,7 +9,7 @@ blind - the game
 - [Работа в проекте(CONTRIBUTING)](CONTRIBUTING.md)
 - [Архетектура](./docs/architecture/index.md)
 - [Плагины](./docs/plugins/index.md)
-- [Генеторы](./docs/generators/index.md)
+- [Генераторы](./docs/generators/index.md)
 
 ## История изменений
 
