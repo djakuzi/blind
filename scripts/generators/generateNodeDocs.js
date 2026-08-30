@@ -39,7 +39,7 @@ async function collectMarkdownFiles(directoryPath) {
 
 function createMarkerRegExp(marker) {
   return new RegExp(
-    `<!--\\s*${marker}:start\\s*-->([\\s\\S]*?)<!--\\s*${marker}:end\\s*-->`,
+    `<span\\s+hidden\\s+data-doc-marker="${marker}:start"><\\/span>([\\s\\S]*?)<span\\s+hidden\\s+data-doc-marker="${marker}:end"><\\/span>`,
     'g',
   )
 }
@@ -73,7 +73,10 @@ async function syncNodeVersionDocs() {
       continue
     }
 
-    const nextSource = source.replace(markerRegExp, `<!-- ${marker}:start -->${nodeVersion}<!-- ${marker}:end -->`)
+    const nextSource = source.replace(
+      markerRegExp,
+      `<span hidden data-doc-marker="${marker}:start"></span>\`${nodeVersion}\`<span hidden data-doc-marker="${marker}:end"></span>`,
+    )
 
     if (nextSource !== source) {
       await writeFile(filePath, nextSource, 'utf8')

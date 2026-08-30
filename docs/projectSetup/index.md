@@ -6,7 +6,7 @@
 
 ### Базовое окружение
 
-1. `Node.js` `<!-- node-version:start -->>=22.12.0<!-- node-version:end -->`.
+1. `Node.js` <span hidden data-doc-marker="node-version:start"></span>`>=22.12.0`<span hidden data-doc-marker="node-version:end"></span>.
 2. `npm`, который идет вместе с поддерживаемым `Node.js` и умеет ставить зависимости проекта.
 3. `Git` любой актуальной стабильной версии.
 

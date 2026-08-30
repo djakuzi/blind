@@ -13,7 +13,7 @@
 
 ### Поддержка окружения
 
-1. `Node.js` версии `<!-- node-version:start -->>=22.12.0<!-- node-version:end -->`.
+1. `Node.js` версии <span hidden data-doc-marker="node-version:start"></span>`>=22.12.0`<span hidden data-doc-marker="node-version:end"></span>.
 2. `npm` из поддерживаемой версии `Node.js`.
 3. `Git` любой актуальной стабильной версии.
 4. Для web-режима используется локальный dev-сервер `Vite`.
