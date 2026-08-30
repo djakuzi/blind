@@ -51,6 +51,11 @@ const MARKERS = [
   },
   {
     filePath: path.resolve('docs/projectSetup/index.md'),
+    marker: 'setup-capacitor',
+    value: (packageJson) => `Capacitor ${normalizeVersion(packageJson.dependencies['@capacitor/core'])}`,
+  },
+  {
+    filePath: path.resolve('docs/projectSetup/index.md'),
     marker: 'setup-vite',
     value: (packageJson) => `Vite ${normalizeVersion(packageJson.devDependencies.vite)}`,
   },

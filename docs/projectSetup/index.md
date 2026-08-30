@@ -34,7 +34,7 @@
 Проект использует:
 
 - <span hidden data-doc-marker="setup-vue:start"></span>`Vue 3.5.39`<span hidden data-doc-marker="setup-vue:end"></span>;
-- `Capacitor 8.2.0`;
+- <span hidden data-doc-marker="setup-capacitor:start"></span>`Capacitor 8.5.0`<span hidden data-doc-marker="setup-capacitor:end"></span>;
 - <span hidden data-doc-marker="setup-vite:start"></span>`Vite 8.1.1`<span hidden data-doc-marker="setup-vite:end"></span>;
 - <span hidden data-doc-marker="setup-pinia:start"></span>`Pinia 4.0.3`<span hidden data-doc-marker="setup-pinia:end"></span>;
 - <span hidden data-doc-marker="setup-vue-router:start"></span>`vue-router 5.3.0`<span hidden data-doc-marker="setup-vue-router:end"></span>.

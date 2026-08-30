@@ -40,6 +40,7 @@
 
 - `node-version`
 - `stack-vue`
+- `setup-capacitor`
 - `stack-typescript`
 - `stack-vite`
 - `stack-pinia`
