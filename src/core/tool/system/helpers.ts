@@ -1,6 +1,8 @@
-const MIN_SCALE_VALUE = 0.5
-const MAX_SCALE_VALUE = 2
-const DEFAULT_SCALE_VALUE = 1
+import {
+  DEFAULT_SCALE_VALUE,
+  MAX_SCALE_VALUE,
+  MIN_SCALE_VALUE,
+} from './const'
 
 export function normalizeScaleValue(value: number): number {
   if (!Number.isFinite(value)) {

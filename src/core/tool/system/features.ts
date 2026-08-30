@@ -1,8 +1,8 @@
 import { Capacitor } from '@capacitor/core'
 import { TextZoom } from '@capacitor/text-zoom'
 
+import { DEFAULT_SCALE_VALUE } from './const'
 import * as helpers from './helpers'
-const DEFAULT_SCALE_VALUE = 1
 
 export function getPlatform() {
   return Capacitor.getPlatform()
