@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Inter';
-  src: url('../../assets/fonts/interBold/Inter-Regular.woff2') format('woff2');
+  src: url('../../../assets/fonts/interBold/Inter-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('../../assets/fonts/interBold/Inter-Medium.woff2') format('woff2');
+  src: url('../../../assets/fonts/interBold/Inter-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('../../assets/fonts/interBold/Inter-SemiBold.woff2') format('woff2');
+  src: url('../../../assets/fonts/interBold/Inter-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -24,7 +24,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('../../assets/fonts/interBold/Inter-Bold.woff2') format('woff2');
+  src: url('../../../assets/fonts/interBold/Inter-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;

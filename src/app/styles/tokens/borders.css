@@ -1,0 +1,12 @@
+:root {
+  /* Border width */
+  --app-border-width-none: 0;
+  --app-border-width-thin: 0.0625rem;
+  --app-border-width-medium: 0.125rem;
+  --app-border-width-thick: 0.1875rem;
+  --app-border-width-heavy: 0.25rem;
+
+  /* Border style */
+  --app-border-style-solid: solid;
+  --app-border-style-dashed: dashed;
+}

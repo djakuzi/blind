@@ -1,0 +1,9 @@
+:root {
+  --app-padding-0: 0;
+  --app-padding-1: 0.25rem;  /* 4px */
+  --app-padding-2: 0.5rem;   /* 8px */
+  --app-padding-3: 0.75rem;  /* 12px */
+  --app-padding-4: 1rem;     /* 16px */
+  --app-padding-5: 1.5rem;   /* 24px */
+  --app-padding-6: 2rem;     /* 32px */
+}

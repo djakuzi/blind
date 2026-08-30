@@ -1,29 +1,36 @@
 :root {
-  --app-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --app-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* Font family */
+  --app-font-family-base: 'Inter', sans-serif;
 
+  /* Font weight */
   --app-font-weight-regular: 400;
   --app-font-weight-medium: 500;
   --app-font-weight-semibold: 600;
   --app-font-weight-bold: 700;
 
-  --app-font-size-10: 10px;
-  --app-font-size-12: 12px;
-  --app-font-size-14: 14px;
-  --app-font-size-16: 16px;
-  --app-font-size-18: 18px;
-  --app-font-size-20: 20px;
-  --app-font-size-22: 22px;
-  --app-font-size-24: 24px;
-  --app-font-size-34: 34px;
+  /* Font size */
+  --app-font-size-xs: 0.75rem;   /* 12px */
+  --app-font-size-sm: 0.875rem;  /* 14px */
+  --app-font-size-md: 1rem;      /* 16px */
+  --app-font-size-lg: 1.125rem;  /* 18px */
+  --app-font-size-xl: 1.25rem;   /* 20px */
+  --app-font-size-2xl: 1.5rem;   /* 24px */
+  --app-font-size-3xl: 2rem;     /* 32px */
+  --app-font-size-4xl: 2.5rem;   /* 40px */
+  --app-font-size-5xl: 3rem;     /* 48px */
 
-  --app-line-height-10: 12px;
-  --app-line-height-12: 16px;
-  --app-line-height-14: 20px;
-  --app-line-height-16: 24px;
-  --app-line-height-18: 24px;
-  --app-line-height-20: 28px;
-  --app-line-height-22: 28px;
-  --app-line-height-24: 32px;
-  --app-line-height-34: 34px;
+  /* Line height */
+  --app-line-height-tight: 1;
+  --app-line-height-display: 1.1;
+  --app-line-height-heading: 1.2;
+  --app-line-height-control: 1.25;
+  --app-line-height-body: 1.4;
+  --app-line-height-relaxed: 1.6;
+
+  /* Letter spacing */
+  --app-letter-spacing-tight: -0.02em;
+  --app-letter-spacing-slight-tight: -0.01em;
+  --app-letter-spacing-normal: 0;
+  --app-letter-spacing-wide: 0.02em;
+  --app-letter-spacing-wider: 0.06em;
 }

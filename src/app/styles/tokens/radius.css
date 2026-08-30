@@ -1,2 +1,12 @@
 :root {
+  --app-radius-none: 0;
+  
+  --app-radius-xs: 0.25rem;   /* 4px */
+  --app-radius-sm: 0.375rem;  /* 6px */
+  --app-radius-md: 0.5rem;    /* 8px */
+  --app-radius-lg: 0.75rem;   /* 12px */
+  --app-radius-xl: 1rem;      /* 16px */
+  --app-radius-2xl: 1.5rem;   /* 24px */
+
+  --app-radius-full: 9999px;
 }
