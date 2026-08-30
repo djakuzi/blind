@@ -9,7 +9,6 @@
 5. `Vue Router 5.x` - маршрутизация.
 6. `vue-tsc 3.x` - типовая проверка Vue SFC и TypeScript перед production-сборкой.
 7. `@vitejs/plugin-vue 6.x` - интеграция Vue с Vite.
-8. `Capacitor 8.2.0` - нативная обвязка для Android и iOS по проектной документации.
 
 ### Поддержка окружения
 

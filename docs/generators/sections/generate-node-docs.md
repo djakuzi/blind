@@ -40,6 +40,14 @@
 2. Генератор находит маркер `node-version`.
 3. В документации обновляется только значение версии.
 
+### Исходник `.md`
+
+Пример строки в markdown-файле:
+
+```md
+1. `Node.js` версии <span hidden data-doc-marker="node-version:start"></span>`>=22.12.0`<span hidden data-doc-marker="node-version:end"></span>.
+```
+
 ## Запуск
 
 Стандартный запуск:
