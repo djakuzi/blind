@@ -4,8 +4,8 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 </script>
 
 <template>
-    <ViewLayout>
-    </ViewLayout>
+  <ViewLayout>
+  </ViewLayout>
 </template>
 
 <style scoped>

@@ -1,5 +1,5 @@
-import type { RouteRecordRaw } from 'vue-router'
-import { KEY_ROUTE } from '../constants/route.const'
+import type { RouteRecordRaw } from 'vue-router';
+import { KEY_ROUTE } from '../constants/route.const';
 
 const LayoutBase = () => import('@/app/layouts/LayoutBase.vue');
 const ViewGame = () => import('@/app/view/game/ViewGame.vue');
@@ -14,4 +14,4 @@ export const routeGame: RouteRecordRaw = {
       component: ViewGame,
     },
   ],
-}
+};

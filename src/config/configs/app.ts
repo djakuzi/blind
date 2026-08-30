@@ -1,6 +1,6 @@
 
-import { LibBoolean } from '@/core/lib/boolean'
-import type { AppConfig, AppMode } from '../types'
+import { LibBoolean } from '@/core/lib/boolean';
+import type { AppConfig, AppMode } from '../types';
 
 export function createAppConfig(mode: AppMode): AppConfig {
   return {
@@ -12,6 +12,6 @@ export function createAppConfig(mode: AppMode): AppConfig {
     },
     deepLink: {
       scheme: (import.meta.env.APP_DEEPLINK_SCHEME ?? 'blind').trim() || 'blind',
-    }
-  }
+    },
+  };
 }

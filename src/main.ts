@@ -1,17 +1,17 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import App from './App.vue'
-import router from './app/router'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import App from './App.vue';
+import router from './app/router';
 
-const app = createApp(App)
-const pinia = createPinia()
+const app = createApp(App);
+const pinia = createPinia();
 
-app.use(pinia)
+app.use(pinia);
 
 async function bootstrap() {
-  app.use(router)
-  await router.isReady()
-  app.mount('#app')
+  app.use(router);
+  await router.isReady();
+  app.mount('#app');
 }
 
-bootstrap()
+bootstrap();

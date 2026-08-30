@@ -1,8 +1,8 @@
-import type { RouteRecordRaw } from 'vue-router'
-import { KEY_ROUTE } from '../constants/route.const'
+import type { RouteRecordRaw } from 'vue-router';
+import { KEY_ROUTE } from '../constants/route.const';
 
-const LayoutBase = () => import('@/app/layouts/LayoutBase.vue')
-const ViewMenu = () => import('@/app/view/menu/ViewMenu.vue')
+const LayoutBase = () => import('@/app/layouts/LayoutBase.vue');
+const ViewMenu = () => import('@/app/view/menu/ViewMenu.vue');
 
 export const routeMenu: RouteRecordRaw = {
   path: 'menu',
@@ -14,4 +14,4 @@ export const routeMenu: RouteRecordRaw = {
       component: ViewMenu,
     },
   ],
-}
+};
