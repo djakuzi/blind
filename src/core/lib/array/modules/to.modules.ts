@@ -1,4 +1,4 @@
-function toValue<T>(value: unknown): T[] {
+function toValue<T>(_value: unknown): T[] {
 
     return [] as T[];
 }

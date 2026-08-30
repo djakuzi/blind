@@ -10,6 +10,7 @@
     "app:generate:docs-versions": "node scripts/generators/generateDocsVersions.js",
     "app:generate:node-docs": "npm run app:generate:docs-versions --",
     "dev": "vite",
+    "lint": "eslint .",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
@@ -19,10 +20,15 @@
     "vue-router": "^5.3.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^24.13.2",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.9.1",
+    "eslint-plugin-vue": "^10.10.0",
+    "globals": "^17.11.0",
     "typescript": "~6.0.2",
+    "typescript-eslint": "^8.68.0",
     "vite": "^8.1.1",
     "vue-tsc": "^3.3.5"
   }
