@@ -19,7 +19,7 @@ function resolveAppScale(appScaleMode: tAppScaleMode, systemScaleValue: number) 
   return APP_SCALE_MODE[appScaleMode as tAppScalePresetMode];
 }
 
-export async function setupScale(pinia: Pinia) {
+export async function setupdffdgScale(pinia: Pinia) {
   const settingsStore = useSettingsStore(pinia);
   const savedAppScaleMode = await settingsStore.loadAppScaleMode();
 
