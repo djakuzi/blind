@@ -71,16 +71,6 @@
 npm run app:generate:docs-versions
 ```
 
-## Обратная совместимость
-
-Дополнительно в `package.json` сохранен алиас:
-
-```bash
-npm run app:generate:node-docs
-```
-
-Он проксирует вызов в основную команду `npm run app:generate:docs-versions`.
-
 ## Когда использовать
 
 Запускайте генератор после изменения версий в `package.json` или после добавления новых документируемых маркеров версий.

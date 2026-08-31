@@ -9,7 +9,7 @@
   "scripts": {
     "app:generate:style-contracts": "node scripts/generators/generateStyleContracts.js",
     "app:generate:docs-versions": "node scripts/generators/generateDocsVersions.js",
-    "app:generate:node-docs": "npm run app:generate:docs-versions --",
+    "app:generate:icons-assets":"node scripts/generators/generateIconsProject.js",
     "dev": "vite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
