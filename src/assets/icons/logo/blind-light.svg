@@ -13,7 +13,7 @@
        C 451 275 445 264 445 249
        V 239
        C 445 225 455 214 470 214 Z"
-    fill="#F7F7F8"/>
+    fill="#0B0B0C"/>
 
   <!-- Rounded center wedge -->
   <path
@@ -24,7 +24,7 @@
        L 566 649
        C 579 637 579 614 566 602
        Z"
-    fill="#F7F7F8"/>
+    fill="#0B0B0C"/>
 
   <!-- Bottom curved segment -->
   <path
@@ -37,7 +37,7 @@
        C 451 977 445 988 445 1003
        V 1013
        C 445 1027 455 1038 470 1038 Z"
-    fill="#F7F7F8"/>
+    fill="#0B0B0C"/>
 
   <!-- Brand projectile / focus point -->
   <circle cx="810" cy="626" r="62.5" fill="#D92D32"/>
