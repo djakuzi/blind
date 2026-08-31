@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1248" height="1320" viewBox="0 0 1248 1320" fill="none">
+  <title>Blind rounded logo with wordmark</title>
+  <desc>Approved rounded Blind hidden-B mark with BLIND wordmark below.</desc>
+
+  <g transform="translate(0 -80)">
+    
+<g id="blind-mark">
+  <path d="M 470 214
+           H 690
+           C 772 214 833 275 833 356
+           C 833 431 782 492 713 494
+           C 692 495 675 488 660 474
+           L 463 286
+           C 451 275 445 264 445 249
+           V 239
+           C 445 225 455 214 470 214 Z"
+        fill="#0A090A"/>
+
+  <path d="M 392 435
+           C 382 426 378 432 378 447
+           V 800
+           C 378 816 385 822 397 812
+           L 566 649
+           C 579 637 579 614 566 602
+           Z"
+        fill="#0A090A"/>
+
+  <path d="M 470 1038
+           H 690
+           C 772 1038 833 977 833 896
+           C 833 821 782 760 713 758
+           C 692 757 675 764 660 778
+           L 463 966
+           C 451 977 445 988 445 1003
+           V 1013
+           C 445 1027 455 1038 470 1038 Z"
+        fill="#0A090A"/>
+
+  <circle cx="810" cy="626" r="62.5" fill="#DA292E"/>
+</g>
+
+  </g>
+
+  <g id="blind-wordmark">
+    <path d="M0 0 H50 C78 0 94 14 94 36 C94 50 87 60 75 66 C89 72 98 84 98 100 C98 124 80 140 50 140 H0 Z M20 20 V56 H48 C64 56 72 50 72 38 C72 26 64 20 48 20 Z M20 78 V120 H50 C67 120 76 113 76 99 C76 85 67 78 50 78 Z" fill="#0A090A" fill-rule="evenodd" transform="translate(368.571 1065) scale(0.857143)"/><path d="M0 0 H22 V118 H88 V140 H0 Z" fill="#0A090A" fill-rule="evenodd" transform="translate(492.000 1065) scale(0.857143)"/><path d="M0 0 H22 V140 H0 Z" fill="#0A090A" fill-rule="evenodd" transform="translate(606.857 1065) scale(0.857143)"/><path d="M0 140 V0 H24 L78 96 V0 H100 V140 H76 L22 44 V140 Z" fill="#0A090A" fill-rule="evenodd" transform="translate(665.143 1065) scale(0.857143)"/><path d="M0 0 H46 C82 0 104 25 104 70 C104 115 82 140 46 140 H0 Z M22 22 V118 H44 C68 118 81 103 81 70 C81 37 68 22 44 22 Z" fill="#0A090A" fill-rule="evenodd" transform="translate(790.286 1065) scale(0.857143)"/>
+  </g>
+</svg>

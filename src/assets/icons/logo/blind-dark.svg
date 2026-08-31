@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1248" height="1248" viewBox="0 0 1248 1248" fill="none">
+  <title>Blind hidden B rounded mark</title>
+  <desc>Rounded refinement of the Blind hidden B logo.</desc>
+
+  <!-- Top curved segment -->
+  <path
+    d="M 470 214
+       H 690
+       C 772 214 833 275 833 356
+       C 833 431 782 492 713 494
+       C 692 495 675 488 660 474
+       L 463 286
+       C 451 275 445 264 445 249
+       V 239
+       C 445 225 455 214 470 214 Z"
+    fill="#0A090A"/>
+
+  <!-- Rounded center wedge -->
+  <path
+    d="M 392 435
+       C 382 426 378 432 378 447
+       V 800
+       C 378 816 385 822 397 812
+       L 566 649
+       C 579 637 579 614 566 602
+       Z"
+    fill="#0A090A"/>
+
+  <!-- Bottom curved segment -->
+  <path
+    d="M 470 1038
+       H 690
+       C 772 1038 833 977 833 896
+       C 833 821 782 760 713 758
+       C 692 757 675 764 660 778
+       L 463 966
+       C 451 977 445 988 445 1003
+       V 1013
+       C 445 1027 455 1038 470 1038 Z"
+    fill="#0A090A"/>
+
+  <!-- Brand projectile / focus point -->
+  <circle cx="810" cy="626" r="62.5" fill="#DA292E"/>
+</svg>
