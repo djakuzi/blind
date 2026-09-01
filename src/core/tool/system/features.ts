@@ -4,6 +4,8 @@ import { TextZoom } from '@capacitor/text-zoom';
 import { DEFAULT_SCALE_VALUE } from './const';
 import * as helpers from './helpers';
 
+export type tSystemThemeMode = 'light' | 'dark';
+
 export function getPlatform() {
   return Capacitor.getPlatform();
 }
@@ -48,4 +50,14 @@ export async function getPreferredScale() {
 
 export async function getSystemScale() {
   return getPreferredScale();
+}
+
+export function getPreferredThemeMode(): tSystemThemeMode {
+  if (typeof globalThis.matchMedia !== 'function') {
+    return 'light';
+  }
+
+  return globalThis.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
 }
