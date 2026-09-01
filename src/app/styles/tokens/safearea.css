@@ -3,4 +3,7 @@
     --app-safe-area-right: max(env(safe-area-inset-right, 0px), calc(0.625rem * var(--app-scale)));
     --app-safe-area-bottom: max(env(safe-area-inset-bottom, 0px), calc(0.625rem * var(--app-scale)));
     --app-safe-area-left: max(env(safe-area-inset-left, 0px), calc(0.625rem * var(--app-scale)));
+
+    --app-safe-area-horizontal: max(var(--app-safe-area-left), var(--app-safe-area-right));
+    --app-safe-area-vertical: max(var(--app-safe-area-top), var(--app-safe-area-bottom));
 }

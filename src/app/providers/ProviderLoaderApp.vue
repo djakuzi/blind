@@ -65,11 +65,7 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 }
 
 .provider-loader-app__content {
-  gap: clamp(
-    4rem,
-    8dvh,
-    6rem
-  );
+  gap: clamp(var(--app-space-8), 8dvh, var(--app-space-16));
   transform: translateY(-2dvh);
 }
 
@@ -81,11 +77,5 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
   position: absolute;
   right: max(var(--app-space-24), env(safe-area-inset-right));
   bottom: max(var(--app-space-24), env(safe-area-inset-bottom));
-}
-
-@media (max-width: 640px) {
-  .provider-loader-app__content {
-    gap: var(--app-space-24);
-  }
 }
 </style>
