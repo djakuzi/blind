@@ -60,7 +60,7 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
   position: relative;
   overflow: hidden;
   padding: var(--app-space-24);
-  background: var(--app-color-blind-white);
+  background: var(--app-color-background);
 }
 
 .provider-loader-app__content {
