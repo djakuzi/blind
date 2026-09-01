@@ -46,16 +46,16 @@ const LOGO_SIZE_MAP: Record<tBaseSizeVariant, { width: string, height: string }>
 
 const LOGO_ASSET_MAP: Record<tAppLogoVariant, Record<ToolSystem.tSystemThemeMode, tLogoAssetKey>> = {
   blind: {
-    light: 'blindDark',
-    dark: 'blindLight',
+    dark: 'blindDark',
+    light: 'blindLight',
   },
   blindTextBottom: {
-    light: 'blindDarkTextBottom',
-    dark: 'blindLightTextBottom',
+    dark: 'blindDarkTextBottom',
+    light: 'blindLightTextBottom',
   },
   blindTextRight: {
-    light: 'blindDarkTextRight',
-    dark: 'blindLightTextRight',
+    dark: 'blindDarkTextRight',
+    light: 'blindLightTextRight',
   },
 };
 
