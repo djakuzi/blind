@@ -294,6 +294,7 @@ async function generateStyleContracts() {
   const spacingSource = await readTokenFile('spacing.css');
   const paddingSource = await readTokenFile('padding.css');
   const bordersSource = await readTokenFile('borders.css');
+  const safeAreaSource = await readTokenFile('safearea.css');
 
   await writeContract('color.contract.ts', renderColorContract(extractStringTokens(colorsSource, 'app-color-')));
   await writeContract('fontSize.contract.ts', renderSimpleStringContract({
@@ -417,6 +418,29 @@ async function generateStyleContracts() {
     resolverName: 'resolvePaddingValue',
     tokenVarName: 'paddingTokenVar',
     checkerName: 'isPaddingToken',
+  }));
+  await writeContract('safeArea.contract.ts', renderSimpleStringContract({
+    sourceFile: 'src/app/styles/tokens/safearea.css',
+    constName: 'SAFE_AREA_TOKENS',
+    typeName: 'tSafeAreaToken',
+    valueTypeName: 'tSafeAreaValue',
+    tokens: extractStringTokens(safeAreaSource, 'app-safe-area-'),
+    varPrefix: 'app-safe-area',
+    extras: [
+      '`var(--${string})`',
+      '`${number}px`',
+      '`${number}rem`',
+      '`${number}%`',
+      '`calc(${string})`',
+      "'auto'",
+      "'inherit'",
+      "'initial'",
+      "'unset'",
+      '(string & {})',
+    ],
+    resolverName: 'resolveSafeAreaValue',
+    tokenVarName: 'safeAreaTokenVar',
+    checkerName: 'isSafeAreaToken',
   }));
   await writeContract('border.contract.ts', renderBorderContract(
     extractStringTokens(bordersSource, 'app-border-width-'),

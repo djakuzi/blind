@@ -3,17 +3,20 @@ import { computed } from 'vue';
 
 import type { tLayerValue } from '@/app/styles/contracts/layer.contract';
 import { resolveLayerValue } from '@/app/styles/contracts/layer.contract';
+import type { tSafeAreaToken } from '@/app/styles/contracts/safeArea.contract';
+import { isSafeAreaToken, safeAreaTokenVar } from '@/app/styles/contracts/safeArea.contract';
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 
 type tAppPositionType = 'fixed' | 'absolute' | 'relative' | 'sticky';
 type tAppPositionCenter = 'x' | 'y' | 'xy';
+type tAppPositionOffsetValue = tSpaceValue | tSafeAreaToken;
 
 interface iAppPositionOffsets {
-  top?: tSpaceValue
-  right?: tSpaceValue
-  bottom?: tSpaceValue
-  left?: tSpaceValue
+  top?: tAppPositionOffsetValue
+  right?: tAppPositionOffsetValue
+  bottom?: tAppPositionOffsetValue
+  left?: tAppPositionOffsetValue
 }
 
 interface Props {
@@ -37,13 +40,19 @@ const positionClass = computed(() => [
   props.center ? `app-position--center-${props.center}` : undefined,
 ]);
 
+function resolvePositionOffsetValue(value?: tAppPositionOffsetValue) {
+  return typeof value === 'string' && isSafeAreaToken(value)
+    ? safeAreaTokenVar(value)
+    : resolveSpaceValue(value);
+}
+
 const positionStyle = computed(() => ({
   '--cp-position-type': props.type,
   '--cp-position-layer': resolveLayerValue(props.layer),
-  '--cp-position-top': resolveSpaceValue(props.position?.top) ?? 'auto',
-  '--cp-position-right': resolveSpaceValue(props.position?.right) ?? 'auto',
-  '--cp-position-bottom': resolveSpaceValue(props.position?.bottom) ?? 'auto',
-  '--cp-position-left': resolveSpaceValue(props.position?.left) ?? 'auto',
+  '--cp-position-top': resolvePositionOffsetValue(props.position?.top) ?? 'auto',
+  '--cp-position-right': resolvePositionOffsetValue(props.position?.right) ?? 'auto',
+  '--cp-position-bottom': resolvePositionOffsetValue(props.position?.bottom) ?? 'auto',
+  '--cp-position-left': resolvePositionOffsetValue(props.position?.left) ?? 'auto',
 }));
 </script>
 

@@ -15,6 +15,7 @@
 - `src/app/styles/tokens/radius.css`
 - `src/app/styles/tokens/spacing.css`
 - `src/app/styles/tokens/padding.css`
+- `src/app/styles/tokens/safearea.css`
 - `src/app/styles/tokens/borders.css`
 
 Если нужно изменить доступные tokens или типы для props, сначала меняются соответствующие файлы в `tokens`, а затем повторно запускается генератор.
@@ -29,6 +30,7 @@
 - `src/app/styles/contracts/radius.contract.ts`
 - `src/app/styles/contracts/space.contract.ts`
 - `src/app/styles/contracts/padding.contract.ts`
+- `src/app/styles/contracts/safeArea.contract.ts`
 - `src/app/styles/contracts/border.contract.ts`
 
 ## Когда использовать

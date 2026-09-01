@@ -49,8 +49,8 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
       <AppPosition
         type="absolute"
         :position="{
-          right: 'var(--app-safe-area-horizontal)',
-          bottom: 'var(--app-safe-area-vertical)',
+          right: 'horizontal',
+          bottom: 'vertical',
         }"
       >
         <AppVersion
