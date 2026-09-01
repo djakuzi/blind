@@ -127,7 +127,7 @@ watch(
 }
 
 .app-line-loader--size-small {
-  gap: var(--app-space-12);
+  gap: var(--app-space-3);
 
   .app-line-loader__track {
     height: 0.25rem;
@@ -139,7 +139,7 @@ watch(
 }
 
 .app-line-loader--size-middle {
-  gap: var(--app-space-16);
+  gap: var(--app-space-5);
 
   .app-line-loader__track {
     height: 0.5rem;
@@ -151,7 +151,7 @@ watch(
 }
 
 .app-line-loader--size-big {
-  gap: var(--app-space-20);
+  gap: var(--app-space-7);
 
   .app-line-loader__track {
     height: 0.625rem;

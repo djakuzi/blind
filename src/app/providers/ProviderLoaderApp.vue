@@ -28,13 +28,14 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
         class="provider-loader-app__content"
         direction="column"
         align="center"
-        max-width="calc(47.5rem * var(--app-scale))"
+        max-width="100%"
+        width="100%"
       >
         <AppLogo
           class="provider-loader-app__logo"
           logo="blindTextRight"
           size="big"
-          width="clamp(calc(20rem * var(--app-scale)), 48vw, calc(40rem * var(--app-scale)))"
+          width="clamp(20rem, 48vw, 40rem)"
           height="auto"
         />
 
@@ -42,7 +43,7 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
           class="provider-loader-app__line"
           :progress="68"
           size="middle"
-          width="min(43vw, calc(45rem * var(--app-scale)))"
+          width="min(23vw, 30rem)"
           max-width="100%"
         />
       </AppFlex>
@@ -59,22 +60,21 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 .provider-loader-app {
   position: relative;
   overflow: hidden;
-  padding: var(--app-space-24);
+  padding: var(--app-padding-6);
   background: var(--app-color-background);
 }
 
 .provider-loader-app__content {
-  width: 100%;
   gap: clamp(
-    calc(4rem * var(--app-scale)),
+    4rem,
     8dvh,
-    calc(6rem * var(--app-scale))
+    6rem
   );
   transform: translateY(-2dvh);
 }
 
 .provider-loader-app__line {
-  min-width: min(100%, calc(17.5rem * var(--app-scale)));
+  min-width: min(100%, 17.5rem);
 }
 
 .provider-loader-app__version {
