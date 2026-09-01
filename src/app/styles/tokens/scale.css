@@ -1,3 +1,4 @@
 :root {
   --app-scale: 1;
+  --app-root-font-size: calc(16px * var(--app-scale));
 }

@@ -7,7 +7,7 @@ body,
 #app {
     text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
-    font-size: calc(16px * var('--app-scale'));
+    font-size: var(--app-root-font-size);
 }
 
 body {
