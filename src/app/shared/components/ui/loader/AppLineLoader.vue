@@ -48,7 +48,7 @@ const loaderClass = computed(() => [
   `app-line-loader--size-${props.size}`,
 ]);
 
-const progressWidth = computed(() => `${normalizedProgress.value}%`);
+const progressScale = computed(() => normalizedProgress.value / 100);
 
 watch(
   normalizedProgress,
@@ -80,17 +80,13 @@ watch(
   >
     <AppBlock
       class="app-line-loader__track"
+      :style="{ '--cp-line-loader-progress': progressScale }"
+      overflow="hidden"
       role="progressbar"
       :aria-valuenow="normalizedProgress"
       aria-valuemin="0"
       aria-valuemax="100"
-    >
-      <AppBlock
-        class="app-line-loader__progress"
-        :width="progressWidth"
-        height="100%"
-      />
-    </AppBlock>
+    />
 
     <span class="app-line-loader__text">
       {{ text }}
@@ -100,15 +96,20 @@ watch(
 
 <style scoped>
 .app-line-loader__track {
+  position: relative;
   width: 100%;
-  overflow: hidden;
   border-radius: var(--app-radius-full);
   background: var(--app-color-surface-interactive);
-}
 
-.app-line-loader__progress {
-  border-radius: inherit;
-  transition: width 180ms ease;
+  &::after {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    content: '';
+    transform: scaleX(var(--cp-line-loader-progress));
+    transform-origin: left center;
+    transition: transform 180ms ease;
+  }
 }
 
 .app-line-loader__text {
@@ -121,7 +122,7 @@ watch(
 }
 
 .app-line-loader--primary {
-  .app-line-loader__progress {
+  .app-line-loader__track::after {
     background: var(--app-color-primary);
   }
 }

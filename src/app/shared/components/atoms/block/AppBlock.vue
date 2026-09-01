@@ -3,11 +3,13 @@ import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 export type tAppBlockTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer' | 'span';
 export type tAppBlockDisplay = 'block' | 'inline-block' | 'flex' | 'inline-flex' | 'none';
+export type tAppBlockOverflow = 'visible' | 'hidden' | 'clip' | 'scroll' | 'auto';
 export type tAppBlockSizeValue = number | string;
 
 export interface PropsAppBlock {
   tag?: tAppBlockTag
   display?: tAppBlockDisplay
+  overflow?: tAppBlockOverflow
   width?: tAppBlockSizeValue
   maxWidth?: tAppBlockSizeValue
   height?: tAppBlockSizeValue
@@ -23,6 +25,7 @@ import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 const props = withDefaults(defineProps<PropsAppBlock>(), {
   tag: 'div',
   display: 'block',
+  overflow: 'visible',
   width: undefined,
   maxWidth: undefined,
   height: undefined,
@@ -47,6 +50,7 @@ const blockStyle = computed(() => ({
   '--cp-block-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
   '--cp-block-height': resolveSizeValue(props.height) ?? 'auto',
   '--cp-block-margin': resolveSpaceValue(props.margin) ?? 0,
+  '--cp-block-overflow': props.overflow,
 }));
 </script>
 
@@ -66,6 +70,7 @@ const blockStyle = computed(() => ({
   max-width: var(--cp-block-max-width);
   height: var(--cp-block-height);
   margin: var(--cp-block-margin);
+  overflow: var(--cp-block-overflow);
 }
 
 .app-block--display-block {

@@ -34,7 +34,7 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
         <AppLogo
           logo="blindTextRight"
           size="big"
-          width="clamp(20rem, 78vw, 60rem)"
+          width="clamp(20rem, 75vw, 60rem)"
           height="auto"
         />
 
