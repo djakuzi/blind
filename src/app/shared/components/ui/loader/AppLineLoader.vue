@@ -32,6 +32,10 @@ const props = withDefaults(defineProps<Props>(), {
   text: 'Загрузка',
 });
 
+const emit = defineEmits<{
+  complete: []
+}>();
+
 const hasCompleted = ref(false);
 
 const normalizedProgress = computed(() => {
@@ -50,6 +54,14 @@ const loaderClass = computed(() => [
 
 const progressScale = computed(() => normalizedProgress.value / 100);
 
+function handleProgressTransitionEnd(event: TransitionEvent) {
+  if (event.propertyName !== 'transform' || normalizedProgress.value < 100) {
+    return;
+  }
+
+  emit('complete');
+}
+
 watch(
   normalizedProgress,
   (progress) => {
@@ -65,6 +77,10 @@ watch(
 
     hasCompleted.value = true;
     props.actions?.complete?.();
+
+    if (progressScale.value === 1) {
+      return;
+    }
   },
   { immediate: true },
 );
@@ -80,13 +96,18 @@ watch(
   >
     <AppBlock
       class="app-line-loader__track"
-      :style="{ '--cp-line-loader-progress': progressScale }"
       overflow="hidden"
       role="progressbar"
       :aria-valuenow="normalizedProgress"
       aria-valuemin="0"
       aria-valuemax="100"
-    />
+    >
+      <AppBlock
+        class="app-line-loader__progress"
+        :style="{ '--cp-line-loader-progress': progressScale }"
+        @transitionend="handleProgressTransitionEnd"
+      />
+    </AppBlock>
 
     <span class="app-line-loader__text">
       {{ text }}
@@ -96,20 +117,18 @@ watch(
 
 <style scoped>
 .app-line-loader__track {
-  position: relative;
   width: 100%;
   border-radius: var(--app-radius-full);
   background: var(--app-color-surface-interactive);
+}
 
-  &::after {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    content: '';
-    transform: scaleX(var(--cp-line-loader-progress));
-    transform-origin: left center;
-    transition: transform 180ms ease;
-  }
+.app-line-loader__progress {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  transform: scaleX(var(--cp-line-loader-progress));
+  transform-origin: left center;
+  transition: transform 180ms ease;
 }
 
 .app-line-loader__text {
@@ -122,7 +141,7 @@ watch(
 }
 
 .app-line-loader--primary {
-  .app-line-loader__track::after {
+  .app-line-loader__progress {
     background: var(--app-color-primary);
   }
 }

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppGrid from '@/app/shared/components/atoms/block/AppGrid.vue';
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
@@ -6,22 +8,63 @@ import AppLineLoader from '@/app/shared/components/ui/loader/AppLineLoader.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
 import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 
+type tWidgetLoaderPhase = 'loading' | 'complete' | 'leaving';
+
 interface Props {
-  isShow?: boolean
+  isLoading?: boolean
   progress?: number
   text?: string
 }
 
-withDefaults(defineProps<Props>(), {
-  isShow: false,
+const props = withDefaults(defineProps<Props>(), {
+  isLoading: false,
   progress: 0,
   text: 'Загрузка',
 });
+
+const isRendered = ref(props.isLoading);
+const phase = ref<tWidgetLoaderPhase>('loading');
+
+const loaderClass = computed(() => [
+  'widget-loader-app',
+  `widget-loader-app--${phase.value}`,
+]);
+
+watch(
+  () => props.isLoading,
+  (isLoading) => {
+    if (!isLoading) {
+      phase.value = 'complete';
+
+      return;
+    }
+
+    isRendered.value = true;
+    phase.value = 'loading';
+  },
+  { immediate: true },
+);
+
+function handleLoaderProgressComplete() {
+  if (props.isLoading || phase.value !== 'complete') {
+    return;
+  }
+
+  phase.value = 'leaving';
+}
+
+function handleLoaderAnimationEnd(event: AnimationEvent) {
+  if (event.animationName !== 'widget-loader-app-leave' || phase.value !== 'leaving') {
+    return;
+  }
+
+  isRendered.value = false;
+}
 </script>
 
 <template>
   <AppPosition
-    :is-show="isShow"
+    :is-show="isRendered"
     type="fixed"
     layer="overlay"
     :position="{
@@ -32,9 +75,10 @@ withDefaults(defineProps<Props>(), {
     }"
   >
     <AppGrid
-      class="widget-loader-app"
+      :class="loaderClass"
       place-items="center"
       min-height="100dvh"
+      @animationend="handleLoaderAnimationEnd"
     >
       <AppFlex
         class="widget-loader-app__content"
@@ -56,6 +100,7 @@ withDefaults(defineProps<Props>(), {
           size="middle"
           width="min(40vw, 30rem)"
           max-width="100%"
+          @complete="handleLoaderProgressComplete"
         />
       </AppFlex>
 
@@ -83,8 +128,22 @@ withDefaults(defineProps<Props>(), {
   background: var(--app-color-background);
 }
 
+.widget-loader-app--leaving {
+  animation: widget-loader-app-leave 320ms ease forwards;
+}
+
 .widget-loader-app__content {
   gap: clamp(var(--app-space-8), 7.5dvh, var(--app-space-10));
   transform: translateY(-2dvh);
+}
+
+@keyframes widget-loader-app-leave {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 </style>

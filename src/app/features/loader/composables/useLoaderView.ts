@@ -14,7 +14,7 @@ export function useLoaderView() {
     totalResourcesCount,
   } = storeToRefs(loaderStore);
 
-  const isShow = computed(() => {
+  const isLoading = computed(() => {
     return totalResourcesCount.value > 0 && pendingResourcesCount.value > 0;
   });
 
@@ -26,7 +26,7 @@ export function useLoaderView() {
 
   return {
     errors,
-    isShow,
+    isLoading,
     loadedResourcesCount,
     pendingResourcesCount,
     progress,
