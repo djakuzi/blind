@@ -42,16 +42,19 @@ const blockClass = computed(() => [
   `app-block--display-${props.display}`,
 ]);
 
-const blockWidth = computed(() => resolveSizeValue(props.width));
-const blockMaxWidth = computed(() => resolveSizeValue(props.maxWidth));
-const blockHeight = computed(() => resolveSizeValue(props.height));
-const blockMargin = computed(() => resolveSpaceValue(props.margin));
+const blockStyle = computed(() => ({
+  '--cp-block-width': resolveSizeValue(props.width) ?? 'auto',
+  '--cp-block-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
+  '--cp-block-height': resolveSizeValue(props.height) ?? 'auto',
+  '--cp-block-margin': resolveSpaceValue(props.margin) ?? 0,
+}));
 </script>
 
 <template>
   <component
     :is="tag"
     :class="blockClass"
+    :style="blockStyle"
   >
     <slot />
   </component>
@@ -59,10 +62,10 @@ const blockMargin = computed(() => resolveSpaceValue(props.margin));
 
 <style scoped>
 .app-block {
-  width: v-bind(blockWidth);
-  max-width: v-bind(blockMaxWidth);
-  height: v-bind(blockHeight);
-  margin: v-bind(blockMargin);
+  width: var(--cp-block-width);
+  max-width: var(--cp-block-max-width);
+  height: var(--cp-block-height);
+  margin: var(--cp-block-margin);
 }
 
 .app-block--display-block {

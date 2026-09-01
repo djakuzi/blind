@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 
 import type { tLayerValue } from '@/app/styles/contracts/layer.contract';
-import { isLayerToken, resolveLayerValue } from '@/app/styles/contracts/layer.contract';
+import { resolveLayerValue } from '@/app/styles/contracts/layer.contract';
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 
@@ -34,94 +34,55 @@ const props = withDefaults(defineProps<Props>(), {
 
 const positionClass = computed(() => [
   'app-position',
-  `app-position--type-${props.type}`,
-  typeof props.layer === 'string' && isLayerToken(props.layer)
-    ? `app-position--layer-${props.layer}`
-    : 'app-position--layer-custom',
-  props.center ? `app-position--center-${props.center}` : 'app-position--offsets',
+  props.center ? `app-position--center-${props.center}` : undefined,
 ]);
 
-const positionLayer = computed(() => resolveLayerValue(props.layer));
-const positionTop = computed(() => resolveSpaceValue(props.position?.top));
-const positionRight = computed(() => resolveSpaceValue(props.position?.right));
-const positionBottom = computed(() => resolveSpaceValue(props.position?.bottom));
-const positionLeft = computed(() => resolveSpaceValue(props.position?.left));
+const positionStyle = computed(() => ({
+  '--cp-position-type': props.type,
+  '--cp-position-layer': resolveLayerValue(props.layer),
+  '--cp-position-top': resolveSpaceValue(props.position?.top) ?? 'auto',
+  '--cp-position-right': resolveSpaceValue(props.position?.right) ?? 'auto',
+  '--cp-position-bottom': resolveSpaceValue(props.position?.bottom) ?? 'auto',
+  '--cp-position-left': resolveSpaceValue(props.position?.left) ?? 'auto',
+}));
 </script>
 
 <template>
   <div
     v-if="isShow"
     :class="positionClass"
+    :style="positionStyle"
   >
     <slot />
   </div>
 </template>
 
 <style scoped>
-.app-position--type-fixed {
-  position: fixed;
-}
+.app-position {
+  --cp-position-transform: none;
 
-.app-position--type-absolute {
-  position: absolute;
-}
-
-.app-position--type-relative {
-  position: relative;
-}
-
-.app-position--type-sticky {
-  position: sticky;
-}
-
-.app-position--offsets {
-  top: v-bind(positionTop);
-  right: v-bind(positionRight);
-  bottom: v-bind(positionBottom);
-  left: v-bind(positionLeft);
+  position: var(--cp-position-type);
+  z-index: var(--cp-position-layer);
+  top: var(--cp-position-top);
+  right: var(--cp-position-right);
+  bottom: var(--cp-position-bottom);
+  left: var(--cp-position-left);
+  transform: var(--cp-position-transform);
 }
 
 .app-position--center-x {
-  left: 50%;
-  transform: translateX(-50%);
+  --cp-position-left: 50%;
+  --cp-position-transform: translateX(-50%);
 }
 
 .app-position--center-y {
-  top: 50%;
-  transform: translateY(-50%);
+  --cp-position-top: 50%;
+  --cp-position-transform: translateY(-50%);
 }
 
 .app-position--center-xy {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.app-position--layer-base {
-  z-index: var(--app-layer-base);
-}
-
-.app-position--layer-raised {
-  z-index: var(--app-layer-raised);
-}
-
-.app-position--layer-sticky {
-  z-index: var(--app-layer-sticky);
-}
-
-.app-position--layer-overlay {
-  z-index: var(--app-layer-overlay);
-}
-
-.app-position--layer-modal {
-  z-index: var(--app-layer-modal);
-}
-
-.app-position--layer-toast {
-  z-index: var(--app-layer-toast);
-}
-
-.app-position--layer-custom {
-  z-index: v-bind(positionLayer);
+  --cp-position-top: 50%;
+  --cp-position-left: 50%;
+  --cp-position-transform: translate(-50%, -50%);
 }
 </style>
