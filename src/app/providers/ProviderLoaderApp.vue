@@ -34,14 +34,14 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
         <AppLogo
           logo="blindTextRight"
           size="big"
-          width="clamp(20rem, 78vw, 40rem)"
+          width="clamp(20rem, 78vw, 60rem)"
           height="auto"
         />
 
         <AppLineLoader
           :progress="68"
           size="middle"
-          width="min(23vw, 30rem)"
+          width="min(40vw, 30rem)"
           max-width="100%"
         />
       </AppFlex>
@@ -71,7 +71,7 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 }
 
 .provider-loader-app__content {
-  gap: clamp(var(--app-space-8), 8dvh, var(--app-space-16));
+  gap: clamp(var(--app-space-8), 7.5dvh, var(--app-space-10));
   transform: translateY(-2dvh);
 }
 </style>
