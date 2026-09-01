@@ -35,12 +35,11 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
           class="provider-loader-app__logo"
           logo="blindTextRight"
           size="big"
-          width="clamp(20rem, 48vw, 40rem)"
+          width="clamp(20rem, 78vw, 40rem)"
           height="auto"
         />
 
         <AppLineLoader
-          class="provider-loader-app__line"
           :progress="68"
           size="middle"
           width="min(23vw, 30rem)"
@@ -60,7 +59,7 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 .provider-loader-app {
   position: relative;
   overflow: hidden;
-  padding: var(--app-padding-6);
+  padding: var(--app-safe-area-vertical) var(--app-safe-area-horizontal);
   background: var(--app-color-background);
 }
 
@@ -69,13 +68,9 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
   transform: translateY(-2dvh);
 }
 
-.provider-loader-app__line {
-  min-width: min(100%, 17.5rem);
-}
-
 .provider-loader-app__version {
   position: absolute;
-  right: max(var(--app-space-24), env(safe-area-inset-right));
-  bottom: max(var(--app-space-24), env(safe-area-inset-bottom));
+  right: var(--app-safe-area-horizontal);
+  bottom: var(--app-safe-area-vertical);
 }
 </style>
