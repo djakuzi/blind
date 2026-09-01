@@ -1,7 +1,7 @@
 import type { tAppScaleMode } from '@/app/styles/contracts/appScale.contract';
 import { ToolStorage } from '@/core/tool/storage';
 
-import { APP_SCALE_MODE_STORAGE_KEY } from '../const';
+import { APP_SCALE_MODE_STORAGE_KEY } from '../settings.const';
 import type { iSettingsState } from '../settings.type';
 
 export function createSetAppScaleMode() {

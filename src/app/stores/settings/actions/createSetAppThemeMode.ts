@@ -1,7 +1,7 @@
 import type { tAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
 import { ToolStorage } from '@/core/tool/storage';
 
-import { APP_THEME_MODE_STORAGE_KEY } from '../const';
+import { APP_THEME_MODE_STORAGE_KEY } from '../settings.const';
 import type { iSettingsState } from '../settings.type';
 
 export function createSetAppThemeMode() {
