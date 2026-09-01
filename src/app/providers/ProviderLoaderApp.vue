@@ -32,7 +32,6 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
         width="100%"
       >
         <AppLogo
-          class="provider-loader-app__logo"
           logo="blindTextRight"
           size="big"
           width="clamp(20rem, 78vw, 40rem)"
@@ -47,10 +46,18 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
         />
       </AppFlex>
 
-      <AppVersion
-        class="provider-loader-app__version"
-        size="big"
-      />
+      <AppPosition
+        type="absolute"
+        :position="{
+          right: 'var(--app-safe-area-horizontal)',
+          bottom: 'var(--app-safe-area-vertical)',
+        }"
+      >
+        <AppVersion
+          class="provider-loader-app__version"
+          size="big"
+        />
+      </AppPosition>
     </AppGrid>
   </AppPosition>
 </template>
@@ -66,11 +73,5 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 .provider-loader-app__content {
   gap: clamp(var(--app-space-8), 8dvh, var(--app-space-16));
   transform: translateY(-2dvh);
-}
-
-.provider-loader-app__version {
-  position: absolute;
-  right: var(--app-safe-area-horizontal);
-  bottom: var(--app-safe-area-vertical);
 }
 </style>
