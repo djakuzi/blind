@@ -3,10 +3,10 @@ import { computed, ref, watch } from 'vue';
 
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 
 type tAppLineLoaderVariant = 'primary';
-type tAppLineLoaderSizeValue = number | string;
 
 interface iAppLineLoaderActions {
   complete?: () => void
@@ -15,8 +15,8 @@ interface iAppLineLoaderActions {
 interface Props {
   progress?: number
   size?: tBaseSizeVariant
-  maxWidth?: tAppLineLoaderSizeValue
-  width?: tAppLineLoaderSizeValue
+  maxWidth?: PropsAppBlock['maxWidth']
+  width?: PropsAppBlock['width']
   variant?: tAppLineLoaderVariant
   actions?: iAppLineLoaderActions
   text?: string
@@ -34,10 +34,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const hasCompleted = ref(false);
 
-function resolveSizeValue(value: tAppLineLoaderSizeValue) {
-  return typeof value === 'number' ? `${value}px` : value;
-}
-
 const normalizedProgress = computed(() => {
   if (!Number.isFinite(props.progress)) {
     return 0;
@@ -52,8 +48,6 @@ const loaderClass = computed(() => [
   `app-line-loader--size-${props.size}`,
 ]);
 
-const loaderMaxWidth = computed(() => resolveSizeValue(props.maxWidth));
-const loaderWidth = computed(() => resolveSizeValue(props.width));
 const progressWidth = computed(() => `${normalizedProgress.value}%`);
 
 watch(
@@ -81,8 +75,8 @@ watch(
     :class="loaderClass"
     direction="column"
     align="center"
-    :width="loaderWidth"
-    :max-width="loaderMaxWidth"
+    :width="width"
+    :max-width="maxWidth"
   >
     <AppBlock
       class="app-line-loader__track"
@@ -91,7 +85,11 @@ watch(
       aria-valuemin="0"
       aria-valuemax="100"
     >
-      <AppBlock class="app-line-loader__progress" />
+      <AppBlock
+        class="app-line-loader__progress"
+        :width="progressWidth"
+        height="100%"
+      />
     </AppBlock>
 
     <span class="app-line-loader__text">
@@ -109,8 +107,6 @@ watch(
 }
 
 .app-line-loader__progress {
-  height: 100%;
-  width: v-bind(progressWidth);
   border-radius: inherit;
   transition: width 180ms ease;
 }
@@ -134,7 +130,7 @@ watch(
   gap: var(--app-space-12);
 
   .app-line-loader__track {
-    height: calc(0.25rem * var(--app-scale));
+    height: 0.25rem;
   }
 
   .app-line-loader__text {
@@ -146,7 +142,7 @@ watch(
   gap: var(--app-space-16);
 
   .app-line-loader__track {
-    height: calc(0.5rem * var(--app-scale));
+    height: 0.5rem;
   }
 
   .app-line-loader__text {
@@ -158,7 +154,7 @@ watch(
   gap: var(--app-space-20);
 
   .app-line-loader__track {
-    height: calc(0.625rem * var(--app-scale));
+    height: 0.625rem;
   }
 
   .app-line-loader__text {

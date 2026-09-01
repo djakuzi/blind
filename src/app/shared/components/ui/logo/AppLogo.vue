@@ -2,11 +2,8 @@
 import { computed } from 'vue';
 
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
+import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import {
-  APP_THEME_SYSTEM_MODE,
-} from '@/app/styles/contracts/appTheme.contract';
-import { useSettingsStore } from '@/app/stores/settings/settings.store';
 import { ICONS_ASSETS } from '@/core/media/assets';
 import { ToolSystem } from '@/core/tool/system';
 
@@ -30,7 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxWidth: '100%',
 });
 
-const settingsStore = useSettingsStore();
+const { resolvedThemeMode } = useAppThemeMode();
 
 const LOGO_SIZE_MAP: Record<tBaseSizeVariant, { width: string, height: string }> = {
   small: {
@@ -62,22 +59,10 @@ const LOGO_ASSET_MAP: Record<tAppLogoVariant, Record<ToolSystem.tSystemThemeMode
   },
 };
 
-function createSvgDataUrl(svg: string) {
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
-
-const resolvedThemeMode = computed<ToolSystem.tSystemThemeMode>(() => {
-  if (settingsStore.appThemeMode === APP_THEME_SYSTEM_MODE) {
-    return ToolSystem.getPreferredThemeMode();
-  }
-
-  return settingsStore.appThemeMode;
-});
-
 const logoSrc = computed(() => {
   const logoKey = LOGO_ASSET_MAP[props.logo][resolvedThemeMode.value];
 
-  return createSvgDataUrl(ICONS_ASSETS.logo[logoKey]);
+  return ICONS_ASSETS.logo[logoKey];
 });
 
 const resolvedWidth = computed(() => {
