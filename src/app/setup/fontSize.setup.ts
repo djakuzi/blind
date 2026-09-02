@@ -1,17 +1,9 @@
-import {
-  APP_ROOT_FONT_SIZE_BASE_VALUE,
-  APP_ROOT_FONT_SIZE_CSS_VARIABLE_NAME,
-  APP_SCALE_CSS_VARIABLE_NAME,
-} from '@/app/styles/contracts/appScale.contract';
-import { DomProperty } from '@/core/dom/property';
-import { ToolSystem } from '@/core/tool/system';
+import type { Pinia } from 'pinia';
 
-export function setupFontSize() {
-  const viewportRatio = ToolSystem.getViewportRatio();
-  const rootFontSize = Math.round(APP_ROOT_FONT_SIZE_BASE_VALUE * viewportRatio);
+import { useAppFontSizeSetup } from '@/app/features/settings/composables/useAppFontSizeSetup';
 
-  DomProperty.setProperty(
-    APP_ROOT_FONT_SIZE_CSS_VARIABLE_NAME,
-    `calc(${rootFontSize}px * var(${APP_SCALE_CSS_VARIABLE_NAME}))`,
-  );
+export async function setupFontSize(pinia: Pinia) {
+  const { setupAppFontSize } = useAppFontSizeSetup(pinia);
+
+  await setupAppFontSize();
 }

@@ -23,6 +23,12 @@ export type tAppScalePresetMode = keyof typeof APP_SCALE_MODE;
 
 export type tAppScaleMode = (typeof APP_SCALE_MODE_LIST)[number];
 
+export type tAppRootFontSize = number;
+
 export function isAppScaleMode(value: string): value is tAppScaleMode {
   return APP_SCALE_MODE_LIST.includes(value as tAppScaleMode);
+}
+
+export function isAppRootFontSize(value: number): value is tAppRootFontSize {
+  return Number.isFinite(value) && value > 0;
 }

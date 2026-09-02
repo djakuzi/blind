@@ -13,7 +13,7 @@ app.use(pinia);
 
 async function bootstrap() {
   await setupScale(pinia);
-  setupFontSize();
+  await setupFontSize(pinia);
   await setupTheme(pinia);
   app.use(router);
   await router.isReady();
