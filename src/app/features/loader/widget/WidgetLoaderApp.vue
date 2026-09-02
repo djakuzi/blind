@@ -89,7 +89,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
       >
         <AppLogo
           logo="blindTextRight"
-          width="90rem"
+          width="100rem"
           height="auto"
         />
 
@@ -97,7 +97,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
           :progress="progress"
           :text="text"
           size="big"
-          width="60rem"
+          width="70rem"
           max-width="100%"
           @complete="handleLoaderProgressComplete"
         />
