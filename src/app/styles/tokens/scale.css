@@ -1,17 +1,17 @@
 :root {
   --app-scale: 1;
-  --app-root-font-size-base: 0.35vmin;
+  --app-root-font-size-base: 1vmin;
   --app-root-font-size: calc(var(--app-root-font-size-base) * var(--app-scale));
 }
 
 @media (min-aspect-ratio: 16 / 9) {
   :root {
-    --app-root-font-size-base: 0.35vmin;
+    --app-root-font-size-base: 1vmin;
   }
 }
 
 @media (min-aspect-ratio: 21 / 9) {
   :root {
-    --app-root-font-size-base: 0.35vmin;
+    --app-root-font-size-base: 1vmin;
   }
 }
