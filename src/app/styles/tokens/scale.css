@@ -1,5 +1,5 @@
 :root {
   --app-scale: 1;
-  --app-root-font-size-base: clamp(14px, 12px + 0.35vmin, 18px);
+  --app-root-font-size-base: 1vmin;
   --app-root-font-size: calc(var(--app-root-font-size-base) * var(--app-scale));
 }

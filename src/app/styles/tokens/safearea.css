@@ -1,8 +1,8 @@
 :root {
-    --app-safe-area-top: max(env(safe-area-inset-top, 0px), 0.625rem);
-    --app-safe-area-right: max(env(safe-area-inset-right, 0px), 0.625rem);
-    --app-safe-area-bottom: max(env(safe-area-inset-bottom, 0px), 0.625rem);
-    --app-safe-area-left: max(env(safe-area-inset-left, 0px), 0.625rem);
+    --app-safe-area-top: calc(env(safe-area-inset-top, 0px) + 0.625rem);
+    --app-safe-area-right: calc(env(safe-area-inset-right, 0px) + 0.625rem);
+    --app-safe-area-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.625rem);
+    --app-safe-area-left: calc(env(safe-area-inset-left, 0px) + 0.625rem);
 
     --app-safe-area-horizontal: max(var(--app-safe-area-left), var(--app-safe-area-right));
     --app-safe-area-vertical: max(var(--app-safe-area-top), var(--app-safe-area-bottom));
