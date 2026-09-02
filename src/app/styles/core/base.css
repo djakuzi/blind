@@ -4,10 +4,13 @@ body,
   min-height: 100%;
 }
 
+:root {
+    font-size: var(--app-root-font-size);
+}
+
 #app {
     text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
-    font-size: var(--app-root-font-size);
 }
 
 body {
