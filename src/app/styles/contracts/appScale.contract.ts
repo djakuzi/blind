@@ -7,8 +7,6 @@ export const APP_SCALE_MODE_LIST = [
 ] as const;
 
 export const APP_SCALE_CSS_VARIABLE_NAME = '--app-scale';
-export const APP_ROOT_FONT_SIZE_CSS_VARIABLE_NAME = '--app-root-font-size';
-export const APP_ROOT_FONT_SIZE_BASE_VALUE = 1;
 
 export const APP_SCALE_MODE = {
   small: 0.9,
@@ -23,12 +21,6 @@ export type tAppScalePresetMode = keyof typeof APP_SCALE_MODE;
 
 export type tAppScaleMode = (typeof APP_SCALE_MODE_LIST)[number];
 
-export type tAppRootFontSize = number;
-
 export function isAppScaleMode(value: string): value is tAppScaleMode {
   return APP_SCALE_MODE_LIST.includes(value as tAppScaleMode);
-}
-
-export function isAppRootFontSize(value: number): value is tAppRootFontSize {
-  return Number.isFinite(value) && value > 0;
 }

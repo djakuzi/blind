@@ -1,9 +1,9 @@
 :root {
   --app-padding-0: 0;
-  --app-padding-1: calc(0.25rem * var(--app-scale));  /* 4px */
-  --app-padding-2: calc(0.5rem * var(--app-scale));   /* 8px */
-  --app-padding-3: calc(0.75rem * var(--app-scale));  /* 12px */
-  --app-padding-4: calc(1rem * var(--app-scale));     /* 16px */
-  --app-padding-5: calc(1.5rem * var(--app-scale));   /* 24px */
-  --app-padding-6: calc(2rem * var(--app-scale));     /* 32px */
+  --app-padding-1: 0.25rem;  /* 4px */
+  --app-padding-2: 0.5rem;   /* 8px */
+  --app-padding-3: 0.75rem;  /* 12px */
+  --app-padding-4: 1rem;     /* 16px */
+  --app-padding-5: 1.5rem;   /* 24px */
+  --app-padding-6: 2rem;     /* 32px */
 }
