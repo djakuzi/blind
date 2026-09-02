@@ -1,6 +1,5 @@
 @import './core/fonts.css';
 @import './core/reset.css';
-@import './core/base.css';
 
 @import './tokens/scale.css';
 @import './tokens/borders.css';
@@ -11,3 +10,6 @@
 @import './tokens/typography.css';
 @import './tokens/padding.css';
 @import './tokens/safearea.css';
+
+@import './core/base.css';
+@import './core/root.css';
