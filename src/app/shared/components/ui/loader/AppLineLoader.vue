@@ -154,7 +154,7 @@ watch(
   }
 
   .app-line-loader__text {
-    font-size: var(--app-font-size-xs);
+    font-size: var(--app-font-size-sm);
   }
 }
 
