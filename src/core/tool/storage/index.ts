@@ -1,4 +1,4 @@
-import * as ToolStorage from './features';
+import * as ToolStorage from './tool';
 
 export { ToolStorage };
 export * from './type';
