@@ -7,6 +7,7 @@ export const APP_SCALE_MODE_LIST = [
 ] as const;
 
 export const APP_SCALE_CSS_VARIABLE_NAME = '--app-scale';
+export const APP_ROOT_FONT_SIZE_CSS_VARIABLE_NAME = '--app-root-font-size';
 
 export const APP_SCALE_MODE = {
   small: 0.9,
