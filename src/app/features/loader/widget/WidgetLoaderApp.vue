@@ -90,15 +90,15 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
         <AppLogo
           logo="blindTextRight"
           size="big"
-          width="clamp(20rem, 75vw, 60rem)"
+          width="54rem"
           height="auto"
         />
 
         <AppLineLoader
           :progress="progress"
           :text="text"
-          size="middle"
-          width="min(40vw, 30rem)"
+          size="big"
+          width="36rem"
           max-width="100%"
           @complete="handleLoaderProgressComplete"
         />
@@ -133,7 +133,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
 }
 
 .widget-loader-app__content {
-  gap: clamp(var(--app-space-8), 7.5dvh, var(--app-space-10));
+  gap: var(--app-space-5);;
   transform: translateY(-2dvh);
 }
 

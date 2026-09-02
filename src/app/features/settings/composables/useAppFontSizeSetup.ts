@@ -22,7 +22,7 @@ export function useAppFontSizeSetup(pinia: Pinia) {
 
     DomProperty.setProperty(
       APP_ROOT_FONT_SIZE_CSS_VARIABLE_NAME,
-      `calc(${appRootFontSize}px * var(${APP_SCALE_CSS_VARIABLE_NAME}))`,
+      `clamp(10px, ${appRootFontSize}px * var(${APP_SCALE_CSS_VARIABLE_NAME}), 52px)`,
     );
   }
 
