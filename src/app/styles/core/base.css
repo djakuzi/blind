@@ -5,15 +5,16 @@ body,
   min-height: 100%;
 }
 
-#app {
-    text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
-}
-
 body {
+    --app-font-family-base: 'Inter', sans-serif;
     background: var(--app-color-background);
     font-family: var(--app-font-family-base);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
 }
