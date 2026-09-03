@@ -1,37 +1,37 @@
-import { Capacitor } from '@capacitor/core';
-import { ScreenOrientation, type OrientationLockType } from '@capacitor/screen-orientation';
-import { StatusBar } from '@capacitor/status-bar';
-import { TextZoom } from '@capacitor/text-zoom';
-
+export type {
+  iSetupSystemViewOptions,
+  tSystemThemeMode,
+  tSystemViewOrientation,
+} from './type';
 import { DEFAULT_SCALE_VALUE } from './const';
+import * as platformFeature from './features/platform';
+import * as scaleFeature from './features/scale';
+import * as themeFeature from './features/theme';
+import * as viewFeature from './features/view';
+import * as viewportFeature from './features/viewport';
 import * as helpers from './helpers';
-
-export type tSystemThemeMode = 'light' | 'dark';
-export type tSystemViewOrientation = Extract<OrientationLockType, 'any' | 'landscape' | 'portrait'>;
-
-export interface iSetupSystemViewOptions {
-  orientation?: tSystemViewOrientation
-  isStatusBarVisible?: boolean
-  isWebViewLimitedByStatusBar?: boolean
-}
+import type {
+  iSetupSystemViewOptions,
+  tSystemThemeMode,
+} from './type';
 
 export function getPlatform() {
-  return Capacitor.getPlatform();
+  return platformFeature.getPlatform();
 }
 
 export function isNativePlatform() {
-  return Capacitor.isNativePlatform();
+  return platformFeature.isNativePlatform();
 }
 
 export async function getCurrentScale() {
-  if (getPlatform() === 'web' || !Capacitor.isPluginAvailable('TextZoom')) {
+  if (!isNativePlatform() || !scaleFeature.canUseTextZoom()) {
     return {
       value: DEFAULT_SCALE_VALUE,
     };
   }
 
   try {
-    const { value } = await TextZoom.get();
+    const { value } = await scaleFeature.getCurrentTextZoomValue();
     return {
       value: helpers.normalizeScaleValue(value),
     };
@@ -43,14 +43,14 @@ export async function getCurrentScale() {
 }
 
 export async function getPreferredScale() {
-  if (getPlatform() === 'web' || !Capacitor.isPluginAvailable('TextZoom')) {
+  if (!isNativePlatform() || !scaleFeature.canUseTextZoom()) {
     return {
       value: DEFAULT_SCALE_VALUE,
     };
   }
 
   try {
-    const { value } = await TextZoom.getPreferred();
+    const { value } = await scaleFeature.getPreferredTextZoomValue();
     return {
       value: helpers.normalizeScaleValue(value),
     };
@@ -66,102 +66,71 @@ export async function getSystemScale() {
 }
 
 export function getPreferredThemeMode(): tSystemThemeMode {
-  if (typeof globalThis.matchMedia !== 'function') {
+  if (!themeFeature.canUsePreferredThemeMode()) {
     return 'light';
   }
 
-  return globalThis.matchMedia('(prefers-color-scheme: dark)').matches
+  return themeFeature.isDarkThemeModePreferred()
     ? 'dark'
     : 'light';
 }
 
 export function getViewportRatio() {
-  if (typeof window === 'undefined' || window.innerHeight === 0) {
-    return 1;
-  }
-
-  return window.innerWidth / window.innerHeight;
+  return viewportFeature.getViewportRatio();
 }
 
 export async function setupView(options: iSetupSystemViewOptions) {
   if (isNativePlatform()) {
-    await setupNativeView(options);
+    const orientation = options.orientation;
 
-    return;
-  }
+    if (orientation && viewFeature.canUseNativeScreenOrientation()) {
+      await helpers.runSafeAsync(async () => {
+        if (orientation === 'any') {
+          await viewFeature.unlockNativeScreenOrientation();
 
-  await setupWebView(options);
-}
+          return;
+        }
 
-async function setupNativeView(options: iSetupSystemViewOptions) {
-  await setupNativeViewOrientation(options.orientation);
-  await setupNativeStatusBar(options);
-}
-
-async function setupNativeViewOrientation(orientation: tSystemViewOrientation | undefined) {
-  if (!orientation || !Capacitor.isPluginAvailable('ScreenOrientation')) {
-    return;
-  }
-
-  try {
-    if (orientation === 'any') {
-      await ScreenOrientation.unlock();
-
-      return;
-    }
-
-    await ScreenOrientation.lock({ orientation });
-  } catch {
-    return;
-  }
-}
-
-async function setupNativeStatusBar(options: iSetupSystemViewOptions) {
-  if (!Capacitor.isPluginAvailable('StatusBar')) {
-    return;
-  }
-
-  try {
-    if (typeof options.isWebViewLimitedByStatusBar === 'boolean') {
-      await StatusBar.setOverlaysWebView({
-        overlay: !options.isWebViewLimitedByStatusBar,
+        await viewFeature.lockNativeScreenOrientation(orientation);
       });
     }
 
-    if (typeof options.isStatusBarVisible !== 'boolean') {
-      return;
+    if (viewFeature.canUseNativeStatusBar()) {
+      await helpers.runSafeAsync(async () => {
+        if (typeof options.isWebViewLimitedByStatusBar === 'boolean') {
+          await viewFeature.setNativeStatusBarOverlay(options.isWebViewLimitedByStatusBar);
+        }
+
+        if (typeof options.isStatusBarVisible !== 'boolean') {
+          return;
+        }
+
+        if (options.isStatusBarVisible) {
+          await viewFeature.showNativeStatusBar();
+
+          return;
+        }
+
+        await viewFeature.hideNativeStatusBar();
+      });
     }
 
-    if (options.isStatusBarVisible) {
-      await StatusBar.show();
-
-      return;
-    }
-
-    await StatusBar.hide();
-  } catch {
-    return;
-  }
-}
-
-async function setupWebView(options: iSetupSystemViewOptions) {
-  await setupWebViewOrientation(options.orientation);
-}
-
-async function setupWebViewOrientation(orientation: tSystemViewOrientation | undefined) {
-  if (!orientation || typeof screen === 'undefined' || !screen.orientation) {
     return;
   }
 
-  try {
+  const orientation = options.orientation;
+
+  if (!orientation || !helpers.canUseWebScreenOrientation()) {
+    return;
+  }
+
+  await helpers.runSafeAsync(async () => {
     if (orientation === 'any') {
-      screen.orientation.unlock();
+      viewFeature.unlockWebScreenOrientation();
 
       return;
     }
 
-    await screen.orientation.lock(orientation);
-  } catch {
-    return;
-  }
+    await viewFeature.lockWebScreenOrientation(orientation);
+  });
 }

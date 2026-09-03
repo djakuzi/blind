@@ -11,3 +11,15 @@ export function normalizeScaleValue(value: number): number {
 
   return Math.min(MAX_SCALE_VALUE, Math.max(MIN_SCALE_VALUE, value));
 }
+
+export async function runSafeAsync(action: () => Promise<void>) {
+  try {
+    await action();
+  } catch {
+    return;
+  }
+}
+
+export function canUseWebScreenOrientation() {
+  return typeof screen !== 'undefined' && Boolean(screen.orientation);
+}
