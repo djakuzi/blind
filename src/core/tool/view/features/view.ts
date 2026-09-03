@@ -3,8 +3,8 @@ import { StatusBar } from '@capacitor/status-bar';
 
 import * as helpers from '../helpers';
 import type {
+  iEnterViewFullscreenOptions,
   iSetupViewOptions,
-  tViewOrientation,
 } from '../type';
 
 export async function setupNativeView(options: iSetupViewOptions) {
@@ -57,10 +57,26 @@ export async function setupWebView(options: iSetupViewOptions) {
       return;
     }
 
-    await lockWebScreenOrientation(orientation);
+    await screen.orientation.lock(orientation);
   });
 }
 
-async function lockWebScreenOrientation(orientation: Exclude<tViewOrientation, 'any'>) {
-  await screen.orientation.lock(orientation);
+export function getFullscreenElement() {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  return document.fullscreenElement;
+}
+
+export async function enterFullscreen(options: iEnterViewFullscreenOptions) {
+  const target = options.target ?? document.documentElement;
+
+  await target.requestFullscreen({
+    navigationUI: options.navigation,
+  });
+}
+
+export async function exitFullscreen() {
+  await document.exitFullscreen();
 }
