@@ -10,6 +10,7 @@ blind - the game
 - [Архетектура](./docs/architecture/index.md)
 - [Плагины](./docs/plugins/index.md)
 - [Генераторы](./docs/generators/index.md)
+- [Интерфейс](./docs/interface/index.md)
 
 ## История изменений
 
