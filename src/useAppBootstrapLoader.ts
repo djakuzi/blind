@@ -28,9 +28,9 @@ export function useAppBootstrapLoader() {
   });
 
   function setBootstrapResourceLoaded(resourceKey: tAppBootstrapResourceKey) {
-    if (count == 2) {
-      return;
-    }
+    // if (count == 2) {
+    //   return;
+    // }
   
     loaderRegistry.setResourceState({
       scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
