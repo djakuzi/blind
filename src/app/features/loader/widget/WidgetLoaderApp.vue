@@ -53,8 +53,8 @@ function handleLoaderProgressComplete() {
   phase.value = 'leaving';
 }
 
-function handleLoaderAnimationEnd(event: AnimationEvent) {
-  if (event.animationName !== 'widget-loader-app-leave' || phase.value !== 'leaving') {
+function handleLoaderAnimationEnd() {
+  if (phase.value !== 'leaving') {
     return;
   }
 

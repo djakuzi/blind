@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
@@ -37,6 +37,7 @@ const emit = defineEmits<{
 }>();
 
 const hasCompleted = ref(false);
+const progressElement = ref<HTMLElement | null>(null);
 
 const normalizedProgress = computed(() => {
   if (!Number.isFinite(props.progress)) {
@@ -59,7 +60,32 @@ function handleProgressTransitionEnd(event: TransitionEvent) {
     return;
   }
 
+  emitComplete();
+}
+
+function emitComplete() {
+  if (hasCompleted.value) {
+    return;
+  }
+
+  hasCompleted.value = true;
+  props.actions?.complete?.();
   emit('complete');
+}
+
+async function waitProgressAnimationComplete() {
+  await nextTick();
+
+  const animations = progressElement.value?.getAnimations() ?? [];
+
+  if (animations.length === 0) {
+    emitComplete();
+
+    return;
+  }
+
+  await Promise.allSettled(animations.map((animation) => animation.finished));
+  emitComplete();
 }
 
 watch(
@@ -71,16 +97,7 @@ watch(
       return;
     }
 
-    if (hasCompleted.value) {
-      return;
-    }
-
-    hasCompleted.value = true;
-    props.actions?.complete?.();
-
-    if (progressScale.value === 1) {
-      return;
-    }
+    void waitProgressAnimationComplete();
   },
   { immediate: true },
 );
@@ -102,7 +119,8 @@ watch(
       aria-valuemin="0"
       aria-valuemax="100"
     >
-      <AppBlock
+      <div
+        ref="progressElement"
         class="app-line-loader__progress"
         :style="{ '--cp-line-loader-progress': progressScale }"
         @transitionend="handleProgressTransitionEnd"
