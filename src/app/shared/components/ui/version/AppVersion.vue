@@ -49,7 +49,6 @@ const versionFontSize = computed(() => resolveFontSizeValue(props.fontSize));
 .app-version {
   display: inline-block;
   color: var(--app-color-text-secondary);
-  font-family: var(--app-font-family-base);
   font-weight: var(--app-font-weight-medium);
   line-height: var(--app-line-height-control);
 }
