@@ -12,6 +12,7 @@ body,
 
 body {
     background: var(--app-color-background);
+    font-family: var(--app-font-family-base);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -13,6 +13,8 @@ const APP_BOOTSTRAP_RESOURCES = {
 type tAppBootstrapResourceKey = (typeof APP_BOOTSTRAP_RESOURCES)[keyof typeof APP_BOOTSTRAP_RESOURCES];
 
 export function useAppBootstrapLoader() {
+  let count = 0;
+
   const loaderRegistry = useLoaderRegistry();
 
   loaderRegistry.registerScope({
@@ -26,11 +28,17 @@ export function useAppBootstrapLoader() {
   });
 
   function setBootstrapResourceLoaded(resourceKey: tAppBootstrapResourceKey) {
+    if (count == 2) {
+      return;
+    }
+  
     loaderRegistry.setResourceState({
       scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
       resourceKey,
       isLoaded: true,
     });
+
+    count += 1;
   }
 
   function waitBootstrapMinDisplayTime() {

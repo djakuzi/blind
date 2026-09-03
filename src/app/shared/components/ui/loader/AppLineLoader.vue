@@ -151,7 +151,6 @@ watch(
 
 .app-line-loader__text {
   color: var(--app-color-text-primary);
-  font-family: var(--app-font-family-base);
   font-weight: var(--app-font-weight-medium);
   line-height: var(--app-line-height-control);
   letter-spacing: var(--app-letter-spacing-wider);
