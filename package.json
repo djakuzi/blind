@@ -9,7 +9,7 @@
   "scripts": {
     "app:generate:style-contracts": "node scripts/generators/generateStyleContracts.js",
     "app:generate:docs-versions": "node scripts/generators/generateDocsVersions.js",
-    "app:generate:icons-assets":"node scripts/generators/generateIconsProject.js",
+    "app:generate:icons-assets": "node scripts/generators/generateIconsProject.js",
     "dev": "vite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -21,6 +21,8 @@
     "@capacitor/core": "^8.5.0",
     "@capacitor/ios": "^8.5.0",
     "@capacitor/preferences": "^8.0.1",
+    "@capacitor/screen-orientation": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.3",
     "@capacitor/text-zoom": "^8.0.1",
     "pinia": "^4.0.3",
     "vue": "^3.5.39",
