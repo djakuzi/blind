@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 
 interface iAppHoldActionActions {
   complete?: () => void
@@ -9,12 +9,16 @@ interface Props {
   actions?: iAppHoldActionActions
   disabled?: boolean
   duration?: number
+  initialProgress?: number
+  releaseDuration?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   actions: undefined,
   disabled: false,
   duration: 650,
+  initialProgress: 8,
+  releaseDuration: 140,
 });
 
 const emit = defineEmits<{
@@ -24,13 +28,31 @@ const emit = defineEmits<{
 const isHolding = ref(false);
 const hasCompleted = ref(false);
 const startedAt = ref(0);
-const progress = ref(0);
 let animationFrameId: number | undefined;
 let activePointerId: number | undefined;
 let activePointerTarget: HTMLElement | undefined;
 let activeTouchId: number | undefined;
 
-const normalizedProgress = computed(() => Math.min(100, Math.max(0, progress.value)));
+function normalizeProgressValue(value: number) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+
+  return Math.min(100, Math.max(0, value));
+}
+
+const normalizedInitialProgress = computed(() => normalizeProgressValue(props.initialProgress));
+const normalizedReleaseDuration = computed(() => Math.max(0, props.releaseDuration));
+const progress = ref(normalizedInitialProgress.value);
+const normalizedProgress = computed(() => normalizeProgressValue(progress.value));
+
+watch(normalizedInitialProgress, (initialProgress) => {
+  if (isHolding.value) {
+    return;
+  }
+
+  progress.value = initialProgress;
+});
 
 function stopProgressAnimation() {
   if (animationFrameId === undefined) {
@@ -59,7 +81,8 @@ function updateProgress() {
 
   const duration = Math.max(1, props.duration);
   const elapsed = performance.now() - startedAt.value;
-  progress.value = (elapsed / duration) * 100;
+  const initialProgress = normalizedInitialProgress.value;
+  progress.value = initialProgress + (elapsed / duration) * (100 - initialProgress);
 
   if (progress.value >= 100) {
     completeHold();
@@ -79,9 +102,39 @@ function beginHold() {
   stopProgressAnimation();
   isHolding.value = true;
   hasCompleted.value = false;
-  progress.value = 0;
+  progress.value = normalizedInitialProgress.value;
   startedAt.value = performance.now();
   animationFrameId = requestAnimationFrame(updateProgress);
+}
+
+function animateReleaseProgress() {
+  const startProgress = normalizedProgress.value;
+  const finishProgress = normalizedInitialProgress.value;
+  const startedAt = performance.now();
+  const duration = normalizedReleaseDuration.value;
+
+  if (startProgress <= finishProgress || duration <= 0) {
+    progress.value = finishProgress;
+
+    return;
+  }
+
+  function updateReleaseProgress() {
+    const elapsed = performance.now() - startedAt;
+    const releaseProgress = Math.min(1, elapsed / duration);
+    progress.value = finishProgress + (startProgress - finishProgress) * (1 - releaseProgress);
+
+    if (releaseProgress >= 1) {
+      progress.value = finishProgress;
+      animationFrameId = undefined;
+
+      return;
+    }
+
+    animationFrameId = requestAnimationFrame(updateReleaseProgress);
+  }
+
+  animationFrameId = requestAnimationFrame(updateReleaseProgress);
 }
 
 function releasePointerCapture() {
@@ -125,13 +178,22 @@ function startHold(event: PointerEvent) {
   beginHold();
 }
 
-function resetHoldState() {
+function resetHoldState(isImmediate = false) {
+  const shouldAnimateRelease = !isImmediate && progress.value > normalizedInitialProgress.value;
+
   stopProgressAnimation();
   isHolding.value = false;
   hasCompleted.value = false;
-  progress.value = 0;
   activeTouchId = undefined;
   releasePointerCapture();
+
+  if (shouldAnimateRelease) {
+    animateReleaseProgress();
+
+    return;
+  }
+
+  progress.value = normalizedInitialProgress.value;
 }
 
 function resetPointerHold(event?: PointerEvent) {
@@ -194,7 +256,7 @@ function resetMouseHold() {
   resetHoldState();
 }
 
-onBeforeUnmount(resetHoldState);
+onBeforeUnmount(() => resetHoldState(true));
 </script>
 
 <template>

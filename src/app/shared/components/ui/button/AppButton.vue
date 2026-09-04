@@ -15,6 +15,8 @@ interface Props {
   actions?: iAppButtonActions
   disabled?: boolean
   duration?: number
+  initialProgress?: number
+  releaseDuration?: number
   size?: tBaseSizeVariant
   maxWidth?: tAppButtonSizeValue
   width?: tAppButtonSizeValue
@@ -26,6 +28,8 @@ const props = withDefaults(defineProps<Props>(), {
   actions: undefined,
   disabled: false,
   duration: 650,
+  initialProgress: 15,
+  releaseDuration: 140,
   size: 'middle',
   maxWidth: '100%',
   width: '100%',
@@ -81,6 +85,8 @@ function handleComplete() {
     :actions="actions"
     :disabled="disabled"
     :duration="duration"
+    :initial-progress="initialProgress"
+    :release-duration="releaseDuration"
     @complete="handleComplete"
   >
     <template #default="{ progress }">
@@ -148,9 +154,6 @@ function handleComplete() {
   max-width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.app-button--primary {
 }
 
 .app-button--size-small {
