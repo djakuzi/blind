@@ -26,6 +26,9 @@ const hasCompleted = ref(false);
 const startedAt = ref(0);
 const progress = ref(0);
 let animationFrameId: number | undefined;
+let activePointerId: number | undefined;
+let activePointerTarget: HTMLElement | undefined;
+let activeTouchId: number | undefined;
 
 const normalizedProgress = computed(() => Math.min(100, Math.max(0, progress.value)));
 
@@ -68,15 +71,9 @@ function updateProgress() {
   animationFrameId = requestAnimationFrame(updateProgress);
 }
 
-function startHold(event: PointerEvent) {
-  if (props.disabled || event.button !== 0) {
+function beginHold() {
+  if (isHolding.value) {
     return;
-  }
-
-  const target = event.currentTarget;
-
-  if (target instanceof HTMLElement) {
-    target.setPointerCapture(event.pointerId);
   }
 
   stopProgressAnimation();
@@ -87,23 +84,130 @@ function startHold(event: PointerEvent) {
   animationFrameId = requestAnimationFrame(updateProgress);
 }
 
-function resetHold() {
+function releasePointerCapture() {
+  if (
+    activePointerId !== undefined
+    && activePointerTarget?.hasPointerCapture(activePointerId)
+  ) {
+    activePointerTarget.releasePointerCapture(activePointerId);
+  }
+
+  activePointerId = undefined;
+  activePointerTarget = undefined;
+}
+
+function isHoldPointer(event: PointerEvent) {
+  if (!event.isPrimary) {
+    return false;
+  }
+
+  return event.pointerType !== 'mouse' || event.button === 0;
+}
+
+function startHold(event: PointerEvent) {
+  if (props.disabled || !isHoldPointer(event)) {
+    return;
+  }
+
+  event.preventDefault();
+
+  const target = event.target;
+
+  if (target instanceof HTMLElement) {
+    target.setPointerCapture(event.pointerId);
+    activePointerId = event.pointerId;
+    activePointerTarget = target;
+  }
+
+  beginHold();
+}
+
+function resetHoldState() {
   stopProgressAnimation();
   isHolding.value = false;
   hasCompleted.value = false;
   progress.value = 0;
+  activeTouchId = undefined;
+  releasePointerCapture();
 }
 
-onBeforeUnmount(stopProgressAnimation);
+function resetPointerHold(event?: PointerEvent) {
+  if (
+    event !== undefined
+    && activePointerId !== undefined
+    && event.pointerId !== activePointerId
+  ) {
+    return;
+  }
+
+  resetHoldState();
+}
+
+function getActiveChangedTouch(event: TouchEvent) {
+  if (activeTouchId === undefined) {
+    return undefined;
+  }
+
+  return Array
+    .from(event.changedTouches)
+    .find((touch) => touch.identifier === activeTouchId);
+}
+
+function startTouchHold(event: TouchEvent) {
+  const touch = event.changedTouches.item(0);
+
+  if (props.disabled || touch === null) {
+    return;
+  }
+
+  event.preventDefault();
+  activeTouchId = touch.identifier;
+  beginHold();
+}
+
+function resetTouchHold(event: TouchEvent) {
+  if (activeTouchId === undefined || getActiveChangedTouch(event) === undefined) {
+    return;
+  }
+
+  event.preventDefault();
+  resetHoldState();
+}
+
+function startMouseHold(event: MouseEvent) {
+  if (props.disabled || event.button !== 0) {
+    return;
+  }
+
+  event.preventDefault();
+  beginHold();
+}
+
+function resetMouseHold() {
+  if (activePointerId !== undefined || activeTouchId !== undefined) {
+    return;
+  }
+
+  resetHoldState();
+}
+
+onBeforeUnmount(resetHoldState);
 </script>
 
 <template>
   <div
     class="app-hold-action"
     @pointerdown="startHold"
-    @pointerup="resetHold"
-    @pointercancel="resetHold"
-    @lostpointercapture="resetHold"
+    @pointerup="resetPointerHold"
+    @pointercancel="resetPointerHold"
+    @lostpointercapture="resetPointerHold"
+    @touchstart="startTouchHold"
+    @touchend="resetTouchHold"
+    @touchcancel="resetTouchHold"
+    @mousedown="startMouseHold"
+    @mouseup="resetMouseHold"
+    @mouseleave="resetMouseHold"
+    @contextmenu.prevent
   >
     <slot
       :progress="normalizedProgress"

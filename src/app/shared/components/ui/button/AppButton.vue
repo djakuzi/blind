@@ -122,7 +122,7 @@ function handleComplete() {
   overflow: hidden;
   cursor: pointer;
   user-select: none;
-  touch-action: manipulation;
+  touch-action: none;
   appearance: none;
 }
 

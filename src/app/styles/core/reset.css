@@ -37,7 +37,8 @@ a {
   font: inherit;
   color: inherit;
   touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: none;
+  user-select: none;
 }
 
 button,
