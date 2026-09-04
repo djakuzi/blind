@@ -31,8 +31,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   actions: undefined,
   disabled: false,
-  bloodFlowBackDuration: 3000,
-  bloodFlowFrontDuration: 1800,
+  bloodFlowBackDuration: 2200,
+  bloodFlowFrontDuration: 1200,
   duration: 650,
   fillDuration: undefined,
   initialProgress: 15,

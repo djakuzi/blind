@@ -9,8 +9,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  flowBackDuration: 3000,
-  flowFrontDuration: 1800,
+  flowBackDuration: 2200,
+  flowFrontDuration: 1200,
   isActive: false,
   progressRatio: 0,
 });
@@ -54,33 +54,19 @@ const fillClass = computed(() => [
     aria-hidden="true"
   >
     <span class="app-blood-fill__body" />
-    <svg
-      class="app-blood-fill__wave app-blood-fill__wave--back"
-      viewBox="0 0 1440 90"
-      preserveAspectRatio="none"
-      focusable="false"
-    >
-      <path d="M0 38 C54 28 95 43 146 36 C214 25 260 48 326 39 C398 29 455 37 519 43 C585 50 642 28 698 36 C706 37 714 38 720 38 C774 28 815 43 866 36 C934 25 980 48 1046 39 C1118 29 1175 37 1239 43 C1305 50 1362 28 1418 36 C1426 37 1434 38 1440 38 L1440 90 L0 90 Z" />
-    </svg>
-    <svg
-      class="app-blood-fill__wave app-blood-fill__wave--front"
-      viewBox="0 0 1440 90"
-      preserveAspectRatio="none"
-      focusable="false"
-    >
-      <path d="M0 34 C42 21 84 31 132 36 C196 43 240 24 299 30 C360 36 410 50 475 35 C538 20 586 26 638 34 C675 40 704 39 720 34 C762 21 804 31 852 36 C916 43 960 24 1019 30 C1080 36 1130 50 1195 35 C1258 20 1306 26 1358 34 C1395 40 1424 39 1440 34 L1440 90 L0 90 Z" />
-    </svg>
+    <span class="app-blood-fill__wave app-blood-fill__wave--back" />
+    <span class="app-blood-fill__wave app-blood-fill__wave--front" />
   </span>
 </template>
 
 <style scoped>
 .app-blood-fill {
   --cp-blood-fill-color: var(--app-color-primary);
-  --cp-blood-fill-back-duration: 3000ms;
-  --cp-blood-fill-front-duration: 1800ms;
-  --cp-blood-fill-wave-size: var(--app-space-4);
-  --cp-blood-fill-back-wave-y: calc(var(--cp-blood-fill-wave-size) * -0.96);
-  --cp-blood-fill-front-wave-y: calc(var(--cp-blood-fill-wave-size) * -1.12);
+  --cp-blood-fill-back-duration: 2200ms;
+  --cp-blood-fill-front-duration: 1200ms;
+  --cp-blood-fill-wave-height: var(--app-space-8);
+  --cp-blood-fill-back-wave-y: calc(var(--cp-blood-fill-wave-height) * -0.56);
+  --cp-blood-fill-front-wave-y: calc(var(--cp-blood-fill-wave-height) * -0.62);
 
   position: absolute;
   inset: 0;
@@ -97,6 +83,7 @@ const fillClass = computed(() => [
 
 .app-blood-fill__body {
   inset: 0;
+  z-index: 0;
   background: var(--cp-blood-fill-color);
 }
 
@@ -104,24 +91,24 @@ const fillClass = computed(() => [
   top: 0;
   left: 0;
   width: 200%;
-  height: calc(var(--cp-blood-fill-wave-size) * 1.7);
-  color: var(--cp-blood-fill-color);
+  height: var(--cp-blood-fill-wave-height);
+  z-index: 1;
+  background-repeat: repeat-x;
+  background-size: 50% 100%;
   will-change: transform;
-}
-
-.app-blood-fill__wave path {
-  fill: currentColor;
 }
 
 .app-blood-fill__wave--back {
   opacity: 0.72;
   animation: app-blood-fill-flow-back var(--cp-blood-fill-back-duration) linear infinite;
   animation-play-state: paused;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 720 90' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23d92d32' d='M0 38 C45 28 96 46 151 36 C223 24 276 50 344 39 C413 28 466 37 529 43 C604 51 660 28 720 38 C732 40 732 40 720 38 L720 90 L0 90 C-12 90 -12 90 0 90 Z'/%3E%3C/svg%3E");
 }
 
 .app-blood-fill__wave--front {
   animation: app-blood-fill-flow-front var(--cp-blood-fill-front-duration) linear infinite;
   animation-play-state: paused;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 720 90' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23d92d32' d='M0 34 C39 20 86 31 132 36 C196 43 240 24 299 30 C360 36 410 50 475 35 C538 20 586 26 638 34 C672 40 697 39 720 34 C732 34 732 34 720 34 L720 90 L0 90 C-12 90 -12 90 0 90 Z'/%3E%3C/svg%3E");
 }
 
 .app-blood-fill--active {
