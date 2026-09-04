@@ -15,6 +15,8 @@ interface iAppButtonActions {
 interface Props {
   actions?: iAppButtonActions
   disabled?: boolean
+  bloodFlowBackDuration?: number
+  bloodFlowFrontDuration?: number
   duration?: number
   fillDuration?: number
   initialProgress?: number
@@ -29,6 +31,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   actions: undefined,
   disabled: false,
+  bloodFlowBackDuration: 3000,
+  bloodFlowFrontDuration: 1800,
   duration: 650,
   fillDuration: undefined,
   initialProgress: 15,
@@ -86,6 +90,8 @@ function handleComplete() {
         type="button"
       >
         <AppBloodFill
+          :flow-back-duration="bloodFlowBackDuration"
+          :flow-front-duration="bloodFlowFrontDuration"
           :is-active="isProgressActive"
           :progress-ratio="progressRatio"
         />
