@@ -13,5 +13,7 @@ import { RouterView } from 'vue-router';
   display: flex;
   flex: 1;
   width: 100%;
+  min-height: 100dvh;
+  max-height: 100dvh;
 }
 </style>
