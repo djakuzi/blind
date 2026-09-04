@@ -14,7 +14,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   actions: undefined,
   disabled: false,
-  duration: 900,
+  duration: 650,
 });
 
 const emit = defineEmits<{
@@ -111,10 +111,13 @@ function startHold(event: PointerEvent) {
 
   event.preventDefault();
 
-  const target = event.target;
+  const target = event.currentTarget;
 
   if (target instanceof HTMLElement) {
-    target.setPointerCapture(event.pointerId);
+    if (typeof target.setPointerCapture === 'function') {
+      target.setPointerCapture(event.pointerId);
+    }
+
     activePointerId = event.pointerId;
     activePointerTarget = target;
   }
@@ -219,6 +222,11 @@ onBeforeUnmount(resetHoldState);
 
 <style scoped>
 .app-hold-action {
-  display: contents;
+  display: inline-flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  touch-action: none;
+  -webkit-touch-callout: none;
 }
 </style>

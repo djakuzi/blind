@@ -25,7 +25,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   actions: undefined,
   disabled: false,
-  duration: 900,
+  duration: 650,
   size: 'middle',
   maxWidth: '100%',
   width: '100%',
@@ -138,7 +138,6 @@ function handleComplete() {
   background: var(--app-color-primary);
   transform: scaleY(var(--cp-button-progress));
   transform-origin: center bottom;
-  transition: transform 80ms linear;
   pointer-events: none;
 }
 
@@ -152,7 +151,6 @@ function handleComplete() {
 }
 
 .app-button--primary {
-  box-shadow: inset 0 -0.625rem 0 var(--app-color-primary);
 }
 
 .app-button--size-small {
