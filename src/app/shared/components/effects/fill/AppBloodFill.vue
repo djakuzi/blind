@@ -2,14 +2,12 @@
 import { computed } from 'vue';
 
 interface Props {
-  flowBackDuration?: number
   flowFrontDuration?: number
   isActive?: boolean
   progressRatio?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  flowBackDuration: 2200,
   flowFrontDuration: 1200,
   isActive: false,
   progressRatio: 0,
@@ -36,7 +34,6 @@ const fillStyle = computed(() => {
 
   return {
     '--cp-blood-fill-offset': `${(1 - progressRatio) * 100}%`,
-    '--cp-blood-fill-back-duration': `${normalizeDuration(props.flowBackDuration)}ms`,
     '--cp-blood-fill-front-duration': `${normalizeDuration(props.flowFrontDuration)}ms`,
   };
 });
@@ -54,7 +51,6 @@ const fillClass = computed(() => [
     aria-hidden="true"
   >
     <span class="app-blood-fill__body" />
-    <span class="app-blood-fill__wave app-blood-fill__wave--back" />
     <span class="app-blood-fill__wave app-blood-fill__wave--front" />
   </span>
 </template>
@@ -62,10 +58,8 @@ const fillClass = computed(() => [
 <style scoped>
 .app-blood-fill {
   --cp-blood-fill-color: var(--app-color-primary);
-  --cp-blood-fill-back-duration: 2200ms;
   --cp-blood-fill-front-duration: 1200ms;
   --cp-blood-fill-wave-height: var(--app-space-8);
-  --cp-blood-fill-back-wave-y: calc(var(--cp-blood-fill-wave-height) * -0.56);
   --cp-blood-fill-front-wave-y: calc(var(--cp-blood-fill-wave-height) * -0.62);
 
   position: absolute;
@@ -98,13 +92,6 @@ const fillClass = computed(() => [
   will-change: transform;
 }
 
-.app-blood-fill__wave--back {
-  opacity: 0.72;
-  animation: app-blood-fill-flow-back var(--cp-blood-fill-back-duration) linear infinite;
-  animation-play-state: paused;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 720 90' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23d92d32' d='M0 38 C45 28 96 46 151 36 C223 24 276 50 344 39 C413 28 466 37 529 43 C604 51 660 28 720 38 C732 40 732 40 720 38 L720 90 L0 90 C-12 90 -12 90 0 90 Z'/%3E%3C/svg%3E");
-}
-
 .app-blood-fill__wave--front {
   animation: app-blood-fill-flow-front var(--cp-blood-fill-front-duration) linear infinite;
   animation-play-state: paused;
@@ -127,13 +114,4 @@ const fillClass = computed(() => [
   }
 }
 
-@keyframes app-blood-fill-flow-back {
-  from {
-    transform: translate3d(-50%, var(--cp-blood-fill-back-wave-y), 0);
-  }
-
-  to {
-    transform: translate3d(0, var(--cp-blood-fill-back-wave-y), 0);
-  }
-}
 </style>
