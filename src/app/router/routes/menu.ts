@@ -9,6 +9,11 @@ export const routeMenu: RouteRecordRaw = {
   component: LayoutBase,
   children: [
     {
+      meta: {
+        layout: {
+          header: false,
+        },
+      },
       path: '',
       name: KEY_ROUTE.menu.index,
       component: ViewMenu,
