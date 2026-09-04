@@ -78,14 +78,17 @@ function handleComplete() {
     :release-duration="releaseDuration"
     @complete="handleComplete"
   >
-    <template #default="{ progressRatio }">
+    <template #default="{ progressRatio, isProgressActive }">
       <button
         :class="buttonClass"
         :style="buttonBaseStyle"
         :disabled="disabled"
         type="button"
       >
-        <AppBloodFill :progress-ratio="progressRatio" />
+        <AppBloodFill
+          :is-active="isProgressActive"
+          :progress-ratio="progressRatio"
+        />
         <span class="app-button__content">
           <slot>{{ text }}</slot>
         </span>

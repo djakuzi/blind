@@ -2,10 +2,12 @@
 import { computed } from 'vue';
 
 interface Props {
+  isActive?: boolean
   progressRatio?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  isActive: false,
   progressRatio: 0,
 });
 
@@ -24,11 +26,16 @@ const fillStyle = computed(() => {
     '--cp-blood-fill-height': `${progressRatio * 100}%`,
   };
 });
+
+const fillClass = computed(() => [
+  'app-blood-fill',
+  { 'app-blood-fill--active': props.isActive },
+]);
 </script>
 
 <template>
   <span
-    class="app-blood-fill"
+    :class="fillClass"
     :style="fillStyle"
     aria-hidden="true"
   >
@@ -75,6 +82,7 @@ const fillStyle = computed(() => {
   top: calc(var(--cp-blood-fill-wave-size) * -0.96);
   opacity: 0.72;
   animation: app-blood-fill-flow-back 4200ms linear infinite;
+  animation-play-state: paused;
   mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 720 90' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='black' d='M0 39 C47 28 91 42 139 35 C204 24 252 50 319 38 C386 26 433 35 489 43 C553 52 607 26 660 34 C685 38 704 42 720 36 L720 90 L0 90 Z'/%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 720 90' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='black' d='M0 39 C47 28 91 42 139 35 C204 24 252 50 319 38 C386 26 433 35 489 43 C553 52 607 26 660 34 C685 38 704 42 720 36 L720 90 L0 90 Z'/%3E%3C/svg%3E");
 }
@@ -82,8 +90,15 @@ const fillStyle = computed(() => {
 .app-blood-fill__wave--front {
   top: calc(var(--cp-blood-fill-wave-size) * -1.12);
   animation: app-blood-fill-flow-front 2800ms linear infinite;
+  animation-play-state: paused;
   mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 720 90' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='black' d='M0 34 C38 20 86 31 129 36 C190 43 238 23 294 29 C360 36 405 51 470 34 C533 18 584 24 634 33 C674 40 701 36 720 28 L720 90 L0 90 Z'/%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 720 90' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='black' d='M0 34 C38 20 86 31 129 36 C190 43 238 23 294 29 C360 36 405 51 470 34 C533 18 584 24 634 33 C674 40 701 36 720 28 L720 90 L0 90 Z'/%3E%3C/svg%3E");
+}
+
+.app-blood-fill--active {
+  .app-blood-fill__wave {
+    animation-play-state: running;
+  }
 }
 
 @keyframes app-blood-fill-flow-front {
@@ -92,13 +107,13 @@ const fillStyle = computed(() => {
   }
 
   to {
-    transform: translateX(-25%);
+    transform: translateX(-50%);
   }
 }
 
 @keyframes app-blood-fill-flow-back {
   from {
-    transform: translateX(-25%);
+    transform: translateX(-50%);
   }
 
   to {

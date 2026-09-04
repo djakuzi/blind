@@ -49,6 +49,9 @@ const normalizedReleaseDuration = computed(() => Math.max(0, props.releaseDurati
 const progress = ref(normalizedInitialProgress.value);
 const normalizedProgress = computed(() => normalizeProgressValue(progress.value));
 const progressRatio = computed(() => normalizedProgress.value / 100);
+const isProgressActive = computed(() => (
+  isHolding.value || normalizedProgress.value > normalizedInitialProgress.value
+));
 
 watch(normalizedInitialProgress, (initialProgress) => {
   if (isHolding.value) {
@@ -282,6 +285,7 @@ onBeforeUnmount(() => resetHoldState(true));
       :progress="normalizedProgress"
       :progress-ratio="progressRatio"
       :is-holding="isHolding"
+      :is-progress-active="isProgressActive"
       :is-complete="hasCompleted"
     />
   </div>
