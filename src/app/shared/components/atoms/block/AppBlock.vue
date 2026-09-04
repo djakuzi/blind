@@ -1,15 +1,15 @@
 <script lang="ts">
+import type { CSSProperties } from 'vue';
+
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
-export type tAppBlockTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer' | 'span';
-export type tAppBlockDisplay = 'block' | 'inline-block' | 'flex' | 'inline-flex' | 'none';
-export type tAppBlockOverflow = 'visible' | 'hidden' | 'clip' | 'scroll' | 'auto';
-export type tAppBlockSizeValue = number | string;
+type tAppBlockTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer' | 'span';
+type tAppBlockSizeValue = number | string;
 
 export interface PropsAppBlock {
   tag?: tAppBlockTag
-  display?: tAppBlockDisplay
-  overflow?: tAppBlockOverflow
+  display?: CSSProperties['display']
+  overflow?: CSSProperties['overflow']
   width?: tAppBlockSizeValue
   maxWidth?: tAppBlockSizeValue
   height?: tAppBlockSizeValue
@@ -42,10 +42,10 @@ function resolveSizeValue(value?: tAppBlockSizeValue) {
 
 const blockClass = computed(() => [
   'app-block',
-  `app-block--display-${props.display}`,
 ]);
 
 const blockStyle = computed(() => ({
+  '--cp-block-display': props.display,
   '--cp-block-width': resolveSizeValue(props.width) ?? 'auto',
   '--cp-block-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
   '--cp-block-height': resolveSizeValue(props.height) ?? 'auto',
@@ -66,30 +66,11 @@ const blockStyle = computed(() => ({
 
 <style scoped>
 .app-block {
+  display: var(--cp-block-display);
   width: var(--cp-block-width);
   max-width: var(--cp-block-max-width);
   height: var(--cp-block-height);
   margin: var(--cp-block-margin);
   overflow: var(--cp-block-overflow);
-}
-
-.app-block--display-block {
-  display: block;
-}
-
-.app-block--display-inline-block {
-  display: inline-block;
-}
-
-.app-block--display-flex {
-  display: flex;
-}
-
-.app-block--display-inline-flex {
-  display: inline-flex;
-}
-
-.app-block--display-none {
-  display: none;
 }
 </style>
