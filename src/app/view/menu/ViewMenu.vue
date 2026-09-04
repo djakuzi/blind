@@ -3,7 +3,6 @@ import { useRouter } from 'vue-router';
 
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
-import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
 
 const router = useRouter();
@@ -25,29 +24,21 @@ function handleSettings() {
     padding="none"
   >
     <div class="view-menu__nav">
-      <AppHoldAction :actions="{ complete: handlePlay }">
-        <template #default="{ progress }">
-          <AppButton
-            :progress="progress"
-            text="Играть"
-            width="42rem"
-            max-width="100%"
-            size="big"
-          />
-        </template>
-      </AppHoldAction>
+      <AppButton
+        :actions="{ complete: handlePlay }"
+        text="Играть"
+        width="42rem"
+        max-width="100%"
+        size="big"
+      />
 
-      <AppHoldAction :actions="{ complete: handleSettings }">
-        <template #default="{ progress }">
-          <AppButton
-            :progress="progress"
-            text="Настройки"
-            width="42rem"
-            max-width="100%"
-            size="big"
-          />
-        </template>
-      </AppHoldAction>
+      <AppButton
+        :actions="{ complete: handleSettings }"
+        text="Настройки"
+        width="42rem"
+        max-width="100%"
+        size="big"
+      />
     </div>
   </ViewLayout>
 </template>

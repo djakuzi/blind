@@ -1,30 +1,41 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 
 type tAppButtonVariant = 'primary';
 type tAppButtonSizeValue = number | string;
 
+interface iAppButtonActions {
+  complete?: () => void
+}
+
 interface Props {
-  progress?: number
+  actions?: iAppButtonActions
+  disabled?: boolean
+  duration?: number
   size?: tBaseSizeVariant
   maxWidth?: tAppButtonSizeValue
   width?: tAppButtonSizeValue
   variant?: tAppButtonVariant
   text?: string
-  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  progress: 0,
+  actions: undefined,
+  disabled: false,
+  duration: 900,
   size: 'middle',
   maxWidth: '100%',
   width: '100%',
   variant: 'primary',
   text: undefined,
-  disabled: false,
 });
+
+const emit = defineEmits<{
+  complete: []
+}>();
 
 function resolveSizeValue(value?: tAppButtonSizeValue) {
   if (value === undefined || value === null) {
@@ -34,39 +45,58 @@ function resolveSizeValue(value?: tAppButtonSizeValue) {
   return typeof value === 'number' ? `${value}px` : value;
 }
 
+function normalizeProgress(progress: number) {
+  if (!Number.isFinite(progress)) {
+    return 0;
+  }
+
+  return Math.min(100, Math.max(0, progress));
+}
+
 const buttonClass = computed(() => [
   'app-button',
   `app-button--${props.variant}`,
   `app-button--size-${props.size}`,
 ]);
 
-const normalizedProgress = computed(() => {
-  if (!Number.isFinite(props.progress)) {
-    return 0;
-  }
-
-  return Math.min(100, Math.max(0, props.progress));
-});
-
-const buttonStyle = computed(() => ({
+const buttonBaseStyle = computed(() => ({
   '--cp-button-width': resolveSizeValue(props.width) ?? 'auto',
   '--cp-button-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
-  '--cp-button-progress': normalizedProgress.value / 100,
 }));
+
+function getButtonStyle(progress: number) {
+  return {
+    ...buttonBaseStyle.value,
+    '--cp-button-progress': normalizeProgress(progress) / 100,
+  };
+}
+
+function handleComplete() {
+  emit('complete');
+}
 </script>
 
 <template>
-  <button
-    :class="buttonClass"
-    :style="buttonStyle"
+  <AppHoldAction
+    :actions="actions"
     :disabled="disabled"
-    type="button"
+    :duration="duration"
+    @complete="handleComplete"
   >
-    <span class="app-button__fill" />
-    <span class="app-button__content">
-      <slot>{{ text }}</slot>
-    </span>
-  </button>
+    <template #default="{ progress }">
+      <button
+        :class="buttonClass"
+        :style="getButtonStyle(progress)"
+        :disabled="disabled"
+        type="button"
+      >
+        <span class="app-button__fill" />
+        <span class="app-button__content">
+          <slot>{{ text }}</slot>
+        </span>
+      </button>
+    </template>
+  </AppHoldAction>
 </template>
 
 <style scoped>
