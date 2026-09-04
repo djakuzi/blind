@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+* {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
 *,
 body {
   margin: 0;
@@ -46,8 +52,13 @@ button,
 
 input,
 textarea,
-select {
+select,
+[contenteditable=''],
+[contenteditable='true'] {
   color: inherit;
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
 }
 
 iframe {
