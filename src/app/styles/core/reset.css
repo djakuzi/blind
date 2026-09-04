@@ -34,7 +34,6 @@ textarea,
 select,
 a {
   outline: none;
-  font: inherit;
   color: inherit;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;

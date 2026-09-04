@@ -9,6 +9,8 @@ body {
     --app-font-family-base: 'Inter', sans-serif;
     background: var(--app-color-background);
     font-family: var(--app-font-family-base);
+    font-weight: var(--app-font-weight-regular);
+    line-height: var(--app-line-height-display);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -117,7 +117,6 @@ function handleComplete() {
   border-radius: var(--app-radius-md);
   background: var(--app-color-surface-primary);
   color: var(--app-color-text-primary);
-  font-family: inherit;
   font-weight: var(--app-font-weight-medium);
   line-height: var(--app-line-height-control);
   letter-spacing: var(--app-letter-spacing-wider);
@@ -145,20 +144,17 @@ function handleComplete() {
 }
 
 .app-button-hold--size-small {
-  min-height: var(--app-space-12);
   padding: var(--app-space-3) var(--app-space-8);
-  font-size: var(--app-font-size-md);
-}
-
-.app-button-hold--size-middle {
-  min-height: var(--app-space-16);
-  padding: var(--app-space-4) var(--app-space-10);
   font-size: var(--app-font-size-xl);
 }
 
-.app-button-hold--size-big {
-  min-height: var(--app-space-20);
-  padding: var(--app-space-5) var(--app-space-12);
+.app-button-hold--size-middle {
+  padding: var(--app-space-4) var(--app-space-10);
   font-size: var(--app-font-size-2xl);
+}
+
+.app-button-hold--size-big {
+  padding: var(--app-space-5) var(--app-space-12);
+  font-size: var(--app-font-size-4xl);
 }
 </style>
