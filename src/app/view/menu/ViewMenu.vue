@@ -8,7 +8,7 @@ import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
 const router = useRouter();
 
 function handlePlay() {
-  void router.push({ name: KEY_ROUTE.game.index });
+  // void router.push({ name: KEY_ROUTE.game.index });
 }
 
 function handleSettings() {

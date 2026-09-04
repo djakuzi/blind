@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
+import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 
 type tAppButtonVariant = 'primary';
@@ -62,13 +63,6 @@ const buttonBaseStyle = computed(() => ({
   '--cp-button-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
 }));
 
-function getButtonStyle(progressRatio: number) {
-  return {
-    ...buttonBaseStyle.value,
-    '--cp-button-progress': progressRatio,
-  };
-}
-
 function handleComplete() {
   emit('complete');
 }
@@ -87,11 +81,11 @@ function handleComplete() {
     <template #default="{ progressRatio }">
       <button
         :class="buttonClass"
-        :style="getButtonStyle(progressRatio)"
+        :style="buttonBaseStyle"
         :disabled="disabled"
         type="button"
       >
-        <span class="app-button__fill" />
+        <AppBloodFill :progress-ratio="progressRatio" />
         <span class="app-button__content">
           <slot>{{ text }}</slot>
         </span>
@@ -130,16 +124,6 @@ function handleComplete() {
 .app-button:disabled {
   color: var(--app-color-text-disabled);
   cursor: default;
-}
-
-.app-button__fill {
-  position: absolute;
-  inset: auto 0 0;
-  height: 100%;
-  background: var(--app-color-primary);
-  transform: scaleY(var(--cp-button-progress));
-  transform-origin: center bottom;
-  pointer-events: none;
 }
 
 .app-button__content {
