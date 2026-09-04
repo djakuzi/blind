@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 
+import { ToolVibration } from '@/core/tool/vibration';
+
 interface iAppHoldActionActions {
   complete?: () => void
 }
@@ -12,6 +14,7 @@ interface Props {
   fillDuration?: number
   initialProgress?: number
   releaseDuration?: number
+  vibrationDuration?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -21,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
   fillDuration: undefined,
   initialProgress: 15,
   releaseDuration: 140,
+  vibrationDuration: 45,
 });
 
 const emit = defineEmits<{
@@ -77,6 +81,7 @@ function completeHold() {
 
   hasCompleted.value = true;
   progress.value = 100;
+  ToolVibration.vibrate({ duration: props.vibrationDuration });
   props.actions?.complete?.();
   emit('complete');
 }

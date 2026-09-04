@@ -97,7 +97,7 @@ watch(
       return;
     }
 
-    void waitProgressAnimationComplete();
+    waitProgressAnimationComplete();
   },
   { immediate: true },
 );

@@ -5,25 +5,26 @@ import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldActio
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 
-type tAppButtonVariant = 'primary';
-type tAppButtonSizeValue = number | string;
+type tAppButtonHoldVariant = 'primary';
+type tAppButtonHoldSizeValue = number | string;
 
-interface iAppButtonActions {
+interface iAppButtonHoldActions {
   complete?: () => void
 }
 
 interface Props {
-  actions?: iAppButtonActions
+  actions?: iAppButtonHoldActions
   disabled?: boolean
   bloodFlowFrontDuration?: number
   duration?: number
   fillDuration?: number
   initialProgress?: number
   releaseDuration?: number
+  vibrationDuration?: number
   size?: tBaseSizeVariant
-  maxWidth?: tAppButtonSizeValue
-  width?: tAppButtonSizeValue
-  variant?: tAppButtonVariant
+  maxWidth?: tAppButtonHoldSizeValue
+  width?: tAppButtonHoldSizeValue
+  variant?: tAppButtonHoldVariant
   text?: string
 }
 
@@ -35,6 +36,7 @@ const props = withDefaults(defineProps<Props>(), {
   fillDuration: undefined,
   initialProgress: 15,
   releaseDuration: 140,
+  vibrationDuration: 45,
   size: 'middle',
   maxWidth: '100%',
   width: '100%',
@@ -46,7 +48,7 @@ const emit = defineEmits<{
   complete: []
 }>();
 
-function resolveSizeValue(value?: tAppButtonSizeValue) {
+function resolveSizeValue(value?: tAppButtonHoldSizeValue) {
   if (value === undefined || value === null) {
     return undefined;
   }
@@ -55,9 +57,9 @@ function resolveSizeValue(value?: tAppButtonSizeValue) {
 }
 
 const buttonClass = computed(() => [
-  'app-button',
-  `app-button--${props.variant}`,
-  `app-button--size-${props.size}`,
+  'app-button-hold',
+  `app-button-hold--${props.variant}`,
+  `app-button-hold--size-${props.size}`,
 ]);
 
 const buttonBaseStyle = computed(() => ({
@@ -78,6 +80,7 @@ function handleComplete() {
     :fill-duration="fillDuration"
     :initial-progress="initialProgress"
     :release-duration="releaseDuration"
+    :vibration-duration="vibrationDuration"
     @complete="handleComplete"
   >
     <template #default="{ progressRatio, isProgressActive }">
@@ -92,7 +95,7 @@ function handleComplete() {
           :is-active="isProgressActive"
           :progress-ratio="progressRatio"
         />
-        <span class="app-button__content">
+        <span class="app-button-hold__content">
           <slot>{{ text }}</slot>
         </span>
       </button>
@@ -101,7 +104,7 @@ function handleComplete() {
 </template>
 
 <style scoped>
-.app-button {
+.app-button-hold {
   display: inline-flex;
   position: relative;
   align-items: center;
@@ -127,12 +130,12 @@ function handleComplete() {
   appearance: none;
 }
 
-.app-button:disabled {
+.app-button-hold:disabled {
   color: var(--app-color-text-disabled);
   cursor: default;
 }
 
-.app-button__content {
+.app-button-hold__content {
   position: relative;
   z-index: 1;
   overflow: hidden;
@@ -141,19 +144,19 @@ function handleComplete() {
   white-space: nowrap;
 }
 
-.app-button--size-small {
+.app-button-hold--size-small {
   min-height: var(--app-space-12);
   padding: var(--app-space-3) var(--app-space-8);
   font-size: var(--app-font-size-md);
 }
 
-.app-button--size-middle {
+.app-button-hold--size-middle {
   min-height: var(--app-space-16);
   padding: var(--app-space-4) var(--app-space-10);
   font-size: var(--app-font-size-xl);
 }
 
-.app-button--size-big {
+.app-button-hold--size-big {
   min-height: var(--app-space-20);
   padding: var(--app-space-5) var(--app-space-12);
   font-size: var(--app-font-size-2xl);
