@@ -1,7 +1,10 @@
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
 import type { tLayoutSafeArea } from '@/app/layouts/types/layout.type';
 import { safeAreaTokenVar } from '@/app/styles/contracts/safeArea.contract';
 
-export function resolveLayoutPadding(safeArea: tLayoutSafeArea) {
+function resolveLayoutPadding(safeArea: tLayoutSafeArea) {
   const safeAreaVertical = safeAreaTokenVar('vertical');
   const safeAreaHorizontal = safeAreaTokenVar('horizontal');
 
@@ -18,4 +21,14 @@ export function resolveLayoutPadding(safeArea: tLayoutSafeArea) {
   }
 
   return `${safeAreaVertical} ${safeAreaHorizontal}`;
+}
+
+export function useLayoutPadding() {
+  const route = useRoute();
+
+  const layoutPadding = computed(() => resolveLayoutPadding(route.meta.layout?.safeArea ?? true));
+
+  return {
+    layoutPadding,
+  };
 }

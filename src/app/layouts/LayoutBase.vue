@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { RouterView, useRoute } from 'vue-router';
+import { RouterView } from 'vue-router';
 
 import WidgetLayoutHeader from '@/app/layouts/components/widgets/WidgetLayoutHeader.vue';
-import { resolveLayoutPadding } from '@/app/layouts/composables/common/useLayoutPadding';
+import { useLayoutHeader } from '@/app/layouts/composables/common/useLayoutHeader';
+import { useLayoutPadding } from '@/app/layouts/composables/common/useLayoutPadding';
 
-const route = useRoute();
-
-const hasLayoutHeader = computed(() => route.meta.header !== false);
+const { hasLayoutHeader } = useLayoutHeader();
+const { layoutPadding } = useLayoutPadding();
 
 const layoutStyle = computed(() => {
   return {
-    '--cp-layout-padding': resolveLayoutPadding(route.meta.safeArea ?? true),
+    '--cp-layout-padding': layoutPadding.value,
   };
 });
 </script>
