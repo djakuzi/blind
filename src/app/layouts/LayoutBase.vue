@@ -2,15 +2,16 @@
 import { computed } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
 
-import { safeAreaTokenVar } from '@/app/styles/contracts/safeArea.contract';
+import WidgetLayoutHeader from '@/app/layouts/components/widgets/WidgetLayoutHeader.vue';
+import { resolveLayoutPadding } from '@/app/layouts/composables/common/useLayoutPadding';
 
 const route = useRoute();
 
-const layoutStyle = computed(() => {
-  const safeAreaPadding = `${safeAreaTokenVar('vertical')} ${safeAreaTokenVar('horizontal')}`;
+const hasLayoutHeader = computed(() => route.meta.header !== false);
 
+const layoutStyle = computed(() => {
   return {
-    '--cp-layout-padding': route.meta.safeArea === false ? '0' : safeAreaPadding,
+    '--cp-layout-padding': resolveLayoutPadding(route.meta.safeArea ?? true),
   };
 });
 </script>
@@ -20,9 +21,7 @@ const layoutStyle = computed(() => {
     class="layout"
     :style="layoutStyle"
   >
-    <div class="layout-header">
-      тестовый хедер
-    </div>
+    <WidgetLayoutHeader v-if="hasLayoutHeader" />
     <RouterView />
   </main>
 </template>
