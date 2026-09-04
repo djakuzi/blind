@@ -15,6 +15,7 @@ interface Props {
   actions?: iAppButtonActions
   disabled?: boolean
   duration?: number
+  fillDuration?: number
   initialProgress?: number
   releaseDuration?: number
   size?: tBaseSizeVariant
@@ -28,6 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
   actions: undefined,
   disabled: false,
   duration: 650,
+  fillDuration: undefined,
   initialProgress: 15,
   releaseDuration: 140,
   size: 'middle',
@@ -49,14 +51,6 @@ function resolveSizeValue(value?: tAppButtonSizeValue) {
   return typeof value === 'number' ? `${value}px` : value;
 }
 
-function normalizeProgress(progress: number) {
-  if (!Number.isFinite(progress)) {
-    return 0;
-  }
-
-  return Math.min(100, Math.max(0, progress));
-}
-
 const buttonClass = computed(() => [
   'app-button',
   `app-button--${props.variant}`,
@@ -68,10 +62,10 @@ const buttonBaseStyle = computed(() => ({
   '--cp-button-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
 }));
 
-function getButtonStyle(progress: number) {
+function getButtonStyle(progressRatio: number) {
   return {
     ...buttonBaseStyle.value,
-    '--cp-button-progress': normalizeProgress(progress) / 100,
+    '--cp-button-progress': progressRatio,
   };
 }
 
@@ -85,14 +79,15 @@ function handleComplete() {
     :actions="actions"
     :disabled="disabled"
     :duration="duration"
+    :fill-duration="fillDuration"
     :initial-progress="initialProgress"
     :release-duration="releaseDuration"
     @complete="handleComplete"
   >
-    <template #default="{ progress }">
+    <template #default="{ progressRatio }">
       <button
         :class="buttonClass"
-        :style="getButtonStyle(progress)"
+        :style="getButtonStyle(progressRatio)"
         :disabled="disabled"
         type="button"
       >

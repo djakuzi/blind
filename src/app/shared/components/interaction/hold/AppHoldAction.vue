@@ -9,6 +9,7 @@ interface Props {
   actions?: iAppHoldActionActions
   disabled?: boolean
   duration?: number
+  fillDuration?: number
   initialProgress?: number
   releaseDuration?: number
 }
@@ -17,7 +18,8 @@ const props = withDefaults(defineProps<Props>(), {
   actions: undefined,
   disabled: false,
   duration: 650,
-  initialProgress: 8,
+  fillDuration: undefined,
+  initialProgress: 15,
   releaseDuration: 140,
 });
 
@@ -42,9 +44,11 @@ function normalizeProgressValue(value: number) {
 }
 
 const normalizedInitialProgress = computed(() => normalizeProgressValue(props.initialProgress));
+const normalizedFillDuration = computed(() => Math.max(1, props.fillDuration ?? props.duration));
 const normalizedReleaseDuration = computed(() => Math.max(0, props.releaseDuration));
 const progress = ref(normalizedInitialProgress.value);
 const normalizedProgress = computed(() => normalizeProgressValue(progress.value));
+const progressRatio = computed(() => normalizedProgress.value / 100);
 
 watch(normalizedInitialProgress, (initialProgress) => {
   if (isHolding.value) {
@@ -79,7 +83,7 @@ function updateProgress() {
     return;
   }
 
-  const duration = Math.max(1, props.duration);
+  const duration = normalizedFillDuration.value;
   const elapsed = performance.now() - startedAt.value;
   const initialProgress = normalizedInitialProgress.value;
   progress.value = initialProgress + (elapsed / duration) * (100 - initialProgress);
@@ -276,6 +280,7 @@ onBeforeUnmount(() => resetHoldState(true));
   >
     <slot
       :progress="normalizedProgress"
+      :progress-ratio="progressRatio"
       :is-holding="isHolding"
       :is-complete="hasCompleted"
     />
