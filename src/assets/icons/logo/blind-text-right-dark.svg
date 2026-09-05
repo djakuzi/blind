@@ -1,14 +1,16 @@
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="3600"
+  width="2150"
   height="900"
-  viewBox="0 0 3600 900"
+  viewBox="325 0 2150 900"
 >
   <!-- Background -->
   <rect
-    width="3600"
+    x="325"
+    y="0"
+    width="2150"
     height="900"
-    fill="#0B0B0C"
+    fill="#F5F5F6"
   />
 
   <!-- BLIND icon -->
@@ -26,7 +28,7 @@
            V 239
            C 445 225 455 214 470 214
            Z"
-        fill="#F7F7F8"
+        fill="#0B0B0C"
       />
     </g>
 
@@ -39,7 +41,7 @@
          L 566 649
          C 579 637 579 614 566 602
          Z"
-      fill="#F7F7F8"
+      fill="#0B0B0C"
       transform="translate(46 0)"
     />
 
@@ -56,7 +58,7 @@
            V 1013
            C 445 1027 455 1038 470 1038
            Z"
-        fill="#F7F7F8"
+        fill="#0B0B0C"
       />
     </g>
 
@@ -71,8 +73,8 @@
 
   <!-- BLIND wordmark -->
   <g
-    fill="#F7F7F8"
-    transform="translate(930 450) scale(2.25 2.85) translate(-425 -786.5)"
+    fill="#0B0B0C"
+    transform="translate(830 450) scale(2.25 2.85) translate(-425 -786.5)"
   >
     <!-- B -->
     <path
