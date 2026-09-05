@@ -19,6 +19,23 @@ function handlePlay() {
 function handleSettings() {
   router.push({ name: KEY_ROUTE.settings.index });
 }
+
+const menuActions = [
+  {
+    key: 'play',
+    text: 'Играть',
+    actions: {
+      complete: handlePlay,
+    },
+  },
+  {
+    key: 'settings',
+    text: 'Настройки',
+    actions: {
+      complete: handleSettings,
+    },
+  },
+];
 </script>
 
 <template>
@@ -29,7 +46,6 @@ function handleSettings() {
     padding="none"
   >
     <AppFlex
-      class="view-menu__content"
       direction="column"
       align="center"
       width="100%"
@@ -38,7 +54,7 @@ function handleSettings() {
         class="view-menu__logo"
         size="big"
         logo="blindTextRight"
-        width="70rem"
+        width="80rem"
       />
 
       <AppFlex
@@ -50,15 +66,10 @@ function handleSettings() {
         width="100%"
       >
         <AppButtonHold
-          :actions="{ complete: handlePlay }"
-          text="Играть"
-          width="42rem"
-          size="big"
-        />
-
-        <AppButtonHold
-          :actions="{ complete: handleSettings }"
-          text="Настройки"
+          v-for="menuAction in menuActions"
+          :key="menuAction.key"
+          :actions="menuAction.actions"
+          :text="menuAction.text"
           width="42rem"
           size="big"
         />
@@ -82,11 +93,6 @@ function handleSettings() {
 <style scoped>
 .view-menu {
   position: relative;
-}
-
-.view-menu__content {
-  min-width: 0;
-  padding: var(--app-space-8) var(--app-space-4);
 }
 
 .view-menu__logo {
