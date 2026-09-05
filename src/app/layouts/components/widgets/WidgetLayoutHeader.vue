@@ -15,7 +15,6 @@ function handleBack() {
 <template>
   <header class="layout-header">
     <AppFlex
-      class="layout-header__content"
       align="center"
       justify="between"
       width="100%"
@@ -51,11 +50,6 @@ function handleBack() {
   flex: 0 0 auto;
   align-items: center;
   width: 100%;
-  box-sizing: border-box;
-}
-
-.layout-header__content {
-  min-width: 0;
 }
 
 .layout-header__back,

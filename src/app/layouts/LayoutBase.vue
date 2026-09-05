@@ -34,7 +34,6 @@ const layoutStyle = computed(() => {
   width: 100%;
   min-height: 100dvh;
   max-height: 100dvh;
-  box-sizing: border-box;
   padding: var(--cp-layout-padding);
 }
 </style>
