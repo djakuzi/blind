@@ -45,15 +45,31 @@ ${entries}
   })
   .join('\n')
 
+const typesBlock = [
+  'export type tIconGroup = keyof typeof ICONS_ASSETS',
+  'export type tIconAssets = Record<string, string>',
+  '',
+  'type tResolveIconName<TName extends string> =',
+  '  TName extends `${infer TIconName}Dark`',
+  '    ? TIconName',
+  '    : TName extends `${infer TIconName}Light`',
+  '      ? TIconName',
+  '      : TName',
+  '',
+  'export type tIconName<TGroup extends tIconGroup> =',
+  '  TGroup extends tIconGroup',
+  '    ? tResolveIconName<Extract<keyof (typeof ICONS_ASSETS)[TGroup], string>>',
+  '    : never',
+].join('\n');
+
 const content = `${importsBlock}
 
 export const ICONS_ASSETS = {
 ${iconsBlock}
 } as const
 
-export type tIconGroup = keyof typeof ICONS_ASSETS
-export type tIconAssets = Record<string, string>
-`
+${typesBlock}
+`;
 
 mkdirSync(outputDirectory, { recursive: true })
 writeFileSync(outputPath, content)
