@@ -32,52 +32,44 @@
   font-display: swap;
 }
 
-/* Golos Text */
+/* Comfortaa */
 
 @font-face {
-  font-family: 'Golos Text';
-  src: url('../../../assets/fonts/golosText/GolosText-Regular.woff2') format('woff2');
+  font-family: 'Comfortaa';
+  src: url('../../../assets/fonts/comfortaa/Comfortaa-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('../../../assets/fonts/comfortaa/Comfortaa-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Golos Text';
-  src: url('../../../assets/fonts/golosText/GolosText-Medium.woff2') format('woff2');
+  font-family: 'Comfortaa';
+  src: url('../../../assets/fonts/comfortaa/Comfortaa-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Golos Text';
-  src: url('../../../assets/fonts/golosText/GolosText-SemiBold.woff2') format('woff2');
+  font-family: 'Comfortaa';
+  src: url('../../../assets/fonts/comfortaa/Comfortaa-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Golos Text';
-  src: url('../../../assets/fonts/golosText/GolosText-Bold.woff2') format('woff2');
+  font-family: 'Comfortaa';
+  src: url('../../../assets/fonts/comfortaa/Comfortaa-Bold.woff2') format('woff2');
   font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Golos Text';
-  src: url('../../../assets/fonts/golosText/GolosText-ExtraBold.woff2') format('woff2');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Golos Text';
-  src: url('../../../assets/fonts/golosText/GolosText-Black.woff2') format('woff2');
-  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
