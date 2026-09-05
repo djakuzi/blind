@@ -17,8 +17,6 @@ interface Props {
   maxWidth?: PropsAppBlock['maxWidth']
   display?: PropsAppBlock['display']
   alt?: string
-  loading?: 'eager' | 'lazy'
-  decoding?: 'async' | 'sync' | 'auto'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -26,13 +24,11 @@ const props = withDefaults(defineProps<Props>(), {
   maxWidth: '100%',
   display: 'block',
   alt: '',
-  loading: 'eager',
-  decoding: 'async',
 });
 
 const { resolvedThemeMode } = useAppThemeMode();
 
-const iconSrc = computed(() => {
+const iconSvg = computed(() => {
   const groupAssets = ICONS_ASSETS[props.group] as tIconAssets;
 
   const themeSuffix = resolvedThemeMode.value === 'dark'
@@ -54,14 +50,14 @@ const iconSrc = computed(() => {
     :width="width"
     :max-width="maxWidth"
     :height="height"
+    role="img"
+    :aria-label="alt || undefined"
+    :aria-hidden="alt ? undefined : true"
   >
-    <img
+    <span
       class="app-icon__media"
-      :src="iconSrc"
-      :alt="alt"
-      :loading="loading"
-      :decoding="decoding"
-    >
+      v-html="iconSvg"
+    />
   </AppBlock>
 </template>
 
@@ -71,6 +67,12 @@ const iconSrc = computed(() => {
 }
 
 .app-icon__media {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.app-icon__media :deep(svg) {
   display: block;
   width: 100%;
   height: 100%;
