@@ -76,6 +76,7 @@ const fillClass = computed(() => [
 }
 
 .app-blood-fill__body {
+  width: 100%;
   inset: 0;
   z-index: 0;
   background: var(--cp-blood-fill-color);
