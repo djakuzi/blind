@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style/modules/to.modules';
+import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 
 type tAppButtonHoldVariant = 'primary';

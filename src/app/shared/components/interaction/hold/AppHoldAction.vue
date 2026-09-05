@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue';
 
 import { ToolVibration } from '@/core/tool/vibration';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style/modules/to.modules';
+import type { tStyleSizeValue } from '@/app/shared/lib/style';
 
 interface iAppHoldActionActions {
   complete?: () => void

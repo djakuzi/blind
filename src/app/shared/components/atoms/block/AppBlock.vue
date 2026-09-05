@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { CSSProperties } from 'vue';
 
-import type { tStyleSizeValue } from '@/app/shared/lib/style/modules/to.modules';
+import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 type tAppBlockTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer' | 'span';
