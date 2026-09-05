@@ -7,7 +7,7 @@ import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { ICONS_ASSETS } from '@/core/media/assets';
 import { ToolSystem } from '@/core/tool/system';
 
-type tAppLogoVariant = 'blind' | 'blindTextBottomLight' | 'blindTextRight';
+type tAppLogoVariant = 'blind' | 'blindTextBottom' | 'blindTextRight';
 type tAppLogoSizeValue = number | string;
 type tLogoAssetKey = keyof typeof ICONS_ASSETS.logo;
 
@@ -49,7 +49,7 @@ const LOGO_ASSET_MAP: Record<tAppLogoVariant, Record<ToolSystem.tSystemThemeMode
     dark: 'blindDark',
     light: 'blindLight',
   },
-  blindTextBottomLight: {
+  blindTextBottom: {
     dark: 'blindTextBottomDark',
     light: 'blindTextBottomLight',
   },
