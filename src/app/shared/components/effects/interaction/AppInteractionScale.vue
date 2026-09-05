@@ -32,7 +32,7 @@ withDefaults(defineProps<Props>(), {
 
 @media (hover: hover) and (pointer: fine) {
   .app-interaction-scale:not(.app-interaction-scale--disabled):hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
   }
 }
 
