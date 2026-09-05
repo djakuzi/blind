@@ -2,7 +2,7 @@ import { access, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, extname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import ttf2woff2 from 'ttf2woff2';
+import { createFont, woff2 } from 'fonteditor-core';
 
 const ROOT_PATH = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const FONTS_PATH = resolve(ROOT_PATH, 'src/assets/fonts');
@@ -39,9 +39,21 @@ async function convertFont(inputPath) {
 
   try {
     const ttfBuffer = await readFile(inputPath);
-    const woff2Buffer = ttf2woff2(ttfBuffer);
 
-    await writeFile(outputPath, woff2Buffer);
+    const font = createFont(ttfBuffer, {
+      type: 'ttf',
+      hinting: true,
+      kerning: true,
+      compound2simple: false,
+    });
+
+    const woff2Buffer = font.write({
+      type: 'woff2',
+      hinting: true,
+      kerning: true,
+    });
+
+    await writeFile(outputPath, Buffer.from(woff2Buffer));
   } catch (error) {
     const inputRelativePath = relative(ROOT_PATH, inputPath);
     const message = error instanceof Error ? error.message : String(error);
@@ -72,6 +84,8 @@ async function generateFontsWoff2() {
 
     return;
   }
+
+  await woff2.init();
 
   for (const inputPath of fontFiles) {
     const outputPath = await convertFont(inputPath);
