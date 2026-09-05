@@ -112,7 +112,6 @@ function handleComplete() {
   width: var(--cp-button-width);
   max-width: var(--cp-button-max-width);
   min-width: 0;
-  box-sizing: border-box;
   border: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-text-primary);
   border-radius: var(--app-radius-md);
   background: var(--app-color-surface-primary);

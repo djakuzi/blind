@@ -33,27 +33,26 @@ function handleSettings() {
       direction="column"
       align="center"
       width="100%"
-      max-width="46rem"
     >
       <AppLogo
         class="view-menu__logo"
         size="big"
         logo="blindTextRight"
-        width="41rem"
+        width="70rem"
       />
 
       <AppFlex
         class="view-menu__nav"
         direction="column"
+        justify="center"
+        align="center"
         :gap="8"
         width="100%"
-        max-width="42rem"
       >
         <AppButtonHold
           :actions="{ complete: handlePlay }"
           text="Играть"
           width="42rem"
-          max-width="100%"
           size="big"
         />
 
@@ -61,7 +60,6 @@ function handleSettings() {
           :actions="{ complete: handleSettings }"
           text="Настройки"
           width="42rem"
-          max-width="100%"
           size="big"
         />
       </AppFlex>
