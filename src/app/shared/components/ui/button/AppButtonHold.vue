@@ -108,7 +108,6 @@ function handleComplete() {
   border-radius: var(--app-radius-md);
   background: var(--app-color-surface-primary);
   color: var(--app-color-text-primary);
-  font-weight: var(--app-font-weight-medium);
   line-height: var(--app-line-height-control);
   letter-spacing: var(--app-letter-spacing-wider);
   text-align: center;
