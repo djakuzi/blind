@@ -55,6 +55,7 @@ const menuActions = [
         size="big"
         logo="blindTextRight"
         width="80rem"
+        height="auto"
       />
 
       <AppFlex
@@ -101,24 +102,5 @@ const menuActions = [
 
 .view-menu__hint {
   margin-top: var(--app-space-16);
-}
-
-@media (max-height: 42rem) {
-  .view-menu__content {
-    padding-block: var(--app-space-4);
-  }
-
-  .view-menu__logo {
-    width: 30rem;
-    margin-bottom: var(--app-space-8);
-  }
-
-  .view-menu__nav {
-    gap: var(--app-space-5);
-  }
-
-  .view-menu__hint {
-    margin-top: var(--app-space-8);
-  }
 }
 </style>
