@@ -1,3 +1,8 @@
+:root {
+    --app-font-family-base: 'Inter', sans-serif;
+    --app-font-family-accent: 'Golos Text', sans-serif;
+}
+
 html,
 body,
 #app {
@@ -6,7 +11,6 @@ body,
 }
 
 body {
-    --app-font-family-base: 'Inter', sans-serif;
     background: var(--app-color-background);
     font-family: var(--app-font-family-base);
     font-weight: var(--app-font-weight-regular);
