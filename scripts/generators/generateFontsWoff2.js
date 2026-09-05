@@ -1,11 +1,28 @@
-import { access, readFile, readdir, writeFile } from 'node:fs/promises';
-import { dirname, extname, relative, resolve } from 'node:path';
+import {
+  access,
+  readFile,
+  readdir,
+  writeFile,
+} from 'node:fs/promises';
+import {
+  dirname,
+  extname,
+  relative,
+  resolve,
+} from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { createFont, woff2 } from 'fonteditor-core';
+import wawoff2 from 'wawoff2';
 
-const ROOT_PATH = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const FONTS_PATH = resolve(ROOT_PATH, 'src/assets/fonts');
+const ROOT_PATH = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  '../..',
+);
+
+const FONTS_PATH = resolve(
+  ROOT_PATH,
+  'src/assets/fonts',
+);
 
 async function collectTtfFiles(directoryPath) {
   const entries = await readdir(directoryPath, {
@@ -26,12 +43,42 @@ async function collectTtfFiles(directoryPath) {
       continue;
     }
 
-    if (entry.isFile() && extname(entry.name).toLowerCase() === '.ttf') {
+    if (
+      entry.isFile()
+      && extname(entry.name).toLowerCase() === '.ttf'
+    ) {
       files.push(entryPath);
     }
   }
 
   return files;
+}
+
+async function validateWoff2(woff2Buffer, inputPath) {
+  const magic = Buffer.from(woff2Buffer.subarray(0, 4))
+    .toString('ascii');
+
+  if (magic !== 'wOF2') {
+    throw new Error(
+      `Invalid WOFF2 signature for "${relative(ROOT_PATH, inputPath)}": ${magic}`,
+    );
+  }
+
+  try {
+    const decompressedBuffer = await wawoff2.decompress(woff2Buffer);
+
+    if (!decompressedBuffer || decompressedBuffer.length === 0) {
+      throw new Error('Decompressed font is empty');
+    }
+  } catch (error) {
+    const message = error instanceof Error
+      ? error.message
+      : String(error);
+
+    throw new Error(
+      `Generated WOFF2 validation failed for "${relative(ROOT_PATH, inputPath)}": ${message}`,
+    );
+  }
 }
 
 async function convertFont(inputPath) {
@@ -40,23 +87,17 @@ async function convertFont(inputPath) {
   try {
     const ttfBuffer = await readFile(inputPath);
 
-    const font = createFont(ttfBuffer, {
-      type: 'ttf',
-      hinting: true,
-      kerning: true,
-      compound2simple: false,
-    });
+    const woff2Buffer = await wawoff2.compress(ttfBuffer);
+    const normalizedBuffer = Buffer.from(woff2Buffer);
 
-    const woff2Buffer = font.write({
-      type: 'woff2',
-      hinting: true,
-      kerning: true,
-    });
-
-    await writeFile(outputPath, Buffer.from(woff2Buffer));
+    await validateWoff2(normalizedBuffer, inputPath);
+    await writeFile(outputPath, normalizedBuffer);
   } catch (error) {
     const inputRelativePath = relative(ROOT_PATH, inputPath);
-    const message = error instanceof Error ? error.message : String(error);
+
+    const message = error instanceof Error
+      ? error.message
+      : String(error);
 
     throw new Error(
       `Failed to convert font "${inputRelativePath}": ${message}`,
@@ -85,15 +126,17 @@ async function generateFontsWoff2() {
     return;
   }
 
-  await woff2.init();
-
   for (const inputPath of fontFiles) {
     const outputPath = await convertFont(inputPath);
 
-    console.log(`Updated ${relative(ROOT_PATH, outputPath)}`);
+    console.log(
+      `Updated ${relative(ROOT_PATH, outputPath)}`,
+    );
   }
 
-  console.log(`WOFF2 fonts generated successfully: ${fontFiles.length}`);
+  console.log(
+    `WOFF2 fonts generated successfully: ${fontFiles.length}`,
+  );
 }
 
 generateFontsWoff2().catch((error) => {
