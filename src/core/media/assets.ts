@@ -1,17 +1,17 @@
-import BlindDarkTextBottom from '@/assets/icons/logo/blind-dark-text-bottom.svg';
-import BlindDarkTextRight from '@/assets/icons/logo/blind-dark-text-right.svg';
-import BlindDark from '@/assets/icons/logo/blind-dark.svg';
-import BlindLightTextBottom from '@/assets/icons/logo/blind-light-text-bottom.svg';
-import BlindLightTextRight from '@/assets/icons/logo/blind-light-text-right.svg';
-import BlindLight from '@/assets/icons/logo/blind-light.svg';
+import BlindDark from '@/assets/icons/logo/blind-dark.svg?raw'
+import BlindLight from '@/assets/icons/logo/blind-light.svg?raw'
+import BlindTextBottomDark from '@/assets/icons/logo/blind-text-bottom-dark.svg?raw'
+import BlindTextBottomLight from '@/assets/icons/logo/blind-text-bottom-light.svg?raw'
+import BlindTextRightDark from '@/assets/icons/logo/blind-text-right-dark.svg?raw'
+import BlindTextRightLight from '@/assets/icons/logo/blind-text-right-light.svg?raw'
 
 export const ICONS_ASSETS = {
   logo: {
-    blindDarkTextBottom: BlindDarkTextBottom,
-    blindDarkTextRight: BlindDarkTextRight,
     blindDark: BlindDark,
-    blindLightTextBottom: BlindLightTextBottom,
-    blindLightTextRight: BlindLightTextRight,
     blindLight: BlindLight,
+    blindTextBottomDark: BlindTextBottomDark,
+    blindTextBottomLight: BlindTextBottomLight,
+    blindTextRightDark: BlindTextRightDark,
+    blindTextRightLight: BlindTextRightLight,
   },
-} as const;
+} as const
