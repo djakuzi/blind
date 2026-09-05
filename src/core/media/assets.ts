@@ -1,3 +1,5 @@
+import BackArrowDark from '@/assets/icons/back/back-arrow-dark.svg'
+import BackArrowLight from '@/assets/icons/back/back-arrow-light.svg'
 import BlindDark from '@/assets/icons/logo/blind-dark.svg'
 import BlindLight from '@/assets/icons/logo/blind-light.svg'
 import BlindTextBottomDark from '@/assets/icons/logo/blind-text-bottom-dark.svg'
@@ -6,6 +8,10 @@ import BlindTextRightDark from '@/assets/icons/logo/blind-text-right-dark.svg'
 import BlindTextRightLight from '@/assets/icons/logo/blind-text-right-light.svg'
 
 export const ICONS_ASSETS = {
+  back: {
+    backArrowDark: BackArrowDark,
+    backArrowLight: BackArrowLight,
+  },
   logo: {
     blindDark: BlindDark,
     blindLight: BlindLight,
