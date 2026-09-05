@@ -10,7 +10,7 @@
     y="0"
     width="2150"
     height="900"
-    fill="#F5F5F6"
+    fill="#0B0B0C"
   />
 
   <!-- BLIND icon -->
@@ -28,7 +28,7 @@
            V 239
            C 445 225 455 214 470 214
            Z"
-        fill="#0B0B0C"
+        fill="#F7F7F8"
       />
     </g>
 
@@ -41,7 +41,7 @@
          L 566 649
          C 579 637 579 614 566 602
          Z"
-      fill="#0B0B0C"
+      fill="#F7F7F8"
       transform="translate(46 0)"
     />
 
@@ -58,7 +58,7 @@
            V 1013
            C 445 1027 455 1038 470 1038
            Z"
-        fill="#0B0B0C"
+        fill="#F7F7F8"
       />
     </g>
 
@@ -73,7 +73,7 @@
 
   <!-- BLIND wordmark -->
   <g
-    fill="#0B0B0C"
+    fill="#F7F7F8"
     transform="translate(830 450) scale(2.25 2.85) translate(-425 -786.5)"
   >
     <!-- B -->
