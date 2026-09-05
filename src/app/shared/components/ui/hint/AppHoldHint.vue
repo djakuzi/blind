@@ -2,12 +2,10 @@
 import AppPulseAttention from '@/app/shared/components/effects/attention/AppPulseAttention.vue';
 
 interface Props {
-  text?: string
+  text: string
 }
 
-withDefaults(defineProps<Props>(), {
-  text: 'Удерживайте, чтобы начать',
-});
+defineProps<Props>();
 </script>
 
 <template>

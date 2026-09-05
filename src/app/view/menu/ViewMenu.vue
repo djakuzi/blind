@@ -49,9 +49,9 @@ const menuActions = [
       direction="column"
       align="center"
       width="100%"
+      :gap="16"
     >
       <AppLogo
-        class="view-menu__logo"
         size="big"
         logo="blindTextRight"
         width="80rem"
@@ -76,7 +76,7 @@ const menuActions = [
         />
       </AppFlex>
 
-      <AppHoldHint class="view-menu__hint" />
+      <AppHoldHint text="Удерживайте, чтобы начать" />
     </AppFlex>
 
     <AppPosition
@@ -94,13 +94,5 @@ const menuActions = [
 <style scoped>
 .view-menu {
   position: relative;
-}
-
-.view-menu__logo {
-  margin-bottom: var(--app-space-20);
-}
-
-.view-menu__hint {
-  margin-top: var(--app-space-16);
 }
 </style>
