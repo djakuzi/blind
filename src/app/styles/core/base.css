@@ -22,6 +22,7 @@ body {
 
 button {
     font-family: var(--app-font-family-accent);
+    font-weight: var(--app-font-weight-bold);
 }
 
 #app {

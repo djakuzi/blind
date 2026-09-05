@@ -136,16 +136,16 @@ function handleComplete() {
 
 .app-button-hold--size-small {
   padding: var(--app-space-3) var(--app-space-8);
-  font-size: var(--app-font-size-xl);
+  font-size: var(--app-font-size-2xl);
 }
 
 .app-button-hold--size-middle {
   padding: var(--app-space-4) var(--app-space-10);
-  font-size: var(--app-font-size-2xl);
+  font-size: var(--app-font-size-3xl);
 }
 
 .app-button-hold--size-big {
   padding: var(--app-space-5) var(--app-space-12);
-  font-size: var(--app-font-size-4xl);
+  font-size: var(--app-font-size-5xl);
 }
 </style>

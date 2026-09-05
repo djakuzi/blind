@@ -70,7 +70,7 @@ const menuActions = [
           :key="menuAction.key"
           :actions="menuAction.actions"
           :text="menuAction.text"
-          width="42rem"
+          width="40rem"
           size="big"
         />
       </AppFlex>
