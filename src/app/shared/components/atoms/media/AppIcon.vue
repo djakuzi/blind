@@ -4,12 +4,9 @@ import { computed } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
-import { ICONS_ASSETS } from '@/core/media/assets';
+import { ICONS_ASSETS, type tIconAssets, type tIconGroup } from '@/core/media/assets';
 
-type tIconGroup = keyof typeof ICONS_ASSETS;
-type tIconAssets = Record<string, string>;
-
-interface Props {
+export interface PropsAppIcon {
   group: tIconGroup
   icon: string
   width: PropsAppBlock['width']
@@ -19,7 +16,7 @@ interface Props {
   alt?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppIcon>(), {
   height: 'auto',
   maxWidth: '100%',
   display: 'block',

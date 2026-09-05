@@ -21,3 +21,6 @@ export const ICONS_ASSETS = {
     blindTextRightLight: BlindTextRightLight,
   },
 } as const
+
+export type tIconGroup = keyof typeof ICONS_ASSETS
+export type tIconAssets = Record<string, string>
