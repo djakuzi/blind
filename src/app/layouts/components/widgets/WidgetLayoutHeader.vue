@@ -1,11 +1,56 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router';
+
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
+import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
+
+const router = useRouter();
+
+function handleBack() {
+  router.back();
+}
+</script>
+
 <template>
   <header class="layout-header">
-    <slot />
+    <AppFlex
+      class="layout-header__content"
+      align="center"
+      justify="between"
+      width="100%"
+    >
+      <button
+        class="layout-header__back"
+        type="button"
+        aria-label="Назад"
+        @click="handleBack"
+      >
+        <AppIcon
+          group="back"
+          icon="backArrow"
+          width="100%"
+          height="100%"
+        />
+      </button>
+
+      <AppLogo
+        class="layout-header__logo"
+        size="middle"
+      />
+
+      <span
+        class="layout-header__spacer"
+        aria-hidden="true"
+      />
+    </AppFlex>
   </header>
 </template>
 
 <style scoped>
 .layout-header {
+  --cp-layout-header-control-size: 7.5rem;
+
   display: flex;
   flex: 0 0 auto;
   align-items: center;
@@ -13,5 +58,36 @@
   min-width: 0;
   min-height: var(--app-space-14);
   box-sizing: border-box;
+}
+
+.layout-header__content {
+  min-width: 0;
+}
+
+.layout-header__back,
+.layout-header__spacer {
+  flex: 0 0 var(--cp-layout-header-control-size);
+  width: var(--cp-layout-header-control-size);
+  height: var(--cp-layout-header-control-size);
+}
+
+.layout-header__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.layout-header__logo {
+  flex: 0 1 auto;
+}
+
+.layout-header__spacer {
+  pointer-events: none;
 }
 </style>

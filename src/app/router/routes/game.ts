@@ -9,6 +9,11 @@ export const routeGame: RouteRecordRaw = {
   component: LayoutBase,
   children: [
     {
+      meta: {
+        layout: {
+          header: false,
+        },
+      },
       path: '',
       name: KEY_ROUTE.game.index,
       component: ViewGame,
