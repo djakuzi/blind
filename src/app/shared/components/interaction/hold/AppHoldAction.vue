@@ -7,14 +7,18 @@ interface iAppHoldActionActions {
   complete?: () => void
 }
 
+type tAppHoldActionSizeValue = number | string;
+
 interface Props {
   actions?: iAppHoldActionActions
   disabled?: boolean
   duration?: number
   fillDuration?: number
   initialProgress?: number
+  maxWidth?: tAppHoldActionSizeValue
   releaseDuration?: number
   vibrationDuration?: number
+  width?: tAppHoldActionSizeValue
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,8 +27,10 @@ const props = withDefaults(defineProps<Props>(), {
   duration: 650,
   fillDuration: undefined,
   initialProgress: 15,
+  maxWidth: '100%',
   releaseDuration: 140,
   vibrationDuration: 45,
+  width: '100%',
 });
 
 const emit = defineEmits<{
@@ -38,6 +44,14 @@ let animationFrameId: number | undefined;
 let activePointerId: number | undefined;
 let activePointerTarget: HTMLElement | undefined;
 let activeTouchId: number | undefined;
+
+function resolveSizeValue(value?: tAppHoldActionSizeValue) {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  return typeof value === 'number' ? `${value}px` : value;
+}
 
 function normalizeProgressValue(value: number) {
   if (!Number.isFinite(value)) {
@@ -56,6 +70,10 @@ const progressRatio = computed(() => normalizedProgress.value / 100);
 const isProgressActive = computed(() => (
   isHolding.value || normalizedProgress.value > normalizedInitialProgress.value
 ));
+const holdActionStyle = computed(() => ({
+  '--cp-hold-action-width': resolveSizeValue(props.width) ?? 'auto',
+  '--cp-hold-action-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
+}));
 
 watch(normalizedInitialProgress, (initialProgress) => {
   if (isHolding.value) {
@@ -274,6 +292,7 @@ onBeforeUnmount(() => resetHoldState(true));
 <template>
   <div
     class="app-hold-action"
+    :style="holdActionStyle"
     @pointerdown="startHold"
     @pointerup="resetPointerHold"
     @pointercancel="resetPointerHold"
@@ -299,8 +318,8 @@ onBeforeUnmount(() => resetHoldState(true));
 <style scoped>
 .app-hold-action {
   display: inline-flex;
-  width: 100%;
-  max-width: 100%;
+  width: var(--cp-hold-action-width);
+  max-width: var(--cp-hold-action-max-width);
   min-width: 0;
   touch-action: none;
   -webkit-touch-callout: none;

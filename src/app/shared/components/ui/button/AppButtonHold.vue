@@ -62,10 +62,8 @@ const buttonClass = computed(() => [
   `app-button-hold--size-${props.size}`,
 ]);
 
-const buttonBaseStyle = computed(() => ({
-  '--cp-button-width': resolveSizeValue(props.width) ?? 'auto',
-  '--cp-button-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
-}));
+const holdActionWidth = computed(() => resolveSizeValue(props.width));
+const holdActionMaxWidth = computed(() => resolveSizeValue(props.maxWidth));
 
 function handleComplete() {
   emit('complete');
@@ -79,14 +77,15 @@ function handleComplete() {
     :duration="duration"
     :fill-duration="fillDuration"
     :initial-progress="initialProgress"
+    :max-width="holdActionMaxWidth"
     :release-duration="releaseDuration"
     :vibration-duration="vibrationDuration"
+    :width="holdActionWidth"
     @complete="handleComplete"
   >
     <template #default="{ progressRatio, isProgressActive }">
       <button
         :class="buttonClass"
-        :style="buttonBaseStyle"
         :disabled="disabled"
         type="button"
       >
@@ -109,8 +108,8 @@ function handleComplete() {
   position: relative;
   align-items: center;
   justify-content: center;
-  width: var(--cp-button-width);
-  max-width: var(--cp-button-max-width);
+  width: 100%;
+  max-width: 100%;
   min-width: 0;
   border: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-text-primary);
   border-radius: var(--app-radius-md);
