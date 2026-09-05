@@ -47,7 +47,6 @@ function handleBack() {
   --cp-layout-header-control-size: 7.5rem;
 
   display: flex;
-  flex: 0 0 auto;
   align-items: center;
   width: 100%;
 }
