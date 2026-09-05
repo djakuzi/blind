@@ -81,8 +81,8 @@ const menuActions = [
     <AppPosition
       type="absolute"
       :position="{
-        right: 'horizontal',
-        bottom: 'vertical',
+        right: '0',
+        bottom: '0',
       }"
     >
       <AppVersion size="big" />
