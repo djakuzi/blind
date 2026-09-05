@@ -2,7 +2,7 @@
   /* Border width */
   --app-border-width-none: 0;
   --app-border-width-thin: 0.0625rem;
-  --app-border-width-medium: 0.125rem;
+  --app-border-width-medium: min(0.125rem, 1px);
   --app-border-width-thick: 0.1875rem;
   --app-border-width-heavy: 0.25rem;
 
