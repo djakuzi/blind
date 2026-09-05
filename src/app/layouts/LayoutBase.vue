@@ -5,8 +5,8 @@ import { RouterView } from 'vue-router';
 import WidgetLayoutHeader from '@/app/layouts/components/widgets/WidgetLayoutHeader.vue';
 import { useLayoutHeader } from '@/app/layouts/composables/common/useLayoutHeader';
 import { useLayoutPadding } from '@/app/layouts/composables/common/useLayoutPadding';
-import AppTransitionHeader from '@/app/shared/components/effects/transition/AppTransitionHeader.vue';
-import AppTransitionScreen from '@/app/shared/components/effects/transition/AppTransitionScreen.vue';
+import AppTransitionHeader from '@/app/layouts/components/transition/AppTransitionHeader.vue';
+import AppTransitionScreen from '@/app/layouts/components/transition/AppTransitionScreen.vue';
 
 const { hasLayoutHeader } = useLayoutHeader();
 const { layoutPadding } = useLayoutPadding();
