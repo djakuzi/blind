@@ -50,6 +50,9 @@ const content = `${importsBlock}
 export const ICONS_ASSETS = {
 ${iconsBlock}
 } as const
+
+export type tIconGroup = keyof typeof ICONS_ASSETS
+export type tIconAssets = Record<string, string>
 `
 
 mkdirSync(outputDirectory, { recursive: true })

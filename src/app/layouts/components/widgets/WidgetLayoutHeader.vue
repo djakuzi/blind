@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router';
 
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
+import AppButtonIcon from '@/app/shared/components/ui/button/AppButtonIcon.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
 
 const router = useRouter();
@@ -20,19 +20,15 @@ function handleBack() {
       justify="between"
       width="100%"
     >
-      <button
+      <AppButtonIcon
         class="layout-header__back"
-        type="button"
-        aria-label="Назад"
+        group="back"
+        icon="backArrow"
+        width="var(--cp-layout-header-control-size)"
+        height="var(--cp-layout-header-control-size)"
+        ariaLabel="Назад"
         @click="handleBack"
-      >
-        <AppIcon
-          group="back"
-          icon="backArrow"
-          width="100%"
-          height="100%"
-        />
-      </button>
+      />
 
       <AppLogo
         class="layout-header__logo"
@@ -67,20 +63,6 @@ function handleBack() {
 .layout-header__back,
 .layout-header__spacer {
   flex: 0 0 var(--cp-layout-header-control-size);
-  width: var(--cp-layout-header-control-size);
-  height: var(--cp-layout-header-control-size);
-}
-
-.layout-header__back {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .layout-header__logo {
@@ -88,6 +70,8 @@ function handleBack() {
 }
 
 .layout-header__spacer {
+  width: var(--cp-layout-header-control-size);
+  height: var(--cp-layout-header-control-size);
   pointer-events: none;
 }
 </style>
