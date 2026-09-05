@@ -2,19 +2,20 @@
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 
+import { LibStyle } from '@/app/shared/lib/style';
+import type { tStyleSizeValue } from '@/app/shared/lib/style/modules/to.modules';
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 
 type tAppGridTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer';
-type tAppGridSizeValue = number | string;
 
 interface Props {
   tag?: tAppGridTag
   placeItems?: CSSProperties['placeItems']
   gap?: tSpaceValue
-  width?: tAppGridSizeValue
-  maxWidth?: tAppGridSizeValue
-  minHeight?: tAppGridSizeValue
+  width?: tStyleSizeValue
+  maxWidth?: tStyleSizeValue
+  minHeight?: tStyleSizeValue
   margin?: tSpaceValue
 }
 
@@ -28,18 +29,10 @@ const props = withDefaults(defineProps<Props>(), {
   margin: undefined,
 });
 
-function resolveSizeValue(value?: tAppGridSizeValue) {
-  if (value === undefined || value === null) {
-    return undefined;
-  }
-
-  return typeof value === 'number' ? `${value}px` : value;
-}
-
 const gridGap = computed(() => resolveSpaceValue(props.gap));
-const gridWidth = computed(() => resolveSizeValue(props.width));
-const gridMaxWidth = computed(() => resolveSizeValue(props.maxWidth));
-const gridMinHeight = computed(() => resolveSizeValue(props.minHeight));
+const gridWidth = computed(() => LibStyle.toSizeValue(props.width));
+const gridMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
+const gridMinHeight = computed(() => LibStyle.toSizeValue(props.minHeight));
 const gridMargin = computed(() => resolveSpaceValue(props.margin));
 const gridStyle = computed(() => ({
   '--cp-grid-place-items': props.placeItems,

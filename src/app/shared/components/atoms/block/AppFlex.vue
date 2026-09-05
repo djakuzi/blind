@@ -2,11 +2,12 @@
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 
+import { LibStyle } from '@/app/shared/lib/style';
+import type { tStyleSizeValue } from '@/app/shared/lib/style/modules/to.modules';
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 
 type tAppFlexTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer';
-type tAppFlexSizeValue = number | string;
 
 interface Props {
   tag?: tAppFlexTag
@@ -15,8 +16,8 @@ interface Props {
   justify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between'
   wrap?: CSSProperties['flexWrap']
   gap?: tSpaceValue
-  width?: tAppFlexSizeValue
-  maxWidth?: tAppFlexSizeValue
+  width?: tStyleSizeValue
+  maxWidth?: tStyleSizeValue
   margin?: tSpaceValue
 }
 
@@ -31,14 +32,6 @@ const props = withDefaults(defineProps<Props>(), {
   maxWidth: undefined,
   margin: undefined,
 });
-
-function resolveSizeValue(value?: tAppFlexSizeValue) {
-  if (value === undefined || value === null) {
-    return undefined;
-  }
-
-  return typeof value === 'number' ? `${value}px` : value;
-}
 
 function resolveFlexAlign(align: Props['align']) {
   if (align === 'start') {
@@ -69,8 +62,8 @@ function resolveFlexJustify(justify: Props['justify']) {
 }
 
 const flexGap = computed(() => resolveSpaceValue(props.gap));
-const flexWidth = computed(() => resolveSizeValue(props.width));
-const flexMaxWidth = computed(() => resolveSizeValue(props.maxWidth));
+const flexWidth = computed(() => LibStyle.toSizeValue(props.width));
+const flexMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 const flexMargin = computed(() => resolveSpaceValue(props.margin));
 const flexStyle = computed(() => ({
   '--cp-flex-direction': props.direction,

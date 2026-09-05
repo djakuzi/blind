@@ -2,12 +2,12 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 
 import { ToolVibration } from '@/core/tool/vibration';
+import { LibStyle } from '@/app/shared/lib/style';
+import type { tStyleSizeValue } from '@/app/shared/lib/style/modules/to.modules';
 
 interface iAppHoldActionActions {
   complete?: () => void
 }
-
-type tAppHoldActionSizeValue = number | string;
 
 interface Props {
   actions?: iAppHoldActionActions
@@ -15,10 +15,10 @@ interface Props {
   duration?: number
   fillDuration?: number
   initialProgress?: number
-  maxWidth?: tAppHoldActionSizeValue
+  maxWidth?: tStyleSizeValue
   releaseDuration?: number
   vibrationDuration?: number
-  width?: tAppHoldActionSizeValue
+  width?: tStyleSizeValue
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,14 +45,6 @@ let activePointerId: number | undefined;
 let activePointerTarget: HTMLElement | undefined;
 let activeTouchId: number | undefined;
 
-function resolveSizeValue(value?: tAppHoldActionSizeValue) {
-  if (value === undefined || value === null) {
-    return undefined;
-  }
-
-  return typeof value === 'number' ? `${value}px` : value;
-}
-
 function normalizeProgressValue(value: number) {
   if (!Number.isFinite(value)) {
     return 0;
@@ -71,8 +63,8 @@ const isProgressActive = computed(() => (
   isHolding.value || normalizedProgress.value > normalizedInitialProgress.value
 ));
 const holdActionStyle = computed(() => ({
-  '--cp-hold-action-width': resolveSizeValue(props.width) ?? 'auto',
-  '--cp-hold-action-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
+  '--cp-hold-action-width': LibStyle.toSizeValue(props.width) ?? 'auto',
+  '--cp-hold-action-max-width': LibStyle.toSizeValue(props.maxWidth) ?? 'none',
 }));
 
 watch(normalizedInitialProgress, (initialProgress) => {

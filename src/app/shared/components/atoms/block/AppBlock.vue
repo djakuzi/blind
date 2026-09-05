@@ -1,18 +1,18 @@
 <script lang="ts">
 import type { CSSProperties } from 'vue';
 
+import type { tStyleSizeValue } from '@/app/shared/lib/style/modules/to.modules';
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 type tAppBlockTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer' | 'span';
-type tAppBlockSizeValue = number | string;
 
 export interface PropsAppBlock {
   tag?: tAppBlockTag
   display?: CSSProperties['display']
   overflow?: CSSProperties['overflow']
-  width?: tAppBlockSizeValue
-  maxWidth?: tAppBlockSizeValue
-  height?: tAppBlockSizeValue
+  width?: tStyleSizeValue
+  maxWidth?: tStyleSizeValue
+  height?: tStyleSizeValue
   margin?: tSpaceValue
 }
 </script>
@@ -20,6 +20,7 @@ export interface PropsAppBlock {
 <script setup lang="ts">
 import { computed } from 'vue';
 
+import { LibStyle } from '@/app/shared/lib/style';
 import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 
 const props = withDefaults(defineProps<PropsAppBlock>(), {
@@ -32,23 +33,15 @@ const props = withDefaults(defineProps<PropsAppBlock>(), {
   margin: undefined,
 });
 
-function resolveSizeValue(value?: tAppBlockSizeValue) {
-  if (value === undefined || value === null) {
-    return undefined;
-  }
-
-  return typeof value === 'number' ? `${value}px` : value;
-}
-
 const blockClass = computed(() => [
   'app-block',
 ]);
 
 const blockStyle = computed(() => ({
   '--cp-block-display': props.display,
-  '--cp-block-width': resolveSizeValue(props.width) ?? 'auto',
-  '--cp-block-max-width': resolveSizeValue(props.maxWidth) ?? 'none',
-  '--cp-block-height': resolveSizeValue(props.height) ?? 'auto',
+  '--cp-block-width': LibStyle.toSizeValue(props.width) ?? 'auto',
+  '--cp-block-max-width': LibStyle.toSizeValue(props.maxWidth) ?? 'none',
+  '--cp-block-height': LibStyle.toSizeValue(props.height) ?? 'auto',
   '--cp-block-margin': resolveSpaceValue(props.margin) ?? 0,
   '--cp-block-overflow': props.overflow,
 }));

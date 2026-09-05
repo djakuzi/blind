@@ -3,10 +3,11 @@ import { computed } from 'vue';
 
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
+import { LibStyle } from '@/app/shared/lib/style';
+import type { tStyleSizeValue } from '@/app/shared/lib/style/modules/to.modules';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 
 type tAppButtonHoldVariant = 'primary';
-type tAppButtonHoldSizeValue = number | string;
 
 interface iAppButtonHoldActions {
   complete?: () => void
@@ -22,8 +23,8 @@ interface Props {
   releaseDuration?: number
   vibrationDuration?: number
   size?: tBaseSizeVariant
-  maxWidth?: tAppButtonHoldSizeValue
-  width?: tAppButtonHoldSizeValue
+  maxWidth?: tStyleSizeValue
+  width?: tStyleSizeValue
   variant?: tAppButtonHoldVariant
   text?: string
 }
@@ -48,22 +49,14 @@ const emit = defineEmits<{
   complete: []
 }>();
 
-function resolveSizeValue(value?: tAppButtonHoldSizeValue) {
-  if (value === undefined || value === null) {
-    return undefined;
-  }
-
-  return typeof value === 'number' ? `${value}px` : value;
-}
-
 const buttonClass = computed(() => [
   'app-button-hold',
   `app-button-hold--${props.variant}`,
   `app-button-hold--size-${props.size}`,
 ]);
 
-const holdActionWidth = computed(() => resolveSizeValue(props.width));
-const holdActionMaxWidth = computed(() => resolveSizeValue(props.maxWidth));
+const holdActionWidth = computed(() => LibStyle.toSizeValue(props.width));
+const holdActionMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 
 function handleComplete() {
   emit('complete');
