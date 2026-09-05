@@ -8,3 +8,4 @@
 - [Генератор style contracts](./sections/generate-style-contracts.md)
 - [Генератор иконок проекта](./sections/generate-icons.md)
 - [Генератор версий документации](./sections/generate-node-docs.md)
+- [Генератор формата шрифтов ttf в woff2](./sections/generate-fonts-woff2.md)
