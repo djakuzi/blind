@@ -1,44 +1,208 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="2100" height="700" viewBox="0 0 2100 700" fill="none">
-  <title>Blind rounded horizontal logo balanced text</title>
-  <desc>Rounded Blind hidden-B mark with a much larger BLIND wordmark and almost no gap.</desc>
-  
-  <g id="blind-mark" transform="translate(40 -50) scale(0.62)">
-    <path d="M 470 214
-            H 690
-            C 772 214 833 275 833 356
-            C 833 431 782 492 713 494
-            C 692 495 675 488 660 474
-            L 463 286
-            C 451 275 445 264 445 249
-            V 239
-            C 445 225 455 214 470 214 Z"
-          fill="#F7F7F8"/>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="3600"
+  height="900"
+  viewBox="0 0 3600 900"
+>
+  <!-- Background -->
+  <rect
+    width="3600"
+    height="900"
+    fill="#0B0B0C"
+  />
 
-    <path d="M 392 435
-            C 382 426 378 432 378 447
-            V 800
-            C 378 816 385 822 397 812
-            L 566 649
-            C 579 637 579 614 566 602
-            Z"
-          fill="#F7F7F8"/>
+  <!-- BLIND icon -->
+  <g transform="translate(120 -3) scale(0.72)">
+    <!-- Top rounded segment -->
+    <g transform="translate(0 10)">
+      <path
+        d="M 470 214
+           H 690
+           C 772 214 833 275 833 356
+           C 833 431 782 492 713 494
+           C 692 495 675 488 660 474
+           L 463 286
+           C 451 275 445 264 445 249
+           V 239
+           C 445 225 455 214 470 214
+           Z"
+        fill="#F7F7F8"
+      />
+    </g>
 
-    <path d="M 470 1038
-            H 690
-            C 772 1038 833 977 833 896
-            C 833 821 782 760 713 758
-            C 692 757 675 764 660 778
-            L 463 966
-            C 451 977 445 988 445 1003
-            V 1013
-            C 445 1027 455 1038 470 1038 Z"
-          fill="#F7F7F8"/>
+    <!-- Center wedge -->
+    <path
+      d="M 392 435
+         C 382 426 378 432 378 447
+         V 800
+         C 378 816 385 822 397 812
+         L 566 649
+         C 579 637 579 614 566 602
+         Z"
+      fill="#F7F7F8"
+      transform="translate(46 0)"
+    />
 
-    <circle cx="810" cy="626" r="62.5" fill="#D92D32"/>
+    <!-- Bottom rounded segment -->
+    <g transform="translate(0 -10)">
+      <path
+        d="M 470 1038
+           H 690
+           C 772 1038 833 977 833 896
+           C 833 821 782 760 713 758
+           C 692 757 675 764 660 778
+           L 463 966
+           C 451 977 445 988 445 1003
+           V 1013
+           C 445 1027 455 1038 470 1038
+           Z"
+        fill="#F7F7F8"
+      />
+    </g>
+
+    <!-- Red brand point -->
+    <circle
+      cx="800"
+      cy="626"
+      r="62.5"
+      fill="#D92D32"
+    />
   </g>
 
-  <g id="blind-wordmark">
-    <path d="M0 0 H50 C78 0 94 14 94 36 C94 50 87 60 75 66 C89 72 98 84 98 100 C98 124 80 140 50 140 H0 Z M20 20 V56 H48 C64 56 72 50 72 38 C72 26 64 20 48 20 Z M20 78 V120 H50 C67 120 76 113 76 99 C76 85 67 78 50 78 Z" fill="#F7F7F8" fill-rule="evenodd" transform="translate(620.000 170.000) scale(2.571429)"/><path d="M0 0 H22 V118 H88 V140 H0 Z" fill="#F7F7F8" fill-rule="evenodd" transform="translate(918.286 170.000) scale(2.571429)"/><path d="M0 0 H22 V140 H0 Z" fill="#F7F7F8" fill-rule="evenodd" transform="translate(1183.857 170.000) scale(2.571429)"/><path d="M0 140 V0 H24 L78 96 V0 H100 V140 H76 L22 44 V140 Z" fill="#F7F7F8" fill-rule="evenodd" transform="translate(1281.714 170.000) scale(2.571429)"/><path d="M0 0 H46 C82 0 104 25 104 70 C104 115 82 140 46 140 H0 Z M22 22 V118 H44 C68 118 81 103 81 70 C81 37 68 22 44 22 Z" fill="#F7F7F8" fill-rule="evenodd" transform="translate(1585.143 170.000) scale(2.571429)"/>
+  <!-- BLIND wordmark -->
+  <g
+    fill="#F7F7F8"
+    transform="translate(930 450) scale(2.25 2.85) translate(-425 -786.5)"
+  >
+    <!-- B -->
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="
+        M 429 745
+        L 425 754
+        L 426 758
+        L 523 757
+        L 539 758
+        L 543 763
+        L 541 772
+        L 536 775
+        L 425 775
+        L 425 818
+        L 427 824
+        L 435 833
+        L 446 837
+        L 555 837
+        L 563 834
+        L 568 829
+        L 572 819
+        L 571 798
+        L 563 788
+        L 558 786
+        L 566 780
+        L 570 772
+        L 570 751
+        L 563 739
+        L 557 736
+        L 442 736
+        L 434 740
+        Z
+
+        M 453 797
+        L 537 796
+        L 543 800
+        L 544 809
+        L 539 814
+        L 457 814
+        L 453 810
+        Z
+      "
+    />
+
+    <!-- L -->
+    <path
+      d="
+        M 604 736
+        L 603 813
+        L 608 826
+        L 614 832
+        L 627 837
+        L 675 837
+        L 698 814
+        L 644 814
+        L 638 812
+        L 633 807
+        L 631 801
+        L 631 736
+        Z
+      "
+    />
+
+    <!-- I upper -->
+    <path
+      d="
+        M 759 736
+        L 731 737
+        L 731 790
+        L 759 765
+        Z
+      "
+    />
+
+    <!-- I lower -->
+    <path
+      d="
+        M 759 781
+        L 731 808
+        L 732 837
+        L 759 837
+        Z
+      "
+    />
+
+    <!-- N -->
+    <path
+      d="
+        M 797 736
+        L 797 836
+        L 825 811
+        L 825 771
+        L 907 836
+        L 935 836
+        L 934 736
+        L 907 737
+        L 906 802
+        L 824 736
+        Z
+      "
+    />
+
+    <!-- D -->
+    <path
+      d="
+        M 967 736
+        L 992 759
+        L 1073 759
+        L 1082 765
+        L 1085 773
+        L 1084 804
+        L 1080 810
+        L 1070 814
+        L 999 814
+        L 994 812
+        L 993 790
+        L 967 790
+        L 967 837
+        L 1087 837
+        L 1101 832
+        L 1108 825
+        L 1113 811
+        L 1113 762
+        L 1108 747
+        L 1099 739
+        L 1091 736
+        Z
+      "
+    />
   </g>
 </svg>
