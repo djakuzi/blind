@@ -1,19 +1,31 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
-import { routeSettings } from './routes/settings';
-import { routeMenu } from './routes/menu';
-import { routeGame } from './routes/game';
-import { KEY_ROUTE } from './constants/route.const';
+import {
+  createRouter,
+  createWebHistory,
+  type RouteRecordRaw,
+} from 'vue-router';
 
-const LayotRoot = () => import('@/app/layouts/LayoutRoot.vue');
+import { KEY_ROUTE } from './constants/route.const';
+import { routeGame } from './routes/game';
+import { routeMenu } from './routes/menu';
+import { routeSettings } from './routes/settings';
+
+const LayoutRoot = () => import('@/app/layouts/LayoutRoot.vue');
+const LayoutBase = () => import('@/app/layouts/LayoutBase.vue');
 
 export const rootRoute: RouteRecordRaw = {
   path: '/',
-  component: LayotRoot,
+  component: LayoutRoot,
   redirect: KEY_ROUTE.menu.index,
   children: [
-    routeMenu,
-    routeGame,
-    routeSettings,
+    {
+      path: '',
+      component: LayoutBase,
+      children: [
+        routeMenu,
+        routeGame,
+        routeSettings,
+      ],
+    },
   ],
 };
 
