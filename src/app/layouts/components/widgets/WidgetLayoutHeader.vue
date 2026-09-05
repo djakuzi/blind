@@ -52,15 +52,6 @@ function handleBack() {
   width: 100%;
 }
 
-.layout-header__back,
-.layout-header__spacer {
-  flex: 0 0 var(--cp-layout-header-control-size);
-}
-
-.layout-header__logo {
-  flex: 0 1 auto;
-}
-
 .layout-header__spacer {
   width: var(--cp-layout-header-control-size);
   height: var(--cp-layout-header-control-size);
