@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 
-import { ToolVibration } from '@/core/tool/vibration';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import { ToolVibration } from '@/core/tool/vibration';
 
 interface iAppHoldActionActions {
   complete?: () => void
@@ -39,13 +39,17 @@ const emit = defineEmits<{
 
 const isHolding = ref(false);
 const hasCompleted = ref(false);
-const startedAt = ref(0);
+const progress = ref(0);
+
+let holdStartedAt = 0;
 let animationFrameId: number | undefined;
+
 let activePointerId: number | undefined;
 let activePointerTarget: HTMLElement | undefined;
+
 let activeTouchId: number | undefined;
 
-function normalizeProgressValue(value: number) {
+function normalizeProgressValue(value: number): number {
   if (!Number.isFinite(value)) {
     return 0;
   }
@@ -53,19 +57,45 @@ function normalizeProgressValue(value: number) {
   return Math.min(100, Math.max(0, value));
 }
 
-const normalizedInitialProgress = computed(() => normalizeProgressValue(props.initialProgress));
-const normalizedFillDuration = computed(() => Math.max(1, props.fillDuration ?? props.duration));
-const normalizedReleaseDuration = computed(() => Math.max(0, props.releaseDuration));
-const progress = ref(normalizedInitialProgress.value);
-const normalizedProgress = computed(() => normalizeProgressValue(progress.value));
-const progressRatio = computed(() => normalizedProgress.value / 100);
-const isProgressActive = computed(() => (
-  isHolding.value || normalizedProgress.value > normalizedInitialProgress.value
+function getCurrentTime(): number {
+  return performance.now();
+}
+
+function supportsPointerEvents(): boolean {
+  return typeof globalThis.PointerEvent !== 'undefined';
+}
+
+const normalizedInitialProgress = computed(() => (
+  normalizeProgressValue(props.initialProgress)
 ));
+
+const normalizedFillDuration = computed(() => (
+  Math.max(1, props.fillDuration ?? props.duration)
+));
+
+const normalizedReleaseDuration = computed(() => (
+  Math.max(0, props.releaseDuration)
+));
+
+const normalizedProgress = computed(() => (
+  normalizeProgressValue(progress.value)
+));
+
+const progressRatio = computed(() => (
+  normalizedProgress.value / 100
+));
+
+const isProgressActive = computed(() => (
+  isHolding.value
+  || normalizedProgress.value > normalizedInitialProgress.value
+));
+
 const holdActionStyle = computed(() => ({
   '--cp-hold-action-width': LibStyle.toSizeValue(props.width) ?? 'auto',
   '--cp-hold-action-max-width': LibStyle.toSizeValue(props.maxWidth) ?? 'none',
 }));
+
+progress.value = normalizedInitialProgress.value;
 
 watch(normalizedInitialProgress, (initialProgress) => {
   if (isHolding.value) {
@@ -75,7 +105,7 @@ watch(normalizedInitialProgress, (initialProgress) => {
   progress.value = initialProgress;
 });
 
-function stopProgressAnimation() {
+function stopProgressAnimation(): void {
   if (animationFrameId === undefined) {
     return;
   }
@@ -84,141 +114,183 @@ function stopProgressAnimation() {
   animationFrameId = undefined;
 }
 
-function completeHold() {
+function requestProgressAnimation(callback: FrameRequestCallback): void {
+  stopProgressAnimation();
+  animationFrameId = requestAnimationFrame(callback);
+}
+
+function completeHold(): void {
   if (hasCompleted.value) {
     return;
   }
 
   hasCompleted.value = true;
   progress.value = 100;
-  ToolVibration.vibrate({ duration: props.vibrationDuration });
+
+  void ToolVibration.vibrate({
+    duration: props.vibrationDuration,
+  });
+
   props.actions?.complete?.();
   emit('complete');
 }
 
-function updateProgress() {
+function updateHoldProgress(): void {
   if (!isHolding.value) {
+    animationFrameId = undefined;
     return;
   }
 
-  const duration = normalizedFillDuration.value;
-  const elapsed = performance.now() - startedAt.value;
+  const elapsed = getCurrentTime() - holdStartedAt;
   const initialProgress = normalizedInitialProgress.value;
-  progress.value = initialProgress + (elapsed / duration) * (100 - initialProgress);
+  const duration = normalizedFillDuration.value;
+
+  progress.value = (
+    initialProgress
+    + (elapsed / duration) * (100 - initialProgress)
+  );
 
   if (progress.value >= 100) {
     completeHold();
     stopProgressAnimation();
-
     return;
   }
 
-  animationFrameId = requestAnimationFrame(updateProgress);
+  animationFrameId = requestAnimationFrame(updateHoldProgress);
 }
 
-function beginHold() {
+function beginHold(): void {
   if (isHolding.value) {
     return;
   }
 
   stopProgressAnimation();
+
   isHolding.value = true;
   hasCompleted.value = false;
   progress.value = normalizedInitialProgress.value;
-  startedAt.value = performance.now();
-  animationFrameId = requestAnimationFrame(updateProgress);
+  holdStartedAt = getCurrentTime();
+
+  animationFrameId = requestAnimationFrame(updateHoldProgress);
 }
 
-function animateReleaseProgress() {
+function animateReleaseProgress(): void {
   const startProgress = normalizedProgress.value;
   const finishProgress = normalizedInitialProgress.value;
-  const startedAt = performance.now();
   const duration = normalizedReleaseDuration.value;
 
   if (startProgress <= finishProgress || duration <= 0) {
     progress.value = finishProgress;
-
     return;
   }
 
-  function updateReleaseProgress() {
-    const elapsed = performance.now() - startedAt;
+  const releaseStartedAt = getCurrentTime();
+
+  function updateReleaseProgress(): void {
+    const elapsed = getCurrentTime() - releaseStartedAt;
     const releaseProgress = Math.min(1, elapsed / duration);
-    progress.value = finishProgress + (startProgress - finishProgress) * (1 - releaseProgress);
+
+    progress.value = (
+      finishProgress
+      + (startProgress - finishProgress) * (1 - releaseProgress)
+    );
 
     if (releaseProgress >= 1) {
       progress.value = finishProgress;
       animationFrameId = undefined;
-
       return;
     }
 
     animationFrameId = requestAnimationFrame(updateReleaseProgress);
   }
 
-  animationFrameId = requestAnimationFrame(updateReleaseProgress);
+  requestProgressAnimation(updateReleaseProgress);
 }
 
-function releasePointerCapture() {
-  if (
-    activePointerId !== undefined
-    && activePointerTarget?.hasPointerCapture(activePointerId)
-  ) {
-    activePointerTarget.releasePointerCapture(activePointerId);
-  }
+function releasePointerCapture(): void {
+  const pointerId = activePointerId;
+  const pointerTarget = activePointerTarget;
 
   activePointerId = undefined;
   activePointerTarget = undefined;
-}
 
-function isHoldPointer(event: PointerEvent) {
-  if (!event.isPrimary) {
-    return false;
-  }
-
-  return event.pointerType !== 'mouse' || event.button === 0;
-}
-
-function startHold(event: PointerEvent) {
-  if (props.disabled || !isHoldPointer(event)) {
+  if (
+    pointerId === undefined
+    || pointerTarget === undefined
+    || typeof pointerTarget.hasPointerCapture !== 'function'
+    || typeof pointerTarget.releasePointerCapture !== 'function'
+  ) {
     return;
   }
 
-  event.preventDefault();
-
-  const target = event.currentTarget;
-
-  if (target instanceof HTMLElement) {
-    if (typeof target.setPointerCapture === 'function') {
-      target.setPointerCapture(event.pointerId);
-    }
-
-    activePointerId = event.pointerId;
-    activePointerTarget = target;
+  if (!pointerTarget.hasPointerCapture(pointerId)) {
+    return;
   }
 
-  beginHold();
+  pointerTarget.releasePointerCapture(pointerId);
 }
 
-function resetHoldState(isImmediate = false) {
-  const shouldAnimateRelease = !isImmediate && progress.value > normalizedInitialProgress.value;
+function resetHoldState(isImmediate = false): void {
+  const shouldAnimateRelease = (
+    !isImmediate
+    && progress.value > normalizedInitialProgress.value
+  );
 
   stopProgressAnimation();
+
   isHolding.value = false;
   hasCompleted.value = false;
   activeTouchId = undefined;
+
   releasePointerCapture();
 
   if (shouldAnimateRelease) {
     animateReleaseProgress();
-
     return;
   }
 
   progress.value = normalizedInitialProgress.value;
 }
 
-function resetPointerHold(event?: PointerEvent) {
+function isHoldPointer(event: PointerEvent): boolean {
+  if (!event.isPrimary) {
+    return false;
+  }
+
+  if (event.pointerType === 'mouse') {
+    return event.button === 0;
+  }
+
+  return true;
+}
+
+function capturePointer(event: PointerEvent): void {
+  const target = event.currentTarget;
+
+  if (!(target instanceof HTMLElement)) {
+    return;
+  }
+
+  if (typeof target.setPointerCapture === 'function') {
+    target.setPointerCapture(event.pointerId);
+  }
+
+  activePointerId = event.pointerId;
+  activePointerTarget = target;
+}
+
+function startPointerHold(event: PointerEvent): void {
+  if (props.disabled || !isHoldPointer(event)) {
+    return;
+  }
+
+  event.preventDefault();
+
+  capturePointer(event);
+  beginHold();
+}
+
+function resetPointerHold(event?: PointerEvent): void {
   if (
     event !== undefined
     && activePointerId !== undefined
@@ -230,7 +302,7 @@ function resetPointerHold(event?: PointerEvent) {
   resetHoldState();
 }
 
-function getActiveChangedTouch(event: TouchEvent) {
+function getActiveChangedTouch(event: TouchEvent): Touch | undefined {
   if (activeTouchId === undefined) {
     return undefined;
   }
@@ -240,20 +312,32 @@ function getActiveChangedTouch(event: TouchEvent) {
     .find((touch) => touch.identifier === activeTouchId);
 }
 
-function startTouchHold(event: TouchEvent) {
+function startTouchHold(event: TouchEvent): void {
+  if (supportsPointerEvents() || props.disabled) {
+    return;
+  }
+
   const touch = event.changedTouches.item(0);
 
-  if (props.disabled || touch === null) {
+  if (touch === null) {
     return;
   }
 
   event.preventDefault();
+
   activeTouchId = touch.identifier;
   beginHold();
 }
 
-function resetTouchHold(event: TouchEvent) {
-  if (activeTouchId === undefined || getActiveChangedTouch(event) === undefined) {
+function resetTouchHold(event: TouchEvent): void {
+  if (supportsPointerEvents()) {
+    return;
+  }
+
+  if (
+    activeTouchId === undefined
+    || getActiveChangedTouch(event) === undefined
+  ) {
     return;
   }
 
@@ -261,8 +345,12 @@ function resetTouchHold(event: TouchEvent) {
   resetHoldState();
 }
 
-function startMouseHold(event: MouseEvent) {
-  if (props.disabled || event.button !== 0) {
+function startMouseHold(event: MouseEvent): void {
+  if (
+    supportsPointerEvents()
+    || props.disabled
+    || event.button !== 0
+  ) {
     return;
   }
 
@@ -270,22 +358,28 @@ function startMouseHold(event: MouseEvent) {
   beginHold();
 }
 
-function resetMouseHold() {
-  if (activePointerId !== undefined || activeTouchId !== undefined) {
+function resetMouseHold(): void {
+  if (supportsPointerEvents()) {
+    return;
+  }
+
+  if (activeTouchId !== undefined) {
     return;
   }
 
   resetHoldState();
 }
 
-onBeforeUnmount(() => resetHoldState(true));
+onBeforeUnmount(() => {
+  resetHoldState(true);
+});
 </script>
 
 <template>
   <div
     class="app-hold-action"
     :style="holdActionStyle"
-    @pointerdown="startHold"
+    @pointerdown="startPointerHold"
     @pointerup="resetPointerHold"
     @pointercancel="resetPointerHold"
     @lostpointercapture="resetPointerHold"
