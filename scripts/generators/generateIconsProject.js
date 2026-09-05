@@ -27,7 +27,7 @@ const iconFiles = collectSvgFiles(iconsDir)
 const importsBlock = iconFiles
   .map(
     ({ importName, relativePath }) =>
-      `import ${importName} from '@/assets/icons/${relativePath}?raw'`,
+      `import ${importName} from '@/assets/icons/${relativePath}'`,
   )
   .join('\n')
 
