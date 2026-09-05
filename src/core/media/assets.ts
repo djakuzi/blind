@@ -1,9 +1,9 @@
-import BlindDark from '@/assets/icons/logo/blind-dark.svg?raw'
-import BlindLight from '@/assets/icons/logo/blind-light.svg?raw'
-import BlindTextBottomDark from '@/assets/icons/logo/blind-text-bottom-dark.svg?raw'
-import BlindTextBottomLight from '@/assets/icons/logo/blind-text-bottom-light.svg?raw'
-import BlindTextRightDark from '@/assets/icons/logo/blind-text-right-dark.svg?raw'
-import BlindTextRightLight from '@/assets/icons/logo/blind-text-right-light.svg?raw'
+import BlindDark from '@/assets/icons/logo/blind-dark.svg'
+import BlindLight from '@/assets/icons/logo/blind-light.svg'
+import BlindTextBottomDark from '@/assets/icons/logo/blind-text-bottom-dark.svg'
+import BlindTextBottomLight from '@/assets/icons/logo/blind-text-bottom-light.svg'
+import BlindTextRightDark from '@/assets/icons/logo/blind-text-right-dark.svg'
+import BlindTextRightLight from '@/assets/icons/logo/blind-text-right-light.svg'
 
 export const ICONS_ASSETS = {
   logo: {
