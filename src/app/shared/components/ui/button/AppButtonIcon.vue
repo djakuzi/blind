@@ -1,15 +1,21 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import { computed } from 'vue';
 
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
-import AppIcon, {
-  type PropsAppIcon,
-} from '@/app/shared/components/atoms/media/AppIcon.vue';
+import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
+import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
 import { LibStyle } from '@/app/shared/lib/style';
+import type {
+  tIconGroup,
+  tIconName,
+} from '@/core/media/assets';
 
 interface Props {
-  group: PropsAppIcon['group']
-  icon: PropsAppIcon['icon']
+  group: tIconGroup
+  icon: tIconName<tIconGroup>
   width: PropsAppBlock['width']
   height?: PropsAppBlock['height']
   iconWidth?: PropsAppBlock['width']
@@ -36,21 +42,23 @@ const buttonStyle = computed(() => ({
 </script>
 
 <template>
-  <button
-    class="app-button-icon"
-    type="button"
-    :style="buttonStyle"
-    :disabled="disabled"
-    :aria-label="ariaLabel"
-    @click="$emit('click', $event)"
-  >
-    <AppIcon
-      :group="group"
-      :icon="icon"
-      :width="iconWidth"
-      :height="iconHeight"
-    />
-  </button>
+  <AppInteractionScale :disabled="disabled">
+    <button
+      class="app-button-icon"
+      type="button"
+      :style="buttonStyle"
+      :disabled="disabled"
+      :aria-label="ariaLabel"
+      @click="$emit('click', $event)"
+    >
+      <AppIcon
+        :group="group"
+        :icon="icon"
+        :width="iconWidth"
+        :height="iconHeight"
+      />
+    </button>
+  </AppInteractionScale>
 </template>
 
 <style scoped>
