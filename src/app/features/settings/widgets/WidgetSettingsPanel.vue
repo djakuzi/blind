@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
-import AppCard from '@/app/shared/components/ui/card/AppCard.vue';
+import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
 import AppSwitch from '@/app/shared/components/ui/control/AppSwitch.vue';
 import WidgetList from '@/app/shared/components/widgets/list/WidgetList.vue';
