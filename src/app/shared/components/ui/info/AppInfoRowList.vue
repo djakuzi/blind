@@ -242,7 +242,6 @@ const itemDividerColor = computed(() =>
 .app-info-row-list {
   display: flex;
   align-items: center;
-
   width: v-bind(listWidth);
   max-width: v-bind(listMaxWidth);
   min-width: 0;
@@ -258,19 +257,14 @@ const itemDividerColor = computed(() =>
   display: flex;
   flex: 0 1 auto;
   align-items: center;
-
   min-width: 0;
 
   &:not(:last-child)::after {
     content: '';
-
     flex: 0 0 auto;
-
     width: v-bind(itemDividerWidth);
     height: v-bind(itemDividerHeight);
-
     margin-inline: v-bind(itemDividerGap);
-
     background: v-bind(itemDividerColor);
   }
 }
@@ -278,7 +272,6 @@ const itemDividerColor = computed(() =>
 .app-info-row-list__content {
   display: flex;
   align-items: center;
-
   min-width: 0;
 }
 

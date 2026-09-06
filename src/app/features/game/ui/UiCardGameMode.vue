@@ -97,7 +97,7 @@ function handleComplete() {
             :text="mode.title"
             tag="h2"
             color="text-primary"
-            font-size="10xl"
+            font-size="16xl"
             font-weight="bold"
           />
 
@@ -105,7 +105,7 @@ function handleComplete() {
             class="ui-card-game-mode__description"
             :text="mode.description"
             color="text-secondary"
-            font-size="3xl"
+            font-size="5xl"
             font-weight="medium"
             :uppercase="true"
             :ellipsis="true"
@@ -188,7 +188,7 @@ function handleComplete() {
   align-items: center;
   width: 100%;
   min-width: 0;
-  gap: var(--app-space-3);
+  gap: var(--app-space-12);
   text-align: center;
 }
 
@@ -209,7 +209,7 @@ function handleComplete() {
   justify-content: center;
   width: 100%;
   min-width: 0;
-  gap: var(--app-space-2);
+  gap: var(--app-space-6);
   padding:
     var(--app-space-2)
     var(--app-space-6);
