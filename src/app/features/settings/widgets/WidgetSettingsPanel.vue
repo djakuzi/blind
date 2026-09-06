@@ -78,7 +78,7 @@ function handleSoundEnabledChange(
     tag="section"
     width="100%"
     max-width="75rem"
-    :padding-x="6"
+    :padding-x="8"
     padding-y="0"
   >
     <WidgetList
@@ -86,7 +86,7 @@ function handleSoundEnabledChange(
       item-key="id"
       width="100%"
       padding-x="0"
-      :padding-y="6"
+      :padding-y="8"
       :row-gap="6"
       row-wrap="wrap"
       divider-color="border-default"

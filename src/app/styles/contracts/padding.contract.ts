@@ -9,6 +9,7 @@ export const PADDING_TOKENS = [
   4,
   5,
   6,
+  8,
 ] as const;
 
 export type tPaddingToken = (typeof PADDING_TOKENS)[number];
