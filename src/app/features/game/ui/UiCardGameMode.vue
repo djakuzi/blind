@@ -178,8 +178,8 @@ function handleComplete() {
   min-width: 0;
   min-height: 0;
   padding:
-    var(--app-space-6)
-    var(--app-space-8);
+    var(--app-padding-8)
+    var(--app-padding-8);
 }
 
 .ui-card-game-mode__header {
@@ -211,7 +211,7 @@ function handleComplete() {
   min-width: 0;
   gap: var(--app-space-6);
   padding:
-    var(--app-space-2)
-    var(--app-space-6);
+    var(--app-padding-8)
+    var(--app-padding-8);
 }
 </style>
