@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
   tag: 'p',
   color: 'text-primary',
   fontSize: 'md',
-  fontWeight: 'regular',
+  fontWeight: 'medium',
   uppercase: false,
 });
 
@@ -75,7 +75,7 @@ const textFontWeight = computed(() =>
   font-size: v-bind(textFontSize);
   font-weight: v-bind(textFontWeight);
   line-height: var(--app-line-height-body);
-  letter-spacing: var(--app-letter-spacing-normal);
+  letter-spacing: var(--app-letter-spacing-wide);
 
   &.app-text--uppercase {
     text-transform: uppercase;
