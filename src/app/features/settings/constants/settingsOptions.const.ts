@@ -1,9 +1,5 @@
-export type {
-  tAppThemeMode,
-} from '@/app/styles/contracts/appTheme.contract.ts';
-export type {
-  tAppScaleMode,
-} from '@/app/styles/contracts/appScale.contract.ts';
+import type { tAppScaleMode } from '@/app/styles/contracts/appScale.contract.ts';
+import type { tAppThemeMode } from '@/app/styles/contracts/appTheme.contract.ts';
 
 type tSettingsOption<TValue extends string> = {
   label: string
