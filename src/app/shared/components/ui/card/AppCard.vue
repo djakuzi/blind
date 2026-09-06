@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
   paddingY: undefined,
   backgroundColor: 'surface-secondary',
   borderColor: 'border-contrast',
-  borderWidth: 'medium',
+  borderWidth: 'thick',
   borderStyle: 'solid',
   borderRadius: 'lg',
   overflow: 'visible',

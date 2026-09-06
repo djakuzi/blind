@@ -155,9 +155,9 @@ function handleSelect(option: iAppSegmentedControlOption) {
   max-width: v-bind(controlMaxWidth);
   min-width: 0;
   border:
-    var(--app-border-width-medium)
+    var(--app-border-width-thick)
     var(--app-border-style-solid)
-    var(--app-color-border-strong);
+    var(--app-color-border-contrast);
   border-radius: v-bind(controlBorderRadius);
   overflow: hidden;
 }
@@ -175,7 +175,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
   border-right:
     var(--app-border-width-medium)
     var(--app-border-style-solid)
-    var(--app-color-border-strong);
+    var(--app-color-border-contrast);
   background: var(--app-color-surface-primary);
   color: var(--app-color-text-primary);
   cursor: pointer;
