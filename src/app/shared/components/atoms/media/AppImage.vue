@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 
 type tAppImageFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
 
-interface Props {
+export interface PropsAppImage {
   src: string
   alt?: string
   maxWidth?: PropsAppBlock['maxWidth']
@@ -19,7 +18,7 @@ interface Props {
   decoding?: 'async' | 'sync' | 'auto'
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppImage>(), {
   alt: '',
   maxWidth: '100%',
   width: '100%',
