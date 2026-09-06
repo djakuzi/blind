@@ -31,7 +31,7 @@ function handleBack() {
 
       <AppLogo
         class="layout-header__logo"
-        size="middle"
+        size="small"
       />
 
       <span

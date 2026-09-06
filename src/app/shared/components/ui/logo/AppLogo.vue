@@ -33,20 +33,16 @@ const LOGO_SIZE_MAP: Record<
   tBaseSizeVariant,
   {
     width: string
-    height: string
   }
 > = {
   small: {
-    width: '7.5rem',
-    height: '2.5rem',
+    width: '18rem',
   },
   middle: {
-    width: '22.5rem',
-    height: '7.5rem',
+    width: '24rem',
   },
   big: {
-    width: '32.5rem',
-    height: '10.875rem',
+    width: '30rem',
   },
 };
 
@@ -57,7 +53,7 @@ const resolvedWidth = computed(() => {
 
 const resolvedHeight = computed(() => {
   return props.height
-    ?? (props.width ? 'auto' : LOGO_SIZE_MAP[props.size].height);
+    ?? (props.width ? 'auto' : 'auto');
 });
 
 const blurClass = computed(() => [
