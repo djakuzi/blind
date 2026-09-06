@@ -13,6 +13,7 @@ import {
   resolveRadiusValue,
   type tRadiusValue,
 } from '@/app/styles/contracts/radius.contract';
+import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 
 interface iAppSegmentedControlOption {
   label: string
@@ -46,24 +47,28 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>();
 
-const SIZE_PADDING_MAP: Record<
+const SIZE_MAP: Record<
   tBaseSizeVariant,
   {
-    x: tPaddingValue
-    y: tPaddingValue
+    paddingX: tPaddingValue
+    paddingY: tPaddingValue
+    fontSize: tFontSizeValue
   }
 > = {
   small: {
-    x: 3,
-    y: 2,
+    paddingX: 3,
+    paddingY: 2,
+    fontSize: 'md',
   },
   middle: {
-    x: 5,
-    y: 3,
+    paddingX: 5,
+    paddingY: 3,
+    fontSize: 'xl',
   },
   big: {
-    x: 6,
-    y: 4,
+    paddingX: 6,
+    paddingY: 4,
+    fontSize: '2xl',
   },
 };
 
@@ -82,14 +87,20 @@ const controlBorderRadius = computed(() =>
 const itemPaddingX = computed(() =>
   resolvePaddingValue(
     props.paddingX
-      ?? SIZE_PADDING_MAP[props.size].x,
+      ?? SIZE_MAP[props.size].paddingX,
   ),
 );
 
 const itemPaddingY = computed(() =>
   resolvePaddingValue(
     props.paddingY
-      ?? SIZE_PADDING_MAP[props.size].y,
+      ?? SIZE_MAP[props.size].paddingY,
+  ),
+);
+
+const itemFontSize = computed(() =>
+  resolveFontSizeValue(
+    SIZE_MAP[props.size].fontSize,
   ),
 );
 
@@ -136,7 +147,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
         :text="option.label"
         tag="span"
         color="inherit"
-        font-size="inherit"
+        :font-size="itemFontSize"
         font-weight="bold"
         line-height="var(--app-line-height-tight)"
         letter-spacing="var(--app-letter-spacing-wide)"
@@ -201,17 +212,5 @@ function handleSelect(option: iAppSegmentedControlOption) {
   width: 100%;
   min-width: 0;
   max-width: 100%;
-}
-
-.app-segmented-control--size-small {
-  font-size: var(--app-font-size-md);
-}
-
-.app-segmented-control--size-middle {
-  font-size: var(--app-font-size-xl);
-}
-
-.app-segmented-control--size-big {
-  font-size: var(--app-font-size-2xl);
 }
 </style>
