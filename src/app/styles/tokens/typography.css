@@ -19,7 +19,13 @@
   --app-font-size-7xl: 5.5rem;
   --app-font-size-8xl: 6.5rem;
   --app-font-size-9xl: 7.5rem;
-  --app-font-size-10xl: 7.5rem;    /* px */
+  --app-font-size-10xl: 7.5rem;
+  --app-font-size-11xl: 7.5rem;
+  --app-font-size-12xl: 8.5rem;
+  --app-font-size-13xl: 9.5rem;
+  --app-font-size-14xl: 10.5rem;
+  --app-font-size-15xl: 11.5rem;
+  --app-font-size-16xl: 11.5rem;    /* px */
 
   /* Line height */
   --app-line-height-tight: 1;
