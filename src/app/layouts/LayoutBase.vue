@@ -45,7 +45,7 @@ const layoutStyle = computed(() => ({
       type="absolute"
       :position="{
         right: 'vertical',
-        bottom: 'horizontal',
+        bottom: 'vertical',
       }"
     >
       <AppVersion size="big" />
