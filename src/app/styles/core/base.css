@@ -12,7 +12,7 @@ body,
 
 body {
     background: var(--app-color-background);
-    font-family: var(--app-font-family-base);
+    font-family: var(--app-font-family-accent);
     font-weight: var(--app-font-weight-regular);
     line-height: var(--app-line-height-display);
     text-rendering: optimizeLegibility;
