@@ -1,8 +1,12 @@
 import type { tOptionGameMode } from "@/game/types/gameMode.types";
-import imgDuel from "@/assets/images/gameMode/duel-dark.png";
-import imgCombat from "@/assets/images/gameMode/combat-dark.png";
-import imgClash from "@/assets/images/gameMode/clash-dark.png";
-import imgBattle from "@/assets/images/gameMode/battle-dark.png";
+import imgDuelDark from "@/assets/images/gameMode/duel-dark.png";
+import imgCombatDark from "@/assets/images/gameMode/combat-dark.png";
+import imgClashDark from "@/assets/images/gameMode/clash-dark.png";
+import imgBattleDark from "@/assets/images/gameMode/battle-dark.png";
+import imgDuelLight from "@/assets/images/gameMode/duel-light.png";
+import imgCombatLight from "@/assets/images/gameMode/combat-light.png";
+import imgClashLight from "@/assets/images/gameMode/clash-light.png";
+import imgBattleLight from "@/assets/images/gameMode/battle-light.png";
 
 export interface DataGameMode {
     title: string;
@@ -19,8 +23,8 @@ export const GAME_MODE: Record<string, DataGameMode> = {
     title: 'DUEL',
     description: 'Одно попадание — одна жизнь',
     img: {
-        dark: imgDuel,
-        light: imgDuel,
+        dark: imgDuelDark,
+        light: imgDuelLight,
     },
     options: {
         teamSize: 1,
@@ -33,8 +37,8 @@ export const GAME_MODE: Record<string, DataGameMode> = {
     title: 'COMBAT',
     description: 'Сражайся, пока здоровье не закончится',
     img: {
-        dark: imgCombat,
-        light: imgCombat,
+        dark: imgCombatDark,
+        light: imgCombatLight,
     },
     options: {
         teamSize: 1,
@@ -47,8 +51,8 @@ export const GAME_MODE: Record<string, DataGameMode> = {
     title: 'CLASH',
     description: 'Одна жизнь. Одна команда.',
     img: {
-        dark: imgClash,
-        light: imgClash,
+        dark: imgClashDark,
+        light: imgClashLight,
     },
     options: {
         teamSize: 2,
@@ -61,8 +65,8 @@ export const GAME_MODE: Record<string, DataGameMode> = {
     title: 'BATTLE',
     description: 'Командный бой до последнего выжившего',
     img: {
-        dark: imgBattle,
-        light: imgBattle,
+        dark: imgBattleDark,
+        light: imgBattleLight,
     },
     options: {
         teamSize: 2,
