@@ -76,7 +76,7 @@ function handleSoundEnabledChange(
   <AppCard
     class="widget-settings-panel"
     tag="section"
-    width="160rem"
+    width="140rem"
     max-width="100%"
     :padding-x="10"
     padding-y="0"
@@ -97,7 +97,7 @@ function handleSoundEnabledChange(
         <AppText
           :text="item.text"
           tag="span"
-          font-size="2xl"
+          font-size="xl"
           font-weight="medium"
           :uppercase="true"
           :ellipsis="true"
@@ -133,7 +133,7 @@ function handleSoundEnabledChange(
             v-else
             :model-value="soundEnabled"
             accessibility-label="Звук"
-            width="16rem"
+            width="12rem"
             @update:model-value="handleSoundEnabledChange"
           />
         </AppFlex>

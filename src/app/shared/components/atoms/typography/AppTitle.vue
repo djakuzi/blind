@@ -33,7 +33,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   tag: 'h1',
   color: 'text-secondary',
-  fontSize: '3xl',
+  fontSize: '2xl',
   fontWeight: 'medium',
   uppercase: true,
 });
