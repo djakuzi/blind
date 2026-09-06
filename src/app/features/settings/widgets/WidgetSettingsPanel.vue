@@ -76,8 +76,8 @@ function handleSoundEnabledChange(
   <AppCard
     class="widget-settings-panel"
     tag="section"
-    width="100%"
-    max-width="75rem"
+    width="90rem"
+    max-width="100%"
     :padding-x="8"
     padding-y="0"
   >
@@ -109,7 +109,7 @@ function handleSoundEnabledChange(
           align="center"
           justify="end"
           width="100%"
-          max-width="35rem"
+          max-width="40rem"
         >
           <AppSegmentedControl
             v-if="item.id === 'theme'"

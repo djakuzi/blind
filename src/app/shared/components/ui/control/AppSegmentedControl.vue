@@ -230,7 +230,6 @@ function handleSelect(
 
 .app-segmented-control__text {
   display: block;
-
   width: 100%;
   min-width: 0;
   max-width: 100%;
