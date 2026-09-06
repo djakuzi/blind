@@ -3,7 +3,6 @@ export const APP_SCALE_MODE_LIST = [
   'small',
   'default',
   'large',
-  'xlarge',
 ] as const;
 
 export const APP_SCALE_CSS_VARIABLE_NAME = '--app-scale';
