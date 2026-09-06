@@ -29,6 +29,7 @@
   --app-color-text-secondary: light-dark(#5f5f66, #b0b0b6);
   --app-color-text-tertiary: light-dark(#8b8b92, #7b7b83);
   --app-color-text-disabled: light-dark(#b8b8be, #55555c);
+  --app-color-border-contrast: light-dark(var(--app-color-blind-black),var(--app-color-blind-white));
 
   --app-color-icon-primary: light-dark(#111114, #f7f7f8);
   --app-color-icon-secondary: light-dark(#5f5f66, #b0b0b6);

@@ -5,6 +5,7 @@ import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
 import { ref } from 'vue';
 import AppSwitch from '@/app/shared/components/ui/control/AppSwitch.vue';
+import AppCard from '@/app/shared/components/ui/card/AppCard.vue';
 const soundEnabled = ref(true);
 const theme = ref('light');
 </script>
@@ -45,6 +46,15 @@ const theme = ref('light');
           },
         ]"
       />
+
+<AppCard
+  tag="section"
+  width="100%"
+  max-width="75rem"
+  size="big"
+>
+  ...
+</AppCard>
   </ViewLayout>
 </template>
 

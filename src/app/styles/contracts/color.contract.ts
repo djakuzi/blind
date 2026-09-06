@@ -30,6 +30,7 @@ export const BORDER_COLOR_TOKENS = [
   'border-subtle',
   'border-default',
   'border-strong',
+  'border-contrast',
 ] as const;
 
 export const TEXT_COLOR_TOKENS = [
