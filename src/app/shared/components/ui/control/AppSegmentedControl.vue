@@ -182,7 +182,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
     border-right: 0;
   }
 
-  &--active {
+  &.app-segmented-control__item--active {
     background: var(--app-color-primary);
     color: var(--app-color-on-primary);
   }

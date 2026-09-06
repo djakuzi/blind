@@ -3,6 +3,9 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
+import { ref } from 'vue';
+import AppSwitch from '@/app/shared/components/ui/control/AppSwitch.vue';
+const soundEnabled = ref(true);
 </script>
 
 <template>
@@ -21,6 +24,11 @@ import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmented
       fontSize="2xl"
       fontWeight="medium"
     />
+
+  <AppSwitch
+    v-model="soundEnabled"
+    accessibility-label="Звук"
+  />
   </ViewLayout>
 </template>
 
