@@ -11,7 +11,6 @@ export const GAME_MODE = {
     rounds: 3,
     winCondition: GAME_MODE_WIN_CONDITION.SINGLE_HIT,
   },
-
   COMBAT: {
     title: 'COMBAT',
     description: 'Сражайся, пока здоровье не закончится',
