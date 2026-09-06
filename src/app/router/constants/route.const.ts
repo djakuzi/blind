@@ -10,6 +10,7 @@ export const KEY_ROUTE = {
   },
   preGame: {
     index: 'mode',
+    typeConnection: 'type-connection'
   }
 };
 
