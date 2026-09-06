@@ -1,8 +1,8 @@
 import type { tOptionGameMode } from "@/game/types/gameMode.types";
-import imgDuel from "@/assets/images/gameMode/duel-light.png";
-import imgCombat from "@/assets/images/gameMode/combat-light.png";
-import imgClash from "@/assets/images/gameMode/clash-light.png";
-import imgBattle from "@/assets/images/gameMode/battle-light.png";
+import imgDuel from "@/assets/images/gameMode/duel-dark.png";
+import imgCombat from "@/assets/images/gameMode/combat-dark.png";
+import imgClash from "@/assets/images/gameMode/clash-dark.png";
+import imgBattle from "@/assets/images/gameMode/battle-dark.png";
 
 export interface DataGameMode {
     title: string;
