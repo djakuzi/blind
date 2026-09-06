@@ -24,34 +24,21 @@ export interface iPayloadModelGameMode
 
 export class ModelGameMode {
   readonly key: tKeyGameMode;
-
   readonly title: DataGameMode['title'];
-
-  readonly description:
-    DataGameMode['description'];
-
-  readonly img:
-    DataGameMode['img'];
-
-  readonly options:
-    DataGameMode['options'];
-
-  readonly typeConnection:
-    DataGameMode['typeConnection'];
+  readonly description: DataGameMode['description'];
+  readonly img: DataGameMode['img'];
+  readonly options: DataGameMode['options'];
+  readonly typeConnection: DataGameMode['typeConnection'];
 
   constructor(
     payload: iPayloadModelGameMode,
   ) {
     this.key = payload.key;
-
     this.title = payload.title;
     this.description = payload.description;
-
     this.img = payload.img;
     this.options = payload.options;
-
-    this.typeConnection =
-      payload.typeConnection;
+    this.typeConnection = payload.typeConnection;
   }
 
   getPlayersDescription(): string {
