@@ -33,7 +33,7 @@ type tAppCardTag =
   | 'section'
   | 'article';
 
-interface Props {
+interface PropsAppCard {
   tag?: tAppCardTag
   size?: tBaseSizeVariant
   width?: tStyleSizeValue
@@ -48,7 +48,7 @@ interface Props {
   overflow?: CSSProperties['overflow']
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppCard>(), {
   tag: 'div',
   size: 'middle',
   width: '100%',

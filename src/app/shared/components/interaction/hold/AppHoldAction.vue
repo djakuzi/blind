@@ -9,7 +9,7 @@ interface iAppHoldActionActions {
   complete?: () => void
 }
 
-interface Props {
+interface PropsAppHoldAction {
   actions?: iAppHoldActionActions
   disabled?: boolean
   duration?: number
@@ -21,7 +21,7 @@ interface Props {
   width?: tStyleSizeValue
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   actions: undefined,
   disabled: false,
   duration: 650,
