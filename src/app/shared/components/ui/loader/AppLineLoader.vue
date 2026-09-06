@@ -167,11 +167,11 @@ watch(
   gap: var(--app-space-3);
 
   .app-line-loader__track {
-    height: 0.25rem;
+    height: 0.5rem;
   }
 
   .app-line-loader__text {
-    font-size: var(--app-font-size-md);
+    font-size: var(--app-font-size-xs);
   }
 }
 
@@ -179,11 +179,11 @@ watch(
   gap: var(--app-space-5);
 
   .app-line-loader__track {
-    height: 0.5rem;
+    height: 0.75rem;
   }
 
   .app-line-loader__text {
-    font-size: var(--app-font-size-lg);
+    font-size: var(--app-font-size-sm);
   }
 }
 
@@ -191,11 +191,11 @@ watch(
   gap: var(--app-space-7);
 
   .app-line-loader__track {
-    height: 0.625rem;
+    height: 1rem;
   }
 
   .app-line-loader__text {
-    font-size: var(--app-font-size-xl);
+    font-size: var(--app-font-size-md);
   }
 }
 </style>
