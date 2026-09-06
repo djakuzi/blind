@@ -171,7 +171,7 @@ watch(
   }
 
   .app-line-loader__text {
-    font-size: var(--app-font-size-sm);
+    font-size: var(--app-font-size-md);
   }
 }
 
@@ -183,7 +183,7 @@ watch(
   }
 
   .app-line-loader__text {
-    font-size: var(--app-font-size-md);
+    font-size: var(--app-font-size-lg);
   }
 }
 
@@ -195,7 +195,7 @@ watch(
   }
 
   .app-line-loader__text {
-    font-size: var(--app-font-size-lg);
+    font-size: var(--app-font-size-xl);
   }
 }
 </style>
