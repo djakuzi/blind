@@ -8,7 +8,6 @@ import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
 import AppButtonHold from '@/app/shared/components/ui/button/AppButtonHold.vue';
 import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
-import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 
 const router = useRouter();
 
@@ -78,16 +77,6 @@ const menuActions = [
 
       <AppHoldHint text="Удерживайте, чтобы начать" />
     </AppFlex>
-
-    <AppPosition
-      type="absolute"
-      :position="{
-        right: '0',
-        bottom: '0',
-      }"
-    >
-      <AppVersion size="big" />
-    </AppPosition>
   </ViewLayout>
 </template>
 
