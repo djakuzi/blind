@@ -171,7 +171,6 @@ function handleSelect(option: iAppSegmentedControlOption) {
   padding:
     v-bind(itemPaddingY)
     v-bind(itemPaddingX);
-  line-height: var(--app-line-height-tight);
   border: 0;
   border-right:
     var(--app-border-width-medium)
