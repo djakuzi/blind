@@ -7,8 +7,7 @@ type tSettingsOption<TValue extends string> = {
   disabled?: boolean
 };
 
-type tSettingsThemeMode =
-  Exclude<tAppThemeMode, 'system'>;
+type tSettingsThemeMode = tAppThemeMode;
 
 type tSettingsScaleMode =
   Exclude<tAppScaleMode, 'system'>;
@@ -21,6 +20,10 @@ export const SETTINGS_THEME_OPTIONS = [
   {
     label: 'Тёмная',
     value: 'dark',
+  },
+  {
+    label: 'Система',
+    value: 'system',
   },
 ] satisfies tSettingsOption<tSettingsThemeMode>[];
 
