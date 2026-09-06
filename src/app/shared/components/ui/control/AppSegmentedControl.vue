@@ -137,7 +137,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
         tag="span"
         color="inherit"
         font-size="inherit"
-        font-weight="medium"
+        font-weight="bold"
         line-height="var(--app-line-height-tight)"
         letter-spacing="var(--app-letter-spacing-wide)"
         :uppercase="true"
