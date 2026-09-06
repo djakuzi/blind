@@ -22,27 +22,19 @@ const props = withDefaults(
   {
     tag: 'div',
     size: 'middle',
-
     width: '100%',
     maxWidth: '100%',
-
     paddingX: undefined,
     paddingY: undefined,
-
     backgroundColor: 'transparent',
-
     borderColor: 'border-contrast',
     borderWidth: 'thick',
     borderStyle: 'solid',
     borderRadius: 'lg',
-
     overflow: 'hidden',
-
     actions: undefined,
     disabled: false,
-
     bloodFlowFrontDuration: 1200,
-
     duration: 650,
     fillDuration: undefined,
     initialProgress: 15,
