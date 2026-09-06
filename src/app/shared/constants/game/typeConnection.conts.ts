@@ -13,12 +13,8 @@ export const TYPE_CONNECTION = {
     name: 'ONLINE',
     title: 'Онлайн',
     description: 'Играй по сети'
-  },
-
+  }
 } as const;
-
-
-
 
 export type tTypeConection = typeof TYPE_CONNECTION;
 export type tKeyTypeConection = keyof typeof TYPE_CONNECTION;
