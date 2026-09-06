@@ -1,12 +1,23 @@
 <script setup lang="ts">
+import WidgetSliderGameMode from '@/app/features/game/widgets/WidgetSliderGameMode.vue';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
-
 </script>
 
 <template>
-  <ViewLayout>
+  <ViewLayout
+    class="view-game-mode"
+    align="center"
+    justify="center"
+    padding="none"
+    overflow="hidden"
+  >
+    <WidgetSliderGameMode />
   </ViewLayout>
 </template>
 
 <style scoped>
+.view-game-mode {
+  position: relative;
+  width: 100%;
+}
 </style>
