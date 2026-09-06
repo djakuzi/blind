@@ -70,3 +70,10 @@ const resolvedHeight = computed(() => {
     alt="Blind"
   />
 </template>
+
+<style scoped lang="css">
+.app-logo {
+  transform: scale(1);
+  will-change: transform;
+}
+</style>
