@@ -4,18 +4,24 @@ import { computed } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
+
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+
+import type {
+  tFontSizeValue,
+} from '@/app/styles/contracts/fontSize.contract';
+
 import {
   resolvePaddingValue,
   type tPaddingValue,
 } from '@/app/styles/contracts/padding.contract';
+
 import {
   resolveRadiusValue,
   type tRadiusValue,
 } from '@/app/styles/contracts/radius.contract';
-import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 
-interface iAppSegmentedControlOption {
+export interface iAppSegmentedControlOption {
   label: string
   value: string
   disabled?: boolean
@@ -23,7 +29,7 @@ interface iAppSegmentedControlOption {
 
 export interface PropsAppSegmentedControl {
   modelValue: string
-  options: iAppSegmentedControlOption[]
+  options: readonly iAppSegmentedControlOption[]
   disabled?: boolean
   size?: tBaseSizeVariant
   width?: tStyleSizeValue
@@ -33,15 +39,18 @@ export interface PropsAppSegmentedControl {
   borderRadius?: tRadiusValue
 }
 
-const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
-  disabled: false,
-  size: 'middle',
-  width: 'auto',
-  maxWidth: '100%',
-  paddingX: undefined,
-  paddingY: undefined,
-  borderRadius: 'lg',
-});
+const props = withDefaults(
+  defineProps<PropsAppSegmentedControl>(),
+  {
+    disabled: false,
+    size: 'middle',
+    width: 'auto',
+    maxWidth: '100%',
+    paddingX: undefined,
+    paddingY: undefined,
+    borderRadius: 'lg',
+  },
+);
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
@@ -72,6 +81,10 @@ const SIZE_MAP: Record<
   },
 };
 
+const sizeConfig = computed(() =>
+  SIZE_MAP[props.size],
+);
+
 const controlWidth = computed(() =>
   LibStyle.toSizeValue(props.width),
 );
@@ -87,24 +100,24 @@ const controlBorderRadius = computed(() =>
 const itemPaddingX = computed(() =>
   resolvePaddingValue(
     props.paddingX
-      ?? SIZE_MAP[props.size].paddingX,
+      ?? sizeConfig.value.paddingX,
   ),
 );
 
 const itemPaddingY = computed(() =>
   resolvePaddingValue(
     props.paddingY
-      ?? SIZE_MAP[props.size].paddingY,
+      ?? sizeConfig.value.paddingY,
   ),
 );
 
 const itemFontSize = computed(() =>
-  resolveFontSizeValue(
-    SIZE_MAP[props.size].fontSize,
-  ),
+  sizeConfig.value.fontSize,
 );
 
-function handleSelect(option: iAppSegmentedControlOption) {
+function handleSelect(
+  option: iAppSegmentedControlOption,
+) {
   if (
     props.disabled
     || option.disabled
@@ -113,19 +126,19 @@ function handleSelect(option: iAppSegmentedControlOption) {
     return;
   }
 
-  emit('update:modelValue', option.value);
+  emit(
+    'update:modelValue',
+    option.value,
+  );
 }
 </script>
 
 <template>
   <div
     class="app-segmented-control"
-    :class="[
-      `app-segmented-control--size-${size}`,
-      {
-        'app-segmented-control--disabled': disabled,
-      },
-    ]"
+    :class="{
+      'app-segmented-control--disabled': disabled,
+    }"
     role="radiogroup"
   >
     <button
@@ -149,8 +162,6 @@ function handleSelect(option: iAppSegmentedControlOption) {
         color="inherit"
         :font-size="itemFontSize"
         font-weight="bold"
-        line-height="var(--app-line-height-tight)"
-        letter-spacing="var(--app-letter-spacing-wide)"
         :uppercase="true"
         :ellipsis="true"
         :max-lines="1"
@@ -162,14 +173,18 @@ function handleSelect(option: iAppSegmentedControlOption) {
 <style scoped>
 .app-segmented-control {
   display: inline-flex;
+
   width: v-bind(controlWidth);
   max-width: v-bind(controlMaxWidth);
   min-width: 0;
+
   border:
     var(--app-border-width-thick)
     var(--app-border-style-solid)
     var(--app-color-border-contrast);
+
   border-radius: v-bind(controlBorderRadius);
+
   overflow: hidden;
 }
 
@@ -178,17 +193,23 @@ function handleSelect(option: iAppSegmentedControlOption) {
   flex: 1 1 0;
   align-items: center;
   justify-content: center;
+
   min-width: 0;
+
   padding:
     v-bind(itemPaddingY)
     v-bind(itemPaddingX);
+
   border: 0;
+
   border-right:
     var(--app-border-width-medium)
     var(--app-border-style-solid)
     var(--app-color-border-contrast);
+
   background: var(--app-color-surface-primary);
   color: var(--app-color-text-primary);
+
   cursor: pointer;
   appearance: none;
 
@@ -209,6 +230,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
 
 .app-segmented-control__text {
   display: block;
+
   width: 100%;
   min-width: 0;
   max-width: 100%;
