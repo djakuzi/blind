@@ -105,7 +105,7 @@ watch(normalizedInitialProgress, (initialProgress) => {
   progress.value = initialProgress;
 });
 
-function stopProgressAnimation(): void {
+function stopProgressAnimation() {
   if (animationFrameId === undefined) {
     return;
   }
@@ -114,12 +114,12 @@ function stopProgressAnimation(): void {
   animationFrameId = undefined;
 }
 
-function requestProgressAnimation(callback: FrameRequestCallback): void {
+function requestProgressAnimation(callback: FrameRequestCallback) {
   stopProgressAnimation();
   animationFrameId = requestAnimationFrame(callback);
 }
 
-function completeHold(): void {
+function completeHold() {
   if (hasCompleted.value) {
     return;
   }
@@ -127,7 +127,7 @@ function completeHold(): void {
   hasCompleted.value = true;
   progress.value = 100;
 
-  void ToolVibration.vibrate({
+  ToolVibration.vibrate({
     duration: props.vibrationDuration,
   });
 
@@ -135,7 +135,7 @@ function completeHold(): void {
   emit('complete');
 }
 
-function updateHoldProgress(): void {
+function updateHoldProgress() {
   if (!isHolding.value) {
     animationFrameId = undefined;
     return;
@@ -159,7 +159,7 @@ function updateHoldProgress(): void {
   animationFrameId = requestAnimationFrame(updateHoldProgress);
 }
 
-function beginHold(): void {
+function beginHold() {
   if (isHolding.value) {
     return;
   }
@@ -174,7 +174,7 @@ function beginHold(): void {
   animationFrameId = requestAnimationFrame(updateHoldProgress);
 }
 
-function animateReleaseProgress(): void {
+function animateReleaseProgress() {
   const startProgress = normalizedProgress.value;
   const finishProgress = normalizedInitialProgress.value;
   const duration = normalizedReleaseDuration.value;
@@ -186,7 +186,7 @@ function animateReleaseProgress(): void {
 
   const releaseStartedAt = getCurrentTime();
 
-  function updateReleaseProgress(): void {
+  function updateReleaseProgress() {
     const elapsed = getCurrentTime() - releaseStartedAt;
     const releaseProgress = Math.min(1, elapsed / duration);
 
@@ -207,7 +207,7 @@ function animateReleaseProgress(): void {
   requestProgressAnimation(updateReleaseProgress);
 }
 
-function releasePointerCapture(): void {
+function releasePointerCapture() {
   const pointerId = activePointerId;
   const pointerTarget = activePointerTarget;
 
@@ -230,7 +230,7 @@ function releasePointerCapture(): void {
   pointerTarget.releasePointerCapture(pointerId);
 }
 
-function resetHoldState(isImmediate = false): void {
+function resetHoldState(isImmediate = false) {
   const shouldAnimateRelease = (
     !isImmediate
     && progress.value > normalizedInitialProgress.value
@@ -264,7 +264,7 @@ function isHoldPointer(event: PointerEvent): boolean {
   return true;
 }
 
-function capturePointer(event: PointerEvent): void {
+function capturePointer(event: PointerEvent) {
   const target = event.currentTarget;
 
   if (!(target instanceof HTMLElement)) {
@@ -279,7 +279,7 @@ function capturePointer(event: PointerEvent): void {
   activePointerTarget = target;
 }
 
-function startPointerHold(event: PointerEvent): void {
+function startPointerHold(event: PointerEvent) {
   if (props.disabled || !isHoldPointer(event)) {
     return;
   }
@@ -290,7 +290,7 @@ function startPointerHold(event: PointerEvent): void {
   beginHold();
 }
 
-function resetPointerHold(event?: PointerEvent): void {
+function resetPointerHold(event?: PointerEvent) {
   if (
     event !== undefined
     && activePointerId !== undefined
@@ -312,7 +312,7 @@ function getActiveChangedTouch(event: TouchEvent): Touch | undefined {
     .find((touch) => touch.identifier === activeTouchId);
 }
 
-function startTouchHold(event: TouchEvent): void {
+function startTouchHold(event: TouchEvent) {
   if (supportsPointerEvents() || props.disabled) {
     return;
   }
@@ -329,7 +329,7 @@ function startTouchHold(event: TouchEvent): void {
   beginHold();
 }
 
-function resetTouchHold(event: TouchEvent): void {
+function resetTouchHold(event: TouchEvent) {
   if (supportsPointerEvents()) {
     return;
   }
@@ -345,7 +345,7 @@ function resetTouchHold(event: TouchEvent): void {
   resetHoldState();
 }
 
-function startMouseHold(event: MouseEvent): void {
+function startMouseHold(event: MouseEvent) {
   if (
     supportsPointerEvents()
     || props.disabled
@@ -358,7 +358,7 @@ function startMouseHold(event: MouseEvent): void {
   beginHold();
 }
 
-function resetMouseHold(): void {
+function resetMouseHold() {
   if (supportsPointerEvents()) {
     return;
   }
