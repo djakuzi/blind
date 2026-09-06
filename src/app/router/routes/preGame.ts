@@ -13,7 +13,7 @@ export const routePreGame: RouteRecordRaw = {
       component: ViewGameMode,
     },
     {
-      path: '',
+      path: 'type-connection',
       name: KEY_ROUTE.preGame.typeConnection,
       component: ViewGameTypeConnection,
     },

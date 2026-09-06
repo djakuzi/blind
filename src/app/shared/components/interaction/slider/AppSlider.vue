@@ -575,15 +575,15 @@ watch(
     () => props.itemGap,
   ],
   () => {
-    void updateTrackPosition();
+    updateTrackPosition();
   },
 );
 
 onMounted(() => {
-  void updateTrackPosition();
+  updateTrackPosition();
 
   resizeObserver = new ResizeObserver(() => {
-    void updateTrackPosition();
+    updateTrackPosition();
   });
 
   if (viewportElement.value) {
