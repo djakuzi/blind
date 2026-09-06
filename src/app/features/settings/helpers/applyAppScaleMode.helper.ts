@@ -2,6 +2,7 @@ import {
   APP_SCALE_CSS_VARIABLE_NAME,
   APP_SCALE_MODE,
   APP_SCALE_SYSTEM_MODE,
+  resolveNearestAppScalePresetMode,
   type tAppScaleMode,
   type tAppScalePresetMode,
 } from '@/app/styles/contracts/appScale.contract';
@@ -9,51 +10,31 @@ import {
 import { DomProperty } from '@/core/dom/property';
 import { ToolSystem } from '@/core/tool/system';
 
-function resolveNearestAppScale(
-  systemScaleValue: number,
-) {
-  return Object.values(APP_SCALE_MODE).reduce(
-    (nearestScale, currentScale) => {
-      const nearestDistance = Math.abs(
-        nearestScale - systemScaleValue,
-      );
-
-      const currentDistance = Math.abs(
-        currentScale - systemScaleValue,
-      );
-
-      return currentDistance < nearestDistance
-        ? currentScale
-        : nearestScale;
-    },
-  );
-}
-
-function resolveAppScale(
+async function resolveAppScalePresetMode(
   appScaleMode: tAppScaleMode,
-  systemScaleValue: number,
-) {
-  if (appScaleMode === APP_SCALE_SYSTEM_MODE) {
-    return resolveNearestAppScale(
-      systemScaleValue,
-    );
+): Promise<tAppScalePresetMode> {
+  if (appScaleMode !== APP_SCALE_SYSTEM_MODE) {
+    return appScaleMode;
   }
 
-  return APP_SCALE_MODE[
-    appScaleMode as tAppScalePresetMode
-  ];
+  const { value } =
+    await ToolSystem.getSystemScale();
+
+  return resolveNearestAppScalePresetMode(
+    value,
+  );
 }
 
 export async function applyAppScaleMode(
   appScaleMode: tAppScaleMode,
 ) {
-  const { value } =
-    await ToolSystem.getSystemScale();
+  const resolvedAppScaleMode =
+    await resolveAppScalePresetMode(
+      appScaleMode,
+    );
 
-  const appScaleValue = resolveAppScale(
-    appScaleMode,
-    value,
-  );
+  const appScaleValue =
+    APP_SCALE_MODE[resolvedAppScaleMode];
 
   DomProperty.setProperty(
     APP_SCALE_CSS_VARIABLE_NAME,
