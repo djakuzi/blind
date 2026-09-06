@@ -50,12 +50,4 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
     var(--app-space-8)
     var(--app-space-16);
 }
-
-@media (max-width: 48rem) {
-  .view-settings__content {
-    padding-block:
-      var(--app-space-6)
-      var(--app-space-20);
-  }
-}
 </style>
