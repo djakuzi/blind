@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
 import AppButtonHold from '@/app/shared/components/ui/button/AppButtonHold.vue';
 import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
