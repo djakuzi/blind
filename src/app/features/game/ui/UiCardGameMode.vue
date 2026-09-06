@@ -105,7 +105,7 @@ function handleComplete() {
             class="ui-card-game-mode__description"
             :text="mode.description"
             color="text-secondary"
-            font-size="xl"
+            font-size="3xl"
             font-weight="medium"
             :uppercase="true"
             :ellipsis="true"
@@ -117,7 +117,7 @@ function handleComplete() {
           class="ui-card-game-mode__image"
           :src="imageSource"
           :alt="mode.title"
-          width="9rem"
+          width="14rem"
           max-width="25%"
           height="auto"
           object-fit="contain"
@@ -130,7 +130,7 @@ function handleComplete() {
           :items="optionItems"
           width="auto"
           max-width="100%"
-          size="middle"
+          size="big"
           text-color="on-primary"
           divider-color="on-primary"
           font-weight="bold"
@@ -141,7 +141,7 @@ function handleComplete() {
           :items="connectionItems"
           width="auto"
           max-width="100%"
-          size="small"
+          size="big"
           text-color="on-primary"
           divider-color="on-primary"
           font-weight="medium"
@@ -153,10 +153,6 @@ function handleComplete() {
 </template>
 
 <style scoped>
-.ui-card-game-mode {
-  aspect-ratio: 1.9 / 1;
-}
-
 .ui-card-game-mode :deep(.app-card-hold) {
   height: 100%;
 }
@@ -168,7 +164,6 @@ function handleComplete() {
 .ui-card-game-mode__layout {
   display: flex;
   flex-direction: column;
-
   width: 100%;
   height: 100%;
   min-width: 0;
@@ -180,10 +175,8 @@ function handleComplete() {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-
   min-width: 0;
   min-height: 0;
-
   padding:
     var(--app-space-6)
     var(--app-space-8);
@@ -193,12 +186,9 @@ function handleComplete() {
   display: flex;
   flex-direction: column;
   align-items: center;
-
   width: 100%;
   min-width: 0;
-
   gap: var(--app-space-3);
-
   text-align: center;
 }
 
@@ -208,7 +198,6 @@ function handleComplete() {
 
 .ui-card-game-mode__image {
   flex: 0 1 auto;
-
   pointer-events: none;
 }
 
@@ -218,31 +207,11 @@ function handleComplete() {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   width: 100%;
   min-width: 0;
-
   gap: var(--app-space-2);
-
   padding:
     var(--app-space-2)
     var(--app-space-6);
-}
-
-@media (max-width: 48rem) {
-  .ui-card-game-mode {
-    aspect-ratio: 1.7 / 1;
-  }
-
-  .ui-card-game-mode__main {
-    padding:
-      var(--app-space-4)
-      var(--app-space-5);
-  }
-
-  .ui-card-game-mode__footer {
-    padding-inline:
-      var(--app-space-4);
-  }
 }
 </style>
