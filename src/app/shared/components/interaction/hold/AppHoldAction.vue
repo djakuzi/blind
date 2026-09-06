@@ -16,6 +16,7 @@ export interface PropsAppHoldAction {
   fillDuration?: number
   initialProgress?: number
   maxWidth?: tStyleSizeValue
+  moveCancelThreshold?: number
   releaseDuration?: number
   vibrationDuration?: number
   width?: tStyleSizeValue
@@ -28,6 +29,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   fillDuration: undefined,
   initialProgress: 15,
   maxWidth: '100%',
+  moveCancelThreshold: 12,
   releaseDuration: 140,
   vibrationDuration: 45,
   width: '100%',
@@ -42,6 +44,8 @@ const hasCompleted = ref(false);
 const progress = ref(0);
 
 let holdStartedAt = 0;
+let holdStartX = 0;
+let holdStartY = 0;
 let animationFrameId: number | undefined;
 
 let activePointerId: number | undefined;
@@ -63,6 +67,20 @@ function getCurrentTime(): number {
 
 function supportsPointerEvents(): boolean {
   return typeof globalThis.PointerEvent !== 'undefined';
+}
+
+function setHoldStartPosition(x: number, y: number) {
+  holdStartX = x;
+  holdStartY = y;
+}
+
+function hasExceededMoveThreshold(x: number, y: number): boolean {
+  const threshold = Math.max(0, props.moveCancelThreshold);
+
+  return Math.hypot(
+    x - holdStartX,
+    y - holdStartY,
+  ) >= threshold;
 }
 
 const normalizedInitialProgress = computed(() => (
@@ -286,8 +304,23 @@ function startPointerHold(event: PointerEvent) {
 
   event.preventDefault();
 
+  setHoldStartPosition(event.clientX, event.clientY);
   capturePointer(event);
   beginHold();
+}
+
+function movePointerHold(event: PointerEvent) {
+  if (
+    !isHolding.value
+    || activePointerId === undefined
+    || event.pointerId !== activePointerId
+  ) {
+    return;
+  }
+
+  if (hasExceededMoveThreshold(event.clientX, event.clientY)) {
+    resetHoldState();
+  }
 }
 
 function resetPointerHold(event?: PointerEvent) {
@@ -312,6 +345,16 @@ function getActiveChangedTouch(event: TouchEvent): Touch | undefined {
     .find((touch) => touch.identifier === activeTouchId);
 }
 
+function getActiveTouch(event: TouchEvent): Touch | undefined {
+  if (activeTouchId === undefined) {
+    return undefined;
+  }
+
+  return Array
+    .from(event.touches)
+    .find((touch) => touch.identifier === activeTouchId);
+}
+
 function startTouchHold(event: TouchEvent) {
   if (supportsPointerEvents() || props.disabled) {
     return;
@@ -326,7 +369,23 @@ function startTouchHold(event: TouchEvent) {
   event.preventDefault();
 
   activeTouchId = touch.identifier;
+  setHoldStartPosition(touch.clientX, touch.clientY);
   beginHold();
+}
+
+function moveTouchHold(event: TouchEvent) {
+  if (supportsPointerEvents() || !isHolding.value) {
+    return;
+  }
+
+  const touch = getActiveTouch(event);
+
+  if (
+    touch !== undefined
+    && hasExceededMoveThreshold(touch.clientX, touch.clientY)
+  ) {
+    resetHoldState();
+  }
 }
 
 function resetTouchHold(event: TouchEvent) {
@@ -355,7 +414,23 @@ function startMouseHold(event: MouseEvent) {
   }
 
   event.preventDefault();
+
+  setHoldStartPosition(event.clientX, event.clientY);
   beginHold();
+}
+
+function moveMouseHold(event: MouseEvent) {
+  if (
+    supportsPointerEvents()
+    || !isHolding.value
+    || activeTouchId !== undefined
+  ) {
+    return;
+  }
+
+  if (hasExceededMoveThreshold(event.clientX, event.clientY)) {
+    resetHoldState();
+  }
 }
 
 function resetMouseHold() {
@@ -380,13 +455,16 @@ onBeforeUnmount(() => {
     class="app-hold-action"
     :style="holdActionStyle"
     @pointerdown="startPointerHold"
+    @pointermove="movePointerHold"
     @pointerup="resetPointerHold"
     @pointercancel="resetPointerHold"
     @lostpointercapture="resetPointerHold"
     @touchstart="startTouchHold"
+    @touchmove="moveTouchHold"
     @touchend="resetTouchHold"
     @touchcancel="resetTouchHold"
     @mousedown="startMouseHold"
+    @mousemove="moveMouseHold"
     @mouseup="resetMouseHold"
     @mouseleave="resetMouseHold"
     @contextmenu.prevent
