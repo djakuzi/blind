@@ -12,21 +12,21 @@ import { ToolSystem } from '@/core/tool/system';
 function resolveNearestAppScale(
   systemScaleValue: number,
 ) {
-  const scaleValues = Object.values(APP_SCALE_MODE);
+  return Object.values(APP_SCALE_MODE).reduce(
+    (nearestScale, currentScale) => {
+      const nearestDistance = Math.abs(
+        nearestScale - systemScaleValue,
+      );
 
-  return scaleValues.reduce((nearest, current) => {
-    const nearestDistance = Math.abs(
-      nearest - systemScaleValue,
-    );
+      const currentDistance = Math.abs(
+        currentScale - systemScaleValue,
+      );
 
-    const currentDistance = Math.abs(
-      current - systemScaleValue,
-    );
-
-    return currentDistance < nearestDistance
-      ? current
-      : nearest;
-  });
+      return currentDistance < nearestDistance
+        ? currentScale
+        : nearestScale;
+    },
+  );
 }
 
 function resolveAppScale(
@@ -34,7 +34,9 @@ function resolveAppScale(
   systemScaleValue: number,
 ) {
   if (appScaleMode === APP_SCALE_SYSTEM_MODE) {
-    return resolveNearestAppScale(systemScaleValue);
+    return resolveNearestAppScale(
+      systemScaleValue,
+    );
   }
 
   return APP_SCALE_MODE[
