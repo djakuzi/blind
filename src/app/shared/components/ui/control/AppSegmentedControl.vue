@@ -39,7 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxWidth: '100%',
   paddingX: undefined,
   paddingY: undefined,
-  borderRadius: 'md',
+  borderRadius: 'lg',
 });
 
 const emit = defineEmits<{
@@ -168,6 +168,8 @@ function handleSelect(option: iAppSegmentedControlOption) {
   padding:
     v-bind(itemPaddingY)
     v-bind(itemPaddingX);
+  line-height: var(--app-line-height-tight);
+  font-weight: var(--app-font-weight-medium);
   border: 0;
   border-right:
     var(--app-border-width-medium)

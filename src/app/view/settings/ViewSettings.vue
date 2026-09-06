@@ -6,6 +6,7 @@ import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmented
 import { ref } from 'vue';
 import AppSwitch from '@/app/shared/components/ui/control/AppSwitch.vue';
 const soundEnabled = ref(true);
+const theme = ref('light');
 </script>
 
 <template>
@@ -25,10 +26,25 @@ const soundEnabled = ref(true);
       fontWeight="medium"
     />
 
-  <AppSwitch
+  <!-- <AppSwitch
     v-model="soundEnabled"
     accessibility-label="Звук"
-  />
+  /> -->
+
+      <AppSegmentedControl
+        v-model="theme"
+        width="32rem"
+        :options="[
+          {
+            label: 'Светлая',
+            value: 'light',
+          },
+          {
+            label: 'Тёмная',
+            value: 'dark',
+          },
+        ]"
+      />
   </ViewLayout>
 </template>
 
