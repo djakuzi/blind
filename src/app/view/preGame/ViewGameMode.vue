@@ -22,7 +22,7 @@ import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
     >
       <WidgetSliderGameMode />
 
-      <AppHoldHint text="Удерживайте, чтобы начать" />
+      <AppHoldHint text="Удерживайте для выбора режим игры" />
     </AppFlex>
   </ViewLayout>
 </template>

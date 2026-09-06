@@ -74,7 +74,7 @@ const menuActions = [
         />
       </AppFlex>
 
-      <AppHoldHint text="Удерживайте, чтобы начать" />
+      <AppHoldHint text="Удерживайте для перехода" />
     </AppFlex>
   </ViewLayout>
 </template>
