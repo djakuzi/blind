@@ -81,7 +81,7 @@ export const GAME_MODE: Record<string, DataGameMode> = {
     },
     typeConnection: ['LAN', 'ONLINE'],
   },
-} as const;
+} as const satisfies Record<string, DataGameMode>;
 
 export type tGameMode = typeof GAME_MODE;
 export type tKeyGameMode = keyof typeof GAME_MODE;
