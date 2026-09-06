@@ -1,41 +1,25 @@
 <script setup lang="ts">
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
-import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
-import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
-import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
-import { ref } from 'vue';
-import AppSwitch from '@/app/shared/components/ui/control/AppSwitch.vue';
-import AppCard from '@/app/shared/components/ui/card/AppCard.vue';
-const soundEnabled = ref(true);
+import { computed, ref } from 'vue';
+import type {
+  iWidgetSettingsListItem,
+  tWidgetSettingsListChange,
+} from '@/app/features/settings/widgets/WidgetSettingsList.vue';
+
 const theme = ref('light');
-</script>
+const scale = ref('middle');
+const soundEnabled = ref(true);
 
-<template>
-  <ViewLayout>
-    <AppText
-      text="ТЕМА ПРИЛОЖЕНИЯ"
-      fontSize="3xl"
-      fontWeight="medium"
-      uppercase
-      :ellipsis="true"
-    />
-
-    <AppTitle
-      text="Выберите тему приложения"
-      color="text-primary"
-      fontSize="2xl"
-      fontWeight="medium"
-    />
-
-  <!-- <AppSwitch
-    v-model="soundEnabled"
-    accessibility-label="Звук"
-  /> -->
-
-      <AppSegmentedControl
-        v-model="theme"
-        width="32rem"
-        :options="[
+const settingsItems = computed<iWidgetSettingsListItem[]>(() => [
+  {
+    id: 'theme',
+    text: 'Тема приложения',
+    control: {
+      type: 'segmented',
+      modelValue: theme.value,
+      props: {
+        width: '100%',
+        options: [
           {
             label: 'Светлая',
             value: 'light',
@@ -44,17 +28,76 @@ const theme = ref('light');
             label: 'Тёмная',
             value: 'dark',
           },
-        ]"
-      />
+        ],
+      },
+    },
+  },
+  {
+    id: 'scale',
+    text: 'Размер интерфейса',
+    control: {
+      type: 'segmented',
+      modelValue: scale.value,
+      props: {
+        width: '100%',
+        options: [
+          {
+            label: 'S',
+            value: 'small',
+          },
+          {
+            label: 'M',
+            value: 'middle',
+          },
+          {
+            label: 'L',
+            value: 'big',
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 'sound',
+    text: 'Звук',
+    control: {
+      type: 'switch',
+      modelValue: soundEnabled.value,
+      props: {
+        size: 'small',
+      },
+    },
+  },
+]);
 
-<AppCard
-  tag="section"
-  width="100%"
-  max-width="75rem"
-  size="big"
->
-  ...
-</AppCard>
+function handleSettingsChange(
+  payload: tWidgetSettingsListChange,
+) {
+  if (payload.id === 'theme' && payload.type === 'segmented') {
+    theme.value = payload.value;
+    return;
+  }
+
+  if (payload.id === 'scale' && payload.type === 'segmented') {
+    scale.value = payload.value;
+    return;
+  }
+
+  if (payload.id === 'sound' && payload.type === 'switch') {
+    soundEnabled.value = payload.value;
+  }
+}
+</script>
+
+<template>
+  <ViewLayout>
+    <WidgetSettingsList
+      :items="settingsItems"
+      size="middle"
+      width="100%"
+      control-width="32rem"
+      @change="handleSettingsChange"
+    />
   </ViewLayout>
 </template>
 
