@@ -35,7 +35,7 @@ export function useAppBootstrapLoader() {
     loaderRegistry.setResourceState({
       scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
       resourceKey,
-      isLoaded: false,
+      isLoaded: true,
     });
 
     count += 1;
