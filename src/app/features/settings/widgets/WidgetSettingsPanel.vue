@@ -95,7 +95,6 @@ function handleSoundEnabledChange(
     >
       <template #item="{ item }">
         <AppText
-          class="widget-settings-panel__text"
           :text="item.text"
           tag="span"
           font-size="3xl"
@@ -148,13 +147,7 @@ function handleSoundEnabledChange(
   margin-inline: auto;
 }
 
-.widget-settings-panel__text {
-  flex: 1 1 20rem;
-  min-width: 0;
-}
-
 .widget-settings-panel__control {
-  min-width: 0;
   margin-left: auto;
 }
 </style>
