@@ -97,7 +97,7 @@ function handleComplete() {
             :text="mode.title"
             tag="h2"
             color="text-primary"
-            font-size="5xl"
+            font-size="10xl"
             font-weight="bold"
           />
 
