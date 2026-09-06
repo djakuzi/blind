@@ -1,337 +1,176 @@
-<script lang="ts">
-import type { CSSProperties } from 'vue';
-
-import type { PropsAppText } from '@/app/shared/components/atoms/typography/AppText.vue';
-import type { PropsAppSegmentedControl } from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
-import type { PropsAppSwitch } from '@/app/shared/components/ui/control/AppSwitch.vue';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-
-import type {
-  tBorderStyleValue,
-  tBorderWidthValue,
-} from '@/app/styles/contracts/border.contract';
-
-import type {
-  tColorValue,
-} from '@/app/styles/contracts/color.contract';
-
-import type {
-  tPaddingValue,
-} from '@/app/styles/contracts/padding.contract';
-
-import type {
-  tSpaceValue,
-} from '@/app/styles/contracts/space.contract';
-
-export type tWidgetSettingsListTextProps =
-  Partial<Omit<PropsAppText, 'text'>>;
-
-export type tWidgetSettingsListSegmentedProps =
-  Omit<PropsAppSegmentedControl, 'modelValue'>;
-
-export type tWidgetSettingsListSwitchProps =
-  Omit<
-    PropsAppSwitch,
-    'modelValue' | 'accessibilityLabel'
-  > & {
-    accessibilityLabel?: string
-  };
-
-export interface iWidgetSettingsListSegmentedControl {
-  type: 'segmented'
-  modelValue: string
-  props: tWidgetSettingsListSegmentedProps
-}
-
-export interface iWidgetSettingsListSwitchControl {
-  type: 'switch'
-  modelValue: boolean
-  props?: tWidgetSettingsListSwitchProps
-}
-
-export type tWidgetSettingsListControl =
-  | iWidgetSettingsListSegmentedControl
-  | iWidgetSettingsListSwitchControl;
-
-export interface iWidgetSettingsListItem {
-  id: string
-  text: string
-  textProps?: tWidgetSettingsListTextProps
-  divider?: boolean
-  control: tWidgetSettingsListControl
-}
-
-export interface PropsWidgetSettingsList {
-  items: iWidgetSettingsListItem[]
-  size?: tBaseSizeVariant
-
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-
-  controlWidth?: tStyleSizeValue
-  controlMaxWidth?: tStyleSizeValue
-
-  paddingX?: tPaddingValue
-  paddingY?: tPaddingValue
-
-  rowGap?: tSpaceValue
-  rowWrap?: CSSProperties['flexWrap']
-
-  dividerColor?: tColorValue
-  dividerWidth?: tBorderWidthValue
-  dividerStyle?: tBorderStyleValue
-
-  textProps?: tWidgetSettingsListTextProps
-}
-
-export type tWidgetSettingsListChange =
-  | {
-    id: string
-    type: 'segmented'
-    value: string
-  }
-  | {
-    id: string
-    type: 'switch'
-    value: boolean
-  };
-</script>
-
 <script setup lang="ts">
-import { computed } from 'vue';
-
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import AppCard from '@/app/shared/components/ui/card/AppCard.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
 import AppSwitch from '@/app/shared/components/ui/control/AppSwitch.vue';
-
+import WidgetList from '@/app/shared/components/widgets/list/WidgetList.vue';
 import {
-  resolveBorderStyleValue,
-  resolveBorderWidthValue,
-} from '@/app/styles/contracts/border.contract';
-
+  APP_SCALE_SYSTEM_MODE,
+  isAppScaleMode,
+} from '@/app/styles/contracts/appScale.contract';
 import {
-  resolveColorValue,
-} from '@/app/styles/contracts/color.contract';
-
+  isAppThemeMode,
+} from '@/app/styles/contracts/appTheme.contract';
 import {
-  resolvePaddingValue,
-} from '@/app/styles/contracts/padding.contract';
+  SETTINGS_SCALE_OPTIONS,
+  SETTINGS_THEME_OPTIONS,
+} from '../constants/settingsOptions.const';
+import { useSettings } from '../composables/useSettings';
 
-const props = withDefaults(
-  defineProps<PropsWidgetSettingsList>(),
+const SETTINGS_ITEMS = [
   {
-    size: 'middle',
-
-    width: '100%',
-    maxWidth: '100%',
-
-    controlWidth: 'auto',
-    controlMaxWidth: '100%',
-
-    paddingX: 0,
-    paddingY: undefined,
-
-    rowGap: 6,
-    rowWrap: 'nowrap',
-
-    dividerColor: 'border-default',
-    dividerWidth: 'thin',
-    dividerStyle: 'solid',
-
-    textProps: undefined,
+    id: 'theme',
+    text: 'Тема приложения',
   },
-);
+  {
+    id: 'scale',
+    text: 'Размер интерфейса',
+  },
+  {
+    id: 'sound',
+    text: 'Звук',
+  },
+] as const;
 
-const emit = defineEmits<{
-  change: [payload: tWidgetSettingsListChange]
-}>();
+const {
+  appThemeMode,
+  appScaleMode,
+  soundEnabled,
+  setAppThemeMode,
+  setAppScaleMode,
+  setSoundEnabled,
+} = useSettings();
 
-const ROW_PADDING_Y_MAP: Record<
-  tBaseSizeVariant,
-  tPaddingValue
-> = {
-  small: 3,
-  middle: 4,
-  big: 5,
-};
-
-const rowPaddingX = computed(() =>
-  resolvePaddingValue(props.paddingX),
-);
-
-const rowPaddingY = computed(() =>
-  resolvePaddingValue(
-    props.paddingY
-      ?? ROW_PADDING_Y_MAP[props.size],
-  ),
-);
-
-const dividerColor = computed(() =>
-  resolveColorValue(props.dividerColor),
-);
-
-const dividerWidth = computed(() =>
-  resolveBorderWidthValue(props.dividerWidth),
-);
-
-const dividerStyle = computed(() =>
-  resolveBorderStyleValue(props.dividerStyle),
-);
-
-function resolveTextProps(
-  item: iWidgetSettingsListItem,
-): tWidgetSettingsListTextProps {
-  return {
-    tag: 'span',
-    color: 'text-primary',
-    fontSize: 'inherit',
-    fontWeight: 'medium',
-    uppercase: true,
-    ellipsis: true,
-    maxLines: 1,
-    ...props.textProps,
-    ...item.textProps,
-  };
-}
-
-function hasDivider(
-  item: iWidgetSettingsListItem,
-  index: number,
-) {
-  return (
-    index < props.items.length - 1
-    && item.divider !== false
-  );
-}
-
-function handleSegmentedChange(
-  id: string,
+async function handleThemeModeChange(
   value: string,
 ) {
-  emit('change', {
-    id,
-    type: 'segmented',
-    value,
-  });
+  if (!isAppThemeMode(value)) {
+    return;
+  }
+
+  await setAppThemeMode(value);
 }
 
-function handleSwitchChange(
-  id: string,
+async function handleScaleModeChange(
+  value: string,
+) {
+  if (
+    !isAppScaleMode(value)
+    || value === APP_SCALE_SYSTEM_MODE
+  ) {
+    return;
+  }
+
+  await setAppScaleMode(value);
+}
+
+function handleSoundEnabledChange(
   value: boolean,
 ) {
-  emit('change', {
-    id,
-    type: 'switch',
-    value,
-  });
+  setSoundEnabled(value);
 }
 </script>
 
 <template>
-  <AppFlex
-    class="widget-settings-list"
-    :class="`widget-settings-list--size-${size}`"
-    direction="column"
-    :width="width"
-    :max-width="maxWidth"
+  <AppCard
+    class="widget-settings-panel"
+    tag="section"
+    width="100%"
+    max-width="75rem"
+    padding-x="var(--app-space-12)"
+    padding-y="0"
   >
-    <AppFlex
-      v-for="(item, index) in items"
-      :key="item.id"
-      class="widget-settings-list__row"
-      :class="{
-        'widget-settings-list__row--divider':
-          hasDivider(item, index),
-      }"
-      align="center"
-      justify="between"
-      :wrap="rowWrap"
-      :gap="rowGap"
+    <WidgetList
+      :items="SETTINGS_ITEMS"
+      item-key="id"
       width="100%"
+      padding-x="0"
+      padding-y="var(--app-space-8)"
+      :row-gap="6"
+      row-wrap="wrap"
+      divider-color="border-default"
+      divider-width="thin"
+      accessibility-label="Настройки приложения"
     >
-      <AppText
-        class="widget-settings-list__text"
-        v-bind="resolveTextProps(item)"
-        :text="item.text"
-      />
-
-      <AppFlex
-        class="widget-settings-list__control"
-        align="center"
-        justify="end"
-        :width="controlWidth"
-        :max-width="controlMaxWidth"
-      >
-        <AppSegmentedControl
-          v-if="item.control.type === 'segmented'"
-          v-bind="item.control.props"
-          :model-value="item.control.modelValue"
-          :size="item.control.props.size ?? size"
-          @update:model-value="
-            handleSegmentedChange(item.id, $event)
-          "
+      <template #item="{ item }">
+        <AppText
+          class="widget-settings-panel__text"
+          :text="item.text"
+          tag="span"
+          font-size="2xl"
+          font-weight="medium"
+          :uppercase="true"
+          :ellipsis="true"
+          :max-lines="1"
         />
 
-        <AppSwitch
-          v-else
-          v-bind="item.control.props ?? {}"
-          :model-value="item.control.modelValue"
-          :size="item.control.props?.size ?? size"
-          :accessibility-label="
-            item.control.props?.accessibilityLabel
-              ?? item.text
-          "
-          @update:model-value="
-            handleSwitchChange(item.id, $event)
-          "
-        />
-      </AppFlex>
-    </AppFlex>
-  </AppFlex>
+        <AppFlex
+          class="widget-settings-panel__control"
+          align="center"
+          justify="end"
+          width="100%"
+          max-width="30rem"
+        >
+          <AppSegmentedControl
+            v-if="item.id === 'theme'"
+            :model-value="appThemeMode"
+            :options="SETTINGS_THEME_OPTIONS"
+            size="middle"
+            width="100%"
+            @update:model-value="handleThemeModeChange"
+          />
+
+          <AppSegmentedControl
+            v-else-if="item.id === 'scale'"
+            :model-value="appScaleMode"
+            :options="SETTINGS_SCALE_OPTIONS"
+            size="middle"
+            width="100%"
+            @update:model-value="handleScaleModeChange"
+          />
+
+          <AppSwitch
+            v-else
+            :model-value="soundEnabled"
+            accessibility-label="Звук"
+            width="7rem"
+            @update:model-value="handleSoundEnabledChange"
+          />
+        </AppFlex>
+      </template>
+    </WidgetList>
+  </AppCard>
 </template>
 
 <style scoped>
-.widget-settings-list {
+.widget-settings-panel {
+  margin-inline: auto;
+}
+
+.widget-settings-panel__text {
+  flex: 1 1 20rem;
   min-width: 0;
 }
 
-.widget-settings-list__row {
-  min-width: 0;
-  padding:
-    v-bind(rowPaddingY)
-    v-bind(rowPaddingX);
-
-  &.widget-settings-list__row--divider {
-    border-bottom:
-      v-bind(dividerWidth)
-      v-bind(dividerStyle)
-      v-bind(dividerColor);
-  }
-}
-
-.widget-settings-list__text {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.widget-settings-list__control {
-  flex: 0 1 auto;
+.widget-settings-panel__control {
+  flex: 0 1 30rem;
   min-width: 0;
   margin-left: auto;
 }
 
-.widget-settings-list--size-small {
-  font-size: var(--app-font-size-xl);
-}
+@media (max-width: 48rem) {
+  .widget-settings-panel {
+    padding-inline: var(--app-space-6);
+  }
 
-.widget-settings-list--size-middle {
-  font-size: var(--app-font-size-2xl);
-}
+  .widget-settings-panel__text {
+    flex-basis: 100%;
+  }
 
-.widget-settings-list--size-big {
-  font-size: var(--app-font-size-3xl);
+  .widget-settings-panel__control {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
 }
 </style>
