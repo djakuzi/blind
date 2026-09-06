@@ -5,7 +5,7 @@ import { KEY_ROUTE } from '../constants/route.const';
 const ViewGameMode = () => import('@/app/view/preGame/ViewGameMode.vue');
 
 export const routePreGame: RouteRecordRaw = {
-  path: 'game',
+  path: 'pre-game',
   children: [
     {
       path: '',
