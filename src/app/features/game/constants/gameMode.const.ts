@@ -7,6 +7,7 @@ import imgDuelLight from "@/assets/images/gameMode/duel-light.png";
 import imgCombatLight from "@/assets/images/gameMode/combat-light.png";
 import imgClashLight from "@/assets/images/gameMode/clash-light.png";
 import imgBattleLight from "@/assets/images/gameMode/battle-light.png";
+import type { tKeyTypeConection } from "@/app/shared/constants/game/typeConnection.conts";
 
 export interface DataGameMode {
     title: string;
@@ -16,6 +17,7 @@ export interface DataGameMode {
         light: string;
     },
     options: tOptionGameMode;
+    typeConnection: [tKeyTypeConection];
 }
 
 export const GAME_MODE: Record<string, DataGameMode> = {
@@ -32,6 +34,7 @@ export const GAME_MODE: Record<string, DataGameMode> = {
       rounds: 3,
       winCondition: 'single-hit',
     },
+    typeConnection: ['BLUETOOTH', 'LAN', 'ONLINE'],
   },
   COMBAT: {
     title: 'COMBAT',
@@ -46,6 +49,7 @@ export const GAME_MODE: Record<string, DataGameMode> = {
       rounds: 3,
       winCondition: 'health',
     },
+    typeConnection: ['BLUETOOTH', 'LAN', 'ONLINE'],
   },
   CLASH: {
     title: 'CLASH',
@@ -60,6 +64,7 @@ export const GAME_MODE: Record<string, DataGameMode> = {
       rounds: 3,
       winCondition: 'single-hit',
     },
+    typeConnection: ['BLUETOOTH', 'LAN', 'ONLINE'],
   },
   BATTLE: {
     title: 'BATTLE',
@@ -74,6 +79,7 @@ export const GAME_MODE: Record<string, DataGameMode> = {
       rounds: 3,
       winCondition: 'health',
     },
+    typeConnection: ['BLUETOOTH', 'LAN', 'ONLINE'],
   },
 } as const;
 
