@@ -44,8 +44,8 @@ const layoutStyle = computed(() => ({
       v-if="hasLayoutVersion"
       type="absolute"
       :position="{
-        right: '0',
-        bottom: '0',
+        right: 'vertical',
+        bottom: 'horizontal',
       }"
     >
       <AppVersion size="big" />
