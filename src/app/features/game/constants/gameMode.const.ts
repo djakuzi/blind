@@ -17,7 +17,7 @@ export interface DataGameMode {
         light: string;
     },
     options: tOptionGameMode;
-    typeConnection: [tKeyTypeConection];
+    typeConnection: tKeyTypeConection[];
 }
 
 export const GAME_MODE: Record<string, DataGameMode> = {
@@ -64,7 +64,7 @@ export const GAME_MODE: Record<string, DataGameMode> = {
       rounds: 3,
       winCondition: 'single-hit',
     },
-    typeConnection: ['BLUETOOTH', 'LAN', 'ONLINE'],
+    typeConnection: ['LAN', 'ONLINE'],
   },
   BATTLE: {
     title: 'BATTLE',
@@ -79,7 +79,7 @@ export const GAME_MODE: Record<string, DataGameMode> = {
       rounds: 3,
       winCondition: 'health',
     },
-    typeConnection: ['BLUETOOTH', 'LAN', 'ONLINE'],
+    typeConnection: ['LAN', 'ONLINE'],
   },
 } as const;
 
