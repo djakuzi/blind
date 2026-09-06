@@ -1,13 +1,40 @@
-import { APP_SCALE_CSS_VARIABLE_NAME, APP_SCALE_MODE, APP_SCALE_SYSTEM_MODE, type tAppScaleMode, type tAppScalePresetMode } from '@/app/styles/contracts/appScale.contract';
+import {
+  APP_SCALE_CSS_VARIABLE_NAME,
+  APP_SCALE_MODE,
+  APP_SCALE_SYSTEM_MODE,
+  type tAppScaleMode,
+  type tAppScalePresetMode,
+} from '@/app/styles/contracts/appScale.contract';
+
 import { DomProperty } from '@/core/dom/property';
 import { ToolSystem } from '@/core/tool/system';
+
+function resolveNearestAppScale(
+  systemScaleValue: number,
+) {
+  const scaleValues = Object.values(APP_SCALE_MODE);
+
+  return scaleValues.reduce((nearest, current) => {
+    const nearestDistance = Math.abs(
+      nearest - systemScaleValue,
+    );
+
+    const currentDistance = Math.abs(
+      current - systemScaleValue,
+    );
+
+    return currentDistance < nearestDistance
+      ? current
+      : nearest;
+  });
+}
 
 function resolveAppScale(
   appScaleMode: tAppScaleMode,
   systemScaleValue: number,
 ) {
   if (appScaleMode === APP_SCALE_SYSTEM_MODE) {
-    return systemScaleValue;
+    return resolveNearestAppScale(systemScaleValue);
   }
 
   return APP_SCALE_MODE[
