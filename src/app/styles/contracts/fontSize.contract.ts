@@ -11,6 +11,8 @@ export const FONT_SIZE_TOKENS = [
   '3xl',
   '4xl',
   '5xl',
+  '6xl',
+  '7xl',
 ] as const;
 
 export type tFontSizeToken = (typeof FONT_SIZE_TOKENS)[number];

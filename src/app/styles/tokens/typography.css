@@ -14,7 +14,9 @@
   --app-font-size-2xl: 1.5rem;   /* 24px */
   --app-font-size-3xl: 2rem;     /* 32px */
   --app-font-size-4xl: 2.5rem;   /* 40px */
-  --app-font-size-5xl: 3rem;     /* 48px */
+  --app-font-size-5xl: 3.5rem;
+  --app-font-size-6xl: 4.5rem;
+  --app-font-size-7xl: 4.5rem;    /* px */
 
   /* Line height */
   --app-line-height-tight: 1;
