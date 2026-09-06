@@ -52,7 +52,7 @@ const menuActions = [
       <AppLogo
         size="big"
         logo="blindTextRight"
-        width="90rem"
+        width="85rem"
         height="auto"
       />
 
@@ -69,7 +69,7 @@ const menuActions = [
           :key="menuAction.key"
           :actions="menuAction.actions"
           :text="menuAction.text"
-          width="75rem"
+          width="70rem"
           size="big"
         />
       </AppFlex>
