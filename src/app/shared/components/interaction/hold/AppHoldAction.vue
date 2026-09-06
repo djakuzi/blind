@@ -9,7 +9,7 @@ interface iAppHoldActionActions {
   complete?: () => void
 }
 
-interface PropsAppHoldAction {
+export interface PropsAppHoldAction {
   actions?: iAppHoldActionActions
   disabled?: boolean
   duration?: number

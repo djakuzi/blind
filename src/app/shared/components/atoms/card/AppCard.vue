@@ -33,7 +33,7 @@ type tAppCardTag =
   | 'section'
   | 'article';
 
-interface PropsAppCard {
+export interface PropsAppCard {
   tag?: tAppCardTag
   size?: tBaseSizeVariant
   width?: tStyleSizeValue
