@@ -1,6 +1,7 @@
 import type { tOptionGameMode } from "@/game/types/gameMode.types";
 import imgDuel from "@/assets/images/gameMode/duel.png";
 import imgCombat from "@/assets/images/gameMode/combat.png";
+import imgClash from "@/assets/images/gameMode/clash.png";
 
 export interface DataGameMode {
     title: string;
@@ -35,7 +36,7 @@ export const GAME_MODE: Record<string, DataGameMode> = {
   CLASH: {
     title: 'CLASH',
     description: 'Одна жизнь. Одна команда.',
-    img: imgCombat,
+    img: imgClash,
     options: {
         teamSize: 2,
       players: 4,
