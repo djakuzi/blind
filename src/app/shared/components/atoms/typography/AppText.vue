@@ -22,7 +22,7 @@ type tAppTextTag =
   | 'div'
   | 'label';
 
-interface Props {
+export interface PropsAppText {
   text: string
   tag?: tAppTextTag
   color?: tColorValue
@@ -33,7 +33,7 @@ interface Props {
   maxLines?: number
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppText>(), {
   tag: 'p',
   color: 'text-primary',
   fontSize: 'md',

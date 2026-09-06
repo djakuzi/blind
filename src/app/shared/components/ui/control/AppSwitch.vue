@@ -15,7 +15,7 @@ import {
   type tRadiusValue,
 } from '@/app/styles/contracts/radius.contract';
 
-interface Props {
+export interface PropsAppSwitch {
   modelValue: boolean
   accessibilityLabel: string
   disabled?: boolean
@@ -30,7 +30,7 @@ interface Props {
   borderColor?: tColorValue
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppSwitch>(), {
   disabled: false,
   size: 'middle',
   width: undefined,

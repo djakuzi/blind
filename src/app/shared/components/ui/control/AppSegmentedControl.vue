@@ -20,7 +20,7 @@ interface iAppSegmentedControlOption {
   disabled?: boolean
 }
 
-interface Props {
+export interface PropsAppSegmentedControl {
   modelValue: string
   options: iAppSegmentedControlOption[]
   disabled?: boolean
@@ -32,7 +32,7 @@ interface Props {
   borderRadius?: tRadiusValue
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
   disabled: false,
   size: 'middle',
   width: 'auto',
