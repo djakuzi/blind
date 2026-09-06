@@ -13,7 +13,7 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 const router = useRouter();
 
 function handlePlay() {
-  router.push({ name: KEY_ROUTE.game.index });
+  router.push({ name: KEY_ROUTE.preGame.index });
 }
 
 function handleSettings() {

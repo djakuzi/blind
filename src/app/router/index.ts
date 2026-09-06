@@ -8,6 +8,7 @@ import { KEY_ROUTE } from './constants/route.const';
 import { routeGame } from './routes/game';
 import { routeMenu } from './routes/menu';
 import { routeSettings } from './routes/settings';
+import { routePreGame } from './routes/preGame';
 
 const LayoutRoot = () => import('@/app/layouts/LayoutRoot.vue');
 const LayoutBase = () => import('@/app/layouts/LayoutBase.vue');
@@ -24,6 +25,7 @@ export const rootRoute: RouteRecordRaw = {
       component: LayoutBase,
       children: [
         routeMenu,
+        routePreGame,
         routeGame,
         routeSettings,
       ],
