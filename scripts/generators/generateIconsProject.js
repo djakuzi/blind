@@ -1,19 +1,19 @@
-import { mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs'
-import { dirname, extname, relative, resolve, sep } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, extname, relative, resolve, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
-const iconsDir = resolve(root, 'src/assets/icons')
-const outputDirectory = resolve(root, 'src/core/media')
-const outputPath = resolve(outputDirectory, 'assets.ts')
-const excludedDirectories = []
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const iconsDir = resolve(root, 'src/assets/icons');
+const outputDirectory = resolve(root, 'src/core/media');
+const outputPath = resolve(outputDirectory, 'assets.ts');
+const excludedDirectories = [];
 
 const iconFiles = collectSvgFiles(iconsDir)
   .sort((left, right) => left.localeCompare(right))
   .map((filePath) => {
-    const relativePath = relative(iconsDir, filePath).split(sep).join('/')
-    const { groupName, iconName } = buildIconMeta(relativePath)
-    const importName = buildImportName(iconName)
+    const relativePath = relative(iconsDir, filePath).split(sep).join('/');
+    const { groupName, iconName } = buildIconMeta(relativePath);
+    const importName = buildImportName(iconName);
 
     return {
       filePath,
@@ -21,29 +21,29 @@ const iconFiles = collectSvgFiles(iconsDir)
       groupName,
       iconName,
       importName,
-    }
-  })
+    };
+  });
 
 const importsBlock = iconFiles
   .map(
     ({ importName, relativePath }) =>
       `import ${importName} from '@/assets/icons/${relativePath}?raw'`,
   )
-  .join('\n')
+  .join('\n');
 
-const groupedIcons = Object.groupBy(iconFiles, ({ groupName }) => groupName)
+const groupedIcons = Object.groupBy(iconFiles, ({ groupName }) => groupName);
 
 const iconsBlock = Object.entries(groupedIcons)
   .map(([groupName, icons]) => {
     const entries = icons
       .map(({ iconName, importName }) => `    ${iconName}: ${importName},`)
-      .join('\n')
+      .join('\n');
 
     return `  ${groupName}: {
 ${entries}
-  },`
+  },`;
   })
-  .join('\n')
+  .join('\n');
 
 const typesBlock = [
   'export type tIconGroup = keyof typeof ICONS_ASSETS',
@@ -71,56 +71,56 @@ ${iconsBlock}
 ${typesBlock}
 `;
 
-mkdirSync(outputDirectory, { recursive: true })
-writeFileSync(outputPath, content)
+mkdirSync(outputDirectory, { recursive: true });
+writeFileSync(outputPath, content);
 
-console.log(`icons generated: ${iconFiles.length}`)
+console.log(`icons generated: ${iconFiles.length}`);
 
 function collectSvgFiles(directoryPath) {
   return readdirSync(directoryPath).flatMap((entryName) => {
-    const entryPath = resolve(directoryPath, entryName)
-    const entryStat = statSync(entryPath)
+    const entryPath = resolve(directoryPath, entryName);
+    const entryStat = statSync(entryPath);
 
     if (entryStat.isDirectory()) {
       if (excludedDirectories.includes(relative(iconsDir, entryPath).split(sep)[0])) {
-        return []
+        return [];
       }
 
-      return collectSvgFiles(entryPath)
+      return collectSvgFiles(entryPath);
     }
 
-    return extname(entryPath) === '.svg' ? [entryPath] : []
-  })
+    return extname(entryPath) === '.svg' ? [entryPath] : [];
+  });
 }
 
 function buildIconMeta(relativePath) {
-  const segments = relativePath.replace(/\.svg$/, '').split('/')
+  const segments = relativePath.replace(/\.svg$/, '').split('/');
 
-  const groupName = toCamelCase(segments[0])
-  const fileName = segments.at(-1)
+  const groupName = toCamelCase(segments[0]);
+  const fileName = segments.at(-1);
 
   return {
     groupName,
     iconName: toCamelCase(fileName),
-  }
+  };
 }
 
 function buildImportName(iconName) {
-  return iconName[0].toUpperCase() + iconName.slice(1)
+  return iconName[0].toUpperCase() + iconName.slice(1);
 }
 
 function toCamelCase(value) {
-  const segments = value.split(/[^a-zA-Z0-9]+/).filter(Boolean)
+  const segments = value.split(/[^a-zA-Z0-9]+/).filter(Boolean);
 
   return segments
     .map((segment, index) => {
-      const normalized = segment.toLowerCase()
+      const normalized = segment.toLowerCase();
 
       if (index === 0) {
-        return normalized
+        return normalized;
       }
 
-      return normalized[0].toUpperCase() + normalized.slice(1)
+      return normalized[0].toUpperCase() + normalized.slice(1);
     })
-    .join('')
+    .join('');
 }
