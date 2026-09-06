@@ -14,7 +14,7 @@ export interface DataGameMode {
     img: {
         dark: string;
         light: string;
-    }
+    },
     options: tOptionGameMode;
 }
 
