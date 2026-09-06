@@ -17,6 +17,7 @@ interface Props {
   width?: tAppLogoSizeValue
   height?: tAppLogoSizeValue
   maxWidth?: tAppLogoSizeValue
+  blur?: boolean 
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -25,6 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   width: undefined,
   height: undefined,
   maxWidth: '100%',
+  blur: false,
 });
 
 const LOGO_SIZE_MAP: Record<
@@ -57,11 +59,16 @@ const resolvedHeight = computed(() => {
   return props.height
     ?? (props.width ? 'auto' : LOGO_SIZE_MAP[props.size].height);
 });
+
+const blurClass = computed(() => [
+  'app-logo',
+  props.blur ? 'app-logo--blur' : '',
+]);
 </script>
 
 <template>
   <AppIcon
-    class="app-logo"
+    :class="blurClass"
     group="logo"
     :icon="logo"
     :width="resolvedWidth"
@@ -75,5 +82,10 @@ const resolvedHeight = computed(() => {
 .app-logo {
   transform: scale(1);
   will-change: transform;
+
+  &.app-logo--blur {
+    filter: blur(1px);
+    --webkit-filter: blur(1px);
+  }
 }
 </style>
