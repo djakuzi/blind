@@ -5,4 +5,5 @@ export type tLayoutHeader = boolean;
 export interface iLayoutRouteMeta {
   header?: tLayoutHeader
   safeArea?: tLayoutSafeArea
+  version?: boolean
 }
