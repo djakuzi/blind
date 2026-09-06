@@ -55,7 +55,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxWidth: '100%',
   paddingX: undefined,
   paddingY: undefined,
-  backgroundColor: 'surface-secondary',
+  backgroundColor: 'transparent',
   borderColor: 'border-contrast',
   borderWidth: 'thick',
   borderStyle: 'solid',
