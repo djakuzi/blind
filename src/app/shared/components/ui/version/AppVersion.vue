@@ -58,15 +58,15 @@ const versionFontSize = computed(() => resolveFontSizeValue(props.fontSize));
 }
 
 .app-version--size-small {
-  font-size: var(--app-font-size-sm);
+  font-size: var(--app-font-size-xs);
 }
 
 .app-version--size-middle {
-  font-size: var(--app-font-size-md);
+  font-size: var(--app-font-size-sm);
 }
 
 .app-version--size-big {
-  font-size: var(--app-font-size-lg);
+  font-size: var(--app-font-size-md);
 }
 
 .app-version--size-custom {
