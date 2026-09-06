@@ -1,105 +1,61 @@
 <script setup lang="ts">
+import WidgetSettingsPanel from '@/app/features/settings/widgets/WidgetSettingsPanel.vue';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
-import { computed, ref } from 'vue';
-import type {
-  iWidgetSettingsListItem,
-  tWidgetSettingsListChange,
-} from '@/app/features/settings/widgets/WidgetSettingsList.vue';
-
-const theme = ref('light');
-const scale = ref('middle');
-const soundEnabled = ref(true);
-
-const settingsItems = computed<iWidgetSettingsListItem[]>(() => [
-  {
-    id: 'theme',
-    text: 'Тема приложения',
-    control: {
-      type: 'segmented',
-      modelValue: theme.value,
-      props: {
-        width: '100%',
-        options: [
-          {
-            label: 'Светлая',
-            value: 'light',
-          },
-          {
-            label: 'Тёмная',
-            value: 'dark',
-          },
-        ],
-      },
-    },
-  },
-  {
-    id: 'scale',
-    text: 'Размер интерфейса',
-    control: {
-      type: 'segmented',
-      modelValue: scale.value,
-      props: {
-        width: '100%',
-        options: [
-          {
-            label: 'S',
-            value: 'small',
-          },
-          {
-            label: 'M',
-            value: 'middle',
-          },
-          {
-            label: 'L',
-            value: 'big',
-          },
-        ],
-      },
-    },
-  },
-  {
-    id: 'sound',
-    text: 'Звук',
-    control: {
-      type: 'switch',
-      modelValue: soundEnabled.value,
-      props: {
-        size: 'small',
-      },
-    },
-  },
-]);
-
-function handleSettingsChange(
-  payload: tWidgetSettingsListChange,
-) {
-  if (payload.id === 'theme' && payload.type === 'segmented') {
-    theme.value = payload.value;
-    return;
-  }
-
-  if (payload.id === 'scale' && payload.type === 'segmented') {
-    scale.value = payload.value;
-    return;
-  }
-
-  if (payload.id === 'sound' && payload.type === 'switch') {
-    soundEnabled.value = payload.value;
-  }
-}
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
+import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
+import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 </script>
 
 <template>
-  <ViewLayout>
-    <WidgetSettingsList
-      :items="settingsItems"
-      size="middle"
+  <ViewLayout
+    class="view-settings"
+    align="center"
+    justify="center"
+    padding="none"
+    overflow="auto"
+  >
+    <AppFlex
+      class="view-settings__content"
+      direction="column"
+      align="center"
       width="100%"
-      control-width="32rem"
-      @change="handleSettingsChange"
-    />
+      :gap="12"
+    >
+      <AppTitle text="Настройки" />
+
+      <WidgetSettingsPanel />
+    </AppFlex>
+
+    <AppPosition
+      class="view-settings__version"
+      type="absolute"
+      :position="{
+        right: '0',
+        bottom: '0',
+      }"
+    >
+      <AppVersion size="big" />
+    </AppPosition>
   </ViewLayout>
 </template>
 
 <style scoped>
+.view-settings {
+  position: relative;
+}
+
+.view-settings__content {
+  padding-block:
+    var(--app-space-8)
+    var(--app-space-16);
+}
+
+@media (max-width: 48rem) {
+  .view-settings__content {
+    padding-block:
+      var(--app-space-6)
+      var(--app-space-20);
+  }
+}
 </style>
