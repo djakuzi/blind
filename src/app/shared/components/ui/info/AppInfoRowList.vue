@@ -111,21 +111,21 @@ const SIZE_MAP: Record<
   }
 > = {
   small: {
-    fontSize: '1xl',
+    fontSize: 'md',
     iconWidth: '2rem',
     iconGap: 2,
     dividerGap: 4,
     dividerHeight: '2rem',
   },
   middle: {
-    fontSize: '2xl',
+    fontSize: 'lg',
     iconWidth: '2.5rem',
     iconGap: 3,
     dividerGap: 5,
     dividerHeight: '2.5rem',
   },
   big: {
-    fontSize: '3xl',
+    fontSize: 'xl',
     iconWidth: '3rem',
     iconGap: 4,
     dividerGap: 6,

@@ -36,13 +36,13 @@ const LOGO_SIZE_MAP: Record<
   }
 > = {
   small: {
-    width: '18rem',
+    width: '30rem',
   },
   middle: {
-    width: '24rem',
+    width: '40rem',
   },
   big: {
-    width: '30rem',
+    width: '50rem',
   },
 };
 

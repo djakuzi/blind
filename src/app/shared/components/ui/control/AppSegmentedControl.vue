@@ -67,17 +67,17 @@ const SIZE_MAP: Record<
   small: {
     paddingX: 3,
     paddingY: 2,
-    fontSize: 'md',
+    fontSize: 'sm',
   },
   middle: {
     paddingX: 5,
     paddingY: 3,
-    fontSize: 'xl',
+    fontSize: 'md',
   },
   big: {
     paddingX: 6,
     paddingY: 4,
-    fontSize: '2xl',
+    fontSize: 'lg',
   },
 };
 

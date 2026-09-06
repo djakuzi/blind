@@ -76,9 +76,9 @@ function handleSoundEnabledChange(
   <AppCard
     class="widget-settings-panel"
     tag="section"
-    width="90rem"
+    width="160rem"
     max-width="100%"
-    :padding-x="8"
+    :padding-x="10"
     padding-y="0"
   >
     <WidgetList
@@ -86,7 +86,7 @@ function handleSoundEnabledChange(
       item-key="id"
       width="100%"
       padding-x="0"
-      :padding-y="8"
+      :padding-y="10"
       :row-gap="6"
       row-wrap="wrap"
       divider-color="border-default"
@@ -97,7 +97,7 @@ function handleSoundEnabledChange(
         <AppText
           :text="item.text"
           tag="span"
-          font-size="3xl"
+          font-size="2xl"
           font-weight="medium"
           :uppercase="true"
           :ellipsis="true"
@@ -109,7 +109,7 @@ function handleSoundEnabledChange(
           align="center"
           justify="end"
           width="100%"
-          max-width="40rem"
+          max-width="60rem"
         >
           <AppSegmentedControl
             v-if="item.id === 'theme'"
@@ -133,7 +133,7 @@ function handleSoundEnabledChange(
             v-else
             :model-value="soundEnabled"
             accessibility-label="Звук"
-            width="8rem"
+            width="16rem"
             @update:model-value="handleSoundEnabledChange"
           />
         </AppFlex>

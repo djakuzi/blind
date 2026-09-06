@@ -81,7 +81,7 @@ function handleComplete() {
     max-width="100%"
     size="big"
     :padding-x="0"
-    :padding-y="0"
+    :padding-y="8"
     background-color="surface-primary"
     border-color="border-contrast"
     border-width="thick"
@@ -97,7 +97,7 @@ function handleComplete() {
             :text="mode.title"
             tag="h2"
             color="text-primary"
-            font-size="16xl"
+            font-size="3xxl"
             font-weight="bold"
           />
 
@@ -105,7 +105,7 @@ function handleComplete() {
             class="ui-card-game-mode__description"
             :text="mode.description"
             color="text-secondary"
-            font-size="5xl"
+            font-size="lg"
             font-weight="medium"
             :uppercase="true"
             :ellipsis="true"
@@ -117,8 +117,8 @@ function handleComplete() {
           class="ui-card-game-mode__image"
           :src="imageSource"
           :alt="mode.title"
-          width="14rem"
-          max-width="25%"
+          width="20rem"
+          max-width="30%"
           height="auto"
           object-fit="contain"
           loading="eager"
@@ -167,6 +167,7 @@ function handleComplete() {
   width: 100%;
   height: 100%;
   min-width: 0;
+  gap: var(--app-space-12);
 }
 
 .ui-card-game-mode__main {
@@ -177,9 +178,7 @@ function handleComplete() {
   justify-content: space-evenly;
   min-width: 0;
   min-height: 0;
-  padding:
-    var(--app-padding-8)
-    var(--app-padding-8);
+  gap: var(--app-space-12);
 }
 
 .ui-card-game-mode__header {
@@ -209,9 +208,6 @@ function handleComplete() {
   justify-content: center;
   width: 100%;
   min-width: 0;
-  gap: var(--app-space-6);
-  padding:
-    var(--app-padding-8)
-    var(--app-padding-8);
+  gap: var(--app-space-2);
 }
 </style>

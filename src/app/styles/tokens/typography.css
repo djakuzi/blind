@@ -6,26 +6,16 @@
   --app-font-weight-bold: 700;
 
   /* Font size */
-  --app-font-size-xs: 0.75rem;   /* 12px */
-  --app-font-size-sm: 0.875rem;  /* 14px */
-  --app-font-size-md: 1rem;      /* 16px */
-  --app-font-size-lg: 1.125rem;  /* 18px */
-  --app-font-size-xl: 1.25rem;   /* 20px */
-  --app-font-size-2xl: 1.5rem;   /* 24px */
-  --app-font-size-3xl: 2rem;     /* 32px */
-  --app-font-size-4xl: 2.5rem;   /* 40px */
-  --app-font-size-5xl: 3.5rem;
-  --app-font-size-6xl: 4.5rem;
-  --app-font-size-7xl: 5.5rem;
-  --app-font-size-8xl: 6.5rem;
-  --app-font-size-9xl: 7.5rem;
-  --app-font-size-10xl: 7.5rem;
-  --app-font-size-11xl: 7.5rem;
-  --app-font-size-12xl: 8.5rem;
-  --app-font-size-13xl: 9.5rem;
-  --app-font-size-14xl: 10.5rem;
-  --app-font-size-15xl: 11.5rem;
-  --app-font-size-16xl: 11.5rem;    /* px */
+  --app-font-size-xs: 1.25rem;
+  --app-font-size-sm: 1.5rem;
+  --app-font-size-md: 2rem;
+  --app-font-size-lg: 2.5rem;
+  --app-font-size-xl: 4.5rem;
+  --app-font-size-2xl: 5.5rem;
+  --app-font-size-3xl: 6.5rem;
+  --app-font-size-xxl: 8.5rem;
+  --app-font-size-2xxl: 10.5rem;
+  --app-font-size-3xxl: 12.5rem;
 
   /* Line height */
   --app-line-height-tight: 1;

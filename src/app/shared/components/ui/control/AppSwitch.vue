@@ -170,25 +170,20 @@ function handleToggle() {
 .app-switch__thumb-track {
   position: absolute;
   inset: 0;
-
   transform: translateX(0);
   pointer-events: none;
-
   transition: transform 180ms ease;
   will-change: transform;
 }
 
 .app-switch__thumb {
   position: absolute;
-  top: 14%;
-  left: 7%;
-
-  width: 36%;
+  top: 10%;
+  left: 5%;
+  width: 40%;
   aspect-ratio: 1;
-
   border-radius: v-bind(switchThumbBorderRadius);
   background: v-bind(switchThumbColor);
-
   transition: background-color 160ms ease;
 }
 
