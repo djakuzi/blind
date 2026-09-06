@@ -132,14 +132,17 @@ function handleSelect(option: iAppSegmentedControlOption) {
       @click="handleSelect(option)"
     >
       <AppText
+        class="app-segmented-control__text"
         :text="option.label"
         tag="span"
         color="inherit"
         font-size="inherit"
         font-weight="medium"
-        line-height="var(--app-line-height-control)"
+        line-height="var(--app-line-height-tight)"
         letter-spacing="var(--app-letter-spacing-wide)"
         :uppercase="true"
+        :ellipsis="true"
+        :max-lines="1"
       />
     </button>
   </div>
@@ -169,7 +172,6 @@ function handleSelect(option: iAppSegmentedControlOption) {
     v-bind(itemPaddingY)
     v-bind(itemPaddingX);
   line-height: var(--app-line-height-tight);
-  font-weight: var(--app-font-weight-medium);
   border: 0;
   border-right:
     var(--app-border-width-medium)
@@ -193,6 +195,13 @@ function handleSelect(option: iAppSegmentedControlOption) {
     color: var(--app-color-text-disabled);
     cursor: default;
   }
+}
+
+.app-segmented-control__text {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .app-segmented-control--size-small {
