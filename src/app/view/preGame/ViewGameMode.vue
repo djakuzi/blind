@@ -5,7 +5,6 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 
 <template>
   <ViewLayout>
-    fgdfg
   </ViewLayout>
 </template>
 
