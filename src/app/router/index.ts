@@ -15,7 +15,9 @@ const LayoutBase = () => import('@/app/layouts/LayoutBase.vue');
 export const rootRoute: RouteRecordRaw = {
   path: '/',
   component: LayoutRoot,
-  redirect: KEY_ROUTE.menu.index,
+  redirect: {
+    name: KEY_ROUTE.menu.index,
+  },
   children: [
     {
       path: '',

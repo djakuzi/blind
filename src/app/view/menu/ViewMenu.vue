@@ -56,7 +56,6 @@ const menuActions = [
         logo="blindTextRight"
         width="80rem"
         height="auto"
-        :blur="true"
       />
 
       <AppFlex
