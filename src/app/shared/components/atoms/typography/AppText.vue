@@ -29,6 +29,8 @@ interface Props {
   fontSize?: tFontSizeValue
   fontWeight?: tFontWeightValue
   uppercase?: boolean
+  ellipsis?: boolean
+  maxLines?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -37,12 +39,23 @@ const props = withDefaults(defineProps<Props>(), {
   fontSize: 'md',
   fontWeight: 'medium',
   uppercase: false,
+  ellipsis: false,
+  maxLines: 1,
 });
+
+const resolvedMaxLines = computed(() =>
+  Math.max(1, Math.trunc(props.maxLines)),
+);
 
 const textClass = computed(() => [
   'app-text',
   {
     'app-text--uppercase': props.uppercase,
+    'app-text--ellipsis': props.ellipsis,
+    'app-text--ellipsis-single':
+      props.ellipsis && resolvedMaxLines.value === 1,
+    'app-text--ellipsis-multiple':
+      props.ellipsis && resolvedMaxLines.value > 1,
   },
 ]);
 
@@ -79,6 +92,22 @@ const textFontWeight = computed(() =>
 
   &.app-text--uppercase {
     text-transform: uppercase;
+  }
+
+  &.app-text--ellipsis {
+    overflow: hidden;
+  }
+
+  &.app-text--ellipsis-single {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &.app-text--ellipsis-multiple {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: v-bind(resolvedMaxLines);
+    line-clamp: v-bind(resolvedMaxLines);
   }
 }
 </style>

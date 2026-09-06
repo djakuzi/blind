@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import AppSegmentedControl from '@/app/shared/components/ui/tab/AppSegmentedControl.vue';
 </script>
 
 <template>
