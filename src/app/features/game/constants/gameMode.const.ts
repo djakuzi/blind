@@ -1,12 +1,16 @@
 import type { tOptionGameMode } from "@/game/types/gameMode.types";
-import imgDuel from "@/assets/images/gameMode/duel.png";
-import imgCombat from "@/assets/images/gameMode/combat.png";
-import imgClash from "@/assets/images/gameMode/clash.png";
+import imgDuel from "@/assets/images/gameMode/duel-light.png";
+import imgCombat from "@/assets/images/gameMode/combat-light.png";
+import imgClash from "@/assets/images/gameMode/clash-light.png";
+import imgBattle from "@/assets/images/gameMode/battle-light.png";
 
 export interface DataGameMode {
     title: string;
     description: string;
-    img: string;
+    img: {
+        dark: string;
+        light: string;
+    }
     options: tOptionGameMode;
 }
 
@@ -14,7 +18,10 @@ export const GAME_MODE: Record<string, DataGameMode> = {
   DUEL: {
     title: 'DUEL',
     description: 'Одно попадание — одна жизнь',
-    img: imgDuel,
+    img: {
+        dark: imgDuel,
+        light: imgDuel,
+    },
     options: {
         teamSize: 1,
       players: 2,
@@ -25,7 +32,10 @@ export const GAME_MODE: Record<string, DataGameMode> = {
   COMBAT: {
     title: 'COMBAT',
     description: 'Сражайся, пока здоровье не закончится',
-    img: imgCombat,
+    img: {
+        dark: imgCombat,
+        light: imgCombat,
+    },
     options: {
         teamSize: 1,
       players: 2,
@@ -36,7 +46,10 @@ export const GAME_MODE: Record<string, DataGameMode> = {
   CLASH: {
     title: 'CLASH',
     description: 'Одна жизнь. Одна команда.',
-    img: imgClash,
+    img: {
+        dark: imgClash,
+        light: imgClash,
+    },
     options: {
         teamSize: 2,
       players: 4,
@@ -47,7 +60,10 @@ export const GAME_MODE: Record<string, DataGameMode> = {
   BATTLE: {
     title: 'BATTLE',
     description: 'Командный бой до последнего выжившего',
-    img: imgCombat,
+    img: {
+        dark: imgBattle,
+        light: imgBattle,
+    },
     options: {
         teamSize: 2,
       players: 4,
