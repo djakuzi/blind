@@ -17,7 +17,7 @@ interface Props {
   width?: tAppLogoSizeValue
   height?: tAppLogoSizeValue
   maxWidth?: tAppLogoSizeValue
-  blur?: boolean 
+  blur?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

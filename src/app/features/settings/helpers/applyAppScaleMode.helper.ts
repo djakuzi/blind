@@ -1,6 +1,6 @@
-import { APP_SCALE_CSS_VARIABLE_NAME, APP_SCALE_MODE, APP_SCALE_SYSTEM_MODE, type tAppScaleMode, type tAppScalePresetMode } from "@/app/styles/contracts/appScale.contract";
-import { DomProperty } from "@/core/dom/property";
-import { ToolSystem } from "@/core/tool/system";
+import { APP_SCALE_CSS_VARIABLE_NAME, APP_SCALE_MODE, APP_SCALE_SYSTEM_MODE, type tAppScaleMode, type tAppScalePresetMode } from '@/app/styles/contracts/appScale.contract';
+import { DomProperty } from '@/core/dom/property';
+import { ToolSystem } from '@/core/tool/system';
 
 function resolveAppScale(
   appScaleMode: tAppScaleMode,

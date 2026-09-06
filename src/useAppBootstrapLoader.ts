@@ -31,7 +31,7 @@ export function useAppBootstrapLoader() {
     // if (count == 2) {
     //   return;
     // }
-  
+
     loaderRegistry.setResourceState({
       scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
       resourceKey,

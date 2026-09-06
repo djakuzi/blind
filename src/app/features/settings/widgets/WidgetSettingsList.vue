@@ -88,15 +88,15 @@ export interface PropsWidgetSettingsList {
 
 export type tWidgetSettingsListChange =
   | {
-      id: string
-      type: 'segmented'
-      value: string
-    }
+    id: string
+    type: 'segmented'
+    value: string
+  }
   | {
-      id: string
-      type: 'switch'
-      value: boolean
-    };
+    id: string
+    type: 'switch'
+    value: boolean
+  };
 </script>
 
 <script setup lang="ts">

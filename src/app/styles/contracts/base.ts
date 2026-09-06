@@ -1,5 +1,5 @@
-export const BASE_ADAPTIVE_VARIANTS = ['small', 'middle', 'big'] as const
-export const BASE_SIZE_VARIANTS = BASE_ADAPTIVE_VARIANTS
+export const BASE_ADAPTIVE_VARIANTS = ['small', 'middle', 'big'] as const;
+export const BASE_SIZE_VARIANTS = BASE_ADAPTIVE_VARIANTS;
 
-export type tBaseAdaptiveVariant = (typeof BASE_ADAPTIVE_VARIANTS)[number]
-export type tBaseSizeVariant = (typeof BASE_SIZE_VARIANTS)[number]
+export type tBaseAdaptiveVariant = (typeof BASE_ADAPTIVE_VARIANTS)[number];
+export type tBaseSizeVariant = (typeof BASE_SIZE_VARIANTS)[number];
