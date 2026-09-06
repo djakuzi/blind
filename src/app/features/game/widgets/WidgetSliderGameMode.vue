@@ -1,28 +1,15 @@
 <script setup lang="ts">
-import {
-  onMounted,
-  ref,
-} from 'vue';
-
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import {
-  apiGame,
-} from '@/app/domain/game/api/api';
-
-import type {
-  ModelGameMode,
-} from '@/app/domain/game/models/GameMode.model';
-
+import { apiGame } from '@/app/domain/game/api/api';
+import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
 import UiCardGameMode from '@/app/features/game/ui/UiCardGameMode.vue';
-
-import {
-  KEY_ROUTE,
-} from '@/app/router/constants/route.const';
-
+import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
 
 const router = useRouter();
+
 const modes = ref<ModelGameMode[]>([]);
 const activeIndex = ref(0);
 const isLoading = ref(false);
@@ -33,19 +20,14 @@ async function loadModes() {
   hasLoadError.value = false;
 
   try {
-    modes.value =
-      await apiGame.getModes();
-
+    modes.value = await apiGame.getModes();
     activeIndex.value = 0;
   }
   catch (error) {
     modes.value = [];
     hasLoadError.value = true;
 
-    console.error(
-      'Failed to load game modes:',
-      error,
-    );
+    console.error('Failed to load game modes:', error);
   }
   finally {
     isLoading.value = false;
@@ -53,20 +35,20 @@ async function loadModes() {
 }
 
 function handleModeComplete() {
-    router.push({
+  void router.push({
     name: KEY_ROUTE.preGame.typeConnection,
   });
 }
 
 onMounted(() => {
-  loadModes();
+  void loadModes();
 });
 </script>
 
 <template>
   <div class="widget-slider-game-mode">
     <AppSlider
-      v-if="modes.length > 0"
+      v-if="modes.length"
       v-model="activeIndex"
       :count="modes.length"
       width="100%"
@@ -115,10 +97,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 100%;
   min-height: 20rem;
-
   color: var(--app-color-text-secondary);
   font-size: var(--app-font-size-xl);
   text-align: center;
