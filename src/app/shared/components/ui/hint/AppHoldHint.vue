@@ -23,7 +23,7 @@ defineProps<Props>();
 .app-hold-hint {
   display: inline-block;
   color: var(--app-color-text-secondary);
-  font-size: var(--app-font-size-lg);
+  font-size: var(--app-font-size-md);
   font-weight: var(--app-font-weight-medium);
   line-height: var(--app-line-height-control);
   letter-spacing: var(--app-letter-spacing-wider);

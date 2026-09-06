@@ -87,7 +87,7 @@ function handleComplete() {
     border-width="thick"
     border-radius="2xl"
     overflow="hidden"
-    :initial-progress="25"
+    :initial-progress="20"
     @complete="handleComplete"
   >
     <div class="ui-card-game-mode__layout">
@@ -97,7 +97,7 @@ function handleComplete() {
             :text="mode.title"
             tag="h2"
             color="text-primary"
-            font-size="3xxl"
+            font-size="2xxl"
             font-weight="bold"
           />
 
@@ -178,7 +178,7 @@ function handleComplete() {
   justify-content: space-evenly;
   min-width: 0;
   min-height: 0;
-  gap: var(--app-space-12);
+  gap: var(--app-space-8);
 }
 
 .ui-card-game-mode__header {
