@@ -78,7 +78,7 @@ function handleSoundEnabledChange(
     tag="section"
     width="100%"
     max-width="75rem"
-    padding-x="var(--app-space-12)"
+    :padding-x="6"
     padding-y="0"
   >
     <WidgetList
@@ -86,7 +86,7 @@ function handleSoundEnabledChange(
       item-key="id"
       width="100%"
       padding-x="0"
-      padding-y="var(--app-space-8)"
+      :padding-y="6"
       :row-gap="6"
       row-wrap="wrap"
       divider-color="border-default"
@@ -98,7 +98,7 @@ function handleSoundEnabledChange(
           class="widget-settings-panel__text"
           :text="item.text"
           tag="span"
-          font-size="2xl"
+          font-size="3xl"
           font-weight="medium"
           :uppercase="true"
           :ellipsis="true"
@@ -110,13 +110,13 @@ function handleSoundEnabledChange(
           align="center"
           justify="end"
           width="100%"
-          max-width="30rem"
+          max-width="35rem"
         >
           <AppSegmentedControl
             v-if="item.id === 'theme'"
             :model-value="appThemeMode"
             :options="SETTINGS_THEME_OPTIONS"
-            size="middle"
+            size="big"
             width="100%"
             @update:model-value="handleThemeModeChange"
           />
@@ -125,7 +125,7 @@ function handleSoundEnabledChange(
             v-else-if="item.id === 'scale'"
             :model-value="appScaleMode"
             :options="SETTINGS_SCALE_OPTIONS"
-            size="middle"
+            size="big"
             width="100%"
             @update:model-value="handleScaleModeChange"
           />
@@ -134,7 +134,7 @@ function handleSoundEnabledChange(
             v-else
             :model-value="soundEnabled"
             accessibility-label="Звук"
-            width="7rem"
+            width="8rem"
             @update:model-value="handleSoundEnabledChange"
           />
         </AppFlex>
@@ -154,23 +154,7 @@ function handleSoundEnabledChange(
 }
 
 .widget-settings-panel__control {
-  flex: 0 1 30rem;
   min-width: 0;
   margin-left: auto;
-}
-
-@media (max-width: 48rem) {
-  .widget-settings-panel {
-    padding-inline: var(--app-space-6);
-  }
-
-  .widget-settings-panel__text {
-    flex-basis: 100%;
-  }
-
-  .widget-settings-panel__control {
-    flex-basis: 100%;
-    max-width: 100%;
-  }
 }
 </style>
