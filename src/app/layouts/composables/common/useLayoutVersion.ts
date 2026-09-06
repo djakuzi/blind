@@ -5,7 +5,7 @@ export function useLayoutVersion() {
     const route = useRoute();
 
     const hasLayoutVersion = computed(() =>
-        route.meta.layout?.version === true,
+        route.meta.layout?.version !== false,
     );
 
     return {
