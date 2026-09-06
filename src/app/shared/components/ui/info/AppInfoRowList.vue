@@ -117,7 +117,6 @@ const SIZE_MAP: Record<
     dividerGap: 4,
     dividerHeight: '2rem',
   },
-
   middle: {
     fontSize: 'md',
     iconWidth: '2.5rem',
@@ -125,7 +124,6 @@ const SIZE_MAP: Record<
     dividerGap: 5,
     dividerHeight: '2.5rem',
   },
-
   big: {
     fontSize: 'xl',
     iconWidth: '3rem',
