@@ -35,7 +35,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   tag: 'p',
-  color: 'text-secondary',
+  color: 'text-primary',
   fontSize: 'md',
   fontWeight: 'medium',
   uppercase: false,
