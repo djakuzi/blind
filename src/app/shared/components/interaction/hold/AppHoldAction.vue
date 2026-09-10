@@ -28,7 +28,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   disabled: false,
   duration: 650,
   fillDuration: undefined,
-  holdStartDelay: 80,
+  holdStartDelay: 40,
   initialProgress: 15,
   maxWidth: '100%',
   moveCancelThreshold: 6,
