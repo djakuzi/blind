@@ -477,6 +477,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
+    ref="rootElement"
     class="app-hold-action"
     :style="holdActionStyle"
     @pointerdown="startPointerHold"

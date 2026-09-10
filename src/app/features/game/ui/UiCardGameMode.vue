@@ -1,50 +1,35 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type {
-  ModelGameMode,
-} from '@/app/domain/game/models/GameMode.model';
-import {
-  TYPE_CONNECTION,
-} from '@/app/shared/constants/game/typeConnection.conts';
+
+import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
+import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
 import AppCardHold from '@/app/shared/components/ui/card/AppCardHold.vue';
 import AppInfoRowList from '@/app/shared/components/ui/info/AppInfoRowList.vue';
-import type {
-  iAppInfoRowListItem,
-} from '@/app/shared/components/ui/info/AppInfoRowList.vue';
-import {
-  useAppThemeMode,
-} from '@/app/shared/composables/system/useAppThemeMode';
+import type { iAppInfoRowListItem } from '@/app/shared/components/ui/info/AppInfoRowList.vue';
+import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
+import { TYPE_CONNECTION } from '@/app/shared/constants/game/typeConnection.conts';
 
 export interface PropsUiCardGameMode {
   mode: ModelGameMode
   disabled?: boolean
 }
 
-const props = withDefaults(
-  defineProps<PropsUiCardGameMode>(),
-  {
-    disabled: false,
-  },
-);
+const props = withDefaults(defineProps<PropsUiCardGameMode>(), {
+  disabled: false,
+});
 
 const emit = defineEmits<{
   complete: []
 }>();
 
-const {
-  resolvedThemeMode,
-} = useAppThemeMode();
+const { resolvedThemeMode } = useAppThemeMode();
 
-const imageSource = computed(() =>
-  props.mode.img[resolvedThemeMode.value],
-);
+const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
 
-const optionItems = computed<
-  iAppInfoRowListItem[]
->(() => [
+const optionItems = computed<iAppInfoRowListItem[]>(() => [
   {
     id: 'players',
     text: props.mode.getPlayersDescription(),
@@ -55,17 +40,11 @@ const optionItems = computed<
   },
 ]);
 
-const connectionItems = computed<
-  iAppInfoRowListItem[]
->(() =>
-  props.mode.typeConnection.map(
-    (connectionType) => ({
-      id: connectionType,
-      text: TYPE_CONNECTION[
-        connectionType
-      ].title,
-    }),
-  ),
+const connectionItems = computed<iAppInfoRowListItem[]>(() =>
+  props.mode.typeConnection.map((connectionType) => ({
+    id: connectionType,
+    text: TYPE_CONNECTION[connectionType].title,
+  })),
 );
 
 function handleComplete() {
@@ -93,24 +72,34 @@ function handleComplete() {
     <div class="ui-card-game-mode__layout">
       <div class="ui-card-game-mode__main">
         <div class="ui-card-game-mode__header">
-          <AppTitle
-            :text="mode.title"
-            tag="h2"
+          <AppFillAware
             color="text-primary"
-            font-size="2xxl"
-            font-weight="bold"
-          />
+            filled-color="on-primary"
+          >
+            <AppTitle
+              :text="mode.title"
+              tag="h2"
+              color="inherit"
+              font-size="2xxl"
+              font-weight="bold"
+            />
+          </AppFillAware>
 
-          <AppText
+          <AppFillAware
             class="ui-card-game-mode__description"
-            :text="mode.description"
             color="text-secondary"
-            font-size="lg"
-            font-weight="medium"
-            :uppercase="true"
-            :ellipsis="true"
-            :max-lines="1"
-          />
+            filled-color="on-primary"
+          >
+            <AppText
+              :text="mode.description"
+              color="inherit"
+              font-size="lg"
+              font-weight="medium"
+              :uppercase="true"
+              :ellipsis="true"
+              :max-lines="1"
+            />
+          </AppFillAware>
         </div>
 
         <AppImage
@@ -126,30 +115,46 @@ function handleComplete() {
       </div>
 
       <div class="ui-card-game-mode__footer">
-        <AppInfoRowList
-          :items="optionItems"
-          width="auto"
-          max-width="100%"
-          size="big"
-          text-color="on-primary"
-          divider-color="on-primary"
-          font-weight="bold"
-          accessibility-label="Параметры режима"
-          :center-even="true"
-        />
+        <AppFillAware
+          class="ui-card-game-mode__info"
+          tag="div"
+          color="text-primary"
+          filled-color="on-primary"
+          :initial-filled="true"
+        >
+          <AppInfoRowList
+            :items="optionItems"
+            width="auto"
+            max-width="100%"
+            size="big"
+            text-color="inherit"
+            divider-color="currentColor"
+            font-weight="bold"
+            accessibility-label="Параметры режима"
+            :center-even="true"
+          />
+        </AppFillAware>
 
-        <AppInfoRowList
-          :items="connectionItems"
-          width="auto"
-          max-width="100%"
-          size="big"
-          text-color="on-primary"
-          divider-color="on-primary"
-          font-weight="medium"
-          :center-even="false"
-          :center-odd="false"
-          accessibility-label="Доступные способы подключения"
-        />
+        <AppFillAware
+          class="ui-card-game-mode__info"
+          tag="div"
+          color="text-primary"
+          filled-color="on-primary"
+          :initial-filled="true"
+        >
+          <AppInfoRowList
+            :items="connectionItems"
+            width="auto"
+            max-width="100%"
+            size="big"
+            text-color="inherit"
+            divider-color="currentColor"
+            font-weight="medium"
+            :center-even="false"
+            :center-odd="false"
+            accessibility-label="Доступные способы подключения"
+          />
+        </AppFillAware>
       </div>
     </div>
   </AppCardHold>
@@ -212,5 +217,12 @@ function handleComplete() {
   width: 100%;
   min-width: 0;
   gap: var(--app-space-2);
+}
+
+.ui-card-game-mode__info {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
 }
 </style>

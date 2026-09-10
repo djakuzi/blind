@@ -94,7 +94,6 @@ function handleComplete() {
           tag="span"
           color="inherit"
           filled-color="on-primary"
-          :threshold="0.3"
         >
           <slot>{{ text }}</slot>
         </AppFillAware>

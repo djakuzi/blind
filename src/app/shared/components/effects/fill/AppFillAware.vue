@@ -11,14 +11,16 @@ export interface PropsAppFillAware {
   threshold?: number
   color?: tColorValue
   filledColor?: tColorValue
+  initialFilled?: boolean
   transitionDuration?: number
 }
 
 const props = withDefaults(defineProps<PropsAppFillAware>(), {
   tag: 'span',
-  threshold: 0.5,
+  threshold: 0.3,
   color: 'inherit',
   filledColor: 'on-primary',
+  initialFilled: false,
   transitionDuration: 400,
 });
 
@@ -34,12 +36,19 @@ const context = inject(FILL_CONTEXT, null);
 const element = ref<HTMLElement | null>(null);
 const topRatio = ref(0);
 const bottomRatio = ref(1);
+const isMeasured = ref(false);
 
 let resizeObserver: ResizeObserver | null = null;
 
-const normalizedThreshold = computed(() => Math.min(1, Math.max(0, props.threshold)));
+const normalizedThreshold = computed(() => (
+  Math.min(1, Math.max(0, props.threshold))
+));
 
 const coverageRatio = computed(() => {
+  if (!isMeasured.value) {
+    return props.initialFilled ? 1 : 0;
+  }
+
   const progress = context?.progressRatio.value ?? 0;
   const fillTop = 1 - progress;
   const height = bottomRatio.value - topRatio.value;
@@ -53,7 +62,13 @@ const coverageRatio = computed(() => {
   return Math.min(1, Math.max(0, filledHeight / height));
 });
 
-const filled = computed(() => coverageRatio.value >= normalizedThreshold.value);
+const filled = computed(() => {
+  if (!isMeasured.value) {
+    return props.initialFilled;
+  }
+
+  return coverageRatio.value >= normalizedThreshold.value;
+});
 
 const currentColor = computed(() => resolveColorValue(
   filled.value ? props.filledColor : props.color,
@@ -88,6 +103,8 @@ function updatePosition() {
     1,
     Math.max(0, (targetRect.bottom - rootRect.top) / rootRect.height),
   );
+
+  isMeasured.value = true;
 }
 
 function observeElements() {
@@ -106,7 +123,10 @@ function observeElements() {
 }
 
 watch(() => context?.rootElement.value, async () => {
+  isMeasured.value = false;
+
   await nextTick();
+
   observeElements();
   updatePosition();
 });
@@ -120,10 +140,9 @@ watch(() => context?.isActive.value, async (isActive) => {
   updatePosition();
 });
 
-onMounted(async () => {
+onMounted(() => {
   resizeObserver = new ResizeObserver(updatePosition);
 
-  await nextTick();
   observeElements();
   updatePosition();
 });
