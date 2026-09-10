@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
+import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
+import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
@@ -87,9 +88,16 @@ function handleComplete() {
           :is-active="isProgressActive"
           :progress-ratio="progressRatio"
         />
-        <span class="app-button-hold__content">
+
+        <AppFillAware
+          class="app-button-hold__content"
+          tag="span"
+          color="inherit"
+          filled-color="on-primary"
+          :threshold="0.3"
+        >
           <slot>{{ text }}</slot>
-        </span>
+        </AppFillAware>
       </button>
     </template>
   </AppHoldAction>

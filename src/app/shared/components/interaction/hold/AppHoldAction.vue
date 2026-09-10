@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
-
+import { computed, onBeforeUnmount, ref, watch, provide } from 'vue';
+import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { ToolVibration } from '@/core/tool/vibration';
+
 
 interface iAppHoldActionActions {
   complete?: () => void
@@ -44,6 +45,7 @@ const emit = defineEmits<{
 const isHolding = ref(false);
 const hasCompleted = ref(false);
 const progress = ref(0);
+const rootElement = ref<HTMLElement | null>(null);
 
 let holdStartedAt = 0;
 let holdStartX = 0;
@@ -110,6 +112,12 @@ const isProgressActive = computed(() => (
   isHolding.value
   || normalizedProgress.value > normalizedInitialProgress.value
 ));
+
+provide(FILL_CONTEXT, {
+  rootElement,
+  progressRatio,
+  isActive: isProgressActive,
+});
 
 const holdActionStyle = computed(() => ({
   '--cp-hold-action-width': LibStyle.toSizeValue(props.width) ?? 'auto',
