@@ -28,7 +28,6 @@ const props = withDefaults(defineProps<PropsAppCardHold>(), {
   duration: 650,
   fillDuration: undefined,
   initialProgress: 15,
-  moveCancelThreshold: 6,
   releaseDuration: 140,
   vibrationDuration: 45,
 });
@@ -48,6 +47,7 @@ function handleComplete() {
     :disabled="disabled"
     :duration="duration"
     :fill-duration="fillDuration"
+    :hold-start-delay="holdStartDelay"
     :initial-progress="initialProgress"
     :move-cancel-threshold="moveCancelThreshold"
     :release-duration="releaseDuration"
