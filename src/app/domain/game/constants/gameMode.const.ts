@@ -20,16 +20,16 @@ export interface DataGameMode {
     typeConnection: tKeyTypeConection[];
 }
 
-export const GAME_MODE: Record<string, DataGameMode> = {
+export const GAME_MODE = {
   DUEL: {
     title: 'DUEL',
     description: 'Одно попадание — одна жизнь',
     img: {
-        dark: imgDuelDark,
-        light: imgDuelLight,
+      dark: imgDuelDark,
+      light: imgDuelLight,
     },
     options: {
-        teamSize: 1,
+      teamSize: 1,
       players: 2,
       rounds: 3,
       winCondition: 'single-hit',
@@ -40,11 +40,11 @@ export const GAME_MODE: Record<string, DataGameMode> = {
     title: 'COMBAT',
     description: 'Сражайся, пока здоровье не закончится',
     img: {
-        dark: imgCombatDark,
-        light: imgCombatLight,
+      dark: imgCombatDark,
+      light: imgCombatLight,
     },
     options: {
-        teamSize: 1,
+      teamSize: 1,
       players: 2,
       rounds: 3,
       winCondition: 'health',
@@ -55,11 +55,11 @@ export const GAME_MODE: Record<string, DataGameMode> = {
     title: 'CLASH',
     description: 'Одна жизнь. Одна команда.',
     img: {
-        dark: imgClashDark,
-        light: imgClashLight,
+      dark: imgClashDark,
+      light: imgClashLight,
     },
     options: {
-        teamSize: 2,
+      teamSize: 2,
       players: 4,
       rounds: 3,
       winCondition: 'single-hit',
@@ -70,11 +70,11 @@ export const GAME_MODE: Record<string, DataGameMode> = {
     title: 'BATTLE',
     description: 'Командный бой до последнего выжившего',
     img: {
-        dark: imgBattleDark,
-        light: imgBattleLight,
+      dark: imgBattleDark,
+      light: imgBattleLight,
     },
     options: {
-        teamSize: 2,
+      teamSize: 2,
       players: 4,
       rounds: 3,
       winCondition: 'health',
