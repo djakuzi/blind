@@ -124,6 +124,24 @@ function handleComplete() {
   user-select: none;
   touch-action: none;
   appearance: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-button-hold:not(:disabled):hover {
+    background: color-mix(
+      in srgb,
+      var(--app-color-surface-primary) 94%,
+      var(--app-color-primary)
+    );
+    border-color: var(--app-color-primary);
+    box-shadow:
+      0 0 0 var(--app-border-width-medium)
+      color-mix(in srgb, var(--app-color-primary) 16%, transparent);
+  }
 }
 
 .app-button-hold:disabled {
