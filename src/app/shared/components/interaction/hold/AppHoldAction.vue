@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   fillDuration: undefined,
   initialProgress: 15,
   maxWidth: '100%',
-  moveCancelThreshold: 12,
+  moveCancelThreshold: 6,
   releaseDuration: 140,
   vibrationDuration: 45,
   width: '100%',

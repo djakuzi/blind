@@ -1,47 +1,37 @@
 <script setup lang="ts">
 import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
-import type {
-  PropsAppCard,
-} from '@/app/shared/components/atoms/card/AppCard.vue';
-
+import type { PropsAppCard } from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
-
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
-import type {
-  PropsAppHoldAction,
-} from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
+import type { PropsAppHoldAction } from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 
-export interface PropsAppCardHold
-  extends PropsAppCard,
-    PropsAppHoldAction {
+export interface PropsAppCardHold extends PropsAppCard, PropsAppHoldAction {
   bloodFlowFrontDuration?: number
 }
 
-const props = withDefaults(
-  defineProps<PropsAppCardHold>(),
-  {
-    tag: 'div',
-    size: 'middle',
-    width: '100%',
-    maxWidth: '100%',
-    paddingX: undefined,
-    paddingY: undefined,
-    backgroundColor: 'transparent',
-    borderColor: 'border-contrast',
-    borderWidth: 'thick',
-    borderStyle: 'solid',
-    borderRadius: 'lg',
-    overflow: 'hidden',
-    actions: undefined,
-    disabled: false,
-    bloodFlowFrontDuration: 1200,
-    duration: 650,
-    fillDuration: undefined,
-    initialProgress: 15,
-    releaseDuration: 140,
-    vibrationDuration: 45,
-  },
-);
+const props = withDefaults(defineProps<PropsAppCardHold>(), {
+  tag: 'div',
+  size: 'middle',
+  width: '100%',
+  maxWidth: '100%',
+  paddingX: undefined,
+  paddingY: undefined,
+  backgroundColor: 'transparent',
+  borderColor: 'border-contrast',
+  borderWidth: 'thick',
+  borderStyle: 'solid',
+  borderRadius: 'lg',
+  overflow: 'hidden',
+  actions: undefined,
+  disabled: false,
+  bloodFlowFrontDuration: 1200,
+  duration: 650,
+  fillDuration: undefined,
+  initialProgress: 15,
+  moveCancelThreshold: 6,
+  releaseDuration: 140,
+  vibrationDuration: 45,
+});
 
 const emit = defineEmits<{
   complete: []
@@ -59,20 +49,14 @@ function handleComplete() {
     :duration="duration"
     :fill-duration="fillDuration"
     :initial-progress="initialProgress"
+    :move-cancel-threshold="moveCancelThreshold"
     :release-duration="releaseDuration"
     :vibration-duration="vibrationDuration"
     :width="width"
     :max-width="maxWidth"
     @complete="handleComplete"
   >
-    <template
-      #default="{
-        progressRatio,
-        isProgressActive,
-        isHolding,
-        isComplete,
-      }"
-    >
+    <template #default="{ progressRatio, isProgressActive, isHolding, isComplete }">
       <AppCard
         class="app-card-hold"
         :class="{
@@ -114,7 +98,6 @@ function handleComplete() {
 <style scoped>
 .app-card-hold {
   position: relative;
-
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
@@ -124,7 +107,6 @@ function handleComplete() {
 .app-card-hold__content {
   position: relative;
   z-index: 1;
-
   width: 100%;
   min-width: 0;
 }
