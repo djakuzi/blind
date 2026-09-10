@@ -4,21 +4,15 @@ import { computed } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-
-import {
-  resolveColorValue,
-  type tColorValue,
-} from '@/app/styles/contracts/color.contract';
-
-import {
-  resolveRadiusValue,
-  type tRadiusValue,
-} from '@/app/styles/contracts/radius.contract';
+import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
+import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
+import { ToolVibration } from '@/core/tool/vibration';
 
 export interface PropsAppSwitch {
   modelValue: boolean
   accessibilityLabel: string
   disabled?: boolean
+  vibration?: boolean
   size?: tBaseSizeVariant
   width?: tStyleSizeValue
   maxWidth?: tStyleSizeValue
@@ -32,6 +26,7 @@ export interface PropsAppSwitch {
 
 const props = withDefaults(defineProps<PropsAppSwitch>(), {
   disabled: false,
+  vibration: true,
   size: 'middle',
   width: undefined,
   maxWidth: '100%',
@@ -53,39 +48,17 @@ const SWITCH_WIDTH_MAP: Record<tBaseSizeVariant, string> = {
   big: '14rem',
 };
 
-const switchWidth = computed(() =>
-  LibStyle.toSizeValue(
-    props.width ?? SWITCH_WIDTH_MAP[props.size],
-  ),
-);
+const switchWidth = computed(() => LibStyle.toSizeValue(
+  props.width ?? SWITCH_WIDTH_MAP[props.size],
+));
 
-const switchMaxWidth = computed(() =>
-  LibStyle.toSizeValue(props.maxWidth),
-);
-
-const switchBorderRadius = computed(() =>
-  resolveRadiusValue(props.borderRadius),
-);
-
-const switchThumbBorderRadius = computed(() =>
-  resolveRadiusValue(props.thumbBorderRadius),
-);
-
-const switchActiveColor = computed(() =>
-  resolveColorValue(props.activeColor),
-);
-
-const switchInactiveColor = computed(() =>
-  resolveColorValue(props.inactiveColor),
-);
-
-const switchThumbColor = computed(() =>
-  resolveColorValue(props.thumbColor),
-);
-
-const switchBorderColor = computed(() =>
-  resolveColorValue(props.borderColor),
-);
+const switchMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
+const switchBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
+const switchThumbBorderRadius = computed(() => resolveRadiusValue(props.thumbBorderRadius));
+const switchActiveColor = computed(() => resolveColorValue(props.activeColor));
+const switchInactiveColor = computed(() => resolveColorValue(props.inactiveColor));
+const switchThumbColor = computed(() => resolveColorValue(props.thumbColor));
+const switchBorderColor = computed(() => resolveColorValue(props.borderColor));
 
 function handleToggle() {
   if (props.disabled) {
@@ -93,6 +66,10 @@ function handleToggle() {
   }
 
   emit('update:modelValue', !props.modelValue);
+
+  if (props.vibration) {
+    void ToolVibration.selectionChanged();
+  }
 }
 </script>
 
@@ -128,25 +105,19 @@ function handleToggle() {
   max-width: v-bind(switchMaxWidth);
   min-width: 0;
   aspect-ratio: 2 / 1;
-
   padding: 0;
-  border:
-    var(--app-border-width-medium)
-    var(--app-border-style-solid)
-    v-bind(switchBorderColor);
-
+  border: var(--app-border-width-medium) var(--app-border-style-solid) v-bind(switchBorderColor);
   border-radius: v-bind(switchBorderRadius);
   background: v-bind(switchInactiveColor);
-
   overflow: hidden;
   cursor: pointer;
   appearance: none;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-
   transition:
     background-color 160ms ease,
     border-color 160ms ease,
+    box-shadow 160ms ease,
     opacity 160ms ease;
 
   &.app-switch--active {
@@ -159,10 +130,7 @@ function handleToggle() {
   }
 
   &:focus-visible {
-    outline:
-      var(--app-border-width-medium)
-      var(--app-border-style-solid)
-      var(--app-color-primary);
+    outline: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-primary);
     outline-offset: 2px;
   }
 }
@@ -189,6 +157,14 @@ function handleToggle() {
 
 .app-switch--active .app-switch__thumb-track {
   transform: translateX(50%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-switch:not(.app-switch--disabled):hover {
+    border-color: var(--app-color-primary);
+    box-shadow: 0 0 0 var(--app-border-width-medium)
+      color-mix(in srgb, var(--app-color-primary) 20%, transparent);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
