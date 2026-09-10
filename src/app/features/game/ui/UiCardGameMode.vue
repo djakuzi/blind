@@ -135,6 +135,7 @@ function handleComplete() {
           divider-color="on-primary"
           font-weight="bold"
           accessibility-label="Параметры режима"
+          :center-even="true"
         />
 
         <AppInfoRowList
@@ -145,6 +146,7 @@ function handleComplete() {
           text-color="on-primary"
           divider-color="on-primary"
           font-weight="medium"
+          :center-even="false"
           :center-odd="false"
           accessibility-label="Доступные способы подключения"
         />
