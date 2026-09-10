@@ -19,6 +19,7 @@ export interface PropsAppSlider {
   inactiveScale?: number
   inactiveOpacity?: number
   contentDotsGap?: tSpaceValue
+  dotsHintGap?: tSpaceValue
   dotsGap?: tSpaceValue
   dotSize?: tStyleSizeValue
   dotColor?: tColorValue
@@ -38,6 +39,7 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
   inactiveScale: 0.88,
   inactiveOpacity: 0.45,
   contentDotsGap: undefined,
+  dotsHintGap: undefined,
   dotsGap: undefined,
   dotSize: '1rem',
   dotColor: 'border-strong',
@@ -56,22 +58,31 @@ defineSlots<{
     index: number
     active: boolean
   }): unknown
+
+  hint?(props: {
+    wheelEnabled: boolean
+    canNavigate: boolean
+  }): unknown
 }>();
 
 const SIZE_MAP: Record<tBaseSizeVariant, {
   contentDotsGap: tSpaceValue
+  dotsHintGap: tSpaceValue
   dotsGap: tSpaceValue
 }> = {
   small: {
     contentDotsGap: 4,
+    dotsHintGap: 2,
     dotsGap: 2,
   },
   middle: {
     contentDotsGap: 6,
+    dotsHintGap: 3,
     dotsGap: 3,
   },
   big: {
     contentDotsGap: 8,
+    dotsHintGap: 4,
     dotsGap: 4,
   },
 };
@@ -80,7 +91,6 @@ const DRAG_START_THRESHOLD = 12;
 
 const viewportElement = ref<HTMLElement | null>(null);
 const trackElement = ref<HTMLElement | null>(null);
-
 const trackTranslate = ref(0);
 const dragOffset = ref(0);
 const activeItemWidth = ref(0);
@@ -89,12 +99,9 @@ const isDragging = ref(false);
 let activePointerId: number | null = null;
 let pointerStartX = 0;
 let pointerMoved = false;
-
 let dragFrameId: number | null = null;
 let positionFrameId: number | null = null;
-
 let resizeObserver: ResizeObserver | null = null;
-
 let wheelGestureActive = false;
 let wheelResetTimer: number | null = null;
 
@@ -110,6 +117,9 @@ const sliderItemMaxWidth = computed(() => LibStyle.toSizeValue(props.itemMaxWidt
 const sliderItemGap = computed(() => resolveSpaceValue(props.itemGap));
 const sliderContentDotsGap = computed(() => resolveSpaceValue(
   props.contentDotsGap ?? sizeConfig.value.contentDotsGap,
+));
+const sliderDotsHintGap = computed(() => resolveSpaceValue(
+  props.dotsHintGap ?? sizeConfig.value.dotsHintGap,
 ));
 const sliderDotsGap = computed(() => resolveSpaceValue(
   props.dotsGap ?? sizeConfig.value.dotsGap,
@@ -454,9 +464,7 @@ onBeforeUnmount(() => {
           v-for="index in indexes"
           :key="index"
           class="app-slider__item"
-          :class="{
-            'app-slider__item--active': isItemActive(index),
-          }"
+          :class="{ 'app-slider__item--active': isItemActive(index) }"
           role="group"
           aria-roledescription="slide"
           :aria-label="`${index + 1} из ${count}`"
@@ -473,18 +481,29 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div
-      class="app-slider__dots"
-      aria-hidden="true"
-    >
-      <span
-        v-for="index in indexes"
-        :key="index"
-        class="app-slider__dot"
-        :class="{
-          'app-slider__dot--active': isItemActive(index),
-        }"
-      />
+    <div class="app-slider__footer">
+      <div
+        class="app-slider__dots"
+        aria-hidden="true"
+      >
+        <span
+          v-for="index in indexes"
+          :key="index"
+          class="app-slider__dot"
+          :class="{ 'app-slider__dot--active': isItemActive(index) }"
+        />
+      </div>
+
+      <div
+        v-if="$slots.hint"
+        class="app-slider__hint"
+      >
+        <slot
+          name="hint"
+          :wheel-enabled="wheel && count > 1"
+          :can-navigate="count > 1"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -511,10 +530,7 @@ onBeforeUnmount(() => {
   -webkit-tap-highlight-color: transparent;
 
   &:focus-visible {
-    outline:
-      var(--app-border-width-medium)
-      var(--app-border-style-solid)
-      var(--app-color-primary);
+    outline: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-primary);
     outline-offset: 2px;
   }
 }
@@ -554,6 +570,15 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
+.app-slider__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  gap: v-bind(sliderDotsHintGap);
+}
+
 .app-slider__dots {
   display: flex;
   align-items: center;
@@ -575,6 +600,13 @@ onBeforeUnmount(() => {
 
 .app-slider__dot--active {
   background: v-bind(sliderActiveDotColor);
+}
+
+.app-slider__hint {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
 }
 
 .app-slider--dragging {

@@ -7,6 +7,7 @@ import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
 import UiCardGameMode from '@/app/features/game/ui/UiCardGameMode.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
+import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
 
 const router = useRouter();
 
@@ -26,7 +27,6 @@ async function loadModes() {
   catch (error) {
     modes.value = [];
     hasLoadError.value = true;
-
     console.error('Failed to load game modes:', error);
   }
   finally {
@@ -67,6 +67,22 @@ onMounted(() => {
           :mode="modes[index]"
           :disabled="!active"
           @complete="handleModeComplete"
+        />
+      </template>
+
+      <template #hint>
+        <AppHoldHint
+          :items="[
+            'Удерживайте карточку, чтобы выбрать режим',
+          ]"
+          :desktop-items="[
+            'Колесо мыши — сменить режим',
+            'Удерживайте карточку — выбрать',
+          ]"
+          direction="column"
+          desktop-direction="column"
+          size="middle"
+          max-width="100%"
         />
       </template>
     </AppSlider>
