@@ -163,6 +163,19 @@ function handleComplete() {
 <style scoped>
 .ui-card-game-mode :deep(.app-card-hold) {
   height: 100%;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ui-card-game-mode :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
+    border-color: var(--app-color-primary);
+    box-shadow:
+      0 0 0 var(--app-border-width-medium)
+      color-mix(in srgb, var(--app-color-primary) 18%, transparent);
+  }
 }
 
 .ui-card-game-mode :deep(.app-card-hold__content) {
