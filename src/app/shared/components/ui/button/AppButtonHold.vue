@@ -34,7 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
   actions: undefined,
   disabled: false,
   bloodFlowFrontDuration: 1200,
-  duration: 650,
+  duration: 450,
   fillDuration: undefined,
   initialProgress: 15,
   releaseDuration: 140,
