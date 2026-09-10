@@ -145,6 +145,7 @@ function handleComplete() {
           text-color="on-primary"
           divider-color="on-primary"
           font-weight="medium"
+          :center-odd="false"
           accessibility-label="Доступные способы подключения"
         />
       </div>

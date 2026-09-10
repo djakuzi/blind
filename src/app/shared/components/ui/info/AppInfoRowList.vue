@@ -3,46 +3,18 @@ import { computed } from 'vue';
 
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
-
+import AppDistributedRow from '@/app/shared/components/layout/row/AppDistributedRow.vue';
+import type { PropsAppDistributedRow } from '@/app/shared/components/layout/row/AppDistributedRow.vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type {
-  tStyleSizeValue,
-} from '@/app/shared/lib/style';
-
-import type {
-  tBaseSizeVariant,
-} from '@/app/styles/contracts/base';
-
-import {
-  resolveBorderWidthValue,
-  type tBorderWidthValue,
-} from '@/app/styles/contracts/border.contract';
-
-import {
-  resolveColorValue,
-  type tColorValue,
-} from '@/app/styles/contracts/color.contract';
-
-import type {
-  tFontSizeValue,
-} from '@/app/styles/contracts/fontSize.contract';
-
-import type {
-  tFontWeightValue,
-} from '@/app/styles/contracts/fontWeight.contract';
-
-import {
-  resolvePaddingValue,
-  type tPaddingValue,
-} from '@/app/styles/contracts/padding.contract';
-import {
-  resolveSpaceValue,
-  type tSpaceValue,
-} from '@/app/styles/contracts/space.contract';
-import type {
-  tIconGroup,
-  tIconName,
-} from '@/core/media/assets';
+import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import { resolveBorderWidthValue, type tBorderWidthValue } from '@/app/styles/contracts/border.contract';
+import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
+import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
+import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
+import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
+import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+import type { tIconGroup, tIconName } from '@/core/media/assets';
 
 export type tAppInfoRowListItemIcon = {
   [TGroup in tIconGroup]: {
@@ -58,16 +30,13 @@ export interface iAppInfoRowListItem {
   icon?: tAppInfoRowListItemIcon
 }
 
-export interface PropsAppInfoRowList {
+export interface PropsAppInfoRowList extends Omit<PropsAppDistributedRow, 'count'> {
   items: readonly iAppInfoRowListItem[]
   size?: tBaseSizeVariant
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
   paddingX?: tPaddingValue
   paddingY?: tPaddingValue
   iconWidth?: tStyleSizeValue
   iconGap?: tSpaceValue
-  dividerGap?: tSpaceValue
   dividerHeight?: tStyleSizeValue
   dividerWidth?: tBorderWidthValue
   dividerColor?: tColorValue
@@ -78,153 +47,114 @@ export interface PropsAppInfoRowList {
   accessibilityLabel?: string
 }
 
-const props = withDefaults(
-  defineProps<PropsAppInfoRowList>(),
-  {
-    size: 'middle',
-    width: 'auto',
-    maxWidth: '100%',
-    paddingX: 0,
-    paddingY: 0,
-    iconWidth: undefined,
-    iconGap: undefined,
-    dividerGap: undefined,
-    dividerHeight: undefined,
-    dividerWidth: 'thin',
-    dividerColor: 'currentColor',
-    fontSize: undefined,
-    fontWeight: 'medium',
-    textColor: 'inherit',
-    uppercase: true,
-    accessibilityLabel: undefined,
-  },
-);
+const props = withDefaults(defineProps<PropsAppInfoRowList>(), {
+  size: 'middle',
+  width: 'auto',
+  maxWidth: '100%',
+  separatorGap: undefined,
+  centerEven: true,
+  centerOdd: true,
+  overflow: 'hidden',
+  paddingX: 0,
+  paddingY: 0,
+  iconWidth: undefined,
+  iconGap: undefined,
+  dividerHeight: undefined,
+  dividerWidth: 'thin',
+  dividerColor: 'currentColor',
+  fontSize: undefined,
+  fontWeight: 'medium',
+  textColor: 'inherit',
+  uppercase: true,
+  accessibilityLabel: undefined,
+});
 
-const SIZE_MAP: Record<
-  tBaseSizeVariant,
-  {
-    fontSize: tFontSizeValue
-    iconWidth: tStyleSizeValue
-    iconGap: tSpaceValue
-    dividerGap: tSpaceValue
-    dividerHeight: tStyleSizeValue
-  }
-> = {
+const SIZE_MAP: Record<tBaseSizeVariant, {
+  fontSize: tFontSizeValue
+  iconWidth: tStyleSizeValue
+  iconGap: tSpaceValue
+  separatorGap: tSpaceValue
+  dividerHeight: tStyleSizeValue
+}> = {
   small: {
     fontSize: 'sm',
     iconWidth: '2rem',
     iconGap: 2,
-    dividerGap: 4,
+    separatorGap: 4,
     dividerHeight: '2rem',
   },
   middle: {
     fontSize: 'md',
     iconWidth: '2.5rem',
     iconGap: 3,
-    dividerGap: 5,
+    separatorGap: 5,
     dividerHeight: '2.5rem',
   },
   big: {
     fontSize: 'lg',
     iconWidth: '3rem',
     iconGap: 4,
-    dividerGap: 6,
+    separatorGap: 6,
     dividerHeight: '3rem',
   },
 };
 
-const sizeConfig = computed(() =>
-  SIZE_MAP[props.size],
-);
+const sizeConfig = computed(() => SIZE_MAP[props.size]);
 
-const listWidth = computed(() =>
-  LibStyle.toSizeValue(props.width),
-);
+const listPaddingX = computed(() => resolvePaddingValue(props.paddingX));
+const listPaddingY = computed(() => resolvePaddingValue(props.paddingY));
 
-const listMaxWidth = computed(() =>
-  LibStyle.toSizeValue(props.maxWidth),
-);
+const itemFontSize = computed(() => props.fontSize ?? sizeConfig.value.fontSize);
+const itemIconWidth = computed(() => LibStyle.toSizeValue(
+  props.iconWidth ?? sizeConfig.value.iconWidth,
+));
+const itemIconGap = computed(() => resolveSpaceValue(
+  props.iconGap ?? sizeConfig.value.iconGap,
+));
 
-const listPaddingX = computed(() =>
-  resolvePaddingValue(props.paddingX),
-);
+const rowSeparatorGap = computed(() => props.separatorGap ?? sizeConfig.value.separatorGap);
+const itemDividerHeight = computed(() => LibStyle.toSizeValue(
+  props.dividerHeight ?? sizeConfig.value.dividerHeight,
+));
+const itemDividerWidth = computed(() => resolveBorderWidthValue(props.dividerWidth));
+const itemDividerColor = computed(() => resolveColorValue(props.dividerColor));
 
-const listPaddingY = computed(() =>
-  resolvePaddingValue(props.paddingY),
-);
-
-const itemFontSize = computed(() =>
-  props.fontSize
-    ?? sizeConfig.value.fontSize,
-);
-
-const itemIconWidth = computed(() =>
-  LibStyle.toSizeValue(
-    props.iconWidth
-      ?? sizeConfig.value.iconWidth,
-  ),
-);
-
-const itemIconGap = computed(() =>
-  resolveSpaceValue(
-    props.iconGap
-      ?? sizeConfig.value.iconGap,
-  ),
-);
-
-const itemDividerGap = computed(() =>
-  resolveSpaceValue(
-    props.dividerGap
-      ?? sizeConfig.value.dividerGap,
-  ),
-);
-
-const itemDividerHeight = computed(() =>
-  LibStyle.toSizeValue(
-    props.dividerHeight
-      ?? sizeConfig.value.dividerHeight,
-  ),
-);
-
-const itemDividerWidth = computed(() =>
-  resolveBorderWidthValue(
-    props.dividerWidth,
-  ),
-);
-
-const itemDividerColor = computed(() =>
-  resolveColorValue(
-    props.dividerColor,
-  ),
-);
+function getItem(index: number): iAppInfoRowListItem {
+  return props.items[index] as iAppInfoRowListItem;
+}
 </script>
 
 <template>
-  <div
+  <AppDistributedRow
     class="app-info-row-list"
+    :count="items.length"
+    :width="width"
+    :max-width="maxWidth"
+    :separator-gap="rowSeparatorGap"
+    :center-even="centerEven"
+    :center-odd="centerOdd"
+    :overflow="overflow"
     role="list"
     :aria-label="accessibilityLabel"
   >
-    <div
-      v-for="item in items"
-      :key="item.id"
-      class="app-info-row-list__item"
-      role="listitem"
-    >
-      <div class="app-info-row-list__content">
+    <template #item="{ index }">
+      <div
+        class="app-info-row-list__item"
+        role="listitem"
+      >
         <AppIcon
-          v-if="item.icon"
+          v-if="getItem(index).icon"
           class="app-info-row-list__icon"
-          :group="item.icon.group"
-          :icon="item.icon.icon"
-          :alt="item.icon.alt ?? ''"
+          :group="getItem(index).icon!.group"
+          :icon="getItem(index).icon!.icon"
+          :alt="getItem(index).icon!.alt ?? ''"
           :width="itemIconWidth"
           height="auto"
         />
 
         <AppText
           class="app-info-row-list__text"
-          :text="item.text"
+          :text="getItem(index).text"
           tag="span"
           :color="textColor"
           :font-size="itemFontSize"
@@ -234,45 +164,25 @@ const itemDividerColor = computed(() =>
           :max-lines="1"
         />
       </div>
-    </div>
-  </div>
+    </template>
+
+    <template #separator>
+      <span class="app-info-row-list__divider" />
+    </template>
+  </AppDistributedRow>
 </template>
 
 <style scoped>
 .app-info-row-list {
-  display: flex;
-  align-items: center;
-  width: v-bind(listWidth);
-  max-width: v-bind(listMaxWidth);
-  min-width: 0;
-
-  padding:
-    v-bind(listPaddingY)
-    v-bind(listPaddingX);
-
-  overflow: hidden;
+  box-sizing: border-box;
+  padding: v-bind(listPaddingY) v-bind(listPaddingX);
 }
 
 .app-info-row-list__item {
   display: flex;
-  flex: 0 1 auto;
   align-items: center;
   min-width: 0;
-
-  &:not(:last-child)::after {
-    content: '';
-    flex: 0 0 auto;
-    width: v-bind(itemDividerWidth);
-    height: v-bind(itemDividerHeight);
-    margin-inline: v-bind(itemDividerGap);
-    background: v-bind(itemDividerColor);
-  }
-}
-
-.app-info-row-list__content {
-  display: flex;
-  align-items: center;
-  min-width: 0;
+  overflow: hidden;
 }
 
 .app-info-row-list__icon {
@@ -281,7 +191,15 @@ const itemDividerColor = computed(() =>
 }
 
 .app-info-row-list__text {
+  flex: 1 1 auto;
   min-width: 0;
   max-width: 100%;
+}
+
+.app-info-row-list__divider {
+  display: block;
+  width: v-bind(itemDividerWidth);
+  height: v-bind(itemDividerHeight);
+  background: v-bind(itemDividerColor);
 }
 </style>
