@@ -13,7 +13,7 @@ export type tAppHoldHintDirection = 'row' | 'column';
 
 export interface PropsAppHoldHint {
   text?: string
-  items: readonly string[]
+  items?: readonly string[]
   desktopItems?: readonly string[]
   size?: tBaseSizeVariant
   direction?: tAppHoldHintDirection
