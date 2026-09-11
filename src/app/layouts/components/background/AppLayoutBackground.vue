@@ -1,18 +1,25 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
-
-import test from '@/assets/images/background/bgDark.png';
+import { computed, reactive, ref, watch } from 'vue';
 import backgroundLight from '@/assets/images/background/bgLight.png';
+import backgroundDark from '@/assets/images/background/bgDark.png';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
 import { ToolSystem } from '@/core/tool/system';
 
 type tThemeMode = ToolSystem.tSystemThemeMode;
 
+interface Props {
+  tileWidth?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  tileWidth: 480,
+});
+
 const { resolvedThemeMode } = useAppThemeMode();
 
 const sourceMap: Record<tThemeMode, string> = {
   light: backgroundLight,
-  dark: test,
+  dark: backgroundDark,
 };
 
 const shouldLoad = reactive<Record<tThemeMode, boolean>>({
@@ -25,45 +32,30 @@ const isLoaded = reactive<Record<tThemeMode, boolean>>({
   dark: false,
 });
 
-const displayedThemeMode = ref<tThemeMode>(
-  resolvedThemeMode.value,
-);
+const displayedThemeMode = ref<tThemeMode>(resolvedThemeMode.value);
 
-function getOppositeThemeMode(
-  themeMode: tThemeMode,
-): tThemeMode {
-  return themeMode === 'light'
-    ? 'dark'
-    : 'light';
+const backgroundSize = computed(() => `${Math.max(1, props.tileWidth)}px auto`);
+
+function getOppositeThemeMode(themeMode: tThemeMode): tThemeMode {
+  return themeMode === 'light' ? 'dark' : 'light';
 }
 
-function loadTheme(
-  themeMode: tThemeMode,
-) {
+function loadTheme(themeMode: tThemeMode) {
   shouldLoad[themeMode] = true;
 }
 
-function handleLoad(
-  themeMode: tThemeMode,
-) {
+function handleLoad(themeMode: tThemeMode) {
   isLoaded[themeMode] = true;
 
   if (resolvedThemeMode.value === themeMode) {
     displayedThemeMode.value = themeMode;
   }
 
-  loadTheme(
-    getOppositeThemeMode(themeMode),
-  );
+  loadTheme(getOppositeThemeMode(themeMode));
 }
 
-function isThemeVisible(
-  themeMode: tThemeMode,
-) {
-  return (
-    displayedThemeMode.value === themeMode
-    && isLoaded[themeMode]
-  );
+function isThemeVisible(themeMode: tThemeMode) {
+  return displayedThemeMode.value === themeMode && isLoaded[themeMode];
 }
 
 watch(
@@ -86,33 +78,28 @@ watch(
     class="app-layout-background"
     aria-hidden="true"
   >
-    <img
-      v-if="shouldLoad.light"
-      class="app-layout-background__image"
+    <div
+      v-for="themeMode in (['light', 'dark'] as const)"
+      :key="themeMode"
+      class="app-layout-background__layer"
       :class="{
-        'app-layout-background__image--visible':
-          isThemeVisible('light'),
+        'app-layout-background__layer--visible':
+          isThemeVisible(themeMode),
       }"
-      :src="sourceMap.light"
-      alt=""
-      draggable="false"
-      decoding="async"
-      @load="handleLoad('light')"
-    >
-
-    <img
-      v-if="shouldLoad.dark"
-      class="app-layout-background__image"
-      :class="{
-        'app-layout-background__image--visible':
-          isThemeVisible('dark'),
+      :style="{
+        backgroundImage: shouldLoad[themeMode]
+          ? `url(${sourceMap[themeMode]})`
+          : undefined,
       }"
-      :src="sourceMap.dark"
-      alt=""
-      draggable="false"
-      decoding="async"
-      @load="handleLoad('dark')"
     >
+      <img
+        v-if="shouldLoad[themeMode] && !isLoaded[themeMode]"
+        class="app-layout-background__preload"
+        :src="sourceMap[themeMode]"
+        alt=""
+        @load="handleLoad(themeMode)"
+      >
+    </div>
   </div>
 </template>
 
@@ -126,25 +113,31 @@ watch(
   pointer-events: none;
 }
 
-.app-layout-background__image {
+.app-layout-background__layer {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  background-repeat: repeat;
+  background-position: center;
+  background-size: v-bind(backgroundSize);
   opacity: 0;
-  user-select: none;
   pointer-events: none;
   transition: opacity 320ms ease;
 }
 
-.app-layout-background__image--visible {
+.app-layout-background__layer--visible {
   opacity: 1;
 }
 
+.app-layout-background__preload {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .app-layout-background__image {
+  .app-layout-background__layer {
     transition: none;
   }
 }
