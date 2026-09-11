@@ -12,6 +12,7 @@ import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/spac
 export type tAppHoldHintDirection = 'row' | 'column';
 
 export interface PropsAppHoldHint {
+  text?: string
   items: readonly string[]
   desktopItems?: readonly string[]
   size?: tBaseSizeVariant
@@ -64,11 +65,25 @@ const SIZE_MAP: Record<tBaseSizeVariant, {
 
 const sizeConfig = computed(() => SIZE_MAP[props.size]);
 
-const resolvedDesktopItems = computed(() =>
-  props.desktopItems?.length
-    ? props.desktopItems
-    : props.items,
-);
+const resolvedItems = computed<readonly string[]>(() => {
+  if (props.items?.length) {
+    return props.items;
+  }
+
+  if (props.text) {
+    return [props.text];
+  }
+
+  return [];
+});
+
+const resolvedDesktopItems = computed<readonly string[]>(() => {
+  if (props.desktopItems?.length) {
+    return props.desktopItems;
+  }
+
+  return resolvedItems.value;
+});
 
 const hintDirection = computed(() => props.direction);
 
