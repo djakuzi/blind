@@ -74,7 +74,7 @@ const menuActions = [
         />
       </AppFlex>
 
-      <AppHoldHint text="Удерживайте для перехода" />
+      <AppHoldHint text="ЗАЖМИТЕ КНОПКУ ДЛЯ ВЫБОРА" />
     </AppFlex>
   </ViewLayout>
 </template>
