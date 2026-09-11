@@ -10,6 +10,7 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
     justify="center"
     padding="none"
     overflow="hidden"
+    bleed="horizontal"
   >
     <WidgetSliderGameMode />
   </ViewLayout>

@@ -16,10 +16,18 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 
 const { hasLayoutHeader } = useLayoutHeader();
 const { hasLayoutVersion } = useLayoutVersion();
-const { layoutPadding } = useLayoutPadding();
+const {
+  layoutPadding,
+  layoutPaddingHorizontal,
+  layoutPaddingVertical,
+} = useLayoutPadding();
 
 const layoutStyle = computed(() => ({
   '--cp-layout-padding': layoutPadding.value,
+  '--cp-layout-padding-horizontal':
+    layoutPaddingHorizontal.value,
+  '--cp-layout-padding-vertical':
+    layoutPaddingVertical.value,
 }));
 </script>
 
@@ -60,15 +68,12 @@ const layoutStyle = computed(() => ({
 .layout {
   position: relative;
   isolation: isolate;
-
   display: flex;
   flex: 1;
   flex-direction: column;
-
   width: 100%;
   min-height: 100dvh;
   max-height: 100dvh;
-
   padding: var(--cp-layout-padding);
   background: var(--app-color-background);
   overflow: hidden;
