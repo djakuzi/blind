@@ -77,7 +77,7 @@ onMounted(() => {
           ]"
           :desktop-items="[
             'Колесо мыши — сменить режим',
-            'Удерживайте карточку — выбрать',
+            'Удерживать карточку — выбрать',
           ]"
           direction="column"
           desktop-direction="column"
