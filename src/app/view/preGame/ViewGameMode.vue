@@ -19,6 +19,5 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 <style scoped>
 .view-game-mode {
   position: relative;
-  width: 100%;
 }
 </style>
