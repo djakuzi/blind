@@ -1,22 +1,17 @@
 <script lang="ts">
 import type { CSSProperties } from 'vue';
-
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-
 import type {
   tBorderStyleValue,
   tBorderWidthValue,
 } from '@/app/styles/contracts/border.contract';
-
 import type {
   tColorValue,
 } from '@/app/styles/contracts/color.contract';
-
 import type {
   tPaddingValue,
 } from '@/app/styles/contracts/padding.contract';
-
 import type {
   tSpaceValue,
 } from '@/app/styles/contracts/space.contract';
@@ -29,7 +24,6 @@ export interface PropsWidgetList<
   TItem extends Record<string, unknown> = Record<string, unknown>,
 > {
   items: readonly TItem[]
-
   itemKey?:
     | string
     | (
@@ -38,38 +32,28 @@ export interface PropsWidgetList<
         index: number,
       ) => tWidgetListKey
     )
-
   size?: tBaseSizeVariant
-
   width?: tStyleSizeValue
   maxWidth?: tStyleSizeValue
-
   gap?: tSpaceValue
-
   paddingX?: tPaddingValue
   paddingY?: tPaddingValue
-
   rowGap?: tSpaceValue
-
   rowAlign?:
     | CSSProperties['alignItems']
     | 'start'
     | 'end'
-
   rowJustify?:
     | CSSProperties['justifyContent']
     | 'start'
     | 'end'
     | 'between'
-
   rowWrap?: CSSProperties['flexWrap']
-
   divider?: boolean
   dividerColor?: tColorValue
   dividerWidth?: tBorderWidthValue
   dividerStyle?: tBorderStyleValue
   showLastDivider?: boolean
-
   accessibilityLabel?: string
 }
 </script>
