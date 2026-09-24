@@ -2,6 +2,6 @@ import { config } from '@/config';
 import { HttpClient } from '@/core/http';
 
 export const apiClient = new HttpClient({
-  baseUrl: config.api.baseUrl,
+  baseUrl: '',
   timeout: 10_000,
 });
