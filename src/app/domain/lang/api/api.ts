@@ -1,3 +1,4 @@
+import { apiClient } from '@/app/shared/api';
 import type { Locale } from '../locale';
 import { ModelLanguage } from '../models/Language.model';
 
@@ -9,23 +10,10 @@ interface iResponseLanguage {
   isDefault: boolean
 }
 
-async function fetchJson<TResponse>(
-  url: string,
-): Promise<TResponse> {
-  const response =
-    await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`Language API request failed: ${url}`);
-  }
-
-  return await response.json() as TResponse;
-}
-
 export class ApiLanguage {
   async getLanguages(): Promise<ModelLanguage[]> {
     const languages =
-      await fetchJson<iResponseLanguage[]>(
+      await apiClient.get<iResponseLanguage[]>(
         '/lang/languages.json',
       );
 
@@ -46,7 +34,7 @@ export class ApiLanguage {
   async getLanguageInterface(
     code: string,
   ): Promise<Locale> {
-    return await fetchJson<Locale>(
+    return await apiClient.get<Locale>(
       `/lang/${code}.json`,
     );
   }
