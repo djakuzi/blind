@@ -1,21 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppButtonIcon from '@/app/shared/components/ui/button/AppButtonIcon.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
-import { useLanguageStore } from '@/app/stores/language/language.store';
 
 const router = useRouter();
-const languageStore = useLanguageStore();
 
-const commonLocale = computed(() => {
-  if (!languageStore.locale) {
-    throw new Error('Locale is not initialized');
-  }
-
-  return languageStore.locale.common;
-});
+const commonLocale = useLocale(
+  locale => locale.common,
+);
 
 function handleBack() {
   router.back();
