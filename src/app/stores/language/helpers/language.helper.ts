@@ -2,7 +2,6 @@ import { apiLanguage } from '@/app/domain/lang/api/api';
 import { ModelLanguage } from '@/app/domain/lang/models/Language.model';
 import { ToolFilesystem } from '@/core/tool/filesystem';
 import { ToolStorage } from '@/core/tool/storage';
-import { ToolSystem } from '@/core/tool/system';
 import { LANGUAGE_FILE_DIR, LANGUAGE_LIST_STORAGE_KEY } from '../language.const';
 import type { Locale } from '@/app/domain/lang/locale';
 import type { iLanguageFile } from '../language.type';
@@ -101,28 +100,16 @@ export async function loadLanguages() {
 
 export async function resolveInitialLanguage(
   languages: ModelLanguage[],
-  savedCode: string | null,
+  preferredLanguageCode: string | null,
 ) {
-  const savedLanguage =
-    findLanguageByCode(languages, savedCode);
+  const preferredLanguage =
+    findLanguageByCode(languages, preferredLanguageCode);
 
-  if (savedLanguage) {
-    return savedLanguage;
+  if (preferredLanguage) {
+    return preferredLanguage;
   }
 
-  let systemCode: string | null;
-
-  try {
-    systemCode =
-      await ToolSystem.getSystemLanguage();
-  } catch {
-    systemCode = null;
-  }
-
-  return findLanguageByCode(
-    languages,
-    systemCode,
-  ) ?? findDefaultLanguage(languages);
+  return findDefaultLanguage(languages);
 }
 
 export async function loadDefaultLanguageFallback() {

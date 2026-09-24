@@ -1,24 +1,17 @@
-import { ToolStorage } from '@/core/tool/storage';
-import { LANGUAGE_SELECTED_CODE_STORAGE_KEY } from '../language.const';
 import { loadLanguageLocale, loadLanguages, loadDefaultLanguageFallback, resolveInitialLanguage, saveDocumentLanguage } from '../helpers/language.helper';
 import type { iLanguageState } from '../language.type';
 
-export function createLoadLanguage() {
-  return async function loadLanguage(
+export function createInitializeLanguage() {
+  return async function initializeLanguage(
     this: iLanguageState,
   ) {
     const languages =
       await loadLanguages();
 
-    const selectedCode =
-      await ToolStorage.getItem(
-        LANGUAGE_SELECTED_CODE_STORAGE_KEY,
-      );
-
     const language =
       await resolveInitialLanguage(
         languages,
-        selectedCode,
+        this.preferredLanguageCode,
       );
 
     if (!language) {

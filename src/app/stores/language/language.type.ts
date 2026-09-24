@@ -8,6 +8,7 @@ export interface iLanguageFile {
 
 export interface iLanguageState {
   languages: ModelLanguage[]
+  preferredLanguageCode: string | null
   currentLanguage: ModelLanguage | null
   locale: Locale | null
   isInitialized: boolean

@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import ProviderLoaderApp from '@/app/providers/ProviderLoaderApp.vue';
-import { useAppBootstrapLoader } from './useAppBootstrapLoader';
+import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import '@/app/styles/index.css';
 
-useAppBootstrapLoader();
+const loaderStore = useLoaderStore();
 </script>
 
 <template>
-  <RouterView key="app-router" />
+  <RouterView
+    v-if="loaderStore.isLoaded"
+    key="app-router"
+  />
   <ProviderLoaderApp />
 </template>
