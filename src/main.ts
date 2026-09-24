@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './app/router';
-import { initializeBootstrap, registerBootstrapLoader } from './app/setup/bootstrap.setup';
+import { prepareAppBootstrap, runAppBootstrap } from './app/bootstrap/bootstrap';
 import { setupLanguage } from './app/setup/language.setup';
 import { setupScale } from './app/setup/scale.setup';
 import { setupTheme } from './app/setup/theme.setup';
@@ -18,11 +18,11 @@ async function bootstrap() {
   await setupLanguage(pinia);
   await setupScale(pinia);
   await setupTheme(pinia);
-  registerBootstrapLoader(pinia);
+  prepareAppBootstrap(pinia);
   app.use(router);
   await router.isReady();
   app.mount('#app');
-  await initializeBootstrap(pinia);
+  await runAppBootstrap(pinia);
 }
 
 bootstrap();

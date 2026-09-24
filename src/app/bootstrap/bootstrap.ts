@@ -3,7 +3,7 @@ import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import { useLanguageStore } from '@/app/stores/language/language.store';
 import { APP_BOOTSTRAP_RESOURCES, APP_BOOTSTRAP_SCOPE_KEY } from './bootstrap.const';
 
-export function registerBootstrapLoader(
+export function prepareAppBootstrap(
   pinia: Pinia,
 ) {
   const loaderStore =
@@ -18,7 +18,7 @@ export function registerBootstrapLoader(
   });
 }
 
-export async function initializeBootstrap(
+export async function runAppBootstrap(
   pinia: Pinia,
 ) {
   const loaderStore =
