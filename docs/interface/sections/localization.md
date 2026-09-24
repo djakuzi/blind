@@ -1,6 +1,6 @@
 # Локализация интерфейса
 
-Локализация в `blind` разделена на две разные системы:
+Локализация в `blind` разделена на два уровня:
 
 ```text
 Static Locale
@@ -8,550 +8,382 @@ Static Locale
 Full Locale
 ```
 
-Это главный архитектурный принцип. Static Locale нужен только для минимального инфраструктурного UI до загрузки основного Locale. Full Locale является основным источником пользовательских текстов приложения после bootstrap.
+Это разделение определяет не способ хранения переводов, а их ответственность.
 
-## Слои
+- Static Locale покрывает минимальный инфраструктурный UI, который может понадобиться до готовности основной системы локализации.
+- Full Locale является основным источником пользовательских текстов после инициализации приложения.
 
-### Static Locale
+Документация описывает архитектурные правила. Конкретный transport, источник файлов, способ кеширования или внутренняя реализация могут меняться, если сохраняются описанные ниже границы и инварианты.
 
-Базовая инфраструктура Static Locale находится в:
+## Static Locale
+
+Static Locale — небольшой встроенный набор инфраструктурных текстов.
+
+Он должен:
+
+- быть доступен без загрузки Full Locale;
+- не зависеть от внешнего transport;
+- не требовать готового списка поддерживаемых языков;
+- иметь безопасный fallback;
+- содержать только тексты, необходимые до готовности основного интерфейса.
+
+Static Locale не должен превращаться во второй полноценный набор переводов приложения.
+
+Типичные кандидаты:
 
 ```text
-src/app/shared/locale/
+bootstrap
+loading
+critical startup states
 ```
 
-Сейчас shared-слой включает:
+Обычный экранный и предметный UI должен оставаться в Full Locale.
+
+### Разделение инфраструктуры и состояния
+
+Базовая работа со Static Locale должна быть независимой от состояния приложения:
 
 ```text
-locale.registry.ts
-locale.helper.ts
-locale.type.ts
+static locale infrastructure
+→ registry
+→ normalization
+→ fallback
+→ locale resolution
 ```
 
-Связка Static Locale с текущим состоянием языка находится на feature-уровне:
+Связь этой инфраструктуры с текущим состоянием языка относится к feature/app composition:
 
 ```text
-src/app/features/settings/composables/useStaticLocale.ts
+language state
++
+static locale infrastructure
+↓
+reactive static locale
 ```
 
-Разделение намеренное:
+Поэтому общий locale-слой не должен знать о конкретном store или feature, а переиспользуемая feature может связывать их между собой.
+
+Такая feature-композиция допустима как для обычного UI, так и для app-level orchestration, включая setup и bootstrap.
+
+## Full Locale
+
+Full Locale — основной контракт пользовательского интерфейса после завершения языковой инициализации.
+
+Источник Full Locale не является частью UI-контракта. Переводы могут приходить:
+
+- из bundled ресурсов;
+- из локального cache;
+- из remote API;
+- из комбинации нескольких источников.
+
+UI не должен зависеть от того, откуда физически получен перевод.
+
+Правильная граница:
 
 ```text
-shared/locale
-→ знает только registry, типы и правила resolution
-→ не знает о Pinia и languageStore
-
-useStaticLocale
-→ знает languageStore
-→ выбирает текущий language code
-→ использует shared/locale
-→ возвращает reactive Static Locale
+source / transport / cache
+↓
+language domain/store
+↓
+Locale contract
+↓
+UI
 ```
 
-Таким образом `shared/locale` остается независимым и переиспользуемым, а feature отвечает за композицию нескольких app-систем.
-
-Feature API может использоваться не только внутри route/view. Если feature предоставляет переиспользуемую связку состояния и shared-инфраструктуры, ее могут использовать app-level orchestrators, включая `setup` и `bootstrap`. Например, `prepareAppBootstrap` использует `useStaticLocale`, чтобы связать `languageStore` со Static Locale до загрузки Full Locale.
-
-Это маленький встроенный в bundle registry. Он:
-
-- поставляется вместе с кодом;
-- не требует HTTP;
-- не требует Filesystem cache;
-- не требует загруженного language manifest;
-- работает во время bootstrap;
-- имеет собственный default fallback;
-- не является вторым полноценным переводом всего приложения.
-
-Static Locale содержит только текст, необходимый до доступности Full Locale или при критической инфраструктурной загрузке.
-
-Пример текущей структуры:
+Неправильная граница:
 
 ```text
-STATIC_LOCALE_REGISTRY
-├── en
-│   └── loading
-└── ru
-    └── loading
+UI
+↓
+конкретный JSON / endpoint / filesystem path
 ```
 
-Сейчас туда относятся:
+## Locale Contract
+
+Full Locale должен иметь типизированный и предсказуемый контракт.
+
+Структура строится по смыслу текста, а не по месту его физического хранения.
+
+Основные категории:
+
+- общие тексты приложения;
+- тексты конкретных экранов и сценариев;
+- локализованные значения настроек;
+- presentation игровых сущностей;
+- presentation технических идентификаторов;
+- форматируемые текстовые шаблоны.
+
+Пример смыслового разделения:
 
 ```text
-loading.base
-loading.language
-```
-
-Обычные разделы приложения нельзя переносить в Static Locale:
-
-```text
+common
 views
-game
 settings
+game
 connectionTypes
 ```
 
-### Full Locale
+Это пример архитектурных категорий, а не требование навсегда сохранять текущий набор root-полей.
 
-Full Locale является основным языком интерфейса после успешного bootstrap.
+### Общие тексты
 
-Текущие bundled источники:
-
-```text
-public/lang/languages.json
-public/lang/en.json
-public/lang/ru.json
-```
-
-Текущий transport:
-
-```text
-ApiLanguage
-↓
-publicClient
-```
-
-В будущем источник manifest или locale-файлов может быть заменен или расширен remote API, но UI и domain не должны зависеть от конкретного transport. Сейчас production backend для локализации не описывается как реализованный.
-
-## Static Locale Resolution
-
-Static Locale выбирается по language code:
-
-```text
-language code
-↓
-normalize
-↓
-exact
-↓
-base
-↓
-STATIC_LOCALE_DEFAULT_LANGUAGE
-```
-
-Примеры:
-
-```text
-ru-RU → ru
-ru_BY → ru
-en-US → en
-de-DE → fallback en
-null → fallback en
-```
-
-`STATIC_LOCALE_DEFAULT_LANGUAGE = 'en'` является инфраструктурным fallback для embedded registry. Это не означает, что основной Locale приложения всегда должен быть английским.
-
-Если Full Locale существует для `de`, но static `de` отсутствует:
-
-```text
-bootstrap static text → fallback en
-после initialize → полноценный de UI
-```
-
-Это допустимо.
-
-## Full Locale Contract
-
-Текущая root-структура:
-
-```text
-Locale
-├── common
-├── views
-├── settings
-├── game
-└── connectionTypes
-```
-
-### common
-
-`common` содержит глобальные UI-тексты, которые не принадлежат одному screen.
-
-Пример:
-
-```text
-common.navigation.back
-```
-
-### views
-
-`views` содержит тексты конкретных route/view.
-
-Правило структуры:
-
-```text
-views
-→ view
-→ subview
-→ ui / modals
-```
-
-Примеры:
-
-```text
-views.settings.index.ui
-views.settings.index.modals.changeLanguage
-
-views.preGame.index.ui
-views.preGame.typeConnection.ui
-```
-
-### settings
-
-`settings` содержит локализованные значения глобальных настроек.
-
-Примеры:
-
-```text
-settings.theme.system
-settings.theme.light
-settings.theme.dark
-
-settings.scale.small
-settings.scale.default
-settings.scale.large
-```
-
-Важно различать название настройки и значение настройки:
-
-```text
-views.settings.index.ui.theme
-→ название строки UI: "App theme"
-
-settings.theme.dark
-→ значение настройки: "Dark"
-```
-
-### game
-
-`game` содержит локализованное presentation-представление игровых сущностей и format templates.
-
-Примеры:
-
-```text
-game.modes.DUEL.title
-game.modes.DUEL.description
-
-game.format.players
-game.format.rounds
-```
-
-### connectionTypes
-
-`connectionTypes` содержит локализованное presentation-представление технических connection keys:
-
-```text
-BLUETOOTH
-LAN
-ONLINE
-```
-
-Технические identifiers не должны содержать локализованный текст.
-
-## Domain Data И Presentation
-
-Domain/config data и translated presentation разделены.
+Глобальный текст, который используется в разных частях приложения, не должен дублироваться внутри отдельных экранов.
 
 Например:
 
 ```text
-public/game/gameModes.json
+navigation.back
+confirm
+cancel
 ```
 
-содержит технические данные режима:
+### Тексты экранов
+
+Текст, принадлежащий конкретному screen или subview, должен быть сгруппирован рядом с контекстом этого экрана.
+
+Рекомендуемая смысловая структура:
 
 ```text
-key
-img
+view
+→ subview
+→ ui / modals / states
+```
+
+### Значения настроек
+
+Нужно различать название настройки и локализованное значение настройки.
+
+Например:
+
+```text
+"Тема приложения"
+≠
+"Тёмная"
+```
+
+Первое относится к UI конкретного экрана, второе — к presentation значения настройки.
+
+### Presentation предметных сущностей
+
+Техническая сущность и её пользовательское представление должны быть разделены.
+
+Domain/config хранит:
+
+```text
+identifier
 options
-typeConnection
+technical metadata
+relations
 ```
 
-А:
-
-```text
-public/lang/<code>.json
-```
-
-содержит пользовательское представление:
+Locale хранит:
 
 ```text
 title
 description
+user-facing labels
 ```
 
-Не помещать русский или английский пользовательский текст в:
+Технический identifier не должен меняться вместе с языком интерфейса.
+
+## Выбор языка
+
+Система должна различать:
+
+- явный выбор пользователя;
+- язык, автоматически определённый из окружения;
+- fallback приложения.
+
+Приоритет обычно выглядит так:
 
 ```text
-ModelGameMode
-TYPE_CONNECTION
-game config
-domain models
-technical constants
+explicit user preference
+↓
+system/environment preference
+↓
+application default
 ```
 
-## Language Manifest
+Автоматически определённый язык не следует сохранять как явный выбор пользователя. Иначе последующее изменение языка системы перестанет иметь ожидаемый эффект.
 
-`public/lang/languages.json` описывает доступные Full Locale.
+### Нормализация language code
 
-`ModelLanguage` использует поля:
+Language code должен нормализоваться перед сравнением.
+
+Рекомендуемая стратегия:
 
 ```text
-key
-name
-img
-version
-isDefault
+exact locale
+↓
+base language
+↓
+fallback
 ```
 
-`key` - BCP-like language identifier, например `en` или `ru`. Он может использоваться для:
+Примеры:
 
 ```text
-Intl.PluralRules
-Intl.DisplayNames
-document.documentElement.lang
-locale lookup
+ru-RU → ru-RU → ru
+en_US → en-us → en
+unknown → application fallback
 ```
 
-`name` - native/fallback название языка, например `English` или `Русский`. Это не обязательно текст, который отображается пользователю при другом UI language.
-
-`img` - опциональное изображение или флаг.
-
-`version` - версия locale-файла для cache invalidation.
-
-`isDefault` - fallback основной системы языков. В manifest должен быть корректный default.
+Система не должна требовать отдельный перевод для каждого regional tag, если базовый язык уже поддерживается.
 
 ## Lifecycle
 
-### До Mount
+Языковая инициализация делится на две задачи.
 
-`setupLanguage` не загружает Full Locale. Он только определяет preferred language:
+### Pre-render preference resolution
 
-```text
-language-selected-code из Preferences
-↓ если отсутствует
-system language через ToolSystem
-↓
-preferredLanguageCode
-```
+До основного bootstrap можно определить предпочтительный language code из сохранённых пользовательских настроек или системного окружения.
 
-Автоматически определенный system language не должен записываться как explicit user choice.
+На этом этапе Full Locale ещё не обязан быть доступен.
 
-Storage key:
+### Full Locale initialization
 
-```text
-language-selected-code
-```
+До открытия обычного пользовательского UI должны быть определены:
 
-предназначен для явного выбора пользователя.
+- список или источник поддерживаемых языков;
+- итоговый активный язык;
+- валидный Full Locale;
+- состояние готовности языковой системы.
 
-### Bootstrap
-
-После mount bootstrap загружает основной язык:
+Инвариант:
 
 ```text
-load languages
-↓
-resolve preferred/default
-↓
-load locale
-↓
-apply currentLanguage
-↓
-apply locale
-↓
-isInitialized = true
-↓
-<html lang>
+language initialized
+→ active language exists
+→ Full Locale exists
 ```
 
-Invariant:
+Если приложение использует bootstrap gate, обычный route UI не должен рендериться раньше выполнения этого инварианта.
+
+Static Locale может использоваться для bootstrap UI до выполнения Full Locale initialization.
+
+## Fallback
+
+Fallback должен быть явным и многоуровневым.
+
+Для выбора языка:
 
 ```text
-isInitialized === true
+preferred language
+↓
+base language
+↓
+default supported language
 ```
 
-означает, что должны существовать:
+Для загрузки данных:
 
 ```text
-currentLanguage
-locale
-languages
+preferred source
+↓
+valid local fallback
+↓
+default locale source
 ```
 
-Не использовать `isInitialized = true` с `null` locale или `null` currentLanguage.
+Конкретная стратегия может меняться, но отказ одного источника не должен автоматически приводить к частично инициализированному UI.
 
-App bootstrap flow:
+Fallback Static Locale и fallback Full Locale являются независимыми понятиями. Static fallback не определяет default Full Locale приложения.
+
+## Cache И Versioning
+
+Locale можно кешировать, если это уменьшает лишние загрузки или обеспечивает offline/fallback сценарий.
+
+Cache должен считаться оптимизацией и источником восстановления, а не частью UI-контракта.
+
+Если используется versioning, общий принцип:
 
 ```text
-main.ts
+language metadata version
 ↓
-setupLanguage()
-↓
-preferredLanguageCode
-↓
-prepareAppBootstrap()
-↓
-getStaticLocale(preferredLanguageCode)
-↓
-loader title = staticLocale.loading.language
-↓
-mount App
-↓
-ProviderLoaderApp visible
-↓
-runAppBootstrap()
-↓
-languageStore.initializeLanguage()
-↓
-Full Locale available
-↓
-app-bootstrap/language = loaded
-↓
-RouterView
+cached locale version
+├── compatible → reuse
+└── incompatible → refresh
 ```
 
-Loader использует Static Locale, потому что Full Locale в этот момент еще загружается. Bootstrap UI не может зависеть от Full Locale.
+При изменении формата хранения или transport UI не должен требовать изменений, пока итоговый Locale contract остаётся прежним.
 
-## Storage И Cache
+Небольшие metadata и большие locale payload могут храниться разными способами.
 
-Preferences используются для небольших persistent metadata.
+## Runtime Language Switch
 
-Сейчас:
+Смена языка должна быть atomic-like операцией.
+
+Правильный порядок:
 
 ```text
-language-selected-code
-language-list
+resolve target language
+↓
+prepare valid target locale
+↓
+persist explicit preference
+↓
+activate language + locale
+↓
+update document/platform presentation
 ```
 
-`language-selected-code` хранит явный выбор пользователя.
+Нельзя сначала переключить active language, а потом пытаться получить его Locale.
 
-`language-list` хранит cached language manifest fallback.
+Если подготовка нового языка не удалась, текущий рабочий Locale должен оставаться активным.
 
-Locale cache хранится отдельно:
+Reactive consumers должны обновляться без полной перезагрузки приложения.
+
+## Названия Языков
+
+Название языка в picker желательно показывать на текущем языке интерфейса, если платформа предоставляет корректный internationalization API.
+
+Например:
 
 ```text
-lang/<code>.json
+English UI → Russian
+Russian UI → английский
 ```
 
-Формат:
+В качестве fallback можно использовать собственное display name языка из metadata.
 
-```text
-version
-locale
-```
-
-Flow:
-
-```text
-manifest language.version
-↓
-Filesystem cached locale
-↓
-version совпадает?
-├── да → cached locale
-└── нет → load source → save new version
-```
-
-## setLanguage
-
-`setLanguage(code)` работает как atomic-like flow:
-
-```text
-resolve supported language
-↓
-load target Locale
-↓
-persist explicit selected code
-↓
-preferredLanguageCode
-↓
-currentLanguage
-↓
-locale
-↓
-<html lang>
-```
-
-Главный принцип: не переключать текущий UI на target language до успешной загрузки target locale.
-
-После успешной смены reactive consumers должны обновиться без reload приложения.
-
-## Settings Language Names
-
-Список языков приходит из manifest. Отображаемое название языка желательно показывать на текущем языке UI:
-
-```text
-UI = en
-ru → Russian
-
-UI = ru
-en → английский
-```
-
-Для этого используется:
-
-```text
-Intl.DisplayNames
-```
-
-Fallback:
-
-```text
-ModelLanguage.name
-```
-
-Не хранить mapping всех названий языков внутри каждого locale-файла:
-
-```text
-settings.languages.en
-settings.languages.ru
-settings.languages.de
-```
-
-Это плохо масштабируется.
+Не следует хранить полный cross-language mapping названий всех поддерживаемых языков внутри каждого Locale: такая схема плохо масштабируется.
 
 ## Pluralization
 
-Для выбора plural category используется:
+Plural category должна определяться стандартными internationalization API платформы.
+
+Принцип:
 
 ```text
-Intl.PluralRules
+count
++
+language code
+↓
+plural category
+↓
+localized template
 ```
 
-Не использовать самописные правила конкретного языка.
+Locale хранит формы, а код выбирает подходящую форму.
 
-Locale хранит templates:
+Обязателен универсальный fallback `other`.
+
+Не следует писать отдельные plural rules вручную для каждого языка.
+
+## Форматируемый Текст
+
+Если текст содержит runtime-значения, Locale должен хранить шаблон, а не собранную строку.
+
+Например:
 
 ```text
-one
-few
-many
-other
+"{count} players"
+"{current} of {total}"
 ```
 
-Пример RU:
+Подстановка должна выполняться централизованными helper-ами или formatter-ами, когда форматирование становится сложнее простого случая.
 
-```json
-{
-  "one": "{count} игрок",
-  "few": "{count} игрока",
-  "many": "{count} игроков",
-  "other": "{count} игроков"
-}
-```
-
-Пример EN:
-
-```json
-{
-  "one": "{count} player",
-  "other": "{count} players"
-}
-```
-
-`other` является обязательным fallback.
-
-TypeScript не должен содержать специальных plural rules для русского, английского, немецкого, китайского и других языков.
+Не смешивать business calculation и правила перевода в одном месте без необходимости.
 
 ## Reusable Components
 
@@ -560,115 +392,148 @@ Reusable component не должен содержать ненулевой user-
 Плохо:
 
 ```ts
-text?: string
-
 withDefaults(..., {
-  text: 'Загрузка',
+  text: 'Loading',
 })
 ```
 
 Плохо:
 
-```ts
-accessibilityLabel: 'Слайдер'
-```
-
-Плохо для generic/reusable компонента:
-
 ```vue
-aria-label="Назад"
+aria-label="Back"
 ```
 
 Правильно:
 
 ```text
-локализованный caller
+localized caller
 ↓
-передаёт text/label/aria-label
+text / placeholder / aria label
 ↓
-reusable component только отображает
+reusable component
 ```
 
-Optional text prop допустим, если отсутствие текста является валидным состоянием.
+Это относится не только к видимому тексту, но и к:
 
-Декоративный `alt=""` не является нарушением этого правила.
+- placeholder;
+- aria-label;
+- accessibility description;
+- empty state;
+- error message;
+- tooltip;
+- alt, если изображение не декоративное.
 
-Пользовательские ARIA strings являются частью локализации так же, как visible UI text.
+Пустое значение допустимо, если отсутствие текста семантически корректно.
+
+## Domain И Localization
+
+Domain-модели не должны содержать переведённые пользовательские строки, если эти строки являются presentation.
+
+Хорошее разделение:
+
+```text
+domain
+→ stable identifiers and data
+
+localization
+→ user-facing representation
+```
+
+Это позволяет менять язык без пересоздания предметных сущностей и не связывает domain с конкретным набором переводов.
+
+## Setup, Bootstrap И Features
+
+Feature — не обязательно только экранный блок. Она может предоставлять переиспользуемую композицию нескольких app-систем.
+
+Поэтому setup и bootstrap могут использовать feature API, когда feature:
+
+- не привязана к конкретному route;
+- не содержит узкосценарный screen flow;
+- инкапсулирует полезную композицию store/shared/core;
+- имеет понятную самостоятельную ответственность.
+
+Направление зависимостей должно сохранять независимость базовых слоёв:
+
+```text
+setup / bootstrap
+↓
+reusable feature composition
+↓
+store + shared/core
+```
+
+При этом shared-инфраструктура не должна начинать зависеть от feature или store только ради удобства конкретного startup flow.
 
 ## Добавление Нового Текста
 
-Checklist:
+При добавлении пользовательского текста нужно:
 
-1. Определить правильный раздел:
-   - `common`;
-   - `views`;
-   - `settings`;
-   - `game`;
-   - `connectionTypes`.
-2. Обновить TypeScript contract в:
-   ```text
-   src/app/shared/types/locale
-   ```
-3. Добавить ключ во все поддерживаемые Full Locale-файлы.
-4. Проверить одинаковую structural schema.
-5. Обновить consumer.
-6. Убрать старый hardcoded text.
-7. Проверить runtime language switch.
-8. Выполнить lint/build.
+1. определить его смысловую область;
+2. обновить типизированный Locale contract;
+3. добавить значение во все поддерживаемые Full Locale;
+4. передать перевод до конечного UI consumer;
+5. удалить старый hardcoded user-facing text;
+6. проверить runtime language switch;
+7. проверить accessibility text;
+8. выполнить lint/build и профильные тесты.
 
-Не добавлять ключ только в один язык.
+Нельзя добавлять обязательный ключ только в один язык.
 
-## Добавление Нового Full Locale
+## Добавление Нового Языка
 
-Checklist для `de`:
+Новый Full Locale должен:
 
-1. Добавить запись в:
-   ```text
-   public/lang/languages.json
-   ```
-2. Добавить:
-   ```text
-   public/lang/de.json
-   ```
-3. Locale должен полностью соответствовать `Locale` contract.
-4. Добавить image при необходимости.
-5. Указать корректный `version`.
-6. Проверить `Intl.PluralRules('de')`.
-7. Проверить `Intl.DisplayNames`.
-8. Проверить initial system-language resolution.
-9. Проверить explicit selection.
-10. Проверить runtime switch.
-11. Проверить filesystem cache/version.
-12. Проверить `<html lang="de">`.
+- быть зарегистрирован в поддерживаемых языках;
+- полностью удовлетворять Locale contract;
+- иметь корректный language code;
+- иметь fallback display name;
+- поддерживать используемые formatter/internationalization сценарии;
+- корректно участвовать в initial resolution;
+- корректно переключаться runtime;
+- корректно работать с cache/versioning, если они используются.
 
-Добавлять язык в `STATIC_LOCALE_REGISTRY` не обязательно.
+Наличие Full Locale не означает, что для этого языка обязательно нужен отдельный Static Locale.
 
-## Добавление Static Locale
+## Расширение Static Locale
 
-Checklist:
+Новый Static Locale нужен только тогда, когда есть реальная необходимость локализовать инфраструктурный UI до готовности Full Locale.
 
-1. Добавить ключ в:
-   ```text
-   STATIC_LOCALE_REGISTRY
-   ```
-2. Реализовать все поля `iStaticLocale`.
-3. Не добавлять туда обычный UI.
-4. Проверить exact/base resolution.
-5. Проверить bootstrap без Full Locale.
+При расширении Static Locale нужно:
+
+- реализовать полный Static Locale contract;
+- сохранить default fallback;
+- не переносить туда обычный экранный UI;
+- проверить exact/base language resolution;
+- проверить startup без доступного Full Locale.
 
 ## Антипаттерны
 
 Нельзя:
 
-- хранить пользовательский текст в domain models;
-- хранить переводы в technical constants;
-- делать hardcoded Russian/English text в reusable components;
-- дублировать Full Locale в static registry;
-- использовать static registry для обычных screens;
+- хранить переводы в domain models и technical constants;
+- привязывать UI к конкретному transport или месту хранения переводов;
+- дублировать Full Locale внутри Static Locale;
+- использовать Static Locale как основной источник текстов после bootstrap;
 - сохранять system-detected language как explicit user choice;
-- реализовывать plural rules вручную;
-- хранить список названий всех языков в каждом locale;
-- переключать current locale до успешной загрузки target locale;
-- создавать silent `?? ''` для route UI, если bootstrap гарантирует initialized Locale;
-- переносить store-зависимую композицию Static Locale в `shared/locale`: shared-слой должен оставаться независимым от Pinia и feature-level состояния;
-- считать зависимость `setup` или `bootstrap` от переиспользуемого feature API архитектурной ошибкой сама по себе. Запрещена не такая зависимость, а втягивание в startup экранной или узкосценарной логики.
+- активировать язык до успешной подготовки его Locale;
+- реализовывать language-specific plural rules вручную;
+- дублировать полный список названий языков в каждом Locale;
+- оставлять hardcoded user-facing text в reusable components;
+- маскировать нарушение Locale contract через silent fallback вроде пустой строки;
+- переносить store-зависимую композицию в shared-инфраструктуру;
+- считать сам факт зависимости setup/bootstrap от переиспользуемой feature архитектурной ошибкой.
+
+## Ориентиры В Проекте
+
+Для поиска реализации используются следующие области:
+
+```text
+src/app/shared/locale
+src/app/shared/types/locale
+src/app/stores/language
+src/app/domain/lang
+src/app/features/settings
+public/lang
+```
+
+Эти пути являются навигационными ориентирами, а не описанием обязательной внутренней реализации.
