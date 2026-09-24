@@ -1,18 +1,6 @@
 import { publicClient } from '@/app/shared/api';
-import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
-import type { tOptionGameMode } from '@/game/types/gameMode.types';
-import type { tKeyGameMode } from '../constants/gameMode.const';
 import { ModelGameMode } from '../models/GameMode.model';
-
-interface iResponseGameMode {
-  key: tKeyGameMode
-  img: {
-    dark: string
-    light: string
-  }
-  options: tOptionGameMode
-  typeConnection: tKeyTypeConnection[]
-}
+import type { iResponseGameMode } from '../type/api/res';
 
 export class ApiGame {
   async getModes(): Promise<ModelGameMode[]> {
