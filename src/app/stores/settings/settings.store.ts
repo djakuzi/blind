@@ -21,7 +21,6 @@ export const useSettingsStore = defineStore('settings', {
   actions: {
     loadAppScaleMode: createLoadAppScaleMode(),
     loadAppThemeMode: createLoadAppThemeMode(),
-
     setAppScaleMode: createSetAppScaleMode(),
     setAppThemeMode: createSetAppThemeMode(),
     setSoundEnabled: createSetSoundEnabled(),
