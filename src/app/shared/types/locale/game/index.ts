@@ -1,5 +1,3 @@
-import type { tKeyGameMode } from '@/app/domain/game/constants/gameMode.const';
-
 export type tLocalePluralCategory =
   | 'zero'
   | 'one'
@@ -20,7 +18,7 @@ interface iLocaleGameMode {
 }
 
 export interface LocaleGame {
-  modes: Record<tKeyGameMode, iLocaleGameMode>
+  modes: Record<string, iLocaleGameMode>
   format: {
     players: tLocalePluralForms
     rounds: tLocalePluralForms

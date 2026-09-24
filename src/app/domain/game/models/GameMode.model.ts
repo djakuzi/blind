@@ -1,15 +1,15 @@
-import type { DataGameMode, tKeyGameMode } from '../constants/gameMode.const';
+import type { iApiGameModeData } from '../type/api/common';
 
 export interface iPayloadModelGameMode
-  extends DataGameMode {
-  key: tKeyGameMode
+  extends iApiGameModeData {
+  key: string
 }
 
 export class ModelGameMode {
-  readonly key: tKeyGameMode;
-  readonly img: DataGameMode['img'];
-  readonly options: DataGameMode['options'];
-  readonly typeConnection: DataGameMode['typeConnection'];
+  readonly key: string;
+  readonly img: iApiGameModeData['img'];
+  readonly options: iApiGameModeData['options'];
+  readonly typeConnection: iApiGameModeData['typeConnection'];
 
   constructor(
     payload: iPayloadModelGameMode,
