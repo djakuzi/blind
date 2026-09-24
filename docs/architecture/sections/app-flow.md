@@ -1,279 +1,460 @@
 # Архитектура и app-flow
 
-Раздел описывает устройство `src/app`: bootstrap приложения, структуру app-слоев, правила зависимостей между ними и поток рендера от точки входа до экрана.
+Раздел описывает назначение слоёв внутри `src/app`, их зоны ответственности и допустимые зависимости.
 
-## Назначение папок в `src/app`
+Документация фиксирует архитектурные принципы, а не текущую последовательность импортов или конкретные имена файлов. Внутренняя реализация может меняться, если сохраняются границы слоёв и общий lifecycle приложения.
 
-### `setup`
+## Setup
 
-Слой легкой предварительной подготовки отдельных app-систем.
+`setup` — слой лёгкой предварительной подготовки app-систем до основного пользовательского рендера.
 
-Здесь должна находиться логика, которая запускается один раз при старте приложения:
+Типичные задачи setup:
 
-- подготовка конкретной app-системы до первого рендера;
-- чтение легких пользовательских или системных предпочтений;
-- настройка окружения, которое нужно до mount.
+- чтение пользовательских предпочтений;
+- чтение системных настроек;
+- подготовка platform-specific окружения;
+- начальная настройка темы, масштаба, языка или viewport;
+- подготовка состояния, которое должно существовать до mount или до bootstrap initialization.
 
-`setup` не отвечает за общую orchestration запуска приложения, регистрацию bootstrap resources или определение app readiness. Такая логика должна жить в `bootstrap`.
+Setup не должен:
 
-Например, `setupLanguage` определяет только preferred language. Реальная загрузка language manifest, locale-файла, проверка cache/version и применение итогового языка выполняются позже через `languageStore.initializeLanguage` во время app bootstrap.
+- определять глобальную готовность приложения;
+- управлять всем startup flow;
+- хранить screen-specific сценарии;
+- подменять bootstrap orchestration.
 
-Подробные правила локализации, разделение Static Locale и Full Locale, cache/fallback flow и language switch описаны в [локализации интерфейса](../../interface/sections/localization.md).
+Setup может использовать переиспользуемый feature API, если feature предоставляет самостоятельную app-level композицию и не привязана к конкретному экрану.
 
-`setup` может использовать переиспользуемый API из `features`, если feature инкапсулирует композицию store/shared/core и не привязана к конкретному экрану. Например, `setupTheme` и `setupScale` используют composables из `features/settings`.
+## Bootstrap
 
-При этом в самом `setup` не должна жить логика конкретного экрана, узкого пользовательского сценария или общего bootstrap flow.
+`bootstrap` — app-level orchestration запуска приложения.
 
-### `bootstrap`
+Его задача — координировать системы, которые должны стать готовыми до открытия обычного route UI.
 
-App-level слой запуска приложения.
+Bootstrap может:
 
-Здесь находится логика, которая связывает отдельные setup-системы, router, loader и lifecycle приложения:
+- регистрировать обязательные startup resources;
+- запускать async initialization;
+- связывать startup-задачи с глобальным loader/error state;
+- определять app readiness;
+- использовать Static Locale для UI, который показывается до Full Locale;
+- использовать переиспользуемые feature API.
 
-- `bootstrap.ts` - orchestration запуска приложения;
-- `bootstrap.const.ts` - ключи bootstrap scope и обязательных startup resources;
-- `composables/useAppBootstrap.ts` - состояние готовности приложения для UI.
+Bootstrap не должен:
 
-`bootstrap` отвечает за:
+- содержать бизнес-логику конкретного экрана;
+- превращаться в место для всех initialization-сценариев без разделения ответственности;
+- зависеть от деталей presentation конкретного route.
 
-- регистрацию обязательных startup resources до mount;
-- запуск реальной async initialization после mount;
-- связь загрузочных задач с `stores/loader`;
-- определение момента, когда приложение готово отдать управление `RouterView`.
-
-`bootstrap` может использовать переиспользуемый API из `features`, если feature предоставляет готовую композицию app-state и более базовых слоев. Это допустимая зависимость app-level orchestration → feature. Например, language bootstrap использует `useStaticLocale`, который связывает `languageStore` с независимой инфраструктурой `shared/locale`.
-
-Нежелательно тянуть в bootstrap feature API, который реализует экранный UI или узкий пользовательский сценарий: bootstrap должен зависеть только от той части feature, которая действительно является переиспользуемой app-level связкой.
-
-На текущем этапе `app-bootstrap` содержит один реальный ресурс: `language`. Fake resources ради progress добавлять не нужно.
-
-### `router`
-
-Слой маршрутизации приложения.
-
-Краткий обзор:
-
-- `index.ts` - создание корневого router instance;
-- `sections/*` - отдельные секции маршрутов (`menu`, `game`, `settings`);
-- `guard/*` - route guards и связанная инфраструктура навигации;
-- `constants/route.const.ts` - имена и ключи маршрутов;
-- `types/vue-router.d.ts` - расширения типов `vue-router`.
-
-`router` отвечает только за навигацию, структуру маршрутов и правила переходов. В нем не должно быть логики конкретной feature или тяжелой предметной логики.
-
-### `layouts`
-
-Слой app-layout'ов и общей каркасной разметки.
-
-- `LayoutRoot.vue` - корневая layout-обертка для дерева маршрутов.
-- `LayoutBase.vue` - базовая layout-обертка для экранов приложения.
-- `layouts/components/*` - локальные layout-компоненты и контейнеры.
-- `layouts/composables/*` - composable-логика, относящаяся именно к layout-слою.
-- `layouts/constants/*` и `layouts/types/*` - служебные константы и типы layout-уровня.
-
-`layouts` управляет каркасом экрана, обертками, контейнерами и общей структурой рендера. Этот слой не должен знать детали предметного сценария конкретной feature.
-
-### `providers`
-
-Глобальные app-level провайдеры интерфейса.
-
-Если провайдер лежит в `app/providers`, это означает, что он создается для уровня всего приложения, а не для отдельного экрана или feature.
-
-Такие провайдеры:
-
-- могут использоваться из любой точки приложения;
-- предоставляют глобальный UI-механизм;
-- не должны содержать предметную бизнес-логику;
-- не должны становиться местом для сценариев конкретной feature.
-
-### `overlay`
-
-Слой глобальных overlay-механизмов приложения.
-
-К примеру:
-
-- `overlay/loader` - визуальный глобальный loader mechanism;
-- `bottomSheet`
-- `modal`
-- `toast`
-
-Каждый overlay-контур может содержать:
-
-- `composables` - API для вызова overlay;
-- `widget` - UI-часть overlay.
-
-`stores/loader` хранит состояние loader scopes/resources. `bootstrap` регистрирует реальные startup resources в loader store, а `ProviderLoaderApp` подключает loader overlay к корневому `App`.
-
-`overlay` описывает глобальные механизмы отображения поверх основного интерфейса. Это app-level инфраструктура, а не слой бизнес-логики.
-
-### `view`
-
-Роутовые экраны верхнего уровня.
-
-К примеру:
-
-- `ViewMenu.vue`
-- `ViewGame.vue`
-- `ViewSettings.vue`
-
-`view` - это точка входа в экран, которую открывает роутер.
-
-Экран может:
-
-- собирать layout;
-- подключать `features`;
-- связывать экран с app-level состоянием;
-- передавать данные дальше в UI.
-
-Экран не должен разрастаться в слой глобальной бизнес-логики и не должен дублировать ответственность feature-модулей.
-
-### `features`
-
-Слой пользовательских сценариев и составных экранных блоков.
-
-Feature-модуль объединяет:
-
-- UI конкретного сценария;
-- composable-логику сценария;
-- связь между экраном и store;
-- локальную orchestration-логику.
-
-Feature должна быть изолированной по ответственности и не должна напрямую зависеть от другой feature.
-
-### `stores`
-
-App-level состояние, доступное на уровне экранов и общего интерфейса.
-
-К примеру в `app/stores` лежат store-модули:
-
-- `settings`
-- `user`
-- `game`
-
-Внутри store-модулей допускаются:
-
-- state;
-- getters/computed state;
-- actions;
-- локальные типы состояния;
-- вспомогательная store-логика.
-
-Store хранит состояние и операции над ним, но не должен становиться заменой feature-слою.
-
-Store желательно использовать через `features`, а не дергать напрямую из любых точек приложения. Прямое использование store допустимо для app-level задач, bootstrap-логики и тонких экранных связок, где отдельная feature не нужна.
-
-### `domain`
-
-Слой предметных моделей, API и доменной логики.
-
-Доменные модули должны быть сгруппированы по областям:
-
-- `domain/game`
-- `domain/settings`
-- `domain/user`
-
-Внутри них могут лежать:
-
-- `api`
-- `models`
-
-`domain` должен описывать предметные сущности и работу с данными, а не рендер интерфейса.
-
-### `shared`
-
-Слой общих переиспользуемых примитивов.
-
-Здесь могут лежать:
-
-- общие компоненты;
-- composables;
-- constants;
-- lib и вспомогательные утилиты.
-
-`shared` используется как общий набор независимых примитивов. В нем не должна появляться логика конкретной feature, view или layout-сценария.
-
-### `styles`
-
-Глобальные стили приложения.
-
-Здесь находятся:
-
-- `index.css` - точка входа для app-стилей;
-- `core/*` - reset, base и fonts;
-- `tokens/*` - глобальные дизайн-токены приложения;
-- `contracts/*` - контрактные стилевые сущности;
-- `utilities/*` - утилитарные стилевые правила.
-
-`styles` - глобальный слой визуальной системы. Здесь не должна жить логика экранов или feature-модулей.
-
-## Правила импортов и зависимостей
-
-### Общий принцип
-
-Импорт должен идти из более прикладного слоя в более базовый или инфраструктурный. Слой не должен зависеть от соседа того же уровня, если это создает прямую связанность между сценариями.
-
-### Допустимые зависимости
-
-1. `main.ts` может подключать `app/router`, `app/bootstrap`, `app/providers`, `app/styles`, `Pinia` и app-level setup.
-2. `router` может подключать route sections, route constants, guards и роутовые `view`.
-3. `view` может подключать `features`, `layouts`, `shared` и при необходимости `stores`.
-4. `features` могут подключать `stores`, `domain`, `shared` и app-level UI-примитивы.
-5. `setup` и `bootstrap` могут использовать переиспользуемый feature API для композиции app-level состояния и инфраструктуры.
-6. `stores` могут подключать `domain`, собственные `actions`, типы и вспомогательные утилиты.
-7. `layouts` могут подключать свои локальные компоненты, composables, types и общие UI-примитивы.
-8. `providers` и `overlay` могут использовать shared/app-level/features инфраструктуру для реализации глобального UI-механизма.
-
-### Запрещенные и нежелательные связи
-
-1. `features` нельзя импортировать в другие `features`.
-2. `layouts` не должны импортировать feature-модули.
-3. `router` не должен импортировать feature-модули напрямую.
-4. `shared` не должен импортировать `features`, `view`, `router` или `layouts`.
-5. `domain` не должен зависеть от UI-слоев. Может только делать импорт из shared.
-6. `stores` нежелательно использовать хаотично напрямую из любых мест, если та же связка может быть оформлена через feature.
-
-## App-flow
-
-Поток управления в `app`-слое на старте приложения:
-
-1. `src/main.ts` создает Vue-приложение.
-2. В `main.ts` подключаются app-level плагины и инфраструктура, например `Pinia`.
-3. `main.ts` выполняет pre-render setup: `setupView`, `setupLanguage`, `setupScale`, `setupTheme`.
-4. `prepareAppBootstrap` регистрирует обязательные startup resources, например `app-bootstrap/language`, и использует Static Locale для bootstrap-текста до загрузки Full Locale.
-5. `main.ts` подключает router из `src/app/router` и ожидает `router.isReady()`.
-6. `main.ts` монтирует `App`.
-7. `ProviderLoaderApp` сразу отображает loader overlay, если в loader store есть незавершенные resources.
-8. `runAppBootstrap` запускает реальную async initialization, например `languageStore.initializeLanguage`.
-9. После завершения startup resources scope `app-bootstrap` становится loaded.
-10. `useAppBootstrap` считает приложение готовым по состоянию `app-bootstrap`, и `App.vue` открывает `RouterView`.
-
-Коротко по language flow:
+Общий принцип:
 
 ```text
-setupLanguage
-→ preferred language only
-
-Static Locale
-→ bootstrap text before Full Locale
-
-bootstrap
-→ initialize Full Locale
-
-RouterView
-→ только после language resource completion
+pre-render setup
+↓
+app bootstrap
+↓
+required systems ready
+↓
+route UI
 ```
 
-Минимальная встроенная locale infrastructure находится в `src/app/shared/locale`. Обычный пользовательский UI после bootstrap должен использовать Full Locale.
+Если система не является обязательной для первого пользовательского экрана, её не обязательно включать в главный bootstrap gate.
 
-После готовности приложения router определяет текущий маршрут и выбирает нужную route section. Route section подключает соответствующий `layout` и роутовый `view`, `LayoutRoot.vue` и `LayoutBase.vue` собирают каркас приложения и экрана, а `view` подключает нужные `features`.
+## Router
 
-## Базовые правила
+`router` отвечает за навигацию и структуру route tree.
 
-1. Все, что относится к запуску и каркасу приложения, должно жить в `app`.
-2. `view` остается точкой сборки экрана, а не местом для всей логики сценария.
-3. Feature не импортирует другую feature.
-4. Store предпочтительно используется через feature-слой, а не напрямую из произвольных мест.
-5. Глобальные UI-механизмы должны жить в `app/providers` и `app/overlay`.
-6. `router` и `layouts` не должны содержать тяжелую предметную логику.
-7. `shared` должен оставаться независимым переиспользуемым слоем.
-8. Готовность приложения должна определяться состоянием bootstrap scope, а не общим `loaderStore.isLoaded`, потому что в приложении могут быть другие loader scopes после старта.
+Его ответственность:
+
+- route definitions;
+- route names и metadata;
+- guards;
+- redirects;
+- lazy loading route views.
+
+Router не должен содержать feature business logic.
+
+Route может выбирать view и передавать metadata, но сценарий экрана должен жить ниже — во view/features.
+
+## Layouts
+
+`layouts` отвечают за общий каркас интерфейса.
+
+Сюда относятся:
+
+- общая структура экрана;
+- header/footer/background;
+- safe-area composition;
+- общие transitions;
+- placement route content.
+
+Layout должен быть максимально нейтрален к предметному сценарию.
+
+Он может использовать общие app-state или shared UI, но не должен знать детали конкретной feature.
+
+## Providers
+
+`providers` — глобальные точки подключения app-level UI или context mechanisms.
+
+Provider нужен, когда механизм должен существовать независимо от текущего route.
+
+Типичные примеры:
+
+- global loader;
+- toast;
+- dialog;
+- bottom sheet;
+- global context bridge.
+
+Provider не должен становиться контейнером feature-specific логики.
+
+## Overlay
+
+`overlay` содержит глобальные механизмы отображения поверх основного интерфейса.
+
+Overlay-система может включать:
+
+- store/state;
+- composable API;
+- provider;
+- widget/presentation.
+
+Overlay описывает механизм, а не конкретный бизнес-сценарий его использования.
+
+Например, loader может знать про scopes/resources/progress, но не обязан знать, что именно означает каждый startup resource.
+
+## Views
+
+`view` — route-level точка сборки экрана.
+
+View может:
+
+- подключать layout;
+- подключать одну или несколько features;
+- связывать route params/meta с feature API;
+- выполнять тонкую composition-логику.
+
+View не должен:
+
+- содержать основную бизнес-логику сценария;
+- дублировать store actions;
+- превращаться в большую монолитную feature.
+
+Правильная идея:
+
+```text
+route
+↓
+view
+↓
+feature composition
+↓
+shared UI / domain / stores
+```
+
+## Features
+
+`features` — слой законченных переиспользуемых app-сценариев и композиций.
+
+Feature может содержать:
+
+- UI конкретного сценария;
+- composables;
+- связку между store и shared/core;
+- локальную orchestration;
+- подготовку presentation data;
+- переиспользуемый API без собственного route.
+
+Feature не обязана быть только экранным блоком.
+
+Например, feature может предоставлять композицию:
+
+```text
+store
++
+shared infrastructure
+↓
+reactive app-level API
+```
+
+Такой API допустимо использовать из setup, bootstrap, provider или view.
+
+Feature должна иметь самостоятельную ответственность и по возможности не зависеть от другой feature напрямую.
+
+## Stores
+
+`stores` отвечают за app-level состояние и операции над ним.
+
+Store может содержать:
+
+- state;
+- getters;
+- actions;
+- state-related helpers;
+- persistence orchestration, если она является частью состояния;
+- связь с domain/API.
+
+Store не должен:
+
+- хранить presentation конкретного экрана;
+- заменять feature;
+- содержать UI-specific branching.
+
+Store желательно потреблять через feature, если feature добавляет смысловую композицию. Прямое использование store допустимо на app-level, в bootstrap и в тонких view/layout связках, если дополнительная feature не даёт пользы.
+
+## Domain
+
+`domain` описывает предметные сущности и операции с данными.
+
+Сюда относятся:
+
+- models;
+- API abstractions;
+- domain-specific data types;
+- mapping raw data в предметные сущности.
+
+Domain не должен зависеть от UI-слоёв.
+
+Presentation, переводы и route-specific состояние не относятся к domain.
+
+## Shared
+
+`shared` — слой независимых переиспользуемых примитивов.
+
+Сюда могут входить:
+
+- UI atoms/primitives;
+- generic widgets;
+- utilities;
+- helpers;
+- contracts;
+- generic composables;
+- infrastructure primitives.
+
+Главное правило shared:
+
+```text
+shared
+→ ничего не знает о конкретном feature/view/route
+```
+
+Shared может использовать более базовые core/platform abstractions, но не должен импортировать app-specific сценарии ради удобства одного consumer.
+
+## Styles
+
+`styles` содержит глобальную визуальную систему:
+
+- tokens;
+- contracts;
+- base styles;
+- utilities;
+- typography;
+- spacing;
+- colors;
+- responsive primitives.
+
+Styles описывают визуальные правила и не должны зависеть от feature logic.
+
+## Допустимые Зависимости
+
+Общий принцип: более прикладной слой может зависеть от более базового или от переиспользуемого API соседнего app-слоя, если это не создаёт циклическую или узкосценарную связанность.
+
+Типичные допустимые связи:
+
+```text
+main
+→ setup / bootstrap / router / providers
+
+setup
+→ feature / store / shared / core
+
+bootstrap
+→ feature / store / overlay / shared
+
+router
+→ view
+
+view
+→ feature / layout / shared / store
+
+feature
+→ store / domain / shared / core
+
+store
+→ domain / shared / core
+
+provider
+→ overlay / feature / store / shared
+
+layout
+→ shared / store / app-level composables
+
+shared
+→ core
+```
+
+Это не строгая compile-time матрица импортов, а ориентир по направлению ответственности.
+
+## Нежелательные Зависимости
+
+Следует избегать:
+
+- feature → feature, если один сценарий начинает напрямую владеть другим;
+- shared → feature/view/router/layout;
+- domain → UI;
+- router → business feature logic;
+- layout → узкосценарная feature logic;
+- store → конкретный component/view;
+- setup/bootstrap → screen-specific presentation.
+
+Если связь нужна только одному конкретному экрану, её место обычно во view или feature, а не в глобальной инфраструктуре.
+
+## App Lifecycle
+
+Общий lifecycle приложения:
+
+```text
+create application
+↓
+install app-level infrastructure
+↓
+pre-render setup
+↓
+prepare bootstrap state
+↓
+mount root UI
+↓
+run required async initialization
+↓
+mark required systems ready
+↓
+open normal route UI
+```
+
+Конкретное количество bootstrap resources, их имена и порядок могут меняться.
+
+Главный инвариант:
+
+```text
+route UI opens
+→ required app systems are ready
+```
+
+Если во время bootstrap нужен пользовательский текст, он не должен зависеть от системы, которая сама ещё находится в процессе initialization.
+
+## App Readiness
+
+Готовность приложения должна определяться отдельным bootstrap state/scope, а не общим состоянием всех loader-задач.
+
+Причина:
+
+после запуска приложения могут появляться другие loader scopes, которые не должны снова переводить всё приложение в состояние "not ready".
+
+Правильно:
+
+```text
+bootstrap readiness
+≠
+global loader activity
+```
+
+Global loader отвечает за отображение текущих loading tasks.
+
+Bootstrap readiness отвечает только за то, можно ли открыть основной интерфейс.
+
+## Error Handling
+
+Startup-системы должны различать:
+
+- recoverable failure;
+- fallback;
+- critical initialization failure.
+
+Если существует fallback, система должна сначала попытаться сохранить рабочее состояние.
+
+Critical failure не должен приводить к тихому частично инициализированному приложению.
+
+Bootstrap может использовать глобальный error/overlay механизм, но конкретная стратегия обработки зависит от системы.
+
+## Setup И Bootstrap: Разница
+
+Коротко:
+
+```text
+setup
+→ подготовить отдельную систему
+
+bootstrap
+→ скоординировать обязательные системы
+```
+
+Setup не определяет готовность приложения.
+
+Bootstrap не обязан знать детали внутренней реализации каждой системы.
+
+Система должна по возможности предоставлять bootstrap готовую операцию высокого уровня:
+
+```text
+initialize()
+prepare()
+load()
+```
+
+вместо того чтобы заставлять bootstrap собирать её внутренний алгоритм вручную.
+
+## Feature Как Переиспользуемая Композиция
+
+Feature может использоваться выше route-level, если она представляет самостоятельную переиспользуемую композицию.
+
+Хороший пример абстракции:
+
+```text
+feature
+→ связывает store + shared/core
+→ возвращает app-level API
+```
+
+Плохой пример зависимости:
+
+```text
+bootstrap
+→ feature конкретного screen
+→ component state
+→ modal flow
+```
+
+Поэтому критерий — не название слоя, а ответственность API.
+
+## Базовые Правила
+
+1. App-level startup orchestration живёт в bootstrap.
+2. Лёгкая подготовка отдельных систем живёт в setup.
+3. View остаётся точкой сборки route screen.
+4. Основной сценарий и композиция состояния оформляются как feature.
+5. Shared остаётся независимым от app-specific сценариев.
+6. Domain не зависит от UI.
+7. Store хранит состояние, но не presentation конкретного экрана.
+8. Providers и overlays реализуют глобальные механизмы, а не предметные сценарии.
+9. Bootstrap readiness отделён от обычной loader activity.
+10. Допустимость зависимости определяется ответственностью API, а не только названием папки.
+
+## Ориентиры В Проекте
+
+Основные app-области:
+
+```text
+src/app/setup
+src/app/bootstrap
+src/app/router
+src/app/layouts
+src/app/providers
+src/app/overlay
+src/app/view
+src/app/features
+src/app/stores
+src/app/domain
+src/app/shared
+src/app/styles
+```
+
+Эти пути нужны для навигации по проекту и не являются описанием обязательной внутренней реализации.
