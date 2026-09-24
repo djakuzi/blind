@@ -14,6 +14,7 @@ export interface PropsAppModal {
   maxWidth?: tStyleSizeValue
   maxHeight?: tStyleSizeValue
   layer?: tLayerValue
+  backdropColor?: tColorValue
   backgroundColor?: tColorValue
   borderColor?: tColorValue
   borderWidth?: tBorderWidthValue
@@ -38,6 +39,7 @@ const props = withDefaults(defineProps<PropsAppModal>(), {
   maxWidth: '100rem',
   maxHeight: '100%',
   layer: 'modal',
+  backdropColor: 'rgba(0, 0, 0, 0.6)',
   backgroundColor: 'surface-elevated',
   borderColor: 'border-contrast',
   borderWidth: 'thick',
@@ -75,6 +77,7 @@ const modalStyle = computed(() => ({
   '--cp-modal-width': LibStyle.toSizeValue(props.width),
   '--cp-modal-max-width': LibStyle.toSizeValue(props.maxWidth),
   '--cp-modal-max-height': LibStyle.toSizeValue(props.maxHeight),
+  '--cp-modal-backdrop-color': resolveColorValue(props.backdropColor),
   '--cp-modal-background-color': resolveColorValue(props.backgroundColor),
   '--cp-modal-border-color': resolveColorValue(props.borderColor),
   '--cp-modal-border-width': resolveBorderWidthValue(props.borderWidth),
@@ -105,6 +108,8 @@ function handleKeydown(event: KeyboardEvent) {
     return;
   }
 
+  event.preventDefault();
+  event.stopPropagation();
   closeModal();
 }
 
@@ -137,9 +142,17 @@ function removeDocumentListeners() {
 }
 
 async function handleOpen() {
-  elementToRestoreFocus.value = document.activeElement instanceof HTMLElement
-    ? document.activeElement
-    : null;
+  const activeElement = document.activeElement;
+  const shouldSaveFocus = activeElement instanceof HTMLElement
+    && !modalPanelRef.value?.contains(activeElement);
+
+  if (shouldSaveFocus) {
+    elementToRestoreFocus.value = activeElement;
+  }
+
+  if (!elementToRestoreFocus.value && activeElement instanceof HTMLElement) {
+    elementToRestoreFocus.value = activeElement;
+  }
 
   lockBodyScroll();
   addDocumentListeners();
@@ -148,15 +161,25 @@ async function handleOpen() {
   modalPanelRef.value?.focus({ preventScroll: true });
 }
 
-function handleClose() {
-  removeDocumentListeners();
-  unlockBodyScroll();
+function restoreFocus() {
+  if (props.modelValue) {
+    return;
+  }
 
   if (elementToRestoreFocus.value?.isConnected) {
     elementToRestoreFocus.value.focus({ preventScroll: true });
   }
 
   elementToRestoreFocus.value = null;
+}
+
+function handleAfterLeave() {
+  restoreFocus();
+}
+
+function handleClose() {
+  removeDocumentListeners();
+  unlockBodyScroll();
 }
 
 watch(
@@ -180,7 +203,10 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport to="body">
-    <Transition name="app-modal">
+    <Transition
+      name="app-modal"
+      @after-leave="handleAfterLeave"
+    >
       <div
         v-if="modelValue"
         class="app-modal"
@@ -237,7 +263,7 @@ onBeforeUnmount(() => {
     var(--app-safe-area-bottom)
     var(--app-safe-area-left);
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--cp-modal-backdrop-color);
 }
 
 .app-modal__panel {
