@@ -1,22 +1,22 @@
-import type { tApiErrorType } from './api.type';
+import type { tHttpErrorType } from './type';
 
-export interface iPayloadApiError {
+export interface iPayloadHttpError {
   message: string
-  type: tApiErrorType
+  type: tHttpErrorType
   status: number | null
   url: string
   data?: unknown
   cause?: unknown
 }
 
-export class ApiError extends Error {
-  readonly type: tApiErrorType;
+export class HttpError extends Error {
+  readonly type: tHttpErrorType;
   readonly status: number | null;
   readonly url: string;
   readonly data: unknown;
 
   constructor(
-    payload: iPayloadApiError,
+    payload: iPayloadHttpError,
   ) {
     super(
       payload.message,
@@ -25,7 +25,7 @@ export class ApiError extends Error {
       },
     );
 
-    this.name = 'ApiError';
+    this.name = 'HttpError';
     this.type = payload.type;
     this.status = payload.status;
     this.url = payload.url;

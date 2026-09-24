@@ -1,6 +1,6 @@
-import { ApiClient } from '@/core/api';
+import { HttpClient } from '@/core/http';
 
-export const apiClient = new ApiClient({
+export const apiClient = new HttpClient({
   baseUrl: '',
   timeout: 10_000,
 });
