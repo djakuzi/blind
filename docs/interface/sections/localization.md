@@ -532,6 +532,7 @@ src/app/shared/locale
 src/app/shared/types/locale
 src/app/stores/language
 src/app/domain/lang
+src/app/features/locale
 src/app/features/settings
 public/lang
 ```
