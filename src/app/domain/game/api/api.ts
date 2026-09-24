@@ -1,21 +1,28 @@
-import {
-  GAME_MODE,
-  type tKeyGameMode,
-} from '../constants/gameMode.const';
-import {
-  ModelGameMode,
-} from '../models/GameMode.model';
+import { publicClient } from '@/app/shared/api';
+import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
+import type { tOptionGameMode } from '@/game/types/gameMode.types';
+import type { tKeyGameMode } from '../constants/gameMode.const';
+import { ModelGameMode } from '../models/GameMode.model';
+
+interface iResponseGameMode {
+  key: tKeyGameMode
+  img: {
+    dark: string
+    light: string
+  }
+  options: tOptionGameMode
+  typeConnection: tKeyTypeConnection[]
+}
 
 export class ApiGame {
   async getModes(): Promise<ModelGameMode[]> {
-    const modeKeys =
-      Object.keys(GAME_MODE) as tKeyGameMode[];
+    const modes =
+      await publicClient.get<iResponseGameMode[]>(
+        '/game/gameModes.json',
+      );
 
-    return modeKeys.map((key) =>
-      new ModelGameMode({
-        key,
-        ...GAME_MODE[key],
-      }),
+    return modes.map((mode) =>
+      new ModelGameMode(mode),
     );
   }
 }

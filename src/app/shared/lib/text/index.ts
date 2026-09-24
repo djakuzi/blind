@@ -1,9 +1,10 @@
-import {
-  modulePlural,
-} from './modules/plural.modules';
+import { modulePlural } from './modules/plural.modules';
+import type { tTextPluralCategory, tTextPluralForms } from './modules/plural.modules';
+
 export type {
-  iTextPluralForms,
-} from './modules/plural.modules';
+  tTextPluralCategory,
+  tTextPluralForms,
+};
 
 export const LibText = {
   ...modulePlural,

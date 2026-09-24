@@ -31,5 +31,49 @@
         }
       }
     }
+  },
+  "game": {
+    "modes": {
+      "DUEL": {
+        "title": "DUEL",
+        "description": "One hit — one life"
+      },
+      "COMBAT": {
+        "title": "COMBAT",
+        "description": "Fight until your health runs out"
+      },
+      "CLASH": {
+        "title": "CLASH",
+        "description": "One life. One team."
+      },
+      "BATTLE": {
+        "title": "BATTLE",
+        "description": "Team battle to the last survivor"
+      }
+    },
+    "format": {
+      "players": {
+        "one": "{count} player",
+        "other": "{count} players"
+      },
+      "rounds": {
+        "one": "{count} round",
+        "other": "{count} rounds"
+      }
+    }
+  },
+  "connectionTypes": {
+    "BLUETOOTH": {
+      "title": "Bluetooth",
+      "description": "Nearby player"
+    },
+    "LAN": {
+      "title": "Local network",
+      "description": "Same Wi-Fi network"
+    },
+    "ONLINE": {
+      "title": "Online",
+      "description": "Play online"
+    }
   }
 }

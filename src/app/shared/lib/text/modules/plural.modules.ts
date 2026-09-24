@@ -1,54 +1,35 @@
-export interface iTextPluralForms {
-  one: string
-  few: string
-  many: string
-}
+export type tTextPluralCategory =
+  | 'zero'
+  | 'one'
+  | 'two'
+  | 'few'
+  | 'many'
+  | 'other';
 
-function resolvePluralWord(
-  count: number,
-  forms: iTextPluralForms,
-): string {
-  const normalizedCount =
-    Math.abs(Math.trunc(count));
-
-  const lastTwoDigits =
-    normalizedCount % 100;
-
-  const lastDigit =
-    normalizedCount % 10;
-
-  if (
-    lastTwoDigits >= 11
-    && lastTwoDigits <= 14
-  ) {
-    return forms.many;
-  }
-
-  if (lastDigit === 1) {
-    return forms.one;
-  }
-
-  if (
-    lastDigit >= 2
-    && lastDigit <= 4
-  ) {
-    return forms.few;
-  }
-
-  return forms.many;
-}
+export type tTextPluralForms =
+  Partial<Record<tTextPluralCategory, string>>
+  & {
+    other: string
+  };
 
 function formatPluralCount(
   count: number,
-  forms: iTextPluralForms,
+  languageCode: string,
+  forms: tTextPluralForms,
 ): string {
-  return `${count} ${resolvePluralWord(
-    count,
-    forms,
-  )}`;
+  const category =
+    new Intl.PluralRules(languageCode)
+      .select(count);
+
+  const template =
+    forms[category] ?? forms.other;
+
+  return template.replace(
+    /\{count\}/g,
+    String(count),
+  );
 }
 
 export const modulePlural = {
-  resolvePluralWord,
   formatPluralCount,
 };

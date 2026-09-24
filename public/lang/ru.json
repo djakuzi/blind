@@ -31,5 +31,53 @@
         }
       }
     }
+  },
+  "game": {
+    "modes": {
+      "DUEL": {
+        "title": "DUEL",
+        "description": "Одно попадание — одна жизнь"
+      },
+      "COMBAT": {
+        "title": "COMBAT",
+        "description": "Сражайся, пока здоровье не закончится"
+      },
+      "CLASH": {
+        "title": "CLASH",
+        "description": "Одна жизнь. Одна команда."
+      },
+      "BATTLE": {
+        "title": "BATTLE",
+        "description": "Командный бой до последнего выжившего"
+      }
+    },
+    "format": {
+      "players": {
+        "one": "{count} игрок",
+        "few": "{count} игрока",
+        "many": "{count} игроков",
+        "other": "{count} игроков"
+      },
+      "rounds": {
+        "one": "{count} раунд",
+        "few": "{count} раунда",
+        "many": "{count} раундов",
+        "other": "{count} раундов"
+      }
+    }
+  },
+  "connectionTypes": {
+    "BLUETOOTH": {
+      "title": "Bluetooth",
+      "description": "Игрок поблизости"
+    },
+    "LAN": {
+      "title": "Локальная сеть",
+      "description": "Одна сеть Wi-Fi"
+    },
+    "ONLINE": {
+      "title": "Онлайн",
+      "description": "Играй по сети"
+    }
   }
 }

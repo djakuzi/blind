@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
 import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
@@ -10,7 +9,8 @@ import AppCardHold from '@/app/shared/components/ui/card/AppCardHold.vue';
 import AppInfoRowList from '@/app/shared/components/ui/info/AppInfoRowList.vue';
 import type { iAppInfoRowListItem } from '@/app/shared/components/ui/info/AppInfoRowList.vue';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
-import { TYPE_CONNECTION } from '@/app/shared/constants/game/typeConnection.conts';
+import { useLanguageStore } from '@/app/stores/language/language.store';
+import { formatGameModePlayers, formatGameModeRounds } from '../helpers/formatGameMode.helper';
 
 export interface PropsUiCardGameMode {
   mode: ModelGameMode
@@ -26,24 +26,44 @@ const emit = defineEmits<{
 }>();
 
 const { resolvedThemeMode } = useAppThemeMode();
+const languageStore = useLanguageStore();
 
 const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
+const currentLanguageCode = computed(() =>
+  languageStore.currentLanguage?.key ?? 'en',
+);
+
+const modeLocale = computed(() =>
+  languageStore.locale?.game.modes[props.mode.key],
+);
 
 const optionItems = computed<iAppInfoRowListItem[]>(() => [
   {
     id: 'players',
-    text: props.mode.getPlayersDescription(),
+    text: languageStore.locale
+      ? formatGameModePlayers(
+        props.mode,
+        currentLanguageCode.value,
+        languageStore.locale,
+      )
+      : '',
   },
   {
     id: 'rounds',
-    text: props.mode.getRoundsDescription(),
+    text: languageStore.locale
+      ? formatGameModeRounds(
+        props.mode,
+        currentLanguageCode.value,
+        languageStore.locale,
+      )
+      : '',
   },
 ]);
 
 const connectionItems = computed<iAppInfoRowListItem[]>(() =>
   props.mode.typeConnection.map((connectionType) => ({
     id: connectionType,
-    text: TYPE_CONNECTION[connectionType].title,
+    text: languageStore.locale?.connectionTypes[connectionType].title ?? '',
   })),
 );
 
@@ -77,7 +97,7 @@ function handleComplete() {
             filled-color="on-primary"
           >
             <AppTitle
-              :text="mode.title"
+              :text="modeLocale?.title ?? ''"
               tag="h2"
               color="inherit"
               font-size="2xxl"
@@ -91,7 +111,7 @@ function handleComplete() {
             filled-color="on-primary"
           >
             <AppText
-              :text="mode.description"
+              :text="modeLocale?.description ?? ''"
               color="inherit"
               font-size="lg"
               font-weight="medium"
@@ -105,7 +125,7 @@ function handleComplete() {
         <AppImage
           class="ui-card-game-mode__image"
           :src="imageSource"
-          :alt="mode.title"
+          :alt="modeLocale?.title ?? ''"
           width="20rem"
           max-width="30%"
           height="auto"
