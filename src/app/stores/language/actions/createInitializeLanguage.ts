@@ -16,11 +16,8 @@ export function createInitializeLanguage() {
 
     if (!language) {
       this.languages = languages;
-      this.currentLanguage = null;
-      this.locale = null;
-      this.isInitialized = true;
 
-      return null;
+      throw new Error('Language initialization failed: language list does not contain an available language');
     }
 
     let currentLanguage =

@@ -26,6 +26,7 @@ export function createSetLanguage() {
       language.key,
     );
 
+    this.preferredLanguageCode = language.key;
     this.currentLanguage = language;
     this.locale = locale;
 
