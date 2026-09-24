@@ -292,12 +292,14 @@ watch(
 
 @media (hover: hover) and (pointer: fine) {
   .widget-search-picker__trigger:hover {
+    color: var(--app-color-primary);
     border-color: var(--app-color-primary);
     background: var(--app-color-surface-interactive);
   }
 
   .widget-search-picker__item:not(.widget-search-picker__item--selected):not(:disabled):hover {
     background: var(--app-color-surface-interactive);
+    color: var(--app-color-primary);
   }
 }
 
