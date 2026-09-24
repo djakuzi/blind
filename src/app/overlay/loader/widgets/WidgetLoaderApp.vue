@@ -12,13 +12,12 @@ type tWidgetLoaderPhase = 'loading' | 'complete' | 'leaving';
 interface Props {
   isLoading?: boolean
   progress?: number
-  text?: string
+  text: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isLoading: false,
   progress: 0,
-  text: 'Загрузка',
 });
 
 const isRendered = ref(props.isLoading);

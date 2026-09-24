@@ -11,7 +11,7 @@ import type { iWidgetSearchPickerItem } from '@/app/shared/components/widgets/pi
 import { APP_SCALE_SYSTEM_MODE, isAppScaleMode } from '@/app/styles/contracts/appScale.contract';
 import { isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
 import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
-import { SETTINGS_SCALE_OPTIONS, SETTINGS_THEME_OPTIONS } from '../constants/settingsOptions.const';
+import { SETTINGS_SCALE_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
 import { useSettings } from '../composables/useSettings';
 
 const SETTINGS_ITEMS = [
@@ -44,27 +44,87 @@ const {
 
 const isLanguagePickerOpen = ref(false);
 
+const strictLocale = computed(() => {
+  if (!locale.value) {
+    throw new Error('Locale is not initialized');
+  }
+
+  return locale.value;
+});
+
+const currentLanguageCode = computed(() => {
+  if (!currentLanguage.value) {
+    throw new Error('Current language is not initialized');
+  }
+
+  return currentLanguage.value.key;
+});
+
 const settingsLocale = computed(() =>
-  locale.value?.views.settings.index.ui,
+  strictLocale.value.views.settings.index.ui,
 );
 
 const changeLanguageModalLocale = computed(() =>
-  locale.value?.views.settings.index.modals.changeLanguage,
+  strictLocale.value.views.settings.index.modals.changeLanguage,
 );
 
 const settingsLabelMap = computed(() => ({
-  theme: settingsLocale.value?.theme ?? '',
-  scale: settingsLocale.value?.scale ?? '',
-  sound: settingsLocale.value?.sound ?? '',
-  language: settingsLocale.value?.language ?? '',
+  theme: settingsLocale.value.theme,
+  scale: settingsLocale.value.scale,
+  sound: settingsLocale.value.sound,
+  language: settingsLocale.value.language,
 }));
+
+const themeOptions = computed(() =>
+  SETTINGS_THEME_VALUES.map((value) => ({
+    value,
+    label: strictLocale.value.settings.theme[value],
+  })),
+);
+
+const scaleOptions = computed(() =>
+  SETTINGS_SCALE_VALUES.map((value) => ({
+    value,
+    label: strictLocale.value.settings.scale[value],
+  })),
+);
+
+const languageDisplayNames = computed(() => {
+  if (typeof Intl.DisplayNames === 'undefined') {
+    return null;
+  }
+
+  try {
+    return new Intl.DisplayNames(
+      [currentLanguageCode.value],
+      {
+        type: 'language',
+      },
+    );
+  }
+  catch {
+    return null;
+  }
+});
+
+function getLanguageDisplayName(
+  language: ModelLanguage,
+) {
+  try {
+    return languageDisplayNames.value?.of(language.key)
+      ?? language.name;
+  }
+  catch {
+    return language.name;
+  }
+}
 
 function createLanguagePickerItem(
   language: ModelLanguage,
 ): iWidgetSearchPickerItem {
   return {
     value: language.key,
-    label: language.name,
+    label: getLanguageDisplayName(language),
     image: language.img
       ? {
         src: language.img,
@@ -135,7 +195,7 @@ async function handleLanguageChange(
       row-wrap="wrap"
       divider-color="border-default"
       divider-width="thin"
-      :accessibility-label="settingsLocale?.accessibilityLabel ?? ''"
+      :accessibility-label="settingsLocale.accessibilityLabel"
     >
       <template #item="{ item }">
         <AppText
@@ -158,7 +218,7 @@ async function handleLanguageChange(
           <AppSegmentedControl
             v-if="item.id === 'theme'"
             :model-value="appThemeMode"
-            :options="SETTINGS_THEME_OPTIONS"
+            :options="themeOptions"
             size="big"
             width="100%"
             @update:model-value="handleThemeModeChange"
@@ -167,7 +227,7 @@ async function handleLanguageChange(
           <AppSegmentedControl
             v-else-if="item.id === 'scale'"
             :model-value="appScaleMode"
-            :options="SETTINGS_SCALE_OPTIONS"
+            :options="scaleOptions"
             size="big"
             width="100%"
             @update:model-value="handleScaleModeChange"
@@ -176,7 +236,7 @@ async function handleLanguageChange(
           <AppSwitch
             v-else-if="item.id === 'sound'"
             :model-value="soundEnabled"
-            :accessibility-label="settingsLocale?.sound ?? ''"
+            :accessibility-label="settingsLocale.sound"
             width="12rem"
             @update:model-value="handleSoundEnabledChange"
           />
@@ -186,12 +246,12 @@ async function handleLanguageChange(
             v-model="isLanguagePickerOpen"
             :items="languagePickerItems"
             :selected-value="currentLanguage?.key"
-            :title="changeLanguageModalLocale?.title ?? ''"
-            :empty-text="changeLanguageModalLocale?.emptyText ?? ''"
-            :trigger-aria-label="settingsLocale?.changeLanguage ?? ''"
+            :title="changeLanguageModalLocale.title"
+            :empty-text="changeLanguageModalLocale.emptyText"
+            :trigger-aria-label="settingsLocale.changeLanguage"
             :search="{
-              placeholder: changeLanguageModalLocale?.searchPlaceholder ?? '',
-              ariaLabel: changeLanguageModalLocale?.searchPlaceholder ?? '',
+              placeholder: changeLanguageModalLocale.searchPlaceholder,
+              ariaLabel: changeLanguageModalLocale.searchPlaceholder,
               size: 'big',
             }"
             :row="{

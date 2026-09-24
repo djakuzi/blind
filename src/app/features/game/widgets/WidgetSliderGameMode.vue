@@ -1,20 +1,38 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-
 import { apiGame } from '@/app/domain/game/api/api';
 import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
 import UiCardGameMode from '@/app/features/game/ui/UiCardGameMode.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
 import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
+import { useLanguageStore } from '@/app/stores/language/language.store';
 
 const router = useRouter();
+const languageStore = useLanguageStore();
 
 const modes = ref<ModelGameMode[]>([]);
 const activeIndex = ref(0);
 const isLoading = ref(false);
 const hasLoadError = ref(false);
+
+const preGameLocale = computed(() => {
+  if (!languageStore.locale) {
+    throw new Error('Locale is not initialized');
+  }
+
+  return languageStore.locale.views.preGame.index.ui;
+});
+
+function formatItemAccessibilityLabel(
+  index: number,
+  count: number,
+) {
+  return preGameLocale.value.itemAccessibilityLabel
+    .replace('{current}', String(index + 1))
+    .replace('{total}', String(count));
+}
 
 async function loadModes() {
   isLoading.value = true;
@@ -59,23 +77,26 @@ onMounted(() => {
       size="big"
       :inactive-scale="0.88"
       :inactive-opacity="0.42"
-      accessibility-label="Выбор режима игры"
+      :accessibility-label="preGameLocale.accessibilityLabel"
+      :item-accessibility-label="formatItemAccessibilityLabel"
     >
       <template #item="{ index, active }">
         <UiCardGameMode
           v-if="modes[index]"
           :mode="modes[index]"
           :disabled="!active"
+          :options-accessibility-label="preGameLocale.modeOptionsAccessibilityLabel"
+          :connection-types-accessibility-label="preGameLocale.connectionTypesAccessibilityLabel"
           @complete="handleModeComplete"
         />
       </template>
 
       <template #hint>
         <AppHoldHint
-          text="Зажмите карточку по центру, чтобы выбрать"
+          :text="preGameLocale.holdHint"
           :desktop-items="[
-            'Колесо мыши — смена режима',
-            'Зажмите карточку — выбрать',
+            preGameLocale.desktopWheelHint,
+            preGameLocale.desktopSelectHint,
           ]"
           direction="column"
           desktop-direction="column"
@@ -89,14 +110,14 @@ onMounted(() => {
       v-else-if="hasLoadError"
       class="widget-slider-game-mode__state"
     >
-      Не удалось загрузить режимы игры
+      {{ preGameLocale.loadError }}
     </div>
 
     <div
       v-else-if="isLoading"
       class="widget-slider-game-mode__state"
     >
-      Загрузка...
+      {{ preGameLocale.loading }}
     </div>
   </div>
 </template>

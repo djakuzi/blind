@@ -1,4 +1,9 @@
 {
+  "common": {
+    "navigation": {
+      "back": "Back"
+    }
+  },
   "views": {
     "menu": {
       "index": {
@@ -6,6 +11,28 @@
           "play": "Play",
           "settings": "Settings",
           "holdHint": "Hold button to select"
+        },
+        "modals": {}
+      }
+    },
+    "preGame": {
+      "index": {
+        "ui": {
+          "accessibilityLabel": "Game mode selection",
+          "itemAccessibilityLabel": "{current} of {total}",
+          "holdHint": "Hold the centered card to select",
+          "desktopWheelHint": "Mouse wheel — change mode",
+          "desktopSelectHint": "Hold the card — select",
+          "loadError": "Failed to load game modes",
+          "loading": "Loading...",
+          "modeOptionsAccessibilityLabel": "Game mode parameters",
+          "connectionTypesAccessibilityLabel": "Available connection methods"
+        },
+        "modals": {}
+      },
+      "typeConnection": {
+        "ui": {
+          "title": "Connection type"
         },
         "modals": {}
       }
@@ -32,6 +59,18 @@
       }
     }
   },
+  "settings": {
+    "theme": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "scale": {
+      "small": "Small",
+      "default": "Default",
+      "large": "Large"
+    }
+  },
   "game": {
     "modes": {
       "DUEL": {
@@ -54,10 +93,14 @@
     "format": {
       "players": {
         "one": "{count} player",
+        "few": "{count} players",
+        "many": "{count} players",
         "other": "{count} players"
       },
       "rounds": {
         "one": "{count} round",
+        "few": "{count} rounds",
+        "many": "{count} rounds",
         "other": "{count} rounds"
       }
     }

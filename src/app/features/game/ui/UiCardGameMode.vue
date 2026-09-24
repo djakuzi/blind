@@ -14,6 +14,8 @@ import { formatGameModePlayers, formatGameModeRounds } from '../helpers/formatGa
 
 export interface PropsUiCardGameMode {
   mode: ModelGameMode
+  optionsAccessibilityLabel: string
+  connectionTypesAccessibilityLabel: string
   disabled?: boolean
 }
 
@@ -29,41 +31,58 @@ const { resolvedThemeMode } = useAppThemeMode();
 const languageStore = useLanguageStore();
 
 const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
-const currentLanguageCode = computed(() =>
-  languageStore.currentLanguage?.key ?? 'en',
-);
+
+const currentLanguageCode = computed(() => {
+  if (!languageStore.currentLanguage) {
+    throw new Error('Current language is not initialized');
+  }
+
+  return languageStore.currentLanguage.key;
+});
+
+const strictLocale = computed(() => {
+  if (!languageStore.locale) {
+    throw new Error('Locale is not initialized');
+  }
+
+  return languageStore.locale;
+});
 
 const modeLocale = computed(() =>
-  languageStore.locale?.game.modes[props.mode.key],
+  strictLocale.value.game.modes[props.mode.key],
+);
+
+const modeTitle = computed(() =>
+  modeLocale.value?.title ?? props.mode.key,
+);
+
+const modeDescription = computed(() =>
+  modeLocale.value?.description ?? '',
 );
 
 const optionItems = computed<iAppInfoRowListItem[]>(() => [
   {
     id: 'players',
-    text: languageStore.locale
-      ? formatGameModePlayers(
-        props.mode,
-        currentLanguageCode.value,
-        languageStore.locale,
-      )
-      : '',
+    text: formatGameModePlayers(
+      props.mode,
+      currentLanguageCode.value,
+      strictLocale.value,
+    ),
   },
   {
     id: 'rounds',
-    text: languageStore.locale
-      ? formatGameModeRounds(
-        props.mode,
-        currentLanguageCode.value,
-        languageStore.locale,
-      )
-      : '',
+    text: formatGameModeRounds(
+      props.mode,
+      currentLanguageCode.value,
+      strictLocale.value,
+    ),
   },
 ]);
 
 const connectionItems = computed<iAppInfoRowListItem[]>(() =>
   props.mode.typeConnection.map((connectionType) => ({
     id: connectionType,
-    text: languageStore.locale?.connectionTypes[connectionType].title ?? '',
+    text: strictLocale.value.connectionTypes[connectionType].title,
   })),
 );
 
@@ -97,7 +116,7 @@ function handleComplete() {
             filled-color="on-primary"
           >
             <AppTitle
-              :text="modeLocale?.title ?? ''"
+              :text="modeTitle"
               tag="h2"
               color="inherit"
               font-size="2xxl"
@@ -111,7 +130,7 @@ function handleComplete() {
             filled-color="on-primary"
           >
             <AppText
-              :text="modeLocale?.description ?? ''"
+              :text="modeDescription"
               color="inherit"
               font-size="lg"
               font-weight="medium"
@@ -125,7 +144,7 @@ function handleComplete() {
         <AppImage
           class="ui-card-game-mode__image"
           :src="imageSource"
-          :alt="modeLocale?.title ?? ''"
+          :alt="modeTitle"
           width="20rem"
           max-width="30%"
           height="auto"
@@ -150,7 +169,7 @@ function handleComplete() {
             text-color="inherit"
             divider-color="currentColor"
             font-weight="bold"
-            accessibility-label="Параметры режима"
+            :accessibility-label="optionsAccessibilityLabel"
             :center-even="true"
           />
         </AppFillAware>
@@ -172,7 +191,7 @@ function handleComplete() {
             font-weight="medium"
             :center-even="false"
             :center-odd="false"
-            accessibility-label="Доступные способы подключения"
+            :accessibility-label="connectionTypesAccessibilityLabel"
           />
         </AppFillAware>
       </div>

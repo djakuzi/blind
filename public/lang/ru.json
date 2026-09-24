@@ -1,4 +1,9 @@
 {
+  "common": {
+    "navigation": {
+      "back": "Назад"
+    }
+  },
   "views": {
     "menu": {
       "index": {
@@ -6,6 +11,28 @@
           "play": "Играть",
           "settings": "Настройки",
           "holdHint": "Зажмите кнопку для выбора"
+        },
+        "modals": {}
+      }
+    },
+    "preGame": {
+      "index": {
+        "ui": {
+          "accessibilityLabel": "Выбор режима игры",
+          "itemAccessibilityLabel": "{current} из {total}",
+          "holdHint": "Зажмите карточку по центру, чтобы выбрать",
+          "desktopWheelHint": "Колесо мыши — смена режима",
+          "desktopSelectHint": "Зажмите карточку — выбрать",
+          "loadError": "Не удалось загрузить режимы игры",
+          "loading": "Загрузка...",
+          "modeOptionsAccessibilityLabel": "Параметры режима",
+          "connectionTypesAccessibilityLabel": "Доступные способы подключения"
+        },
+        "modals": {}
+      },
+      "typeConnection": {
+        "ui": {
+          "title": "Способ подключения"
         },
         "modals": {}
       }
@@ -30,6 +57,18 @@
           }
         }
       }
+    }
+  },
+  "settings": {
+    "theme": {
+      "system": "Система",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    },
+    "scale": {
+      "small": "Маленький",
+      "default": "Обычный",
+      "large": "Большой"
     }
   },
   "game": {

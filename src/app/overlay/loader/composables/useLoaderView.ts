@@ -20,7 +20,7 @@ export function useLoaderView() {
   const text = computed(() => {
     const loadingScope = scopesList.value.find((scope) => !scope.isLoaded);
 
-    return loadingScope?.title ?? 'Загрузка';
+    return loadingScope?.title ?? '';
   });
 
   return {

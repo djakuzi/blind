@@ -11,7 +11,6 @@ export function prepareAppBootstrap(
 
   loaderStore.registerScope({
     scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
-    title: 'Загрузка',
     resources: {
       [APP_BOOTSTRAP_RESOURCES.language]: false,
     },

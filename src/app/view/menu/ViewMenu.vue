@@ -12,9 +12,13 @@ import { useLanguageStore } from '@/app/stores/language/language.store';
 const router = useRouter();
 const languageStore = useLanguageStore();
 
-const menuLocale = computed(() =>
-  languageStore.locale?.views.menu.index.ui,
-);
+const menuLocale = computed(() => {
+  if (!languageStore.locale) {
+    throw new Error('Locale is not initialized');
+  }
+
+  return languageStore.locale.views.menu.index.ui;
+});
 
 function handlePlay() {
   router.push({ name: KEY_ROUTE.preGame.index });
@@ -27,14 +31,14 @@ function handleSettings() {
 const menuActions = computed(() => [
   {
     key: 'play',
-    text: menuLocale.value?.play ?? '',
+    text: menuLocale.value.play,
     actions: {
       complete: handlePlay,
     },
   },
   {
     key: 'settings',
-    text: menuLocale.value?.settings ?? '',
+    text: menuLocale.value.settings,
     actions: {
       complete: handleSettings,
     },
@@ -80,7 +84,7 @@ const menuActions = computed(() => [
         />
       </AppFlex>
 
-      <AppHoldHint :text="menuLocale?.holdHint ?? ''" />
+      <AppHoldHint :text="menuLocale.holdHint" />
     </AppFlex>
   </ViewLayout>
 </template>

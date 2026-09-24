@@ -8,9 +8,13 @@ import { useLanguageStore } from '@/app/stores/language/language.store';
 
 const languageStore = useLanguageStore();
 
-const settingsLocale = computed(() =>
-  languageStore.locale?.views.settings.index.ui,
-);
+const settingsLocale = computed(() => {
+  if (!languageStore.locale) {
+    throw new Error('Locale is not initialized');
+  }
+
+  return languageStore.locale.views.settings.index.ui;
+});
 </script>
 
 <template>
@@ -27,7 +31,7 @@ const settingsLocale = computed(() =>
       width="100%"
       :gap="12"
     >
-      <AppTitle :text="settingsLocale?.title ?? ''" />
+      <AppTitle :text="settingsLocale.title" />
 
       <WidgetSettingsPanel />
     </AppFlex>

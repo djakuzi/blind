@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
@@ -26,7 +25,11 @@ export interface PropsAppSlider {
   activeDotColor?: tColorValue
   wheel?: boolean
   disabled?: boolean
-  accessibilityLabel?: string
+  accessibilityLabel: string
+  itemAccessibilityLabel: (
+    index: number,
+    count: number,
+  ) => string
 }
 
 const props = withDefaults(defineProps<PropsAppSlider>(), {
@@ -46,7 +49,6 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
   activeDotColor: 'primary',
   wheel: true,
   disabled: false,
-  accessibilityLabel: 'Слайдер',
 });
 
 const emit = defineEmits<{
@@ -440,7 +442,6 @@ onBeforeUnmount(() => {
       'app-slider--dragging': isDragging,
     }"
     role="region"
-    aria-roledescription="carousel"
     :aria-label="accessibilityLabel"
   >
     <div
@@ -466,8 +467,7 @@ onBeforeUnmount(() => {
           class="app-slider__item"
           :class="{ 'app-slider__item--active': isItemActive(index) }"
           role="group"
-          aria-roledescription="slide"
-          :aria-label="`${index + 1} из ${count}`"
+          :aria-label="itemAccessibilityLabel(index, count)"
           :aria-hidden="!isItemActive(index)"
         >
           <div class="app-slider__item-content">

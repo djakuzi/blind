@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue';
-
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
@@ -19,7 +18,7 @@ interface Props {
   width?: PropsAppBlock['width']
   variant?: tAppLineLoaderVariant
   actions?: iAppLineLoaderActions
-  text?: string
+  text: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -29,7 +28,6 @@ const props = withDefaults(defineProps<Props>(), {
   width: '100%',
   variant: 'primary',
   actions: undefined,
-  text: 'Загрузка',
 });
 
 const emit = defineEmits<{
@@ -51,6 +49,9 @@ const loaderClass = computed(() => [
   'app-line-loader',
   `app-line-loader--${props.variant}`,
   `app-line-loader--size-${props.size}`,
+  {
+    'app-line-loader--has-text': Boolean(props.text),
+  },
 ]);
 
 const progressScale = computed(() => normalizedProgress.value / 100);
@@ -127,7 +128,10 @@ watch(
       />
     </AppBlock>
 
-    <span class="app-line-loader__text">
+    <span
+      v-if="text"
+      class="app-line-loader__text"
+    >
       {{ text }}
     </span>
   </AppFlex>
@@ -164,8 +168,6 @@ watch(
 }
 
 .app-line-loader--size-small {
-  gap: var(--app-space-3);
-
   .app-line-loader__track {
     height: 0.5rem;
   }
@@ -176,8 +178,6 @@ watch(
 }
 
 .app-line-loader--size-middle {
-  gap: var(--app-space-5);
-
   .app-line-loader__track {
     height: 0.75rem;
   }
@@ -188,14 +188,26 @@ watch(
 }
 
 .app-line-loader--size-big {
-  gap: var(--app-space-7);
-
   .app-line-loader__track {
     height: 1rem;
   }
 
   .app-line-loader__text {
     font-size: var(--app-font-size-md);
+  }
+}
+
+.app-line-loader--has-text {
+  &.app-line-loader--size-small {
+    gap: var(--app-space-3);
+  }
+
+  &.app-line-loader--size-middle {
+    gap: var(--app-space-5);
+  }
+
+  &.app-line-loader--size-big {
+    gap: var(--app-space-7);
   }
 }
 </style>
