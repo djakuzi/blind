@@ -1,64 +1,140 @@
 # Архитектура и app-flow
 
-Раздел описывает назначение слоёв внутри `src/app`, их зоны ответственности и допустимые зависимости.
+Раздел описывает назначение основных слоёв внутри `src/app`, общий lifecycle приложения и правила зависимостей между app-level системами.
 
-Документация фиксирует архитектурные принципы, а не текущую последовательность импортов или конкретные имена файлов. Внутренняя реализация может меняться, если сохраняются границы слоёв и общий lifecycle приложения.
+Документация фиксирует архитектурные принципы, а не конкретную последовательность импортов или текущий набор файлов. Внутренняя реализация может меняться, если сохраняются границы ответственности и инварианты lifecycle.
 
 ## Setup
 
-`setup` — слой лёгкой предварительной подготовки app-систем до основного пользовательского рендера.
+`setup` — единый app-level lifecycle для подготовки и запуска систем приложения.
 
-Типичные задачи setup:
+Он заменяет разделение startup-логики на отдельные сущности вроде preliminary setup и bootstrap. Конкретная система может участвовать в одной или нескольких фазах lifecycle.
+
+Базовые фазы:
+
+```text
+preMount
+↓
+app.mount()
+↓
+postMount
+```
+
+### preMount
+
+`preMount` используется для работы, которая должна завершиться до mount корневого приложения.
+
+Типичные задачи:
 
 - чтение пользовательских предпочтений;
 - чтение системных настроек;
 - подготовка platform-specific окружения;
-- начальная настройка темы, масштаба, языка или viewport;
-- подготовка состояния, которое должно существовать до mount или до bootstrap initialization.
+- применение визуальных параметров, которые не должны мигать после первого рендера;
+- подготовка состояния, необходимого для post-mount initialization.
 
-Setup не должен:
+### postMount
 
-- определять глобальную готовность приложения;
-- управлять всем startup flow;
-- хранить screen-specific сценарии;
-- подменять bootstrap orchestration.
+`postMount` используется для работы, которая должна или может выполняться после mount.
 
-Setup может использовать переиспользуемый feature API, если feature предоставляет самостоятельную app-level композицию и не привязана к конкретному экрану.
-
-## Bootstrap
-
-`bootstrap` — app-level orchestration запуска приложения.
-
-Его задача — координировать системы, которые должны стать готовыми до открытия обычного route UI.
-
-Bootstrap может:
-
-- регистрировать обязательные startup resources;
-- запускать async initialization;
-- связывать startup-задачи с глобальным loader/error state;
-- определять app readiness;
-- использовать Static Locale для UI, который показывается до Full Locale;
-- использовать переиспользуемые feature API.
-
-Bootstrap не должен:
-
-- содержать бизнес-логику конкретного экрана;
-- превращаться в место для всех initialization-сценариев без разделения ответственности;
-- зависеть от деталей presentation конкретного route.
-
-Общий принцип:
+Post-mount задачи разделяются по execution mode:
 
 ```text
-pre-render setup
-↓
-app bootstrap
-↓
-required systems ready
-↓
-route UI
+blocking
+background
 ```
 
-Если система не является обязательной для первого пользовательского экрана, её не обязательно включать в главный bootstrap gate.
+`blocking` означает, что основной route UI не считается готовым до завершения задачи.
+
+`background` означает, что задача запускается после mount, но не влияет на app readiness.
+
+Таким образом две независимые характеристики не смешиваются:
+
+```text
+lifecycle phase
+→ когда запускать
+
+execution mode
+→ влияет ли задача на готовность приложения
+```
+
+Асинхронность сама по себе не является отдельной lifecycle-фазой.
+
+## Setup Structure
+
+Setup-инфраструктуру полезно разделять по ответственности:
+
+```text
+setup
+├── core
+├── registry
+├── modules
+└── composables
+```
+
+### core
+
+Содержит общий контракт lifecycle, runner и внутреннее состояние setup.
+
+Core не должен знать о конкретных app-системах.
+
+### registry
+
+Определяет, какие setup-модули участвуют в lifecycle приложения.
+
+Registry является composition point и может меняться по мере появления или удаления app-систем.
+
+### modules
+
+Содержат setup конкретных систем.
+
+Один модуль может реализовывать:
+
+- только `preMount`;
+- только `postMount`;
+- обе фазы.
+
+Setup-модуль должен координировать систему через её публичный API, а не дублировать внутреннюю business/domain логику.
+
+### composables
+
+Предоставляют reactive доступ к общему состоянию lifecycle, например app readiness.
+
+UI не должен зависеть от внутренней реализации runner.
+
+## App Readiness
+
+Готовность приложения определяется завершением всех обязательных blocking post-mount задач.
+
+Инвариант:
+
+```text
+app isReady
+→ все blocking postMount setup завершены
+```
+
+Background-задачи не должны удерживать основной UI.
+
+App readiness не равен состоянию глобального loader:
+
+```text
+setup readiness
+≠
+global loader activity
+```
+
+Loader может использоваться в любой момент жизни приложения и не должен повторно переводить весь route UI в состояние "not ready".
+
+## Loader И Setup
+
+Setup-модуль может регистрировать loader resource, если его initialization должен быть визуально представлен пользователю.
+
+При этом:
+
+- setup lifecycle определяет готовность приложения;
+- loader отвечает за отображение процесса;
+- конкретный setup-модуль связывает свою задачу с loader resource при необходимости.
+
+Runner не должен зависеть от конкретного loader implementation.
 
 ## Router
 
@@ -119,9 +195,7 @@ Overlay-система может включать:
 - provider;
 - widget/presentation.
 
-Overlay описывает механизм, а не конкретный бизнес-сценарий его использования.
-
-Например, loader может знать про scopes/resources/progress, но не обязан знать, что именно означает каждый startup resource.
+Overlay описывает механизм, а не конкретный business-сценарий его использования.
 
 ## Views
 
@@ -134,23 +208,7 @@ View может:
 - связывать route params/meta с feature API;
 - выполнять тонкую composition-логику.
 
-View не должен:
-
-- содержать основную бизнес-логику сценария;
-- дублировать store actions;
-- превращаться в большую монолитную feature.
-
-Правильная идея:
-
-```text
-route
-↓
-view
-↓
-feature composition
-↓
-shared UI / domain / stores
-```
+View не должен содержать основную business-логику сценария или дублировать ответственность feature/store.
 
 ## Features
 
@@ -167,19 +225,7 @@ Feature может содержать:
 
 Feature не обязана быть только экранным блоком.
 
-Например, feature может предоставлять композицию:
-
-```text
-store
-+
-shared infrastructure
-↓
-reactive app-level API
-```
-
-Такой API допустимо использовать из setup, bootstrap, provider или view.
-
-Feature должна иметь самостоятельную ответственность и по возможности не зависеть от другой feature напрямую.
+Переиспользуемый feature API допустимо использовать из setup, provider, view или другого app-level orchestration, если это не создаёт циклическую или узкосценарную связанность.
 
 ## Stores
 
@@ -191,16 +237,12 @@ Store может содержать:
 - getters;
 - actions;
 - state-related helpers;
-- persistence orchestration, если она является частью состояния;
+- persistence, если она относится к состоянию;
 - связь с domain/API.
 
-Store не должен:
+Store не должен владеть side effects конкретного UI-окружения, если они не являются частью самого состояния.
 
-- хранить presentation конкретного экрана;
-- заменять feature;
-- содержать UI-specific branching.
-
-Store желательно потреблять через feature, если feature добавляет смысловую композицию. Прямое использование store допустимо на app-level, в bootstrap и в тонких view/layout связках, если дополнительная feature не даёт пользы.
+Например, изменение DOM, platform presentation или component behavior обычно должно применяться feature/app-level orchestration поверх store.
 
 ## Domain
 
@@ -214,8 +256,6 @@ Store желательно потреблять через feature, если fea
 - mapping raw data в предметные сущности.
 
 Domain не должен зависеть от UI-слоёв.
-
-Presentation, переводы и route-specific состояние не относятся к domain.
 
 ## Shared
 
@@ -231,14 +271,12 @@ Presentation, переводы и route-specific состояние не отн�
 - generic composables;
 - infrastructure primitives.
 
-Главное правило shared:
+Главное правило:
 
 ```text
 shared
-→ ничего не знает о конкретном feature/view/route
+→ не знает о конкретном feature/view/route
 ```
-
-Shared может использовать более базовые core/platform abstractions, но не должен импортировать app-specific сценарии ради удобства одного consumer.
 
 ## Styles
 
@@ -257,19 +295,16 @@ Styles описывают визуальные правила и не должн
 
 ## Допустимые Зависимости
 
-Общий принцип: более прикладной слой может зависеть от более базового или от переиспользуемого API соседнего app-слоя, если это не создаёт циклическую или узкосценарную связанность.
+Общий принцип: более прикладной слой может зависеть от более базового или от переиспользуемого API app-слоя, если это не создаёт циклическую или узкосценарную связанность.
 
-Типичные допустимые связи:
+Типичные направления:
 
 ```text
 main
-→ setup / bootstrap / router / providers
+→ setup / router
 
 setup
-→ feature / store / shared / core
-
-bootstrap
-→ feature / store / overlay / shared
+→ feature / store / overlay / shared / core
 
 router
 → view
@@ -293,7 +328,7 @@ shared
 → core
 ```
 
-Это не строгая compile-time матрица импортов, а ориентир по направлению ответственности.
+Это ориентир ответственности, а не строгая compile-time матрица.
 
 ## Нежелательные Зависимости
 
@@ -305,138 +340,96 @@ shared
 - router → business feature logic;
 - layout → узкосценарная feature logic;
 - store → конкретный component/view;
-- setup/bootstrap → screen-specific presentation.
+- setup → screen-specific presentation;
+- setup core → конкретный feature/store/overlay.
 
-Если связь нужна только одному конкретному экрану, её место обычно во view или feature, а не в глобальной инфраструктуре.
+Если связь нужна только одному экрану, её место обычно во view или feature, а не в app lifecycle.
 
 ## App Lifecycle
 
-Общий lifecycle приложения:
+Общий поток запуска:
 
 ```text
 create application
 ↓
 install app-level infrastructure
 ↓
-pre-render setup
+create setup registry
 ↓
-prepare bootstrap state
+run preMount setup
+↓
+prepare router
 ↓
 mount root UI
 ↓
-run required async initialization
+run postMount setup
+├── blocking
+└── background
 ↓
-mark required systems ready
+blocking complete
 ↓
-open normal route UI
+app isReady
+↓
+normal route UI
 ```
 
-Конкретное количество bootstrap resources, их имена и порядок могут меняться.
+Конкретный набор setup-модулей и их внутренний порядок может меняться.
 
-Главный инвариант:
-
-```text
-route UI opens
-→ required app systems are ready
-```
-
-Если во время bootstrap нужен пользовательский текст, он не должен зависеть от системы, которая сама ещё находится в процессе initialization.
-
-## App Readiness
-
-Готовность приложения должна определяться отдельным bootstrap state/scope, а не общим состоянием всех loader-задач.
-
-Причина:
-
-после запуска приложения могут появляться другие loader scopes, которые не должны снова переводить всё приложение в состояние "not ready".
-
-Правильно:
-
-```text
-bootstrap readiness
-≠
-global loader activity
-```
-
-Global loader отвечает за отображение текущих loading tasks.
-
-Bootstrap readiness отвечает только за то, можно ли открыть основной интерфейс.
+Основной route UI должен открываться только после готовности обязательных app-систем.
 
 ## Error Handling
 
-Startup-системы должны различать:
+Setup-системы должны различать:
 
 - recoverable failure;
 - fallback;
-- critical initialization failure.
+- critical blocking failure;
+- background failure.
 
-Если существует fallback, система должна сначала попытаться сохранить рабочее состояние.
+Если существует fallback, система должна по возможности сохранить рабочее состояние.
 
-Critical failure не должен приводить к тихому частично инициализированному приложению.
+Critical blocking failure не должен тихо переводить приложение в состояние ready.
 
-Bootstrap может использовать глобальный error/overlay механизм, но конкретная стратегия обработки зависит от системы.
+Ошибка background-задачи не должна блокировать основной UI, но должна быть явно обработана или зафиксирована.
 
-## Setup И Bootstrap: Разница
+## Setup Module Design
 
-Коротко:
+Setup-модуль должен описывать lifecycle конкретной системы, а не становиться местом её внутренней реализации.
 
-```text
-setup
-→ подготовить отдельную систему
-
-bootstrap
-→ скоординировать обязательные системы
-```
-
-Setup не определяет готовность приложения.
-
-Bootstrap не обязан знать детали внутренней реализации каждой системы.
-
-Система должна по возможности предоставлять bootstrap готовую операцию высокого уровня:
+Предпочтительно:
 
 ```text
-initialize()
-prepare()
-load()
+setup module
+↓
+feature/system API
+↓
+store/domain/core
 ```
 
-вместо того чтобы заставлять bootstrap собирать её внутренний алгоритм вручную.
-
-## Feature Как Переиспользуемая Композиция
-
-Feature может использоваться выше route-level, если она представляет самостоятельную переиспользуемую композицию.
-
-Хороший пример абстракции:
+Вместо:
 
 ```text
-feature
-→ связывает store + shared/core
-→ возвращает app-level API
+setup module
+↓
+ручная сборка внутренних шагов системы
 ```
 
-Плохой пример зависимости:
-
-```text
-bootstrap
-→ feature конкретного screen
-→ component state
-→ modal flow
-```
-
-Поэтому критерий — не название слоя, а ответственность API.
+Это позволяет менять реализацию системы без переписывания общего lifecycle.
 
 ## Базовые Правила
 
-1. App-level startup orchestration живёт в bootstrap.
-2. Лёгкая подготовка отдельных систем живёт в setup.
-3. View остаётся точкой сборки route screen.
-4. Основной сценарий и композиция состояния оформляются как feature.
-5. Shared остаётся независимым от app-specific сценариев.
-6. Domain не зависит от UI.
-7. Store хранит состояние, но не presentation конкретного экрана.
-8. Providers и overlays реализуют глобальные механизмы, а не предметные сценарии.
-9. Bootstrap readiness отделён от обычной loader activity.
-10. Допустимость зависимости определяется ответственностью API, а не только названием папки.
+1. Startup lifecycle приложения живёт в `app/setup`.
+2. `preMount` используется для работы, обязательной до mount.
+3. Blocking `postMount` определяет app readiness.
+4. Background `postMount` не блокирует основной UI.
+5. Setup core не знает о конкретных системах.
+6. Registry является composition point setup-модулей.
+7. View остаётся точкой сборки route screen.
+8. Feature инкапсулирует сценарии и переиспользуемые app-композиции.
+9. Shared остаётся независимым от app-specific сценариев.
+10. Domain не зависит от UI.
+11. Store хранит состояние, а application side effects применяются на подходящем orchestration-уровне.
+12. Setup readiness отделён от обычной loader activity.
 
 ## Ориентиры В Проекте
 
@@ -444,7 +437,6 @@ bootstrap
 
 ```text
 src/app/setup
-src/app/bootstrap
 src/app/router
 src/app/layouts
 src/app/providers
@@ -457,4 +449,4 @@ src/app/shared
 src/app/styles
 ```
 
-Эти пути нужны для навигации по проекту и не являются описанием обязательной внутренней реализации.
+Пути являются навигационными ориентирами, а не обязательной внутренней реализацией.
