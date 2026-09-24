@@ -1,4 +1,4 @@
-import type { Locale } from '@/app/domain/lang/locale';
+import type { Locale } from '@/app/shared/types/locale';
 import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
 
 export interface iLanguageFile {

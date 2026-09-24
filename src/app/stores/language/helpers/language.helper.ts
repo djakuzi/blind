@@ -3,7 +3,7 @@ import { ModelLanguage } from '@/app/domain/lang/models/Language.model';
 import { ToolFilesystem } from '@/core/tool/filesystem';
 import { ToolStorage } from '@/core/tool/storage';
 import { LANGUAGE_FILE_DIR, LANGUAGE_LIST_STORAGE_KEY } from '../language.const';
-import type { Locale } from '@/app/domain/lang/locale';
+import type { Locale } from '@/app/shared/types/locale';
 import type { iLanguageFile } from '../language.type';
 
 type tStoredLanguage = ConstructorParameters<typeof ModelLanguage>[0];

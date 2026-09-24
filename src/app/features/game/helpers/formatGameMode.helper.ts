@@ -1,5 +1,5 @@
 import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
-import type { Locale } from '@/app/domain/lang/locale';
+import type { Locale } from '@/app/shared/types/locale';
 import { LibText } from '@/app/shared/lib/text';
 
 export function formatGameModePlayers(

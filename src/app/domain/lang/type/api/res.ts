@@ -1,4 +1,4 @@
-import type { Locale } from '../../locale';
+import type { Locale } from '../../../../shared/types/locale';
 import type { iApiLanguageData } from './common';
 
 export type iResponseLanguage = iApiLanguageData;
