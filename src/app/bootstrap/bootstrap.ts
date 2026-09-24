@@ -1,8 +1,8 @@
 import type { Pinia } from 'pinia';
-import { useStaticLocale } from '@/app/features/settings/composables/useStaticLocale';
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import { useLanguageStore } from '@/app/stores/language/language.store';
 import { APP_BOOTSTRAP_RESOURCES, APP_BOOTSTRAP_SCOPE_KEY } from './bootstrap.const';
+import { useStaticLocale } from '../features/settings/composables/useStaticLocale';
 
 export function prepareAppBootstrap(
   pinia: Pinia,
@@ -15,7 +15,7 @@ export function prepareAppBootstrap(
 
   loaderStore.registerScope({
     scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
-    title: staticLocale.value.loading.base,
+    title: staticLocale.value.loading.language,
     resources: {
       [APP_BOOTSTRAP_RESOURCES.language]: false,
     },
@@ -31,11 +31,9 @@ export async function runAppBootstrap(
 
   await languageStore.initializeLanguage();
 
-  setTimeout( ()=> {
-      loaderStore.setResourceState({
-        scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
-        resourceKey: APP_BOOTSTRAP_RESOURCES.language,
-        isLoaded: true,
-      });
-  }, 1000)
+  loaderStore.setResourceState({
+    scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
+    resourceKey: APP_BOOTSTRAP_RESOURCES.language,
+    isLoaded: true,
+  });
 }

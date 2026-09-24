@@ -31,6 +31,7 @@
 - структура `src/app`, app-flow, views, layouts, features, stores, providers и overlays - `docs/architecture/sections/app-flow.md`
 - CSS, scoped styles, tokens, contracts, responsive и правила написания стилей - `docs/contributing/sections/cssStyle.md`
 - UI scale, единицы измерения интерфейса и построение размеров UI - `docs/interface/index.md`
+- локализация, языки интерфейса, Locale, Static Locale, переводы, pluralization и language switch - `docs/interface/sections/localization.md`
 - `src/core`, platform/browser/native integration и SDK-обертки - `docs/architecture/sections/core-flow.md`
 - игровой контур и game-логика - `docs/architecture/sections/game-flow.md`
 - setup, запуск, Web, Android, iOS, Capacitor и CLI - `docs/projectSetup/index.md`
@@ -48,13 +49,14 @@
 1. Если задача связана с UI, Vue-компонентами, layout, widget, view или app-level UI, читать app-flow и связанные UI/CSS разделы.
 2. Если задача связана с CSS, tokens, responsive, safe area, fonts, scoped styles или style contracts, читать `cssStyle.md`; если затронут scale интерфейса, дополнительно читать `docs/interface`.
 3. Если задача связана одновременно с UI и JS-логикой, читать UI/CSS разделы и документацию по тому слою, где живет логика: app-flow, core-flow, game-flow или setup.
-4. Если задача связана с `src/core`, публичными API-обертками, platform/browser/native логикой или интеграциями SDK, читать core-flow.
-5. Если задача связана с игровыми правилами, игровым состоянием, игровыми моделями или render/game контуром, читать game-flow.
-6. Если задача связана с запуском проекта, платформами, Capacitor, Web, Android, iOS или CLI-командами, читать projectSetup.
-7. Если задача затрагивает generated files, scripts или генераторы, читать generateRule и docs/generators до изменения generated-файлов.
-8. Если задача связана с plugin-логикой, читать pluginRule и docs/plugins.
-9. Если задача связана с env/property, читать docs/settingsProject.
-10. Если задача меняет правила работы агентов или сам `AGENTS.md`, читать `docs/contributing/sections/agentRule.md` и при необходимости обновлять его тоже.
+4. Если задача касается UI text, translation, language, Locale, Static Locale, `public/lang`, accessibility labels, pluralization, `Intl.DisplayNames` или `Intl.PluralRules`, сначала читать `docs/interface/sections/localization.md`.
+5. Если задача связана с `src/core`, публичными API-обертками, platform/browser/native логикой или интеграциями SDK, читать core-flow.
+6. Если задача связана с игровыми правилами, игровым состоянием, игровыми моделями или render/game контуром, читать game-flow.
+7. Если задача связана с запуском проекта, платформами, Capacitor, Web, Android, iOS или CLI-командами, читать projectSetup.
+8. Если задача затрагивает generated files, scripts или генераторы, читать generateRule и docs/generators до изменения generated-файлов.
+9. Если задача связана с plugin-логикой, читать pluginRule и docs/plugins.
+10. Если задача связана с env/property, читать docs/settingsProject.
+11. Если задача меняет правила работы агентов или сам `AGENTS.md`, читать `docs/contributing/sections/agentRule.md` и при необходимости обновлять его тоже.
 
 ## Базовые правила
 

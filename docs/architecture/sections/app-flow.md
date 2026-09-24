@@ -18,6 +18,8 @@
 
 Например, `setupLanguage` определяет только preferred language. Реальная загрузка language manifest, locale-файла, проверка cache/version и применение итогового языка выполняются позже через `languageStore.initializeLanguage` во время app bootstrap.
 
+Подробные правила локализации, разделение Static Locale и Full Locale, cache/fallback flow и language switch описаны в [локализации интерфейса](../../interface/sections/localization.md).
+
 В `setup` не должна жить логика конкретного экрана, feature, предметного сценария или общего bootstrap flow.
 
 ### `bootstrap`
@@ -230,13 +232,31 @@ Store желательно использовать через `features`, а н
 1. `src/main.ts` создает Vue-приложение.
 2. В `main.ts` подключаются app-level плагины и инфраструктура, например `Pinia`.
 3. `main.ts` выполняет pre-render setup: `setupView`, `setupLanguage`, `setupScale`, `setupTheme`.
-4. `prepareAppBootstrap` регистрирует обязательные startup resources, например `app-bootstrap/language`.
+4. `prepareAppBootstrap` регистрирует обязательные startup resources, например `app-bootstrap/language`, и использует Static Locale для bootstrap-текста до загрузки Full Locale.
 5. `main.ts` подключает router из `src/app/router` и ожидает `router.isReady()`.
 6. `main.ts` монтирует `App`.
 7. `ProviderLoaderApp` сразу отображает loader overlay, если в loader store есть незавершенные resources.
 8. `runAppBootstrap` запускает реальную async initialization, например `languageStore.initializeLanguage`.
 9. После завершения startup resources scope `app-bootstrap` становится loaded.
 10. `useAppBootstrap` считает приложение готовым по состоянию `app-bootstrap`, и `App.vue` открывает `RouterView`.
+
+Коротко по language flow:
+
+```text
+setupLanguage
+→ preferred language only
+
+Static Locale
+→ bootstrap text before Full Locale
+
+bootstrap
+→ initialize Full Locale
+
+RouterView
+→ только после language resource completion
+```
+
+Минимальная встроенная locale infrastructure находится в `src/app/shared/locale`. Обычный пользовательский UI после bootstrap должен использовать Full Locale.
 
 После готовности приложения router определяет текущий маршрут и выбирает нужную route section. Route section подключает соответствующий `layout` и роутовый `view`, `LayoutRoot.vue` и `LayoutBase.vue` собирают каркас приложения и экрана, а `view` подключает нужные `features`.
 
