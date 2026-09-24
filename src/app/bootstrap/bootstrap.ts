@@ -1,7 +1,7 @@
 import type { Pinia } from 'pinia';
-import { useLoaderStore } from '@/app/stores/loader/loader.store';
-import { useLanguageStore } from '@/app/stores/language/language.store';
+import { useAppLanguage } from '@/app/features/locale/composables/useAppLanguage';
 import { useStaticLocale } from '@/app/features/locale/composables/useStaticLocale';
+import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import { APP_BOOTSTRAP_RESOURCES, APP_BOOTSTRAP_SCOPE_KEY } from './bootstrap.const';
 
 export function prepareAppBootstrap(
@@ -26,10 +26,10 @@ export async function runAppBootstrap(
   pinia: Pinia,
 ) {
   const loaderStore = useLoaderStore(pinia);
+  const { initializeAppLanguage } =
+    useAppLanguage(pinia);
 
-  const languageStore = useLanguageStore(pinia);
-
-  await languageStore.initializeLanguage();
+  await initializeAppLanguage();
 
   loaderStore.setResourceState({
     scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
