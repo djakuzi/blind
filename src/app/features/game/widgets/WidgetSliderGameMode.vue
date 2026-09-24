@@ -1,29 +1,24 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { apiGame } from '@/app/domain/game/api/api';
 import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
+import { useLocale } from '@/app/features/locale/composables/useLocale';
 import UiCardGameMode from '@/app/features/game/ui/UiCardGameMode.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
 import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
-import { useLanguageStore } from '@/app/stores/language/language.store';
 
 const router = useRouter();
-const languageStore = useLanguageStore();
 
 const modes = ref<ModelGameMode[]>([]);
 const activeIndex = ref(0);
 const isLoading = ref(false);
 const hasLoadError = ref(false);
 
-const preGameLocale = computed(() => {
-  if (!languageStore.locale) {
-    throw new Error('Locale is not initialized');
-  }
-
-  return languageStore.locale.views.preGame.index.ui;
-});
+const preGameLocale = useLocale(
+  locale => locale.views.preGame.index.ui,
+);
 
 function formatItemAccessibilityLabel(
   index: number,
