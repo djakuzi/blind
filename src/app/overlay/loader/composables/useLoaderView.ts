@@ -1,6 +1,5 @@
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
-
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
 
 export function useLoaderView() {

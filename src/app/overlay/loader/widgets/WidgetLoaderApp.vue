@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppGrid from '@/app/shared/components/atoms/block/AppGrid.vue';
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
