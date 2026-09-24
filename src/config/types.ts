@@ -1,4 +1,4 @@
-export type AppMode = 'prod' | 'dev';
+export type AppMode = 'prod' | 'debug';
 
 export interface ApiConfig {
   baseUrl: string

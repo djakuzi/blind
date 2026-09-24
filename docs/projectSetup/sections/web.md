@@ -13,3 +13,9 @@ npm install
 ```bash
 npm run dev
 ```
+
+Production-конфиг можно проверить локально:
+
+```bash
+npm run dev:prod
+```

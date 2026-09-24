@@ -11,10 +11,14 @@
     "app:generate:docs-versions": "node scripts/generators/generateDocsVersions.js",
     "app:generate:icons-assets": "node scripts/generators/generateIconsProject.js",
     "app:generate:fonts-woff2": "node scripts/generators/generateFontsWoff2.js",
-    "dev": "vite",
+    "dev": "vite --mode debug",
+    "dev:debug": "vite --mode debug",
+    "dev:prod": "vite --mode prod",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc -b && vite build --mode prod",
+    "build:debug": "vue-tsc -b && vite build --mode debug",
+    "build:prod": "vue-tsc -b && vite build --mode prod",
     "preview": "vite preview"
   },
   "dependencies": {

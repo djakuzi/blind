@@ -1,17 +1,10 @@
-import type { ApiConfig, AppMode } from '../types';
+import type { ApiConfig } from '../types';
 
-export function createApiConfig(mode: AppMode): ApiConfig {
-  const isProd = mode === 'prod';
-  const apiTarget = isProd
-    ? import.meta.env.API_TARGET_PROD
-    : import.meta.env.API_TARGET_DEV;
+export function createApiConfig(): ApiConfig {
+  const apiTarget = import.meta.env.API_TARGET;
 
   if (!apiTarget) {
-    throw new Error(
-      isProd
-        ? 'API_TARGET_PROD is not configured'
-        : 'API_TARGET_DEV is not configured',
-    );
+    throw new Error('API_TARGET is not configured');
   }
 
   const baseUrl = `${apiTarget}`;

@@ -9,10 +9,10 @@ export class Config implements AppConfigShape {
   constructor() {
     const resolvedMode = import.meta.env.APP_MODE === 'prod'
       ? 'prod'
-      : 'dev';
+      : 'debug';
 
     this.app = createAppConfig(resolvedMode);
-    this.api = createApiConfig(resolvedMode);
+    this.api = createApiConfig();
   }
 }
 
