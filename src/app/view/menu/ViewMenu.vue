@@ -1,14 +1,20 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppButtonHold from '@/app/shared/components/ui/button/AppButtonHold.vue';
 import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
+import { useLanguageStore } from '@/app/stores/language/language.store';
 
 const router = useRouter();
+const languageStore = useLanguageStore();
+
+const menuLocale = computed(() =>
+  languageStore.locale?.views.menu.index,
+);
 
 function handlePlay() {
   router.push({ name: KEY_ROUTE.preGame.index });
@@ -18,22 +24,22 @@ function handleSettings() {
   router.push({ name: KEY_ROUTE.settings.index });
 }
 
-const menuActions = [
+const menuActions = computed(() => [
   {
     key: 'play',
-    text: 'Играть',
+    text: menuLocale.value?.play ?? '',
     actions: {
       complete: handlePlay,
     },
   },
   {
     key: 'settings',
-    text: 'Настройки',
+    text: menuLocale.value?.settings ?? '',
     actions: {
       complete: handleSettings,
     },
   },
-];
+]);
 </script>
 
 <template>
@@ -74,7 +80,7 @@ const menuActions = [
         />
       </AppFlex>
 
-      <AppHoldHint text="ЗАЖМИТЕ КНОПКУ ДЛЯ ВЫБОРА" />
+      <AppHoldHint :text="menuLocale?.holdHint ?? ''" />
     </AppFlex>
   </ViewLayout>
 </template>

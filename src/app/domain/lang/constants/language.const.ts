@@ -1,5 +1,5 @@
-import imgEn from '@/assets/images/language/en.png';
-import imgRu from '@/assets/images/language/ru.png';
+import imgEn from '@/assets/images/language/en.svg';
+import imgRu from '@/assets/images/language/ru.svg';
 
 export interface DataLanguage {
   name: string

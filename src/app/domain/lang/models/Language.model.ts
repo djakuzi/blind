@@ -1,7 +1,4 @@
-import type {
-  DataLanguage,
-  tKeyLanguage,
-} from '../constants/language.const';
+import type { DataLanguage, tKeyLanguage } from '../constants/language.const';
 
 export interface iPayloadModelLanguage
   extends DataLanguage {

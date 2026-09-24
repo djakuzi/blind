@@ -1,3 +1,1 @@
-export interface LocaleModals {
-    // потом добавляем модалки
-}
+export type LocaleModals = Record<string, never>;

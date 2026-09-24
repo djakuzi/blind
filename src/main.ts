@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './app/router';
+import { setupLanguage } from './app/setup/language.setup';
 import { setupScale } from './app/setup/scale.setup';
 import { setupTheme } from './app/setup/theme.setup';
 import { setupView } from './app/setup/view.setup';
@@ -13,6 +14,7 @@ app.use(pinia);
 
 async function bootstrap() {
   await setupView();
+  await setupLanguage(pinia);
   await setupScale(pinia);
   await setupTheme(pinia);
   app.use(router);

@@ -1,8 +1,16 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import WidgetSettingsPanel from '@/app/features/settings/widgets/WidgetSettingsPanel.vue';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
+import { useLanguageStore } from '@/app/stores/language/language.store';
+
+const languageStore = useLanguageStore();
+
+const settingsLocale = computed(() =>
+  languageStore.locale?.views.menu.settings.index,
+);
 </script>
 
 <template>
@@ -20,7 +28,7 @@ import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
       width="100%"
       :gap="12"
     >
-      <AppTitle text="Настройки" />
+      <AppTitle :text="settingsLocale?.title ?? ''" />
 
       <WidgetSettingsPanel />
     </AppFlex>

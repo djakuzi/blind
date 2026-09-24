@@ -1,5 +1,11 @@
 export interface LocaleViewMenuSettings {
-    index: {
-        changeTheme: string
-    }
+  index: {
+    title: string
+    theme: string
+    scale: string
+    sound: string
+    language: string
+    accessibilityLabel: string
+    changeTheme: string
+  }
 }
