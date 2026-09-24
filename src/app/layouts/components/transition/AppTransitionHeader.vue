@@ -23,16 +23,13 @@ defineProps<Props>();
 .app-transition-header {
   display: grid;
   grid-template-rows: 1fr;
-
   flex: 0 0 auto;
-
   width: 100%;
 }
 
 .app-transition-header__content {
   min-height: 0;
   overflow: hidden;
-
   transform-origin: top center;
 }
 
