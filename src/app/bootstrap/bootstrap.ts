@@ -1,8 +1,8 @@
 import type { Pinia } from 'pinia';
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import { useLanguageStore } from '@/app/stores/language/language.store';
+import { useStaticLocale } from '@/app/features/locale/composables/useStaticLocale';
 import { APP_BOOTSTRAP_RESOURCES, APP_BOOTSTRAP_SCOPE_KEY } from './bootstrap.const';
-import { useStaticLocale } from '../features/settings/composables/useStaticLocale';
 
 export function prepareAppBootstrap(
   pinia: Pinia,
