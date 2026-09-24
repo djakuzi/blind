@@ -15,7 +15,8 @@ export type tHttpErrorType =
   | 'timeout'
   | 'http'
   | 'parse'
-  | 'abort';
+  | 'abort'
+  | 'internal';
 
 export type tHttpQueryValue =
   | string
@@ -46,7 +47,6 @@ export interface iHttpRequestContext {
   url: string
   init: RequestInit
   method: tHttpMethod
-  responseType: tHttpResponseType
 }
 
 export interface iHttpResponseContext {
@@ -65,7 +65,10 @@ export type tHttpResponseInterceptor =
   ) => iHttpResponseContext | Promise<iHttpResponseContext>;
 
 export type tHttpErrorInterceptor =
-  (error: import('./HttpError').HttpError) => void | Promise<void>;
+  (error: import('./httpError').HttpError) => void | Promise<void>;
+
+export type tHttpRemoveInterceptor =
+  () => void;
 
 export interface iHttpAbortState {
   signal: AbortSignal

@@ -30,7 +30,6 @@ export function createPrepareRequestMiddleware(): tHttpMiddleware {
         body,
       },
       method: context.method,
-      responseType: context.responseType,
     };
 
     return await next();

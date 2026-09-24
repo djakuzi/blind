@@ -1,4 +1,4 @@
-import { HttpError } from '../../HttpError';
+import { HttpError } from '../../httpError';
 import type { tHttpResponseType } from '../../type';
 
 export async function parseResponseData(

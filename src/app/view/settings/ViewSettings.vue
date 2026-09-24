@@ -22,7 +22,6 @@ const settingsLocale = computed(() =>
     overflow="auto"
   >
     <AppFlex
-      class="view-settings__content"
       direction="column"
       align="center"
       width="100%"
@@ -38,11 +37,5 @@ const settingsLocale = computed(() =>
 <style scoped>
 .view-settings {
   position: relative;
-}
-
-.view-settings__content {
-  padding-block:
-    var(--app-space-8)
-    var(--app-space-16);
 }
 </style>

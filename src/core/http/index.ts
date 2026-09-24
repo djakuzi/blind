@@ -1,18 +1,16 @@
-export { HttpClient } from './HttpClient';
-export { HttpError } from './HttpError';
+export { HttpClient } from './httpClient';
+export { HttpError } from './httpError';
 export type {
   iHttpClientConfig,
-  iHttpAbortState,
-  iHttpPipelineContext,
   iHttpRequestConfig,
   iHttpRequestContext,
   iHttpResponseContext,
   tHttpErrorInterceptor,
   tHttpErrorType,
-  tHttpMiddleware,
   tHttpMethod,
   tHttpQuery,
   tHttpQueryValue,
+  tHttpRemoveInterceptor,
   tHttpRequestInterceptor,
   tHttpResponseInterceptor,
   tHttpResponseType,

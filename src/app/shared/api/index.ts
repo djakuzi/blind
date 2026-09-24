@@ -1,1 +1,4 @@
-export { apiClient } from './client';
+export {
+  apiClient,
+  publicClient,
+} from './client';

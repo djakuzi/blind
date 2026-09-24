@@ -6,7 +6,7 @@ import { createParseResponseMiddleware } from './pipeline/modules/createParseRes
 import { createPrepareRequestMiddleware } from './pipeline/modules/createPrepareRequestMiddleware';
 import { createRequestInterceptorsMiddleware } from './pipeline/modules/createRequestInterceptorsMiddleware';
 import { createResponseInterceptorsMiddleware } from './pipeline/modules/createResponseInterceptorsMiddleware';
-import type { iHttpClientConfig, iHttpPipelineContext, iHttpRequestConfig, tHttpErrorInterceptor, tHttpMethod, tHttpRequestInterceptor, tHttpResponseInterceptor } from './type';
+import type { iHttpClientConfig, iHttpPipelineContext, iHttpRequestConfig, tHttpErrorInterceptor, tHttpMethod, tHttpMiddleware, tHttpRemoveInterceptor, tHttpRequestInterceptor, tHttpResponseInterceptor } from './type';
 
 export class HttpClient {
   private readonly baseUrl: string;
@@ -15,6 +15,7 @@ export class HttpClient {
   private readonly requestInterceptors: tHttpRequestInterceptor[] = [];
   private readonly responseInterceptors: tHttpResponseInterceptor[] = [];
   private readonly errorInterceptors: tHttpErrorInterceptor[] = [];
+  private readonly runPipeline: (context: iHttpPipelineContext) => Promise<iHttpPipelineContext>;
 
   constructor(
     config: iHttpClientConfig = {},
@@ -22,24 +23,49 @@ export class HttpClient {
     this.baseUrl = config.baseUrl ?? '';
     this.headers = config.headers;
     this.timeout = config.timeout;
+    this.runPipeline =
+      createHttpPipeline(
+        this.createPipeline(),
+      );
   }
 
   useRequestInterceptor(
     interceptor: tHttpRequestInterceptor,
-  ) {
+  ): tHttpRemoveInterceptor {
     this.requestInterceptors.push(interceptor);
+
+    return () => {
+      this.removeInterceptor(
+        this.requestInterceptors,
+        interceptor,
+      );
+    };
   }
 
   useResponseInterceptor(
     interceptor: tHttpResponseInterceptor,
-  ) {
+  ): tHttpRemoveInterceptor {
     this.responseInterceptors.push(interceptor);
+
+    return () => {
+      this.removeInterceptor(
+        this.responseInterceptors,
+        interceptor,
+      );
+    };
   }
 
   useErrorInterceptor(
     interceptor: tHttpErrorInterceptor,
-  ) {
+  ): tHttpRemoveInterceptor {
     this.errorInterceptors.push(interceptor);
+
+    return () => {
+      this.removeInterceptor(
+        this.errorInterceptors,
+        interceptor,
+      );
+    };
   }
 
   async request<TResponse, TBody = unknown>(
@@ -63,19 +89,8 @@ export class HttpClient {
       abortState: null,
     };
 
-    const runPipeline =
-      createHttpPipeline([
-        createErrorMiddleware(this.errorInterceptors),
-        createPrepareRequestMiddleware(),
-        createAbortMiddleware(),
-        createRequestInterceptorsMiddleware(this.requestInterceptors),
-        createFetchMiddleware(),
-        createResponseInterceptorsMiddleware(this.responseInterceptors),
-        createParseResponseMiddleware(),
-      ]);
-
     const result =
-      await runPipeline(context);
+      await this.runPipeline(context);
 
     return result.data as TResponse;
   }
@@ -144,6 +159,35 @@ export class HttpClient {
       'DELETE',
       url,
       config,
+    );
+  }
+
+  private createPipeline(): tHttpMiddleware[] {
+    return [
+      createErrorMiddleware(this.errorInterceptors),
+      createPrepareRequestMiddleware(),
+      createRequestInterceptorsMiddleware(this.requestInterceptors),
+      createAbortMiddleware(),
+      createFetchMiddleware(),
+      createResponseInterceptorsMiddleware(this.responseInterceptors),
+      createParseResponseMiddleware(),
+    ];
+  }
+
+  private removeInterceptor<TInterceptor>(
+    interceptors: TInterceptor[],
+    interceptor: TInterceptor,
+  ) {
+    const index =
+      interceptors.indexOf(interceptor);
+
+    if (index === -1) {
+      return;
+    }
+
+    interceptors.splice(
+      index,
+      1,
     );
   }
 }

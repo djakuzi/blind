@@ -1,4 +1,4 @@
-import { HttpError } from '../../HttpError';
+import { HttpError } from '../../httpError';
 import * as helpers from '../../helpers';
 import type { tHttpMiddleware } from '../../type';
 

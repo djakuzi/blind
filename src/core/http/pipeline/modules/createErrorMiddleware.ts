@@ -1,5 +1,4 @@
-import { HttpError } from '../../HttpError';
-import * as helpers from '../../helpers';
+import { HttpError } from '../../httpError';
 import type { tHttpErrorInterceptor, tHttpMiddleware } from '../../type';
 
 export function createErrorMiddleware(
@@ -17,6 +16,7 @@ export function createErrorMiddleware(
           error,
           context.request?.url ?? context.url,
           Boolean(context.abortState?.isTimeout()),
+          Boolean(context.abortState?.signal.aborted),
         );
 
       for (const interceptor of interceptors) {
@@ -32,12 +32,13 @@ function normalizeHttpError(
   error: unknown,
   url: string,
   isTimeout: boolean,
+  isAborted: boolean,
 ) {
   if (error instanceof HttpError) {
     return error;
   }
 
-  if (helpers.isAbortError(error)) {
+  if (isTimeout || isAborted) {
     return new HttpError({
       message: isTimeout
         ? 'HTTP request timed out'
@@ -52,8 +53,8 @@ function normalizeHttpError(
   }
 
   return new HttpError({
-    message: 'HTTP network request failed',
-    type: 'network',
+    message: 'HTTP internal request error',
+    type: 'internal',
     status: null,
     url,
     cause: error,

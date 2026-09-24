@@ -1,4 +1,4 @@
-import { apiClient } from '@/app/shared/api';
+import { publicClient } from '@/app/shared/api';
 import type { Locale } from '../locale';
 import { ModelLanguage } from '../models/Language.model';
 
@@ -13,7 +13,7 @@ interface iResponseLanguage {
 export class ApiLanguage {
   async getLanguages(): Promise<ModelLanguage[]> {
     const languages =
-      await apiClient.get<iResponseLanguage[]>(
+      await publicClient.get<iResponseLanguage[]>(
         '/lang/languages.json',
       );
 
@@ -34,7 +34,7 @@ export class ApiLanguage {
   async getLanguageInterface(
     code: string,
   ): Promise<Locale> {
-    return await apiClient.get<Locale>(
+    return publicClient.get<Locale>(
       `/lang/${code}.json`,
     );
   }
@@ -59,7 +59,7 @@ export class ApiLanguage {
     const language =
       await this.getDefaultLanguage();
 
-    return await this.getLanguageInterface(
+    return this.getLanguageInterface(
       language.key,
     );
   }
