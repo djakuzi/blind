@@ -1,57 +1,79 @@
-import { LANGUAGE, type tKeyLanguage } from '../constants/language.const';
-import { localeEn } from '../languages/en';
-import { localeRu } from '../languages/ru';
 import type { Locale } from '../locale';
 import { ModelLanguage } from '../models/Language.model';
 
-const LANGUAGE_INTERFACE = {
-  en: localeEn,
-  ru: localeRu,
-} satisfies Record<tKeyLanguage, Locale>;
+interface iResponseLanguage {
+  key: string
+  name: string
+  img?: string
+  version: string
+  isDefault: boolean
+}
+
+async function fetchJson<TResponse>(
+  url: string,
+): Promise<TResponse> {
+  const response =
+    await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Language API request failed: ${url}`);
+  }
+
+  return await response.json() as TResponse;
+}
 
 export class ApiLanguage {
   async getLanguages(): Promise<ModelLanguage[]> {
-    const keys =
-      Object.keys(LANGUAGE) as tKeyLanguage[];
+    const languages =
+      await fetchJson<iResponseLanguage[]>(
+        '/lang/languages.json',
+      );
 
-    return keys.map((key) =>
-      new ModelLanguage({
-        key,
-        ...LANGUAGE[key],
-      }),
+    return languages.map((language) =>
+      new ModelLanguage(language),
     );
   }
 
-  async getLanguageCodes(): Promise<tKeyLanguage[]> {
-    return Object.keys(LANGUAGE) as tKeyLanguage[];
+  async getLanguageCodes(): Promise<string[]> {
+    const languages =
+      await this.getLanguages();
+
+    return languages.map((language) =>
+      language.key,
+    );
   }
 
   async getLanguageInterface(
-    code: tKeyLanguage,
+    code: string,
   ): Promise<Locale> {
-    return LANGUAGE_INTERFACE[code];
+    return await fetchJson<Locale>(
+      `/lang/${code}.json`,
+    );
   }
 
   async getDefaultLanguage(): Promise<ModelLanguage> {
-    const defaultKey =
-      Object.keys(LANGUAGE).find((key) =>
-        LANGUAGE[key as tKeyLanguage].isDefault,
-      ) as tKeyLanguage | undefined;
+    const languages =
+      await this.getLanguages();
 
-    const key =
-      defaultKey ?? Object.keys(LANGUAGE)[0] as tKeyLanguage;
+    const language =
+      languages.find((item) =>
+        item.isDefault,
+      ) ?? languages[0];
 
-    return new ModelLanguage({
-      key,
-      ...LANGUAGE[key],
-    });
+    if (!language) {
+      throw new Error('Language API returned an empty language list');
+    }
+
+    return language;
   }
 
   async getDefaultLanguageInterface(): Promise<Locale> {
     const language =
       await this.getDefaultLanguage();
 
-    return LANGUAGE_INTERFACE[language.key];
+    return await this.getLanguageInterface(
+      language.key,
+    );
   }
 }
 

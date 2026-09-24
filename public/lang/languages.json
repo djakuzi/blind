@@ -1,0 +1,16 @@
+[
+  {
+    "key": "en",
+    "name": "English",
+    "img": "/lang/images/en.svg",
+    "version": "1",
+    "isDefault": true
+  },
+  {
+    "key": "ru",
+    "name": "Русский",
+    "img": "/lang/images/ru.svg",
+    "version": "1",
+    "isDefault": false
+  }
+]

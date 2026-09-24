@@ -1,16 +1,17 @@
-import type { DataLanguage, tKeyLanguage } from '../constants/language.const';
-
-export interface iPayloadModelLanguage
-  extends DataLanguage {
-  key: tKeyLanguage
+export interface iPayloadModelLanguage {
+  key: string
+  name: string
+  img?: string
+  version: string
+  isDefault: boolean
 }
 
 export class ModelLanguage {
-  readonly key: tKeyLanguage;
-  readonly name: DataLanguage['name'];
-  readonly img: DataLanguage['img'];
-  readonly version: DataLanguage['version'];
-  readonly isDefault: DataLanguage['isDefault'];
+  readonly key: string;
+  readonly name: string;
+  readonly img?: string;
+  readonly version: string;
+  readonly isDefault: boolean;
 
   constructor(
     payload: iPayloadModelLanguage,
