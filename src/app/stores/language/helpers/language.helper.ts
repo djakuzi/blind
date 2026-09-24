@@ -14,16 +14,6 @@ function getLanguageFilePath(
   return `${LANGUAGE_FILE_DIR}/${code}.json`;
 }
 
-export function saveDocumentLanguage(
-  code: string,
-) {
-  if (typeof document === 'undefined') {
-    return;
-  }
-
-  document.documentElement.lang = code;
-}
-
 export function normalizeLanguageCodes(
   code: string,
 ) {
