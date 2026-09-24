@@ -14,20 +14,43 @@ Full Locale
 
 ### Static Locale
 
-Static Locale находится в:
+Базовая инфраструктура Static Locale находится в:
 
 ```text
 src/app/shared/locale/
 ```
 
-Сейчас слой включает:
+Сейчас shared-слой включает:
 
 ```text
 locale.registry.ts
 locale.helper.ts
 locale.type.ts
-useStaticLocale.ts
 ```
+
+Связка Static Locale с текущим состоянием языка находится на feature-уровне:
+
+```text
+src/app/features/settings/composables/useStaticLocale.ts
+```
+
+Разделение намеренное:
+
+```text
+shared/locale
+→ знает только registry, типы и правила resolution
+→ не знает о Pinia и languageStore
+
+useStaticLocale
+→ знает languageStore
+→ выбирает текущий language code
+→ использует shared/locale
+→ возвращает reactive Static Locale
+```
+
+Таким образом `shared/locale` остается независимым и переиспользуемым, а feature отвечает за композицию нескольких app-систем.
+
+Feature API может использоваться не только внутри route/view. Если feature предоставляет переиспользуемую связку состояния и shared-инфраструктуры, ее могут использовать app-level orchestrators, включая `setup` и `bootstrap`. Например, `prepareAppBootstrap` использует `useStaticLocale`, чтобы связать `languageStore` со Static Locale до загрузки Full Locale.
 
 Это маленький встроенный в bundle registry. Он:
 
@@ -647,4 +670,5 @@ Checklist:
 - хранить список названий всех языков в каждом locale;
 - переключать current locale до успешной загрузки target locale;
 - создавать silent `?? ''` для route UI, если bootstrap гарантирует initialized Locale;
-- завязывать bootstrap на feature-level localization code.
+- переносить store-зависимую композицию Static Locale в `shared/locale`: shared-слой должен оставаться независимым от Pinia и feature-level состояния;
+- считать зависимость `setup` или `bootstrap` от переиспользуемого feature API архитектурной ошибкой сама по себе. Запрещена не такая зависимость, а втягивание в startup экранной или узкосценарной логики.
