@@ -32,9 +32,9 @@ Static Locale не должен превращаться во второй по�
 Типичные кандидаты:
 
 ```text
-bootstrap
+startup
 loading
-critical startup states
+critical initialization states
 ```
 
 Обычный экранный и предметный UI должен оставаться в Full Locale.
@@ -63,7 +63,7 @@ reactive static locale
 
 Поэтому общий locale-слой не должен знать о конкретном store или feature, а переиспользуемая feature может связывать их между собой.
 
-Такая feature-композиция допустима как для обычного UI, так и для app-level orchestration, включая setup и bootstrap.
+Такая feature-композиция допустима как для обычного UI, так и для app-level orchestration, включая setup lifecycle.
 
 ## Full Locale
 
@@ -234,15 +234,15 @@ unknown → application fallback
 
 Языковая инициализация делится на две задачи.
 
-### Pre-render preference resolution
+### Pre-mount preference resolution
 
-До основного bootstrap можно определить предпочтительный language code из сохранённых пользовательских настроек или системного окружения.
+На pre-mount этапе можно определить предпочтительный language code из сохранённых пользовательских настроек или системного окружения.
 
 На этом этапе Full Locale ещё не обязан быть доступен.
 
-### Full Locale initialization
+### Blocking post-mount initialization
 
-До открытия обычного пользовательского UI должны быть определены:
+Полная языковая инициализация может выполняться после mount как blocking setup-задача. До открытия обычного пользовательского UI должны быть определены:
 
 - список или источник поддерживаемых языков;
 - итоговый активный язык;
@@ -257,9 +257,9 @@ language initialized
 → Full Locale exists
 ```
 
-Если приложение использует bootstrap gate, обычный route UI не должен рендериться раньше выполнения этого инварианта.
+Если языковая инициализация является blocking setup-задачей, обычный route UI не должен рендериться раньше выполнения этого инварианта.
 
-Static Locale может использоваться для bootstrap UI до выполнения Full Locale initialization.
+Static Locale может использоваться для startup UI до выполнения Full Locale initialization.
 
 ## Fallback
 
@@ -441,21 +441,32 @@ localization
 
 Это позволяет менять язык без пересоздания предметных сущностей и не связывает domain с конкретным набором переводов.
 
-## Setup, Bootstrap И Features
+## Setup И Features
 
 Feature — не обязательно только экранный блок. Она может предоставлять переиспользуемую композицию нескольких app-систем.
 
-Поэтому setup и bootstrap могут использовать feature API, когда feature:
+Setup lifecycle может использовать feature API, когда feature:
 
 - не привязана к конкретному route;
 - не содержит узкосценарный screen flow;
 - инкапсулирует полезную композицию store/shared/core;
 - имеет понятную самостоятельную ответственность.
 
+Для локализации это позволяет разделить lifecycle на разные обязанности:
+
+```text
+preMount
+→ определить preferred language
+
+postMount blocking
+→ инициализировать Full Locale
+→ применить язык к app environment
+```
+
 Направление зависимостей должно сохранять независимость базовых слоёв:
 
 ```text
-setup / bootstrap
+setup
 ↓
 reusable feature composition
 ↓
@@ -513,7 +524,7 @@ store + shared/core
 - хранить переводы в domain models и technical constants;
 - привязывать UI к конкретному transport или месту хранения переводов;
 - дублировать Full Locale внутри Static Locale;
-- использовать Static Locale как основной источник текстов после bootstrap;
+- использовать Static Locale как основной источник текстов после завершения startup initialization;
 - сохранять system-detected language как explicit user choice;
 - активировать язык до успешной подготовки его Locale;
 - реализовывать language-specific plural rules вручную;
@@ -521,7 +532,7 @@ store + shared/core
 - оставлять hardcoded user-facing text в reusable components;
 - маскировать нарушение Locale contract через silent fallback вроде пустой строки;
 - переносить store-зависимую композицию в shared-инфраструктуру;
-- считать сам факт зависимости setup/bootstrap от переиспользуемой feature архитектурной ошибкой.
+- считать сам факт зависимости setup от переиспользуемой feature архитектурной ошибкой.
 
 ## Ориентиры В Проекте
 
