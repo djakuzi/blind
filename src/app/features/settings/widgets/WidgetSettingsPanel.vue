@@ -11,6 +11,7 @@ import type { iWidgetSearchPickerItem } from '@/app/shared/components/widgets/pi
 import { APP_SCALE_SYSTEM_MODE, isAppScaleMode } from '@/app/styles/contracts/appScale.contract';
 import { isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
 import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
+import { useAppLanguage } from '@/app/features/locale/composables/useAppLanguage';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import { LibText } from '@/app/shared/lib/text';
 import { SETTINGS_SCALE_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
@@ -35,13 +36,16 @@ const {
   appThemeMode,
   appScaleMode,
   soundEnabled,
-  languages,
-  currentLanguage,
   setAppThemeMode,
   setAppScaleMode,
   setSoundEnabled,
-  setLanguage,
 } = useSettings();
+
+const {
+  languages,
+  currentLanguage,
+  setAppLanguage,
+} = useAppLanguage();
 
 const isLanguagePickerOpen = ref(false);
 
@@ -145,7 +149,7 @@ function handleSoundEnabledChange(
 async function handleLanguageChange(
   value: string,
 ) {
-  await setLanguage(value);
+  await setAppLanguage(value);
   isLanguagePickerOpen.value = false;
 }
 </script>
