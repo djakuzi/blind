@@ -24,6 +24,7 @@ export const SURFACE_COLOR_TOKENS = [
   'surface-secondary',
   'surface-elevated',
   'surface-interactive',
+  'surface-overlay',
 ] as const;
 
 export const BORDER_COLOR_TOKENS = [

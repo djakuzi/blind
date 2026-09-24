@@ -39,7 +39,7 @@ const props = withDefaults(defineProps<PropsAppModal>(), {
   maxWidth: '100rem',
   maxHeight: '100%',
   layer: 'modal',
-  backdropColor: 'rgba(0, 0, 0, 0.6)',
+  backdropColor: 'surface-overlay',
   backgroundColor: 'surface-elevated',
   borderColor: 'border-contrast',
   borderWidth: 'thick',
