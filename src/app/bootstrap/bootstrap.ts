@@ -25,11 +25,9 @@ export function prepareAppBootstrap(
 export async function runAppBootstrap(
   pinia: Pinia,
 ) {
-  const loaderStore =
-    useLoaderStore(pinia);
+  const loaderStore = useLoaderStore(pinia);
 
-  const languageStore =
-    useLanguageStore(pinia);
+  const languageStore = useLanguageStore(pinia);
 
   await languageStore.initializeLanguage();
 
