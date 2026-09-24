@@ -20,7 +20,9 @@
 
 Подробные правила локализации, разделение Static Locale и Full Locale, cache/fallback flow и language switch описаны в [локализации интерфейса](../../interface/sections/localization.md).
 
-В `setup` не должна жить логика конкретного экрана, feature, предметного сценария или общего bootstrap flow.
+`setup` может использовать переиспользуемый API из `features`, если feature инкапсулирует композицию store/shared/core и не привязана к конкретному экрану. Например, `setupTheme` и `setupScale` используют composables из `features/settings`.
+
+При этом в самом `setup` не должна жить логика конкретного экрана, узкого пользовательского сценария или общего bootstrap flow.
 
 ### `bootstrap`
 
@@ -38,6 +40,10 @@ App-level слой запуска приложения.
 - запуск реальной async initialization после mount;
 - связь загрузочных задач с `stores/loader`;
 - определение момента, когда приложение готово отдать управление `RouterView`.
+
+`bootstrap` может использовать переиспользуемый API из `features`, если feature предоставляет готовую композицию app-state и более базовых слоев. Это допустимая зависимость app-level orchestration → feature. Например, language bootstrap использует `useStaticLocale`, который связывает `languageStore` с независимой инфраструктурой `shared/locale`.
+
+Нежелательно тянуть в bootstrap feature API, который реализует экранный UI или узкий пользовательский сценарий: bootstrap должен зависеть только от той части feature, которая действительно является переиспользуемой app-level связкой.
 
 На текущем этапе `app-bootstrap` содержит один реальный ресурс: `language`. Fake resources ради progress добавлять не нужно.
 
@@ -212,9 +218,10 @@ Store желательно использовать через `features`, а н
 2. `router` может подключать route sections, route constants, guards и роутовые `view`.
 3. `view` может подключать `features`, `layouts`, `shared` и при необходимости `stores`.
 4. `features` могут подключать `stores`, `domain`, `shared` и app-level UI-примитивы.
-5. `stores` могут подключать `domain`, собственные `actions`, типы и вспомогательные утилиты.
-6. `layouts` могут подключать свои локальные компоненты, composables, types и общие UI-примитивы.
-7. `providers` и `overlay` могут использовать shared/app-level/features инфраструктуру для реализации глобального UI-механизма.
+5. `setup` и `bootstrap` могут использовать переиспользуемый feature API для композиции app-level состояния и инфраструктуры.
+6. `stores` могут подключать `domain`, собственные `actions`, типы и вспомогательные утилиты.
+7. `layouts` могут подключать свои локальные компоненты, composables, types и общие UI-примитивы.
+8. `providers` и `overlay` могут использовать shared/app-level/features инфраструктуру для реализации глобального UI-механизма.
 
 ### Запрещенные и нежелательные связи
 
