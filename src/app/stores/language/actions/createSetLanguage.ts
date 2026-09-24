@@ -1,6 +1,6 @@
 import { ToolStorage } from '@/core/tool/storage';
 import { LANGUAGE_SELECTED_CODE_STORAGE_KEY } from '../language.const';
-import { findLanguageByCode, loadLanguageLocale, saveDocumentLanguage } from '../helpers/language.helper';
+import { findLanguageByCode, loadLanguageLocale } from '../helpers/language.helper';
 import type { iLanguageState } from '../language.type';
 
 export function createSetLanguage() {
@@ -29,8 +29,6 @@ export function createSetLanguage() {
     this.preferredLanguageCode = language.key;
     this.currentLanguage = language;
     this.locale = locale;
-
-    saveDocumentLanguage(language.key);
 
     return language;
   };
