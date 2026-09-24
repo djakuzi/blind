@@ -1,4 +1,4 @@
-import { loadLanguageLocale, loadLanguages, loadDefaultLanguageFallback, resolveInitialLanguage, saveDocumentLanguage } from '../helpers/language.helper';
+import { loadLanguageLocale, loadLanguages, loadDefaultLanguageFallback, resolveInitialLanguage } from '../helpers/language.helper';
 import type { iLanguageState } from '../language.type';
 
 export function createInitializeLanguage() {
@@ -42,8 +42,6 @@ export function createInitializeLanguage() {
     this.currentLanguage = currentLanguage;
     this.locale = locale;
     this.isInitialized = true;
-
-    saveDocumentLanguage(currentLanguage.key);
 
     return currentLanguage;
   };
