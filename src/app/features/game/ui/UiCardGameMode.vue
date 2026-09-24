@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
+import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
@@ -29,6 +30,7 @@ const emit = defineEmits<{
 
 const { resolvedThemeMode } = useAppThemeMode();
 const languageStore = useLanguageStore();
+const locale = useLocale();
 
 const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
 
@@ -40,16 +42,8 @@ const currentLanguageCode = computed(() => {
   return languageStore.currentLanguage.key;
 });
 
-const strictLocale = computed(() => {
-  if (!languageStore.locale) {
-    throw new Error('Locale is not initialized');
-  }
-
-  return languageStore.locale;
-});
-
 const modeLocale = computed(() =>
-  strictLocale.value.game.modes[props.mode.key],
+  locale.value.game.modes[props.mode.key],
 );
 
 const modeTitle = computed(() =>
@@ -66,7 +60,7 @@ const optionItems = computed<iAppInfoRowListItem[]>(() => [
     text: formatGameModePlayers(
       props.mode,
       currentLanguageCode.value,
-      strictLocale.value,
+      locale.value,
     ),
   },
   {
@@ -74,7 +68,7 @@ const optionItems = computed<iAppInfoRowListItem[]>(() => [
     text: formatGameModeRounds(
       props.mode,
       currentLanguageCode.value,
-      strictLocale.value,
+      locale.value,
     ),
   },
 ]);
@@ -82,7 +76,7 @@ const optionItems = computed<iAppInfoRowListItem[]>(() => [
 const connectionItems = computed<iAppInfoRowListItem[]>(() =>
   props.mode.typeConnection.map((connectionType) => ({
     id: connectionType,
-    text: strictLocale.value.connectionTypes[connectionType].title,
+    text: locale.value.connectionTypes[connectionType].title,
   })),
 );
 
