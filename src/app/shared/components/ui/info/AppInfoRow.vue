@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
+import type { PropsAppImage } from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
@@ -11,7 +12,13 @@ import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contrac
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 
-export interface iAppInfoRowImage {
+export interface iAppInfoRowImage extends Pick<
+  PropsAppImage,
+  | 'loading'
+  | 'decoding'
+  | 'objectFit'
+  | 'aspectRatio'
+> {
   src: string
   alt?: string
 }
@@ -126,6 +133,10 @@ const rowFontSize = computed(() => props.fontSize ?? sizeConfig.value.fontSize);
           :alt="image.alt ?? ''"
           :width="mediaWidth ?? sizeConfig.mediaWidth"
           :height="mediaHeight"
+          :loading="image.loading"
+          :decoding="image.decoding"
+          :object-fit="image.objectFit"
+          :aspect-ratio="image.aspectRatio"
         />
       </slot>
     </div>
