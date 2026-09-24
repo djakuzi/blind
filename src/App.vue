@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import { useAppBootstrap } from '@/app/bootstrap/composables/useAppBootstrap';
+import { useAppSetup } from '@/app/setup/composables/useAppSetup';
 import ProviderLoaderApp from '@/app/providers/ProviderLoaderApp.vue';
 import '@/app/styles/index.css';
 
-const bootstrap =
-  useAppBootstrap();
+const appSetup =
+  useAppSetup();
 </script>
 
 <template>
   <RouterView
-    v-if="bootstrap.isReady.value"
+    v-if="appSetup.isReady.value"
     key="app-router"
   />
   <ProviderLoaderApp />
