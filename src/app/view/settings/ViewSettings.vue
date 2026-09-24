@@ -1,20 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { useLocale } from '@/app/features/locale/composables/useLocale';
 import WidgetSettingsPanel from '@/app/features/settings/widgets/WidgetSettingsPanel.vue';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
-import { useLanguageStore } from '@/app/stores/language/language.store';
 
-const languageStore = useLanguageStore();
-
-const settingsLocale = computed(() => {
-  if (!languageStore.locale) {
-    throw new Error('Locale is not initialized');
-  }
-
-  return languageStore.locale.views.settings.index.ui;
-});
+const settingsLocale = useLocale(
+  locale => locale.views.settings.index.ui,
+);
 </script>
 
 <template>
