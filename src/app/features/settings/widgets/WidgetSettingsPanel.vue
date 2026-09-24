@@ -11,6 +11,7 @@ import type { iWidgetSearchPickerItem } from '@/app/shared/components/widgets/pi
 import { APP_SCALE_SYSTEM_MODE, isAppScaleMode } from '@/app/styles/contracts/appScale.contract';
 import { isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
 import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
+import { useLocale } from '@/app/features/locale/composables/useLocale';
 import { LibText } from '@/app/shared/lib/text';
 import { SETTINGS_SCALE_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
 import { useSettings } from '../composables/useSettings';
@@ -36,7 +37,6 @@ const {
   soundEnabled,
   languages,
   currentLanguage,
-  locale,
   setAppThemeMode,
   setAppScaleMode,
   setSoundEnabled,
@@ -45,13 +45,7 @@ const {
 
 const isLanguagePickerOpen = ref(false);
 
-const strictLocale = computed(() => {
-  if (!locale.value) {
-    throw new Error('Locale is not initialized');
-  }
-
-  return locale.value;
-});
+const locale = useLocale();
 
 const currentLanguageCode = computed(() => {
   if (!currentLanguage.value) {
@@ -62,11 +56,11 @@ const currentLanguageCode = computed(() => {
 });
 
 const settingsLocale = computed(() =>
-  strictLocale.value.views.settings.index.ui,
+  locale.value.views.settings.index.ui,
 );
 
 const changeLanguageModalLocale = computed(() =>
-  strictLocale.value.views.settings.index.modals.changeLanguage,
+  locale.value.views.settings.index.modals.changeLanguage,
 );
 
 const settingsLabelMap = computed(() => ({
@@ -79,14 +73,14 @@ const settingsLabelMap = computed(() => ({
 const themeOptions = computed(() =>
   SETTINGS_THEME_VALUES.map((value) => ({
     value,
-    label: strictLocale.value.settings.theme[value],
+    label: locale.value.settings.theme[value],
   })),
 );
 
 const scaleOptions = computed(() =>
   SETTINGS_SCALE_VALUES.map((value) => ({
     value,
-    label: strictLocale.value.settings.scale[value],
+    label: locale.value.settings.scale[value],
   })),
 );
 
