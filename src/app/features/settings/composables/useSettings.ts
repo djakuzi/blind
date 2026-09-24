@@ -40,13 +40,6 @@ export function useSettings() {
     languageStore.locale,
   );
 
-  const languageOptions = computed(() =>
-    languageStore.languages.map((language) => ({
-      label: language.name,
-      value: language.key,
-    })),
-  );
-
   async function setAppThemeMode(
     value: tAppThemeMode,
   ) {
@@ -116,7 +109,6 @@ export function useSettings() {
     languages,
     currentLanguage,
     locale,
-    languageOptions,
     setAppThemeMode,
     setAppScaleMode,
     setSoundEnabled,

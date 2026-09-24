@@ -14,7 +14,10 @@
           "sound": "Звук",
           "language": "Язык",
           "accessibilityLabel": "Настройки приложения",
-          "changeTheme": "Сменить тему"
+          "changeTheme": "Сменить тему",
+          "changeLanguage": "Сменить язык",
+          "searchLanguage": "Поиск языка",
+          "languageNotFound": "Языки не найдены"
         }
       }
     }

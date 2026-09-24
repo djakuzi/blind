@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
 import AppSwitch from '@/app/shared/components/ui/control/AppSwitch.vue';
 import WidgetList from '@/app/shared/components/widgets/list/WidgetList.vue';
+import WidgetSearchPicker from '@/app/shared/components/widgets/picker/WidgetSearchPicker.vue';
+import type { iWidgetSearchPickerItem } from '@/app/shared/components/widgets/picker/WidgetSearchPicker.vue';
 import { APP_SCALE_SYSTEM_MODE, isAppScaleMode } from '@/app/styles/contracts/appScale.contract';
 import { isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
+import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
 import { SETTINGS_SCALE_OPTIONS, SETTINGS_THEME_OPTIONS } from '../constants/settingsOptions.const';
 import { useSettings } from '../composables/useSettings';
 
@@ -30,14 +33,16 @@ const {
   appThemeMode,
   appScaleMode,
   soundEnabled,
+  languages,
   currentLanguage,
   locale,
-  languageOptions,
   setAppThemeMode,
   setAppScaleMode,
   setSoundEnabled,
   setLanguage,
 } = useSettings();
+
+const isLanguagePickerOpen = ref(false);
 
 const settingsLocale = computed(() =>
   locale.value?.views.menu.settings.index,
@@ -49,6 +54,26 @@ const settingsLabelMap = computed(() => ({
   sound: settingsLocale.value?.sound ?? '',
   language: settingsLocale.value?.language ?? '',
 }));
+
+function createLanguagePickerItem(
+  language: ModelLanguage,
+): iWidgetSearchPickerItem {
+  return {
+    value: language.key,
+    label: language.name,
+    image: language.img
+      ? {
+        src: language.img,
+        alt: '',
+        loading: 'lazy',
+      }
+      : undefined,
+  };
+}
+
+const languagePickerItems = computed(() =>
+  languages.value.map(createLanguagePickerItem),
+);
 
 async function handleThemeModeChange(
   value: string,
@@ -83,6 +108,7 @@ async function handleLanguageChange(
   value: string,
 ) {
   await setLanguage(value);
+  isLanguagePickerOpen.value = false;
 }
 </script>
 
@@ -151,13 +177,23 @@ async function handleLanguageChange(
             @update:model-value="handleSoundEnabledChange"
           />
 
-          <AppSegmentedControl
+          <WidgetSearchPicker
             v-else
-            :model-value="currentLanguage?.key ?? ''"
-            :options="languageOptions"
-            size="big"
-            width="100%"
-            @update:model-value="handleLanguageChange"
+            v-model="isLanguagePickerOpen"
+            :items="languagePickerItems"
+            :selected-value="currentLanguage?.key"
+            :title="settingsLocale?.language ?? ''"
+            :empty-text="settingsLocale?.languageNotFound ?? ''"
+            :trigger-aria-label="settingsLocale?.changeLanguage ?? ''"
+            :search="{
+              placeholder: settingsLocale?.searchLanguage ?? '',
+              ariaLabel: settingsLocale?.searchLanguage ?? '',
+              size: 'big',
+            }"
+            :row="{
+              size: 'big',
+            }"
+            @select="handleLanguageChange"
           />
         </AppFlex>
       </template>

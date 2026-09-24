@@ -23,6 +23,7 @@ export interface PropsWidgetSearchPicker {
   selectedValue?: string
   title?: string
   emptyText?: string
+  triggerAriaLabel?: string
   modal?: Omit<PropsAppModal, 'modelValue'>
   search?: Omit<PropsInputSearch, 'modelValue'>
   row?: Omit<PropsAppInfoRow, 'text' | 'image'>
@@ -32,6 +33,7 @@ const props = withDefaults(defineProps<PropsWidgetSearchPicker>(), {
   selectedValue: undefined,
   title: undefined,
   emptyText: undefined,
+  triggerAriaLabel: undefined,
   modal: undefined,
   search: undefined,
   row: undefined,
@@ -47,6 +49,14 @@ defineSlots<{
 }>();
 
 const searchQuery = ref('');
+
+const selectedItem = computed(() =>
+  props.items.find((item) => item.value === props.selectedValue),
+);
+
+const triggerText = computed(() =>
+  selectedItem.value?.label ?? props.selectedValue ?? '',
+);
 
 const modalProps = computed<Omit<PropsAppModal, 'modelValue'>>(() => ({
   bodyPaddingX: 0,
@@ -90,6 +100,10 @@ function handleModelValueUpdate(value: boolean) {
   emit('update:modelValue', value);
 }
 
+function handleTriggerClick() {
+  emit('update:modelValue', true);
+}
+
 function handleSelect(item: iWidgetSearchPickerItem) {
   if (
     item.disabled
@@ -123,6 +137,21 @@ watch(
 </script>
 
 <template>
+  <button
+    class="widget-search-picker__trigger"
+    type="button"
+    :aria-label="triggerAriaLabel"
+    @click="handleTriggerClick"
+  >
+    <AppInfoRow
+      :text="triggerText"
+      :image="selectedItem?.image"
+      size="big"
+      :padding-x="5"
+      :padding-y="3"
+    />
+  </button>
+
   <AppModal
     v-bind="modalProps"
     :model-value="modelValue"
@@ -197,6 +226,29 @@ watch(
 </template>
 
 <style scoped>
+.widget-search-picker__trigger {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: var(--app-border-width-thick) var(--app-border-style-solid) var(--app-color-border-contrast);
+  border-radius: var(--app-radius-lg);
+  background: var(--app-color-surface-primary);
+  color: var(--app-color-text-primary);
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 var(--app-border-width-medium) var(--app-color-primary);
+  }
+}
+
 .widget-search-picker {
   width: 100%;
   min-width: 0;
@@ -239,8 +291,19 @@ watch(
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .widget-search-picker__trigger:hover {
+    border-color: var(--app-color-primary);
+    background: var(--app-color-surface-interactive);
+  }
+
   .widget-search-picker__item:not(.widget-search-picker__item--selected):not(:disabled):hover {
     background: var(--app-color-surface-interactive);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .widget-search-picker__trigger {
+    transition: none;
   }
 }
 </style>

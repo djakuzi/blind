@@ -7,5 +7,8 @@ export interface LocaleViewMenuSettings {
     language: string
     accessibilityLabel: string
     changeTheme: string
+    changeLanguage: string
+    searchLanguage: string
+    languageNotFound: string
   }
 }

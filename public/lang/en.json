@@ -14,7 +14,10 @@
           "sound": "Sound",
           "language": "Language",
           "accessibilityLabel": "App settings",
-          "changeTheme": "Change theme"
+          "changeTheme": "Change theme",
+          "changeLanguage": "Change language",
+          "searchLanguage": "Search language",
+          "languageNotFound": "No languages found"
         }
       }
     }
