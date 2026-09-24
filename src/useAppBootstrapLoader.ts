@@ -1,6 +1,6 @@
 import { nextTick, onMounted } from 'vue';
 
-import { useLoaderRegistry } from '@/app/features/loader/composables/useLoaderRegistry';
+import { useLoaderRegistry } from '@/app/overlay/loader/composables/useLoaderRegistry';
 
 const APP_BOOTSTRAP_SCOPE_KEY = 'app-bootstrap';
 const APP_BOOTSTRAP_MIN_DISPLAY_TIME = 700;

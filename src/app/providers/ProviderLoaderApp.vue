@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useLoaderView } from '@/app/features/loader/composables/useLoaderView';
-import WidgetLoaderApp from '@/app/features/loader/widgets/WidgetLoaderApp.vue';
+import { useLoaderView } from '@/app/overlay/loader/composables/useLoaderView';
+import WidgetLoaderApp from '@/app/overlay/loader/widgets/WidgetLoaderApp.vue';
 
 const loaderView = useLoaderView();
 </script>
