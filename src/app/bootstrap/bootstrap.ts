@@ -15,7 +15,7 @@ export function prepareAppBootstrap(
 
   loaderStore.registerScope({
     scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
-    title: staticLocale.value.loading.language,
+    title: staticLocale.value.loading.base,
     resources: {
       [APP_BOOTSTRAP_RESOURCES.language]: false,
     },
@@ -33,9 +33,11 @@ export async function runAppBootstrap(
 
   await languageStore.initializeLanguage();
 
-  loaderStore.setResourceState({
-    scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
-    resourceKey: APP_BOOTSTRAP_RESOURCES.language,
-    isLoaded: true,
-  });
+  setTimeout( ()=> {
+      loaderStore.setResourceState({
+        scopeKey: APP_BOOTSTRAP_SCOPE_KEY,
+        resourceKey: APP_BOOTSTRAP_RESOURCES.language,
+        isLoaded: true,
+      });
+  }, 1000)
 }
