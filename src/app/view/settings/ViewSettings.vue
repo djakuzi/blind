@@ -9,7 +9,7 @@ import { useLanguageStore } from '@/app/stores/language/language.store';
 const languageStore = useLanguageStore();
 
 const settingsLocale = computed(() =>
-  languageStore.locale?.views.menu.settings.index,
+  languageStore.locale?.views.settings.index.ui,
 );
 </script>
 

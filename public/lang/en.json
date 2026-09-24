@@ -2,12 +2,17 @@
   "views": {
     "menu": {
       "index": {
-        "play": "Play",
-        "settings": "Settings",
-        "holdHint": "Hold button to select"
-      },
-      "settings": {
-        "index": {
+        "ui": {
+          "play": "Play",
+          "settings": "Settings",
+          "holdHint": "Hold button to select"
+        },
+        "modals": {}
+      }
+    },
+    "settings": {
+      "index": {
+        "ui": {
           "title": "Settings",
           "theme": "App theme",
           "scale": "Interface size",
@@ -15,12 +20,16 @@
           "language": "Language",
           "accessibilityLabel": "App settings",
           "changeTheme": "Change theme",
-          "changeLanguage": "Change language",
-          "searchLanguage": "Search language",
-          "languageNotFound": "No languages found"
+          "changeLanguage": "Change language"
+        },
+        "modals": {
+          "changeLanguage": {
+            "title": "Change language",
+            "searchPlaceholder": "Search language",
+            "emptyText": "No languages found"
+          }
         }
       }
     }
-  },
-  "modals": {}
+  }
 }

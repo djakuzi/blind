@@ -45,7 +45,11 @@ const {
 const isLanguagePickerOpen = ref(false);
 
 const settingsLocale = computed(() =>
-  locale.value?.views.menu.settings.index,
+  locale.value?.views.settings.index.ui,
+);
+
+const changeLanguageModalLocale = computed(() =>
+  locale.value?.views.settings.index.modals.changeLanguage,
 );
 
 const settingsLabelMap = computed(() => ({
@@ -182,12 +186,12 @@ async function handleLanguageChange(
             v-model="isLanguagePickerOpen"
             :items="languagePickerItems"
             :selected-value="currentLanguage?.key"
-            :title="settingsLocale?.language ?? ''"
-            :empty-text="settingsLocale?.languageNotFound ?? ''"
+            :title="changeLanguageModalLocale?.title ?? ''"
+            :empty-text="changeLanguageModalLocale?.emptyText ?? ''"
             :trigger-aria-label="settingsLocale?.changeLanguage ?? ''"
             :search="{
-              placeholder: settingsLocale?.searchLanguage ?? '',
-              ariaLabel: settingsLocale?.searchLanguage ?? '',
+              placeholder: changeLanguageModalLocale?.searchPlaceholder ?? '',
+              ariaLabel: changeLanguageModalLocale?.searchPlaceholder ?? '',
               size: 'big',
             }"
             :row="{

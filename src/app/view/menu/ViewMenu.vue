@@ -13,7 +13,7 @@ const router = useRouter();
 const languageStore = useLanguageStore();
 
 const menuLocale = computed(() =>
-  languageStore.locale?.views.menu.index,
+  languageStore.locale?.views.menu.index.ui,
 );
 
 function handlePlay() {

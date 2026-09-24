@@ -1,11 +1,10 @@
-import type { LocaleViewMenuSettings } from './settings';
-
 export interface LocaleViewMenu {
   index: {
-    play: string
-    settings: string
-    holdHint: string
+    ui: {
+      play: string
+      settings: string
+      holdHint: string
+    }
+    modals: Record<string, never>
   }
-
-  settings: LocaleViewMenuSettings
 }

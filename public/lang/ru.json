@@ -2,12 +2,17 @@
   "views": {
     "menu": {
       "index": {
-        "play": "Играть",
-        "settings": "Настройки",
-        "holdHint": "Зажмите кнопку для выбора"
-      },
-      "settings": {
-        "index": {
+        "ui": {
+          "play": "Играть",
+          "settings": "Настройки",
+          "holdHint": "Зажмите кнопку для выбора"
+        },
+        "modals": {}
+      }
+    },
+    "settings": {
+      "index": {
+        "ui": {
           "title": "Настройки",
           "theme": "Тема приложения",
           "scale": "Размер интерфейса",
@@ -15,12 +20,16 @@
           "language": "Язык",
           "accessibilityLabel": "Настройки приложения",
           "changeTheme": "Сменить тему",
-          "changeLanguage": "Сменить язык",
-          "searchLanguage": "Поиск языка",
-          "languageNotFound": "Языки не найдены"
+          "changeLanguage": "Сменить язык"
+        },
+        "modals": {
+          "changeLanguage": {
+            "title": "Сменить язык",
+            "searchPlaceholder": "Поиск языка",
+            "emptyText": "Языки не найдены"
+          }
         }
       }
     }
-  },
-  "modals": {}
+  }
 }
