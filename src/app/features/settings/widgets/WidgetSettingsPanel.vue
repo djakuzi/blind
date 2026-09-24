@@ -11,6 +11,7 @@ import type { iWidgetSearchPickerItem } from '@/app/shared/components/widgets/pi
 import { APP_SCALE_SYSTEM_MODE, isAppScaleMode } from '@/app/styles/contracts/appScale.contract';
 import { isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
 import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
+import { LibText } from '@/app/shared/lib/text';
 import { SETTINGS_SCALE_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
 import { useSettings } from '../composables/useSettings';
 
@@ -89,34 +90,13 @@ const scaleOptions = computed(() =>
   })),
 );
 
-const languageDisplayNames = computed(() => {
-  if (typeof Intl.DisplayNames === 'undefined') {
-    return null;
-  }
-
-  try {
-    return new Intl.DisplayNames(
-      [currentLanguageCode.value],
-      {
-        type: 'language',
-      },
-    );
-  }
-  catch {
-    return null;
-  }
-});
-
 function getLanguageDisplayName(
   language: ModelLanguage,
 ) {
-  try {
-    return languageDisplayNames.value?.of(language.key)
-      ?? language.name;
-  }
-  catch {
-    return language.name;
-  }
+  return LibText.getLanguageDisplayName(
+    language.key,
+    currentLanguageCode.value,
+  ) ?? language.name;
 }
 
 function createLanguagePickerItem(
