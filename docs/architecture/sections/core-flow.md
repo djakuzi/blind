@@ -64,7 +64,7 @@
 Граница ответственности:
 
 - `core/http` - универсальный HTTP transport;
-- `app/shared/api` - конкретные клиенты приложения, например `apiClient` или `publicClient`;
+- `app/shared/api` - конкретные клиенты приложения, например `apiClient` или `apiClient`;
 - `app/domain/*/api` - предметные API конкретного домена.
 
 Domain API не должен напрямую работать с `fetch`, если задачу можно решить через `app/shared/api` и `core/http`.
