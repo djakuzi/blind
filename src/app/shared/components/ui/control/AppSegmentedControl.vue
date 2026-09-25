@@ -4,7 +4,7 @@ import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
+import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
 import { ToolVibration } from '@/core/tool/vibration';
@@ -43,32 +43,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: string];
 }>();
 
-const SIZE_MAP: Record<
-  tBaseSizeVariant,
-  {
-    paddingX: tPaddingValue;
-    paddingY: tPaddingValue;
-    fontSize: tFontSizeValue;
-  }
-> = {
-  small: {
-    paddingX: 3,
-    paddingY: 2,
-    fontSize: 'sm',
-  },
-  middle: {
-    paddingX: 5,
-    paddingY: 3,
-    fontSize: 'md',
-  },
-  big: {
-    paddingX: 6,
-    paddingY: 4,
-    fontSize: 'lg',
-  },
-};
-
-const sizeConfig = computed(() => SIZE_MAP[props.size]);
+const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
 const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
 const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 const controlBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
@@ -149,7 +124,6 @@ function handleSelect(option: iAppSegmentedControlOption) {
   &:last-child {
     border-right: 0;
   }
-
 }
 
 .app-segmented-control__text {
@@ -158,5 +132,4 @@ function handleSelect(option: iAppSegmentedControlOption) {
   min-width: 0;
   max-width: 100%;
 }
-
 </style>

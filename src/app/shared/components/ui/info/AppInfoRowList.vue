@@ -7,6 +7,7 @@ import type { PropsAppDistributedRow } from '@/app/shared/components/layout/row/
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import { BASE_SIZE_FONT_PRESET, BASE_SIZE_MEDIA_WIDTH_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/presets/base.preset';
 import { resolveBorderWidthValue, type tBorderWidthValue } from '@/app/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
@@ -68,50 +69,21 @@ const props = withDefaults(defineProps<PropsAppInfoRowList>(), {
   accessibilityLabel: undefined,
 });
 
-const SIZE_MAP: Record<
-  tBaseSizeVariant,
-  {
-    fontSize: tFontSizeValue;
-    iconWidth: tStyleSizeValue;
-    iconGap: tSpaceValue;
-    separatorGap: tSpaceValue;
-    dividerHeight: tStyleSizeValue;
-  }
-> = {
-  small: {
-    fontSize: 'sm',
-    iconWidth: '2rem',
-    iconGap: 2,
-    separatorGap: 4,
-    dividerHeight: '2rem',
-  },
-  middle: {
-    fontSize: 'md',
-    iconWidth: '2.5rem',
-    iconGap: 3,
-    separatorGap: 5,
-    dividerHeight: '2.5rem',
-  },
-  big: {
-    fontSize: 'lg',
-    iconWidth: '3rem',
-    iconGap: 4,
-    separatorGap: 6,
-    dividerHeight: '3rem',
-  },
+const SEPARATOR_GAP_PRESET: Record<tBaseSizeVariant, tSpaceValue> = {
+  small: 4,
+  middle: 5,
+  big: 6,
 };
-
-const sizeConfig = computed(() => SIZE_MAP[props.size]);
 
 const listPaddingX = computed(() => resolvePaddingValue(props.paddingX));
 const listPaddingY = computed(() => resolvePaddingValue(props.paddingY));
 
-const itemFontSize = computed(() => props.fontSize ?? sizeConfig.value.fontSize);
-const itemIconWidth = computed(() => LibStyle.toSizeValue(props.iconWidth ?? sizeConfig.value.iconWidth));
-const itemIconGap = computed(() => resolveSpaceValue(props.iconGap ?? sizeConfig.value.iconGap));
+const itemFontSize = computed(() => props.fontSize ?? BASE_SIZE_FONT_PRESET[props.size]);
+const itemIconWidth = computed(() => LibStyle.toSizeValue(props.iconWidth ?? BASE_SIZE_MEDIA_WIDTH_PRESET[props.size]));
+const itemIconGap = computed(() => resolveSpaceValue(props.iconGap ?? BASE_SIZE_SPACE_PRESET[props.size]));
 
-const rowSeparatorGap = computed(() => props.separatorGap ?? sizeConfig.value.separatorGap);
-const itemDividerHeight = computed(() => LibStyle.toSizeValue(props.dividerHeight ?? sizeConfig.value.dividerHeight));
+const rowSeparatorGap = computed(() => props.separatorGap ?? SEPARATOR_GAP_PRESET[props.size]);
+const itemDividerHeight = computed(() => LibStyle.toSizeValue(props.dividerHeight ?? BASE_SIZE_MEDIA_WIDTH_PRESET[props.size]));
 const itemDividerWidth = computed(() => resolveBorderWidthValue(props.dividerWidth));
 const itemDividerColor = computed(() => resolveColorValue(props.dividerColor));
 

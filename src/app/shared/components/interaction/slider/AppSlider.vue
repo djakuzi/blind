@@ -5,6 +5,7 @@ import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+import { LibNumber } from '@/core/lib/number';
 
 export interface PropsAppSlider {
   modelValue: number;
@@ -104,7 +105,7 @@ let wheelResetTimer: number | null = null;
 const sizeConfig = computed(() => SIZE_MAP[props.size]);
 const indexes = computed(() => Array.from({ length: Math.max(0, props.count) }, (_, index) => index));
 const maxIndex = computed(() => Math.max(0, props.count - 1));
-const activeIndex = computed(() => Math.min(Math.max(props.modelValue, 0), maxIndex.value));
+const activeIndex = computed(() => LibNumber.clamp(props.modelValue, 0, maxIndex.value));
 
 const sliderWidth = computed(() => LibStyle.toSizeValue(props.width));
 const sliderMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
@@ -117,8 +118,8 @@ const sliderDotsGap = computed(() => resolveSpaceValue(props.dotsGap ?? sizeConf
 const sliderDotSize = computed(() => LibStyle.toSizeValue(props.dotSize));
 const sliderDotColor = computed(() => resolveColorValue(props.dotColor));
 const sliderActiveDotColor = computed(() => resolveColorValue(props.activeDotColor));
-const sliderInactiveScale = computed(() => Math.min(1, Math.max(0, props.inactiveScale)));
-const sliderInactiveOpacity = computed(() => Math.min(1, Math.max(0, props.inactiveOpacity)));
+const sliderInactiveScale = computed(() => LibNumber.clamp(props.inactiveScale, 0, 1));
+const sliderInactiveOpacity = computed(() => LibNumber.clamp(props.inactiveOpacity, 0, 1));
 
 const trackTransform = computed(() => `translate3d(${trackTranslate.value + dragOffset.value}px, 0, 0)`);
 
@@ -131,7 +132,7 @@ function setActiveIndex(index: number) {
     return;
   }
 
-  const nextIndex = Math.min(Math.max(index, 0), maxIndex.value);
+  const nextIndex = LibNumber.clamp(index, 0, maxIndex.value);
 
   if (nextIndex === activeIndex.value) {
     return;
@@ -281,7 +282,7 @@ function handlePointerUp(event: PointerEvent) {
   }
 
   const offset = event.clientX - pointerStartX;
-  const threshold = Math.max(40, Math.min(activeItemWidth.value * 0.18, 96));
+  const threshold = LibNumber.clamp(activeItemWidth.value * 0.18, 40, 96);
 
   let nextIndex = activeIndex.value;
 
@@ -344,7 +345,7 @@ function handleWheel(event: WheelEvent) {
   }
 
   const direction = delta > 0 ? 1 : -1;
-  const nextIndex = Math.min(Math.max(activeIndex.value + direction, 0), maxIndex.value);
+  const nextIndex = LibNumber.clamp(activeIndex.value + direction, 0, maxIndex.value);
 
   if (nextIndex === activeIndex.value) {
     return;

@@ -6,6 +6,7 @@ import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import { BASE_SIZE_FONT_PRESET, BASE_SIZE_MEDIA_WIDTH_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/presets/base.preset';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
@@ -60,33 +61,11 @@ const props = withDefaults(defineProps<PropsAppInfoRow>(), {
 
 const slots = useSlots();
 
-const SIZE_MAP: Record<
-  tBaseSizeVariant,
-  {
-    fontSize: tFontSizeValue;
-    mediaWidth: tStyleSizeValue;
-    mediaGap: tSpaceValue;
-  }
-> = {
-  small: {
-    fontSize: 'sm',
-    mediaWidth: '2rem',
-    mediaGap: 2,
-  },
-  middle: {
-    fontSize: 'md',
-    mediaWidth: '2.5rem',
-    mediaGap: 3,
-  },
-  big: {
-    fontSize: 'lg',
-    mediaWidth: '3rem',
-    mediaGap: 4,
-  },
-};
-
-const sizeConfig = computed(() => SIZE_MAP[props.size]);
 const hasMedia = computed(() => Boolean(slots.media || props.image));
+
+const rowMediaWidth = computed(() => props.mediaWidth ?? BASE_SIZE_MEDIA_WIDTH_PRESET[props.size]);
+const rowMediaGap = computed(() => props.mediaGap ?? BASE_SIZE_SPACE_PRESET[props.size]);
+const rowFontSize = computed(() => props.fontSize ?? BASE_SIZE_FONT_PRESET[props.size]);
 
 const rowClass = computed(() => [
   'app-info-row',
@@ -101,13 +80,12 @@ const rowStyle = computed(() => ({
   '--cp-info-row-max-width': LibStyle.toSizeValue(props.maxWidth),
   '--cp-info-row-padding-x': resolvePaddingValue(props.paddingX),
   '--cp-info-row-padding-y': resolvePaddingValue(props.paddingY),
-  '--cp-info-row-media-width': LibStyle.toSizeValue(props.mediaWidth ?? sizeConfig.value.mediaWidth),
+  '--cp-info-row-media-width': LibStyle.toSizeValue(rowMediaWidth.value),
   '--cp-info-row-media-height': LibStyle.toSizeValue(props.mediaHeight),
-  '--cp-info-row-media-gap': resolveSpaceValue(props.mediaGap ?? sizeConfig.value.mediaGap),
+  '--cp-info-row-media-gap': resolveSpaceValue(rowMediaGap.value),
   '--cp-info-row-text-color': resolveColorValue(props.textColor),
 }));
 
-const rowFontSize = computed(() => props.fontSize ?? sizeConfig.value.fontSize);
 </script>
 
 <template>
@@ -118,7 +96,7 @@ const rowFontSize = computed(() => props.fontSize ?? sizeConfig.value.fontSize);
           v-if="image"
           :src="image.src"
           :alt="image.alt ?? ''"
-          :width="mediaWidth ?? sizeConfig.mediaWidth"
+          :width="rowMediaWidth"
           :height="mediaHeight"
           :loading="image.loading"
           :decoding="image.decoding"

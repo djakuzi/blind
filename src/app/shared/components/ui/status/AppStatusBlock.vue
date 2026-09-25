@@ -6,6 +6,7 @@ import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tAppStatus } from '@/app/shared/types/status';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import { BASE_SIZE_FONT_PRESET } from '@/app/styles/presets/base.preset';
 import type { tBorderStyleValue, tBorderWidthValue } from '@/app/styles/contracts/border.contract';
 import type { tColorValue } from '@/app/styles/contracts/color.contract';
 import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
@@ -95,20 +96,16 @@ const SIZE_MAP: Record<
   tBaseSizeVariant,
   {
     gap: tSpaceValue;
-    fontSize: tFontSizeValue;
   }
 > = {
   small: {
     gap: 3,
-    fontSize: 'sm',
   },
   middle: {
     gap: 4,
-    fontSize: 'md',
   },
   big: {
     gap: 5,
-    fontSize: 'lg',
   },
 };
 
@@ -121,7 +118,7 @@ const statusBackgroundColor = computed(() => props.backgroundColor ?? variantCon
 const statusBorderColor = computed(() => props.borderColor ?? variantConfig.value.borderColor);
 const statusTextColor = computed(() => props.textColor ?? variantConfig.value.textColor);
 const statusGap = computed(() => props.gap ?? sizeConfig.value.gap);
-const statusFontSize = computed(() => props.fontSize ?? sizeConfig.value.fontSize);
+const statusFontSize = computed(() => props.fontSize ?? BASE_SIZE_FONT_PRESET[props.size]);
 
 const statusRole = computed(() => (props.variant === 'error' || props.variant === 'warning' ? 'alert' : 'status'));
 

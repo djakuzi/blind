@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, ref, watch, provide } from 'vue';
 import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import { LibNumber } from '@/core/lib/number';
 import { ToolVibration } from '@/core/tool/vibration';
 
 interface iAppHoldActionActions {
@@ -56,14 +57,6 @@ let activePointerId: number | undefined;
 let activePointerTarget: HTMLElement | undefined;
 let activeTouchId: number | undefined;
 
-function normalizeProgressValue(value: number): number {
-  if (!Number.isFinite(value)) {
-    return 0;
-  }
-
-  return Math.min(100, Math.max(0, value));
-}
-
 function getCurrentTime(): number {
   return performance.now();
 }
@@ -83,7 +76,7 @@ function hasExceededMoveThreshold(x: number, y: number): boolean {
   return Math.hypot(x - holdStartX, y - holdStartY) >= threshold;
 }
 
-const normalizedInitialProgress = computed(() => normalizeProgressValue(props.initialProgress));
+const normalizedInitialProgress = computed(() => LibNumber.clampFinite(props.initialProgress, 0, 100, 0));
 
 const normalizedFillDuration = computed(() => Math.max(1, props.fillDuration ?? props.duration));
 
@@ -91,7 +84,7 @@ const normalizedHoldStartDelay = computed(() => Math.max(0, props.holdStartDelay
 
 const normalizedReleaseDuration = computed(() => Math.max(0, props.releaseDuration));
 
-const normalizedProgress = computed(() => normalizeProgressValue(progress.value));
+const normalizedProgress = computed(() => LibNumber.clampFinite(progress.value, 0, 100, 0));
 
 const progressRatio = computed(() => normalizedProgress.value / 100);
 

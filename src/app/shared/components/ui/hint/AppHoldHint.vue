@@ -4,6 +4,7 @@ import AppPulseAttention from '@/app/shared/components/effects/attention/AppPuls
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/presets/base.preset';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
@@ -44,29 +45,6 @@ const props = withDefaults(defineProps<PropsAppHoldHint>(), {
   uppercase: true,
 });
 
-const SIZE_MAP: Record<
-  tBaseSizeVariant,
-  {
-    fontSize: tFontSizeValue;
-    gap: tSpaceValue;
-  }
-> = {
-  small: {
-    fontSize: 'sm',
-    gap: 2,
-  },
-  middle: {
-    fontSize: 'md',
-    gap: 3,
-  },
-  big: {
-    fontSize: 'lg',
-    gap: 4,
-  },
-};
-
-const sizeConfig = computed(() => SIZE_MAP[props.size]);
-
 const resolvedItems = computed<readonly string[]>(() => {
   if (props.items?.length) {
     return props.items;
@@ -91,15 +69,15 @@ const hintDirection = computed(() => props.direction);
 
 const hintDesktopDirection = computed(() => props.desktopDirection ?? props.direction);
 
-const hintGap = computed(() => resolveSpaceValue(props.gap ?? sizeConfig.value.gap));
+const hintGap = computed(() => resolveSpaceValue(props.gap ?? BASE_SIZE_SPACE_PRESET[props.size]));
 
-const hintDesktopGap = computed(() => resolveSpaceValue(props.desktopGap ?? props.gap ?? sizeConfig.value.gap));
+const hintDesktopGap = computed(() => resolveSpaceValue(props.desktopGap ?? props.gap ?? BASE_SIZE_SPACE_PRESET[props.size]));
 
 const hintMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 
 const hintColor = computed(() => resolveColorValue(props.color));
 
-const hintFontSize = computed(() => resolveFontSizeValue(props.fontSize ?? sizeConfig.value.fontSize));
+const hintFontSize = computed(() => resolveFontSizeValue(props.fontSize ?? BASE_SIZE_FONT_PRESET[props.size]));
 </script>
 
 <template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { LibNumber } from '@/core/lib/number';
 
 interface Props {
   flowFrontDuration?: number;
@@ -13,14 +14,6 @@ const props = withDefaults(defineProps<Props>(), {
   progressRatio: 0,
 });
 
-function normalizeProgressRatio(value: number) {
-  if (!Number.isFinite(value)) {
-    return 0;
-  }
-
-  return Math.min(1, Math.max(0, value));
-}
-
 function normalizeDuration(value: number) {
   if (!Number.isFinite(value)) {
     return 1;
@@ -30,7 +23,7 @@ function normalizeDuration(value: number) {
 }
 
 const fillStyle = computed(() => {
-  const progressRatio = normalizeProgressRatio(props.progressRatio);
+  const progressRatio = LibNumber.clampFinite(props.progressRatio, 0, 1, 0);
 
   return {
     '--cp-blood-fill-offset': `${(1 - progressRatio) * 100}%`,

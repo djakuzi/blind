@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
 import {
   resolveBorderStyleValue,
   resolveBorderWidthValue,
@@ -74,32 +75,7 @@ const emit = defineEmits<{
 
 const inputRef = ref<HTMLInputElement | null>(null);
 
-const SIZE_MAP: Record<
-  tBaseSizeVariant,
-  {
-    paddingX: tPaddingValue;
-    paddingY: tPaddingValue;
-    fontSize: tFontSizeValue;
-  }
-> = {
-  small: {
-    paddingX: 3,
-    paddingY: 2,
-    fontSize: 'sm',
-  },
-  middle: {
-    paddingX: 5,
-    paddingY: 3,
-    fontSize: 'md',
-  },
-  big: {
-    paddingX: 6,
-    paddingY: 4,
-    fontSize: 'lg',
-  },
-};
-
-const sizeConfig = computed(() => SIZE_MAP[props.size]);
+const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
 
 const inputStyle = computed(() => ({
   '--cp-input-search-width': LibStyle.toSizeValue(props.width),

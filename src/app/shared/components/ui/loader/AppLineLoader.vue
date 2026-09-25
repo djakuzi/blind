@@ -4,6 +4,7 @@ import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import { LibNumber } from '@/core/lib/number';
 
 type tAppLineLoaderVariant = 'primary';
 
@@ -37,13 +38,7 @@ const emit = defineEmits<{
 const hasCompleted = ref(false);
 const progressElement = ref<HTMLElement | null>(null);
 
-const normalizedProgress = computed(() => {
-  if (!Number.isFinite(props.progress)) {
-    return 0;
-  }
-
-  return Math.min(100, Math.max(0, props.progress));
-});
+const normalizedProgress = computed(() => LibNumber.clampFinite(props.progress, 0, 100, 0));
 
 const loaderClass = computed(() => [
   'app-line-loader',
