@@ -6,21 +6,21 @@ import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { ToolVibration } from '@/core/tool/vibration';
 
 interface iAppHoldActionActions {
-  complete?: () => void
+  complete?: () => void;
 }
 
 export interface PropsAppHoldAction {
-  actions?: iAppHoldActionActions
-  disabled?: boolean
-  duration?: number
-  fillDuration?: number
-  holdStartDelay?: number
-  initialProgress?: number
-  maxWidth?: tStyleSizeValue
-  moveCancelThreshold?: number
-  releaseDuration?: number
-  vibrationDuration?: number
-  width?: tStyleSizeValue
+  actions?: iAppHoldActionActions;
+  disabled?: boolean;
+  duration?: number;
+  fillDuration?: number;
+  holdStartDelay?: number;
+  initialProgress?: number;
+  maxWidth?: tStyleSizeValue;
+  moveCancelThreshold?: number;
+  releaseDuration?: number;
+  vibrationDuration?: number;
+  width?: tStyleSizeValue;
 }
 
 const props = withDefaults(defineProps<PropsAppHoldAction>(), {
@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
 });
 
 const emit = defineEmits<{
-  complete: []
+  complete: [];
 }>();
 
 const isHolding = ref(false);
@@ -83,34 +83,19 @@ function hasExceededMoveThreshold(x: number, y: number): boolean {
   return Math.hypot(x - holdStartX, y - holdStartY) >= threshold;
 }
 
-const normalizedInitialProgress = computed(() => (
-  normalizeProgressValue(props.initialProgress)
-));
+const normalizedInitialProgress = computed(() => normalizeProgressValue(props.initialProgress));
 
-const normalizedFillDuration = computed(() => (
-  Math.max(1, props.fillDuration ?? props.duration)
-));
+const normalizedFillDuration = computed(() => Math.max(1, props.fillDuration ?? props.duration));
 
-const normalizedHoldStartDelay = computed(() => (
-  Math.max(0, props.holdStartDelay)
-));
+const normalizedHoldStartDelay = computed(() => Math.max(0, props.holdStartDelay));
 
-const normalizedReleaseDuration = computed(() => (
-  Math.max(0, props.releaseDuration)
-));
+const normalizedReleaseDuration = computed(() => Math.max(0, props.releaseDuration));
 
-const normalizedProgress = computed(() => (
-  normalizeProgressValue(progress.value)
-));
+const normalizedProgress = computed(() => normalizeProgressValue(progress.value));
 
-const progressRatio = computed(() => (
-  normalizedProgress.value / 100
-));
+const progressRatio = computed(() => normalizedProgress.value / 100);
 
-const isProgressActive = computed(() => (
-  isHolding.value
-  || normalizedProgress.value > normalizedInitialProgress.value
-));
+const isProgressActive = computed(() => isHolding.value || normalizedProgress.value > normalizedInitialProgress.value);
 
 provide(FILL_CONTEXT, {
   rootElement,
@@ -182,8 +167,7 @@ function updateHoldProgress() {
   const initialProgress = normalizedInitialProgress.value;
   const duration = normalizedFillDuration.value;
 
-  progress.value = initialProgress
-    + (elapsed / duration) * (100 - initialProgress);
+  progress.value = initialProgress + (elapsed / duration) * (100 - initialProgress);
 
   if (progress.value >= 100) {
     completeHold();
@@ -241,8 +225,7 @@ function animateReleaseProgress() {
     const elapsed = getCurrentTime() - releaseStartedAt;
     const releaseProgress = Math.min(1, elapsed / duration);
 
-    progress.value = finishProgress
-      + (startProgress - finishProgress) * (1 - releaseProgress);
+    progress.value = finishProgress + (startProgress - finishProgress) * (1 - releaseProgress);
 
     if (releaseProgress >= 1) {
       progress.value = finishProgress;
@@ -264,10 +247,10 @@ function releasePointerCapture() {
   activePointerTarget = undefined;
 
   if (
-    pointerId === undefined
-    || pointerTarget === undefined
-    || typeof pointerTarget.hasPointerCapture !== 'function'
-    || typeof pointerTarget.releasePointerCapture !== 'function'
+    pointerId === undefined ||
+    pointerTarget === undefined ||
+    typeof pointerTarget.hasPointerCapture !== 'function' ||
+    typeof pointerTarget.releasePointerCapture !== 'function'
   ) {
     return;
   }
@@ -280,10 +263,7 @@ function releasePointerCapture() {
 }
 
 function resetHoldState(isImmediate = false) {
-  const shouldAnimateRelease = (
-    !isImmediate
-    && progress.value > normalizedInitialProgress.value
-  );
+  const shouldAnimateRelease = !isImmediate && progress.value > normalizedInitialProgress.value;
 
   stopHoldStartTimer();
   stopProgressAnimation();
@@ -342,10 +322,7 @@ function startPointerHold(event: PointerEvent) {
 }
 
 function movePointerHold(event: PointerEvent) {
-  if (
-    activePointerId === undefined
-    || event.pointerId !== activePointerId
-  ) {
+  if (activePointerId === undefined || event.pointerId !== activePointerId) {
     return;
   }
 
@@ -355,11 +332,7 @@ function movePointerHold(event: PointerEvent) {
 }
 
 function resetPointerHold(event?: PointerEvent) {
-  if (
-    event !== undefined
-    && activePointerId !== undefined
-    && event.pointerId !== activePointerId
-  ) {
+  if (event !== undefined && activePointerId !== undefined && event.pointerId !== activePointerId) {
     return;
   }
 
@@ -371,8 +344,7 @@ function getActiveChangedTouch(event: TouchEvent): Touch | undefined {
     return undefined;
   }
 
-  return Array.from(event.changedTouches)
-    .find((touch) => touch.identifier === activeTouchId);
+  return Array.from(event.changedTouches).find((touch) => touch.identifier === activeTouchId);
 }
 
 function getActiveTouch(event: TouchEvent): Touch | undefined {
@@ -380,8 +352,7 @@ function getActiveTouch(event: TouchEvent): Touch | undefined {
     return undefined;
   }
 
-  return Array.from(event.touches)
-    .find((touch) => touch.identifier === activeTouchId);
+  return Array.from(event.touches).find((touch) => touch.identifier === activeTouchId);
 }
 
 function startTouchHold(event: TouchEvent) {
@@ -409,10 +380,7 @@ function moveTouchHold(event: TouchEvent) {
 
   const touch = getActiveTouch(event);
 
-  if (
-    touch !== undefined
-    && hasExceededMoveThreshold(touch.clientX, touch.clientY)
-  ) {
+  if (touch !== undefined && hasExceededMoveThreshold(touch.clientX, touch.clientY)) {
     resetHoldState();
   }
 }
@@ -422,10 +390,7 @@ function resetTouchHold(event: TouchEvent) {
     return;
   }
 
-  if (
-    activeTouchId === undefined
-    || getActiveChangedTouch(event) === undefined
-  ) {
+  if (activeTouchId === undefined || getActiveChangedTouch(event) === undefined) {
     return;
   }
 
@@ -434,11 +399,7 @@ function resetTouchHold(event: TouchEvent) {
 }
 
 function startMouseHold(event: MouseEvent) {
-  if (
-    supportsPointerEvents()
-    || props.disabled
-    || event.button !== 0
-  ) {
+  if (supportsPointerEvents() || props.disabled || event.button !== 0) {
     return;
   }
 
@@ -449,10 +410,7 @@ function startMouseHold(event: MouseEvent) {
 }
 
 function moveMouseHold(event: MouseEvent) {
-  if (
-    supportsPointerEvents()
-    || activeTouchId !== undefined
-  ) {
+  if (supportsPointerEvents() || activeTouchId !== undefined) {
     return;
   }
 

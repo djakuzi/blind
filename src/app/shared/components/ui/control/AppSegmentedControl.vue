@@ -10,22 +10,22 @@ import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/ra
 import { ToolVibration } from '@/core/tool/vibration';
 
 export interface iAppSegmentedControlOption {
-  label: string
-  value: string
-  disabled?: boolean
+  label: string;
+  value: string;
+  disabled?: boolean;
 }
 
 export interface PropsAppSegmentedControl {
-  modelValue: string
-  options: readonly iAppSegmentedControlOption[]
-  disabled?: boolean
-  vibration?: boolean
-  size?: tBaseSizeVariant
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  paddingX?: tPaddingValue
-  paddingY?: tPaddingValue
-  borderRadius?: tRadiusValue
+  modelValue: string;
+  options: readonly iAppSegmentedControlOption[];
+  disabled?: boolean;
+  vibration?: boolean;
+  size?: tBaseSizeVariant;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  paddingX?: tPaddingValue;
+  paddingY?: tPaddingValue;
+  borderRadius?: tRadiusValue;
 }
 
 const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
@@ -40,14 +40,17 @@ const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
 });
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string]
+  'update:modelValue': [value: string];
 }>();
 
-const SIZE_MAP: Record<tBaseSizeVariant, {
-  paddingX: tPaddingValue
-  paddingY: tPaddingValue
-  fontSize: tFontSizeValue
-}> = {
+const SIZE_MAP: Record<
+  tBaseSizeVariant,
+  {
+    paddingX: tPaddingValue;
+    paddingY: tPaddingValue;
+    fontSize: tFontSizeValue;
+  }
+> = {
   small: {
     paddingX: 3,
     paddingY: 2,
@@ -70,13 +73,9 @@ const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
 const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 const controlBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
 
-const itemPaddingX = computed(() => resolvePaddingValue(
-  props.paddingX ?? sizeConfig.value.paddingX,
-));
+const itemPaddingX = computed(() => resolvePaddingValue(props.paddingX ?? sizeConfig.value.paddingX));
 
-const itemPaddingY = computed(() => resolvePaddingValue(
-  props.paddingY ?? sizeConfig.value.paddingY,
-));
+const itemPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? sizeConfig.value.paddingY));
 
 const itemFontSize = computed(() => sizeConfig.value.fontSize);
 
@@ -94,11 +93,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
 </script>
 
 <template>
-  <div
-    class="app-segmented-control"
-    :class="{ 'app-segmented-control--disabled': disabled }"
-    role="radiogroup"
-  >
+  <div class="app-segmented-control" :class="{ 'app-segmented-control--disabled': disabled }" role="radiogroup">
     <button
       v-for="option in options"
       :key="option.value"

@@ -2,6 +2,6 @@ import type { tAppScalePresetMode } from '@/app/styles/contracts/appScale.contra
 import type { tAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
 
 export interface LocaleSettings {
-  theme: Record<tAppThemeMode, string>
-  scale: Record<tAppScalePresetMode, string>
+  theme: Record<tAppThemeMode, string>;
+  scale: Record<tAppScalePresetMode, string>;
 }

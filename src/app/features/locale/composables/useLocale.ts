@@ -4,10 +4,7 @@ import type { Pinia } from 'pinia';
 import type { Locale } from '@/app/shared/types/locale';
 import { useLanguageStore } from '@/app/stores/language/language.store';
 
-export function useLocale<TResult = Locale>(
-  selector?: (locale: Locale) => TResult,
-  pinia?: Pinia,
-): ComputedRef<TResult> {
+export function useLocale<TResult = Locale>(selector?: (locale: Locale) => TResult, pinia?: Pinia): ComputedRef<TResult> {
   const languageStore = useLanguageStore(pinia);
 
   return computed(() => {

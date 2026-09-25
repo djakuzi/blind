@@ -17,5 +17,4 @@ export const STATIC_LOCALE_REGISTRY = {
 
 export const STATIC_LOCALE_DEFAULT_LANGUAGE = 'en';
 
-export type tStaticLocaleLanguage =
-  keyof typeof STATIC_LOCALE_REGISTRY;
+export type tStaticLocaleLanguage = keyof typeof STATIC_LOCALE_REGISTRY;

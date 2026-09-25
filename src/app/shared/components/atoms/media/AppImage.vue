@@ -6,16 +6,16 @@ import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock
 type tAppImageFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
 
 export interface PropsAppImage {
-  src: string
-  alt?: string
-  maxWidth?: PropsAppBlock['maxWidth']
-  width?: PropsAppBlock['width']
-  height?: PropsAppBlock['height']
-  objectFit?: tAppImageFit
-  display?: PropsAppBlock['display']
-  aspectRatio?: string
-  loading?: 'eager' | 'lazy'
-  decoding?: 'async' | 'sync' | 'auto'
+  src: string;
+  alt?: string;
+  maxWidth?: PropsAppBlock['maxWidth'];
+  width?: PropsAppBlock['width'];
+  height?: PropsAppBlock['height'];
+  objectFit?: tAppImageFit;
+  display?: PropsAppBlock['display'];
+  aspectRatio?: string;
+  loading?: 'eager' | 'lazy';
+  decoding?: 'async' | 'sync' | 'auto';
 }
 
 const props = withDefaults(defineProps<PropsAppImage>(), {
@@ -37,21 +37,8 @@ const imageStyle = computed(() => ({
 </script>
 
 <template>
-  <AppBlock
-    class="app-image"
-    :display="display"
-    :width="width"
-    :max-width="maxWidth"
-    :height="height"
-    :style="imageStyle"
-  >
-    <img
-      class="app-image__media"
-      :src="src"
-      :alt="alt"
-      :loading="loading"
-      :decoding="decoding"
-    >
+  <AppBlock class="app-image" :display="display" :width="width" :max-width="maxWidth" :height="height" :style="imageStyle">
+    <img class="app-image__media" :src="src" :alt="alt" :loading="loading" :decoding="decoding" />
   </AppBlock>
 </template>
 

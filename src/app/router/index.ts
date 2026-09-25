@@ -18,12 +18,7 @@ export const rootRoute: RouteRecordRaw = {
         name: KEY_ROUTE.menu.index,
       },
       component: LayoutBase,
-      children: [
-        routeMenu,
-        routePreGame,
-        routeGame,
-        routeSettings,
-      ],
+      children: [routeMenu, routePreGame, routeGame, routeSettings],
     },
   ],
 };

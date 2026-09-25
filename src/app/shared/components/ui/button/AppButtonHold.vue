@@ -10,23 +10,23 @@ import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 type tAppButtonHoldVariant = 'primary';
 
 interface iAppButtonHoldActions {
-  complete?: () => void
+  complete?: () => void;
 }
 
 interface Props {
-  actions?: iAppButtonHoldActions
-  disabled?: boolean
-  bloodFlowFrontDuration?: number
-  duration?: number
-  fillDuration?: number
-  initialProgress?: number
-  releaseDuration?: number
-  vibrationDuration?: number
-  size?: tBaseSizeVariant
-  maxWidth?: tStyleSizeValue
-  width?: tStyleSizeValue
-  variant?: tAppButtonHoldVariant
-  text?: string
+  actions?: iAppButtonHoldActions;
+  disabled?: boolean;
+  bloodFlowFrontDuration?: number;
+  duration?: number;
+  fillDuration?: number;
+  initialProgress?: number;
+  releaseDuration?: number;
+  vibrationDuration?: number;
+  size?: tBaseSizeVariant;
+  maxWidth?: tStyleSizeValue;
+  width?: tStyleSizeValue;
+  variant?: tAppButtonHoldVariant;
+  text?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -46,14 +46,10 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  complete: []
+  complete: [];
 }>();
 
-const buttonClass = computed(() => [
-  'app-button-hold',
-  `app-button-hold--${props.variant}`,
-  `app-button-hold--size-${props.size}`,
-]);
+const buttonClass = computed(() => ['app-button-hold', `app-button-hold--${props.variant}`, `app-button-hold--size-${props.size}`]);
 
 const holdActionWidth = computed(() => LibStyle.toSizeValue(props.width));
 const holdActionMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
@@ -77,23 +73,10 @@ function handleComplete() {
     @complete="handleComplete"
   >
     <template #default="{ progressRatio, isProgressActive }">
-      <button
-        :class="buttonClass"
-        :disabled="disabled"
-        type="button"
-      >
-        <AppBloodFill
-          :flow-front-duration="bloodFlowFrontDuration"
-          :is-active="isProgressActive"
-          :progress-ratio="progressRatio"
-        />
+      <button :class="buttonClass" :disabled="disabled" type="button">
+        <AppBloodFill :flow-front-duration="bloodFlowFrontDuration" :is-active="isProgressActive" :progress-ratio="progressRatio" />
 
-        <AppFillAware
-          class="app-button-hold__content"
-          tag="span"
-          color="inherit"
-          filled-color="on-primary"
-        >
+        <AppFillAware class="app-button-hold__content" tag="span" color="inherit" filled-color="on-primary">
           <slot>{{ text }}</slot>
         </AppFillAware>
       </button>
@@ -131,15 +114,9 @@ function handleComplete() {
 
 @media (hover: hover) and (pointer: fine) {
   .app-button-hold:not(:disabled):hover {
-    background: color-mix(
-      in srgb,
-      var(--app-color-surface-primary) 94%,
-      var(--app-color-primary)
-    );
+    background: color-mix(in srgb, var(--app-color-surface-primary) 94%, var(--app-color-primary));
     border-color: var(--app-color-primary);
-    box-shadow:
-      0 0 0 var(--app-border-width-medium)
-      color-mix(in srgb, var(--app-color-primary) 16%, transparent);
+    box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 16%, transparent);
   }
 }
 

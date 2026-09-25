@@ -14,10 +14,10 @@ import { useLanguageStore } from '@/app/stores/language/language.store';
 import { formatGameModePlayers, formatGameModeRounds } from '../helpers/formatGameMode.helper';
 
 export interface PropsUiCardGameMode {
-  mode: ModelGameMode
-  optionsAccessibilityLabel: string
-  connectionTypesAccessibilityLabel: string
-  disabled?: boolean
+  mode: ModelGameMode;
+  optionsAccessibilityLabel: string;
+  connectionTypesAccessibilityLabel: string;
+  disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<PropsUiCardGameMode>(), {
@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<PropsUiCardGameMode>(), {
 });
 
 const emit = defineEmits<{
-  complete: []
+  complete: [];
 }>();
 
 const { resolvedThemeMode } = useAppThemeMode();
@@ -42,34 +42,20 @@ const currentLanguageCode = computed(() => {
   return languageStore.currentLanguage.key;
 });
 
-const modeLocale = computed(() =>
-  locale.value.game.modes[props.mode.key],
-);
+const modeLocale = computed(() => locale.value.game.modes[props.mode.key]);
 
-const modeTitle = computed(() =>
-  modeLocale.value?.title ?? props.mode.key,
-);
+const modeTitle = computed(() => modeLocale.value?.title ?? props.mode.key);
 
-const modeDescription = computed(() =>
-  modeLocale.value?.description ?? '',
-);
+const modeDescription = computed(() => modeLocale.value?.description ?? '');
 
 const optionItems = computed<iAppInfoRowListItem[]>(() => [
   {
     id: 'players',
-    text: formatGameModePlayers(
-      props.mode,
-      currentLanguageCode.value,
-      locale.value,
-    ),
+    text: formatGameModePlayers(props.mode, currentLanguageCode.value, locale.value),
   },
   {
     id: 'rounds',
-    text: formatGameModeRounds(
-      props.mode,
-      currentLanguageCode.value,
-      locale.value,
-    ),
+    text: formatGameModeRounds(props.mode, currentLanguageCode.value, locale.value),
   },
 ]);
 
@@ -105,24 +91,11 @@ function handleComplete() {
     <div class="ui-card-game-mode__layout">
       <div class="ui-card-game-mode__main">
         <div class="ui-card-game-mode__header">
-          <AppFillAware
-            color="text-primary"
-            filled-color="on-primary"
-          >
-            <AppTitle
-              :text="modeTitle"
-              tag="h2"
-              color="inherit"
-              font-size="2xxl"
-              font-weight="bold"
-            />
+          <AppFillAware color="text-primary" filled-color="on-primary">
+            <AppTitle :text="modeTitle" tag="h2" color="inherit" font-size="2xxl" font-weight="bold" />
           </AppFillAware>
 
-          <AppFillAware
-            class="ui-card-game-mode__description"
-            color="text-secondary"
-            filled-color="on-primary"
-          >
+          <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">
             <AppText
               :text="modeDescription"
               color="inherit"
@@ -148,13 +121,7 @@ function handleComplete() {
       </div>
 
       <div class="ui-card-game-mode__footer">
-        <AppFillAware
-          class="ui-card-game-mode__info"
-          tag="div"
-          color="text-primary"
-          filled-color="on-primary"
-          :initial-filled="true"
-        >
+        <AppFillAware class="ui-card-game-mode__info" tag="div" color="text-primary" filled-color="on-primary" :initial-filled="true">
           <AppInfoRowList
             :items="optionItems"
             width="auto"
@@ -168,13 +135,7 @@ function handleComplete() {
           />
         </AppFillAware>
 
-        <AppFillAware
-          class="ui-card-game-mode__info"
-          tag="div"
-          color="text-primary"
-          filled-color="on-primary"
-          :initial-filled="true"
-        >
+        <AppFillAware class="ui-card-game-mode__info" tag="div" color="text-primary" filled-color="on-primary" :initial-filled="true">
           <AppInfoRowList
             :items="connectionItems"
             width="auto"
@@ -205,9 +166,7 @@ function handleComplete() {
 @media (hover: hover) and (pointer: fine) {
   .ui-card-game-mode :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
     border-color: var(--app-color-primary);
-    box-shadow:
-      0 0 0 var(--app-border-width-medium)
-      color-mix(in srgb, var(--app-color-primary) 18%, transparent);
+    box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 18%, transparent);
   }
 }
 

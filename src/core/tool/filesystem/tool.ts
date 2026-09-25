@@ -1,9 +1,6 @@
 import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 
-export async function setJson<T>(
-  path: string,
-  value: T,
-): Promise<void> {
+export async function setJson<T>(path: string, value: T): Promise<void> {
   await Filesystem.writeFile({
     path,
     directory: Directory.Data,
@@ -13,9 +10,7 @@ export async function setJson<T>(
   });
 }
 
-export async function getJson<T>(
-  path: string,
-): Promise<T | null> {
+export async function getJson<T>(path: string): Promise<T | null> {
   try {
     const { data } = await Filesystem.readFile({
       path,
@@ -23,10 +18,7 @@ export async function getJson<T>(
       encoding: Encoding.UTF8,
     });
 
-    const content =
-      typeof data === 'string'
-        ? data
-        : await data.text();
+    const content = typeof data === 'string' ? data : await data.text();
 
     return JSON.parse(content) as T;
   } catch {
@@ -34,9 +26,7 @@ export async function getJson<T>(
   }
 }
 
-export async function remove(
-  path: string,
-): Promise<void> {
+export async function remove(path: string): Promise<void> {
   try {
     await Filesystem.deleteFile({
       path,

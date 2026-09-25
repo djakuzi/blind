@@ -8,9 +8,6 @@ const appSetup = useAppSetup();
 </script>
 
 <template>
-  <RouterView
-    v-if="appSetup.isReady.value"
-    key="app-router"
-  />
+  <RouterView v-if="appSetup.isReady.value" key="app-router" />
   <ProviderLoaderApp />
 </template>

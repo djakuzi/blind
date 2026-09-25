@@ -8,17 +8,17 @@ import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 type tAppLineLoaderVariant = 'primary';
 
 interface iAppLineLoaderActions {
-  complete?: () => void
+  complete?: () => void;
 }
 
 interface Props {
-  progress?: number
-  size?: tBaseSizeVariant
-  maxWidth?: PropsAppBlock['maxWidth']
-  width?: PropsAppBlock['width']
-  variant?: tAppLineLoaderVariant
-  actions?: iAppLineLoaderActions
-  text: string
+  progress?: number;
+  size?: tBaseSizeVariant;
+  maxWidth?: PropsAppBlock['maxWidth'];
+  width?: PropsAppBlock['width'];
+  variant?: tAppLineLoaderVariant;
+  actions?: iAppLineLoaderActions;
+  text: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  complete: []
+  complete: [];
 }>();
 
 const hasCompleted = ref(false);
@@ -105,13 +105,7 @@ watch(
 </script>
 
 <template>
-  <AppFlex
-    :class="loaderClass"
-    direction="column"
-    align="center"
-    :width="width"
-    :max-width="maxWidth"
-  >
+  <AppFlex :class="loaderClass" direction="column" align="center" :width="width" :max-width="maxWidth">
     <AppBlock
       class="app-line-loader__track"
       overflow="hidden"
@@ -128,10 +122,7 @@ watch(
       />
     </AppBlock>
 
-    <span
-      v-if="text"
-      class="app-line-loader__text"
-    >
+    <span v-if="text" class="app-line-loader__text">
       {{ text }}
     </span>
   </AppFlex>

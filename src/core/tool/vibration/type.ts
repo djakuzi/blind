@@ -1,13 +1,13 @@
 import type { ImpactStyle, NotificationType } from '@capacitor/haptics';
 
 export interface iVibrationOptions {
-  duration?: number
+  duration?: number;
 }
 
 export interface iVibrationImpactOptions {
-  style?: ImpactStyle
+  style?: ImpactStyle;
 }
 
 export interface iVibrationNotificationOptions {
-  type?: NotificationType
+  type?: NotificationType;
 }

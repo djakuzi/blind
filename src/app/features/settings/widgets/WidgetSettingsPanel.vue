@@ -32,20 +32,9 @@ const SETTINGS_ITEMS = [
   },
 ] as const;
 
-const {
-  appThemeMode,
-  appScaleMode,
-  soundEnabled,
-  setAppThemeMode,
-  setAppScaleMode,
-  setSoundEnabled,
-} = useSettings();
+const { appThemeMode, appScaleMode, soundEnabled, setAppThemeMode, setAppScaleMode, setSoundEnabled } = useSettings();
 
-const {
-  languages,
-  currentLanguage,
-  setAppLanguage,
-} = useAppLanguage();
+const { languages, currentLanguage, setAppLanguage } = useAppLanguage();
 
 const isLanguagePickerOpen = ref(false);
 
@@ -59,13 +48,9 @@ const currentLanguageCode = computed(() => {
   return currentLanguage.value.key;
 });
 
-const settingsLocale = computed(() =>
-  locale.value.views.settings.index.ui,
-);
+const settingsLocale = computed(() => locale.value.views.settings.index.ui);
 
-const changeLanguageModalLocale = computed(() =>
-  locale.value.views.settings.index.modals.changeLanguage,
-);
+const changeLanguageModalLocale = computed(() => locale.value.views.settings.index.modals.changeLanguage);
 
 const settingsLabelMap = computed(() => ({
   theme: settingsLocale.value.theme,
@@ -88,38 +73,27 @@ const scaleOptions = computed(() =>
   })),
 );
 
-function getLanguageDisplayName(
-  language: ModelLanguage,
-) {
-  return LibText.getLanguageDisplayName(
-    language.key,
-    currentLanguageCode.value,
-  ) ?? language.name;
+function getLanguageDisplayName(language: ModelLanguage) {
+  return LibText.getLanguageDisplayName(language.key, currentLanguageCode.value) ?? language.name;
 }
 
-function createLanguagePickerItem(
-  language: ModelLanguage,
-): iWidgetSearchPickerItem {
+function createLanguagePickerItem(language: ModelLanguage): iWidgetSearchPickerItem {
   return {
     value: language.key,
     label: getLanguageDisplayName(language),
     image: language.img
       ? {
-        src: language.img,
-        alt: '',
-        loading: 'lazy',
-      }
+          src: language.img,
+          alt: '',
+          loading: 'lazy',
+        }
       : undefined,
   };
 }
 
-const languagePickerItems = computed(() =>
-  languages.value.map(createLanguagePickerItem),
-);
+const languagePickerItems = computed(() => languages.value.map(createLanguagePickerItem));
 
-async function handleThemeModeChange(
-  value: string,
-) {
+async function handleThemeModeChange(value: string) {
   if (!isAppThemeMode(value)) {
     return;
   }
@@ -127,42 +101,26 @@ async function handleThemeModeChange(
   await setAppThemeMode(value);
 }
 
-async function handleScaleModeChange(
-  value: string,
-) {
-  if (
-    !isAppScaleMode(value)
-    || value === APP_SCALE_SYSTEM_MODE
-  ) {
+async function handleScaleModeChange(value: string) {
+  if (!isAppScaleMode(value) || value === APP_SCALE_SYSTEM_MODE) {
     return;
   }
 
   await setAppScaleMode(value);
 }
 
-function handleSoundEnabledChange(
-  value: boolean,
-) {
+function handleSoundEnabledChange(value: boolean) {
   setSoundEnabled(value);
 }
 
-async function handleLanguageChange(
-  value: string,
-) {
+async function handleLanguageChange(value: string) {
   await setAppLanguage(value);
   isLanguagePickerOpen.value = false;
 }
 </script>
 
 <template>
-  <AppCard
-    class="widget-settings-panel"
-    tag="section"
-    width="140rem"
-    max-width="100%"
-    :padding-x="10"
-    padding-y="0"
-  >
+  <AppCard class="widget-settings-panel" tag="section" width="140rem" max-width="100%" :padding-x="10" padding-y="0">
     <WidgetList
       :items="SETTINGS_ITEMS"
       item-key="id"
@@ -186,13 +144,7 @@ async function handleLanguageChange(
           :max-lines="1"
         />
 
-        <AppFlex
-          class="widget-settings-panel__control"
-          align="center"
-          justify="end"
-          width="100%"
-          max-width="60rem"
-        >
+        <AppFlex class="widget-settings-panel__control" align="center" justify="end" width="100%" max-width="60rem">
           <AppSegmentedControl
             v-if="item.id === 'theme'"
             :model-value="appThemeMode"

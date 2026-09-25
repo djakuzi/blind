@@ -12,18 +12,18 @@ type tAppPositionCenter = 'x' | 'y' | 'xy';
 type tAppPositionOffsetValue = tSpaceValue | tSafeAreaToken;
 
 interface iAppPositionOffsets {
-  top?: tAppPositionOffsetValue
-  right?: tAppPositionOffsetValue
-  bottom?: tAppPositionOffsetValue
-  left?: tAppPositionOffsetValue
+  top?: tAppPositionOffsetValue;
+  right?: tAppPositionOffsetValue;
+  bottom?: tAppPositionOffsetValue;
+  left?: tAppPositionOffsetValue;
 }
 
 interface Props {
-  type?: tAppPositionType
-  position?: iAppPositionOffsets
-  center?: tAppPositionCenter
-  layer?: tLayerValue
-  isShow?: boolean
+  type?: tAppPositionType;
+  position?: iAppPositionOffsets;
+  center?: tAppPositionCenter;
+  layer?: tLayerValue;
+  isShow?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -34,15 +34,10 @@ const props = withDefaults(defineProps<Props>(), {
   isShow: true,
 });
 
-const positionClass = computed(() => [
-  'app-position',
-  props.center ? `app-position--center-${props.center}` : undefined,
-]);
+const positionClass = computed(() => ['app-position', props.center ? `app-position--center-${props.center}` : undefined]);
 
 function resolvePositionOffsetValue(value?: tAppPositionOffsetValue) {
-  return typeof value === 'string' && isSafeAreaToken(value)
-    ? safeAreaTokenVar(value)
-    : resolveSpaceValue(value);
+  return typeof value === 'string' && isSafeAreaToken(value) ? safeAreaTokenVar(value) : resolveSpaceValue(value);
 }
 
 const positionStyle = computed(() => ({
@@ -56,11 +51,7 @@ const positionStyle = computed(() => ({
 </script>
 
 <template>
-  <div
-    v-if="isShow"
-    :class="positionClass"
-    :style="positionStyle"
-  >
+  <div v-if="isShow" :class="positionClass" :style="positionStyle">
     <slot />
   </div>
 </template>

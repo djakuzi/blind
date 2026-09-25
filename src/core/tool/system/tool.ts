@@ -1,6 +1,4 @@
-export type {
-  tSystemThemeMode,
-} from './type';
+export type { tSystemThemeMode } from './type';
 import { Capacitor } from '@capacitor/core';
 import { Device } from '@capacitor/device';
 import { TextZoom } from '@capacitor/text-zoom';
@@ -69,7 +67,5 @@ export function getPreferredThemeMode(): tSystemThemeMode {
     return 'light';
   }
 
-  return globalThis.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
+  return globalThis.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }

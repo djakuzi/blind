@@ -2,19 +2,10 @@ import * as helpers from '../../helpers';
 import type { tHttpMiddleware } from '../../type';
 
 export function createAbortMiddleware(): tHttpMiddleware {
-  return async function abortMiddleware(
-    context,
-    next,
-  ) {
-    const timeout =
-      context.requestConfig.timeout
-      ?? context.clientConfig.timeout;
+  return async function abortMiddleware(context, next) {
+    const timeout = context.requestConfig.timeout ?? context.clientConfig.timeout;
 
-    const abortState =
-      helpers.createAbortState(
-        context.requestConfig.signal,
-        timeout,
-      );
+    const abortState = helpers.createAbortState(context.requestConfig.signal, timeout);
 
     context.abortState = abortState;
 

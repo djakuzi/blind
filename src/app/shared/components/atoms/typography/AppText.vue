@@ -4,21 +4,17 @@ import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/colo
 import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import { resolveFontWeightValue, type tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
 
-type tAppTextTag =
-  | 'p'
-  | 'span'
-  | 'div'
-  | 'label';
+type tAppTextTag = 'p' | 'span' | 'div' | 'label';
 
 export interface PropsAppText {
-  text: string
-  tag?: tAppTextTag
-  color?: tColorValue
-  fontSize?: tFontSizeValue
-  fontWeight?: tFontWeightValue
-  uppercase?: boolean
-  ellipsis?: boolean
-  maxLines?: number
+  text: string;
+  tag?: tAppTextTag;
+  color?: tColorValue;
+  fontSize?: tFontSizeValue;
+  fontWeight?: tFontWeightValue;
+  uppercase?: boolean;
+  ellipsis?: boolean;
+  maxLines?: number;
 }
 
 const props = withDefaults(defineProps<PropsAppText>(), {
@@ -31,9 +27,7 @@ const props = withDefaults(defineProps<PropsAppText>(), {
   maxLines: 1,
 });
 
-const resolvedMaxLines = computed(() =>
-  Math.max(1, Math.trunc(props.maxLines)),
-);
+const resolvedMaxLines = computed(() => Math.max(1, Math.trunc(props.maxLines)));
 
 const textClass = computed(() => [
   'app-text',
@@ -45,24 +39,15 @@ const textClass = computed(() => [
   },
 ]);
 
-const textColor = computed(() =>
-  resolveColorValue(props.color),
-);
+const textColor = computed(() => resolveColorValue(props.color));
 
-const textFontSize = computed(() =>
-  resolveFontSizeValue(props.fontSize),
-);
+const textFontSize = computed(() => resolveFontSizeValue(props.fontSize));
 
-const textFontWeight = computed(() =>
-  resolveFontWeightValue(props.fontWeight),
-);
+const textFontWeight = computed(() => resolveFontWeightValue(props.fontWeight));
 </script>
 
 <template>
-  <component
-    :is="tag"
-    :class="textClass"
-  >
+  <component :is="tag" :class="textClass">
     <slot>{{ text }}</slot>
   </component>
 </template>

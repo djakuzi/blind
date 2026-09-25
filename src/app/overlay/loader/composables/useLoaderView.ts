@@ -4,14 +4,7 @@ import { useLoaderStore } from '@/app/stores/loader/loader.store';
 
 export function useLoaderView() {
   const loaderStore = useLoaderStore();
-  const {
-    errors,
-    loadedResourcesCount,
-    pendingResourcesCount,
-    progress,
-    scopesList,
-    totalResourcesCount,
-  } = storeToRefs(loaderStore);
+  const { errors, loadedResourcesCount, pendingResourcesCount, progress, scopesList, totalResourcesCount } = storeToRefs(loaderStore);
 
   const isLoading = computed(() => {
     return totalResourcesCount.value > 0 && pendingResourcesCount.value > 0;

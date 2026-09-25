@@ -8,9 +8,9 @@ import { config } from '@/config';
 type tAppVersionVariant = 'primary';
 
 interface Props {
-  size?: tBaseSizeVariant
-  fontSize?: tFontSizeValue
-  variant?: tAppVersionVariant
+  size?: tBaseSizeVariant;
+  fontSize?: tFontSizeValue;
+  variant?: tAppVersionVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -20,9 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const versionLabel = computed(() => {
-  const version = config.app.version.startsWith('v')
-    ? config.app.version
-    : `v${config.app.version}`;
+  const version = config.app.version.startsWith('v') ? config.app.version : `v${config.app.version}`;
 
   return version;
 });
@@ -37,9 +35,7 @@ const versionFontSize = computed(() => resolveFontSizeValue(props.fontSize));
 </script>
 
 <template>
-  <span
-    :class="versionClass"
-  >
+  <span :class="versionClass">
     {{ versionLabel }}
   </span>
 </template>

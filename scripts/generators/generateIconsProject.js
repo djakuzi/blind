@@ -25,19 +25,14 @@ const iconFiles = collectSvgFiles(iconsDir)
   });
 
 const importsBlock = iconFiles
-  .map(
-    ({ importName, relativePath }) =>
-      `import ${importName} from '@/assets/icons/${relativePath}?raw'`,
-  )
+  .map(({ importName, relativePath }) => `import ${importName} from '@/assets/icons/${relativePath}?raw'`)
   .join('\n');
 
 const groupedIcons = Object.groupBy(iconFiles, ({ groupName }) => groupName);
 
 const iconsBlock = Object.entries(groupedIcons)
   .map(([groupName, icons]) => {
-    const entries = icons
-      .map(({ iconName, importName }) => `    ${iconName}: ${importName},`)
-      .join('\n');
+    const entries = icons.map(({ iconName, importName }) => `    ${iconName}: ${importName},`).join('\n');
 
     return `  ${groupName}: {
 ${entries}

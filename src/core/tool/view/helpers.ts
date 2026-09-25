@@ -11,7 +11,9 @@ export function canUseWebScreenOrientation() {
 }
 
 export function canUseFullscreen() {
-  return typeof document !== 'undefined'
-    && typeof document.documentElement.requestFullscreen === 'function'
-    && typeof document.exitFullscreen === 'function';
+  return (
+    typeof document !== 'undefined' &&
+    typeof document.documentElement.requestFullscreen === 'function' &&
+    typeof document.exitFullscreen === 'function'
+  );
 }

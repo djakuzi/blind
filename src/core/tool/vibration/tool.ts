@@ -52,10 +52,7 @@ function vibrateBrowser(pattern: readonly number[]) {
   }
 }
 
-async function selectionByPattern(
-  pattern: tSelectionPattern,
-  callback: () => Promise<void>,
-) {
+async function selectionByPattern(pattern: tSelectionPattern, callback: () => Promise<void>) {
   if (Capacitor.isNativePlatform()) {
     try {
       await callback();

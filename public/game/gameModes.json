@@ -11,11 +11,7 @@
       "rounds": 3,
       "winCondition": "single-hit"
     },
-    "typeConnection": [
-      "BLUETOOTH",
-      "LAN",
-      "ONLINE"
-    ]
+    "typeConnection": ["BLUETOOTH", "LAN", "ONLINE"]
   },
   {
     "key": "COMBAT",
@@ -29,11 +25,7 @@
       "rounds": 3,
       "winCondition": "health"
     },
-    "typeConnection": [
-      "BLUETOOTH",
-      "LAN",
-      "ONLINE"
-    ]
+    "typeConnection": ["BLUETOOTH", "LAN", "ONLINE"]
   },
   {
     "key": "CLASH",
@@ -47,10 +39,7 @@
       "rounds": 3,
       "winCondition": "single-hit"
     },
-    "typeConnection": [
-      "LAN",
-      "ONLINE"
-    ]
+    "typeConnection": ["LAN", "ONLINE"]
   },
   {
     "key": "BATTLE",
@@ -64,9 +53,6 @@
       "rounds": 3,
       "winCondition": "health"
     },
-    "typeConnection": [
-      "LAN",
-      "ONLINE"
-    ]
+    "typeConnection": ["LAN", "ONLINE"]
   }
 ]

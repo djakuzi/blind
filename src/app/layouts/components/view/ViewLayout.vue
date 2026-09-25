@@ -3,29 +3,19 @@ import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 import { safeAreaTokenVar } from '@/app/styles/contracts/safeArea.contract';
 
-type tViewLayoutPadding =
-  | 'none'
-  | 'safe-area'
-  | 'horizontal'
-  | 'vertical';
+type tViewLayoutPadding = 'none' | 'safe-area' | 'horizontal' | 'vertical';
 
-type tViewLayoutHeight =
-  | 'full'
-  | 'auto';
+type tViewLayoutHeight = 'full' | 'auto';
 
-type tViewLayoutBleed =
-  | 'none'
-  | 'horizontal'
-  | 'vertical'
-  | 'all';
+type tViewLayoutBleed = 'none' | 'horizontal' | 'vertical' | 'all';
 
 interface Props {
-  padding?: tViewLayoutPadding
-  bleed?: tViewLayoutBleed
-  overflow?: CSSProperties['overflow']
-  height?: tViewLayoutHeight
-  align?: CSSProperties['alignItems'] | 'start' | 'end'
-  justify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between'
+  padding?: tViewLayoutPadding;
+  bleed?: tViewLayoutBleed;
+  overflow?: CSSProperties['overflow'];
+  height?: tViewLayoutHeight;
+  align?: CSSProperties['alignItems'] | 'start' | 'end';
+  justify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between';
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -37,9 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
   justify: 'start',
 });
 
-function resolveViewLayoutPadding(
-  padding: tViewLayoutPadding,
-) {
+function resolveViewLayoutPadding(padding: tViewLayoutPadding) {
   const vertical = safeAreaTokenVar('vertical');
   const horizontal = safeAreaTokenVar('horizontal');
 
@@ -58,9 +46,7 @@ function resolveViewLayoutPadding(
   return `${vertical} ${horizontal}`;
 }
 
-function resolveViewLayoutAlign(
-  align: Props['align'],
-) {
+function resolveViewLayoutAlign(align: Props['align']) {
   if (align === 'start') {
     return 'flex-start';
   }
@@ -72,9 +58,7 @@ function resolveViewLayoutAlign(
   return align;
 }
 
-function resolveViewLayoutJustify(
-  justify: Props['justify'],
-) {
+function resolveViewLayoutJustify(justify: Props['justify']) {
   if (justify === 'start') {
     return 'flex-start';
   }
@@ -90,20 +74,12 @@ function resolveViewLayoutJustify(
   return justify;
 }
 
-function resolveBleedHorizontal(
-  bleed: tViewLayoutBleed,
-) {
-  return bleed === 'horizontal' || bleed === 'all'
-    ? 'var(--cp-layout-padding-horizontal, 0px)'
-    : '0px';
+function resolveBleedHorizontal(bleed: tViewLayoutBleed) {
+  return bleed === 'horizontal' || bleed === 'all' ? 'var(--cp-layout-padding-horizontal, 0px)' : '0px';
 }
 
-function resolveBleedVertical(
-  bleed: tViewLayoutBleed,
-) {
-  return bleed === 'vertical' || bleed === 'all'
-    ? 'var(--cp-layout-padding-vertical, 0px)'
-    : '0px';
+function resolveBleedVertical(bleed: tViewLayoutBleed) {
+  return bleed === 'vertical' || bleed === 'all' ? 'var(--cp-layout-padding-vertical, 0px)' : '0px';
 }
 
 const viewLayoutStyle = computed(() => {
@@ -112,22 +88,13 @@ const viewLayoutStyle = computed(() => {
   return {
     '--cp-view-layout-align': resolveViewLayoutAlign(props.align),
 
-    '--cp-view-layout-flex':
-      isFullHeight
-        ? '1 1 auto'
-        : '0 0 auto',
+    '--cp-view-layout-flex': isFullHeight ? '1 1 auto' : '0 0 auto',
 
-    '--cp-view-layout-height':
-      isFullHeight
-        ? '100%'
-        : 'auto',
+    '--cp-view-layout-height': isFullHeight ? '100%' : 'auto',
 
     '--cp-view-layout-justify': resolveViewLayoutJustify(props.justify),
 
-    '--cp-view-layout-max-height':
-      isFullHeight
-        ? '100%'
-        : 'none',
+    '--cp-view-layout-max-height': isFullHeight ? '100%' : 'none',
 
     '--cp-view-layout-padding': resolveViewLayoutPadding(props.padding),
 
@@ -141,10 +108,7 @@ const viewLayoutStyle = computed(() => {
 </script>
 
 <template>
-  <section
-    class="view-layout"
-    :style="viewLayoutStyle"
-  >
+  <section class="view-layout" :style="viewLayoutStyle">
     <slot />
   </section>
 </template>
@@ -156,29 +120,15 @@ const viewLayoutStyle = computed(() => {
   flex: var(--cp-view-layout-flex);
   flex-direction: column;
   justify-content: var(--cp-view-layout-justify);
-  width:
-    calc(
-      100%
-      + var(--cp-view-layout-bleed-horizontal) * 2
-    );
+  width: calc(100% + var(--cp-view-layout-bleed-horizontal) * 2);
 
-  height:
-    calc(
-      var(--cp-view-layout-height)
-      + var(--cp-view-layout-bleed-vertical) * 2
-    );
+  height: calc(var(--cp-view-layout-height) + var(--cp-view-layout-bleed-vertical) * 2);
 
   min-height: 0;
   max-width: none;
-  margin-inline:
-    calc(
-      var(--cp-view-layout-bleed-horizontal) * -1
-    );
+  margin-inline: calc(var(--cp-view-layout-bleed-horizontal) * -1);
 
-  margin-block:
-    calc(
-      var(--cp-view-layout-bleed-vertical) * -1
-    );
+  margin-block: calc(var(--cp-view-layout-bleed-vertical) * -1);
 
   padding: var(--cp-view-layout-padding);
   overflow: var(--cp-view-layout-overflow);

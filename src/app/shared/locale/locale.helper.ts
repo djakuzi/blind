@@ -2,9 +2,7 @@ import { STATIC_LOCALE_DEFAULT_LANGUAGE, STATIC_LOCALE_REGISTRY } from './locale
 import type { iStaticLocale } from './locale.type';
 import type { tStaticLocaleLanguage } from './locale.registry';
 
-function normalizeStaticLocaleCode(
-  code: string,
-) {
+function normalizeStaticLocaleCode(code: string) {
   const exact = code.trim().replaceAll('_', '-').toLowerCase();
 
   return {
@@ -13,15 +11,11 @@ function normalizeStaticLocaleCode(
   };
 }
 
-function isStaticLocaleLanguage(
-  code: string,
-): code is tStaticLocaleLanguage {
+function isStaticLocaleLanguage(code: string): code is tStaticLocaleLanguage {
   return code in STATIC_LOCALE_REGISTRY;
 }
 
-export function getStaticLocale(
-  code: string | null,
-): iStaticLocale {
+export function getStaticLocale(code: string | null): iStaticLocale {
   if (!code) {
     return STATIC_LOCALE_REGISTRY[STATIC_LOCALE_DEFAULT_LANGUAGE];
   }

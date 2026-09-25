@@ -1,9 +1,7 @@
 import { appSetupState, resetAppSetupState } from './setup.state';
 import type { iAppSetup } from './setup.type';
 
-export async function runPreMountSetup(
-  setups: readonly iAppSetup[],
-) {
+export async function runPreMountSetup(setups: readonly iAppSetup[]) {
   resetAppSetupState();
 
   for (const setup of setups) {
@@ -11,9 +9,7 @@ export async function runPreMountSetup(
   }
 }
 
-export async function runPostMountSetup(
-  setups: readonly iAppSetup[],
-) {
+export async function runPostMountSetup(setups: readonly iAppSetup[]) {
   appSetupState.isRunning = true;
 
   const blockingTasks: Promise<void>[] = [];
@@ -25,16 +21,11 @@ export async function runPostMountSetup(
       continue;
     }
 
-    const task = Promise
-      .resolve()
-      .then(() => postMount.run());
+    const task = Promise.resolve().then(() => postMount.run());
 
     if (postMount.mode === 'background') {
       task.catch((error) => {
-        console.error(
-          `Background app setup "${setup.key}" failed:`,
-          error,
-        );
+        console.error(`Background app setup "${setup.key}" failed:`, error);
       });
 
       continue;

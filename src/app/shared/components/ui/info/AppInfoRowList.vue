@@ -17,33 +17,33 @@ import type { tIconGroup, tIconName } from '@/core/media/assets';
 
 export type tAppInfoRowListItemIcon = {
   [TGroup in tIconGroup]: {
-    group: TGroup
-    icon: tIconName<TGroup>
-    alt?: string
-  }
+    group: TGroup;
+    icon: tIconName<TGroup>;
+    alt?: string;
+  };
 }[tIconGroup];
 
 export interface iAppInfoRowListItem {
-  id: string | number
-  text: string
-  icon?: tAppInfoRowListItemIcon
+  id: string | number;
+  text: string;
+  icon?: tAppInfoRowListItemIcon;
 }
 
 export interface PropsAppInfoRowList extends Omit<PropsAppDistributedRow, 'count'> {
-  items: readonly iAppInfoRowListItem[]
-  size?: tBaseSizeVariant
-  paddingX?: tPaddingValue
-  paddingY?: tPaddingValue
-  iconWidth?: tStyleSizeValue
-  iconGap?: tSpaceValue
-  dividerHeight?: tStyleSizeValue
-  dividerWidth?: tBorderWidthValue
-  dividerColor?: tColorValue
-  fontSize?: tFontSizeValue
-  fontWeight?: tFontWeightValue
-  textColor?: tColorValue
-  uppercase?: boolean
-  accessibilityLabel?: string
+  items: readonly iAppInfoRowListItem[];
+  size?: tBaseSizeVariant;
+  paddingX?: tPaddingValue;
+  paddingY?: tPaddingValue;
+  iconWidth?: tStyleSizeValue;
+  iconGap?: tSpaceValue;
+  dividerHeight?: tStyleSizeValue;
+  dividerWidth?: tBorderWidthValue;
+  dividerColor?: tColorValue;
+  fontSize?: tFontSizeValue;
+  fontWeight?: tFontWeightValue;
+  textColor?: tColorValue;
+  uppercase?: boolean;
+  accessibilityLabel?: string;
 }
 
 const props = withDefaults(defineProps<PropsAppInfoRowList>(), {
@@ -68,13 +68,16 @@ const props = withDefaults(defineProps<PropsAppInfoRowList>(), {
   accessibilityLabel: undefined,
 });
 
-const SIZE_MAP: Record<tBaseSizeVariant, {
-  fontSize: tFontSizeValue
-  iconWidth: tStyleSizeValue
-  iconGap: tSpaceValue
-  separatorGap: tSpaceValue
-  dividerHeight: tStyleSizeValue
-}> = {
+const SIZE_MAP: Record<
+  tBaseSizeVariant,
+  {
+    fontSize: tFontSizeValue;
+    iconWidth: tStyleSizeValue;
+    iconGap: tSpaceValue;
+    separatorGap: tSpaceValue;
+    dividerHeight: tStyleSizeValue;
+  }
+> = {
   small: {
     fontSize: 'sm',
     iconWidth: '2rem',
@@ -104,17 +107,11 @@ const listPaddingX = computed(() => resolvePaddingValue(props.paddingX));
 const listPaddingY = computed(() => resolvePaddingValue(props.paddingY));
 
 const itemFontSize = computed(() => props.fontSize ?? sizeConfig.value.fontSize);
-const itemIconWidth = computed(() => LibStyle.toSizeValue(
-  props.iconWidth ?? sizeConfig.value.iconWidth,
-));
-const itemIconGap = computed(() => resolveSpaceValue(
-  props.iconGap ?? sizeConfig.value.iconGap,
-));
+const itemIconWidth = computed(() => LibStyle.toSizeValue(props.iconWidth ?? sizeConfig.value.iconWidth));
+const itemIconGap = computed(() => resolveSpaceValue(props.iconGap ?? sizeConfig.value.iconGap));
 
 const rowSeparatorGap = computed(() => props.separatorGap ?? sizeConfig.value.separatorGap);
-const itemDividerHeight = computed(() => LibStyle.toSizeValue(
-  props.dividerHeight ?? sizeConfig.value.dividerHeight,
-));
+const itemDividerHeight = computed(() => LibStyle.toSizeValue(props.dividerHeight ?? sizeConfig.value.dividerHeight));
 const itemDividerWidth = computed(() => resolveBorderWidthValue(props.dividerWidth));
 const itemDividerColor = computed(() => resolveColorValue(props.dividerColor));
 
@@ -137,10 +134,7 @@ function getItem(index: number): iAppInfoRowListItem {
     :aria-label="accessibilityLabel"
   >
     <template #item="{ index }">
-      <div
-        class="app-info-row-list__item"
-        role="listitem"
-      >
+      <div class="app-info-row-list__item" role="listitem">
         <AppIcon
           v-if="getItem(index).icon"
           class="app-info-row-list__icon"

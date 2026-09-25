@@ -4,20 +4,18 @@ import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 
-type tAppDistributedRowNode =
-  | { type: 'item'; index: number }
-  | { type: 'separator'; index: number };
+type tAppDistributedRowNode = { type: 'item'; index: number } | { type: 'separator'; index: number };
 
 export type tAppDistributedRowOverflow = 'hidden' | 'visible';
 
 export interface PropsAppDistributedRow {
-  count: number
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  separatorGap?: tSpaceValue
-  centerEven?: boolean
-  centerOdd?: boolean
-  overflow?: tAppDistributedRowOverflow
+  count: number;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  separatorGap?: tSpaceValue;
+  centerEven?: boolean;
+  centerOdd?: boolean;
+  overflow?: tAppDistributedRowOverflow;
 }
 
 const props = withDefaults(defineProps<PropsAppDistributedRow>(), {
@@ -30,8 +28,8 @@ const props = withDefaults(defineProps<PropsAppDistributedRow>(), {
 });
 
 defineSlots<{
-  item(props: { index: number }): unknown
-  separator(props: { index: number }): unknown
+  item(props: { index: number }): unknown;
+  separator(props: { index: number }): unknown;
 }>();
 
 const normalizedCount = computed(() => Math.max(0, Math.floor(props.count)));
@@ -81,9 +79,7 @@ const centerByAnchor = computed(() => {
     return false;
   }
 
-  return normalizedCount.value % 2 === 0
-    ? props.centerEven
-    : props.centerOdd;
+  return normalizedCount.value % 2 === 0 ? props.centerEven : props.centerOdd;
 });
 
 const rowWidth = computed(() => LibStyle.toSizeValue(props.width));
@@ -94,111 +90,48 @@ const rowOverflow = computed(() => props.overflow);
 
 <template>
   <div class="app-distributed-row">
-    <div
-      v-if="centerByAnchor && centerNode"
-      class="app-distributed-row__balanced"
-    >
+    <div v-if="centerByAnchor && centerNode" class="app-distributed-row__balanced">
       <div class="app-distributed-row__side app-distributed-row__side--left">
-        <template
-          v-for="node in leftNodes"
-          :key="`${node.type}-${node.index}`"
-        >
-          <div
-            v-if="node.type === 'item'"
-            class="app-distributed-row__item"
-          >
-            <slot
-              name="item"
-              :index="node.index"
-            />
+        <template v-for="node in leftNodes" :key="`${node.type}-${node.index}`">
+          <div v-if="node.type === 'item'" class="app-distributed-row__item">
+            <slot name="item" :index="node.index" />
           </div>
 
-          <div
-            v-else
-            class="app-distributed-row__separator"
-          >
-            <slot
-              name="separator"
-              :index="node.index"
-            />
+          <div v-else class="app-distributed-row__separator">
+            <slot name="separator" :index="node.index" />
           </div>
         </template>
       </div>
 
-      <div
-        v-if="centerNode.type === 'item'"
-        class="app-distributed-row__item app-distributed-row__anchor"
-      >
-        <slot
-          name="item"
-          :index="centerNode.index"
-        />
+      <div v-if="centerNode.type === 'item'" class="app-distributed-row__item app-distributed-row__anchor">
+        <slot name="item" :index="centerNode.index" />
       </div>
 
-      <div
-        v-else
-        class="app-distributed-row__separator app-distributed-row__anchor"
-      >
-        <slot
-          name="separator"
-          :index="centerNode.index"
-        />
+      <div v-else class="app-distributed-row__separator app-distributed-row__anchor">
+        <slot name="separator" :index="centerNode.index" />
       </div>
 
       <div class="app-distributed-row__side app-distributed-row__side--right">
-        <template
-          v-for="node in rightNodes"
-          :key="`${node.type}-${node.index}`"
-        >
-          <div
-            v-if="node.type === 'item'"
-            class="app-distributed-row__item"
-          >
-            <slot
-              name="item"
-              :index="node.index"
-            />
+        <template v-for="node in rightNodes" :key="`${node.type}-${node.index}`">
+          <div v-if="node.type === 'item'" class="app-distributed-row__item">
+            <slot name="item" :index="node.index" />
           </div>
 
-          <div
-            v-else
-            class="app-distributed-row__separator"
-          >
-            <slot
-              name="separator"
-              :index="node.index"
-            />
+          <div v-else class="app-distributed-row__separator">
+            <slot name="separator" :index="node.index" />
           </div>
         </template>
       </div>
     </div>
 
-    <div
-      v-else
-      class="app-distributed-row__content"
-    >
-      <template
-        v-for="node in nodes"
-        :key="`${node.type}-${node.index}`"
-      >
-        <div
-          v-if="node.type === 'item'"
-          class="app-distributed-row__item"
-        >
-          <slot
-            name="item"
-            :index="node.index"
-          />
+    <div v-else class="app-distributed-row__content">
+      <template v-for="node in nodes" :key="`${node.type}-${node.index}`">
+        <div v-if="node.type === 'item'" class="app-distributed-row__item">
+          <slot name="item" :index="node.index" />
         </div>
 
-        <div
-          v-else
-          class="app-distributed-row__separator"
-        >
-          <slot
-            name="separator"
-            :index="node.index"
-          />
+        <div v-else class="app-distributed-row__separator">
+          <slot name="separator" :index="node.index" />
         </div>
       </template>
     </div>

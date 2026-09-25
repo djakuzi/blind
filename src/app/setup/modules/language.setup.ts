@@ -13,9 +13,7 @@ const APP_SETUP_LANGUAGE_SCOPE_KEY = 'app-setup-language';
 
 const APP_SETUP_LANGUAGE_RESOURCE_KEY = 'language';
 
-export function createLanguageSetup(
-  pinia: Pinia,
-): iAppSetup {
+export function createLanguageSetup(pinia: Pinia): iAppSetup {
   const languageStore = useLanguageStore(pinia);
 
   const loaderStore = useLoaderStore(pinia);
@@ -28,10 +26,7 @@ export function createLanguageSetup(
     key: 'language',
 
     async preMount() {
-      const selectedCode =
-        await ToolStorage.getItem(
-          LANGUAGE_SELECTED_CODE_STORAGE_KEY,
-        );
+      const selectedCode = await ToolStorage.getItem(LANGUAGE_SELECTED_CODE_STORAGE_KEY);
 
       if (selectedCode) {
         languageStore.preferredLanguageCode = selectedCode;

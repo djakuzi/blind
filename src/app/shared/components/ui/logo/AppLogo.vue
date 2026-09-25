@@ -3,20 +3,17 @@ import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 
-type tAppLogoVariant =
-  | 'blind'
-  | 'blindTextBottom'
-  | 'blindTextRight';
+type tAppLogoVariant = 'blind' | 'blindTextBottom' | 'blindTextRight';
 
 type tAppLogoSizeValue = number | string;
 
 interface Props {
-  size?: tBaseSizeVariant
-  logo?: tAppLogoVariant
-  width?: tAppLogoSizeValue
-  height?: tAppLogoSizeValue
-  maxWidth?: tAppLogoSizeValue
-  blur?: boolean
+  size?: tBaseSizeVariant;
+  logo?: tAppLogoVariant;
+  width?: tAppLogoSizeValue;
+  height?: tAppLogoSizeValue;
+  maxWidth?: tAppLogoSizeValue;
+  blur?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -31,7 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
 const LOGO_SIZE_MAP: Record<
   tBaseSizeVariant,
   {
-    width: string
+    width: string;
   }
 > = {
   small: {
@@ -46,31 +43,18 @@ const LOGO_SIZE_MAP: Record<
 };
 
 const resolvedWidth = computed(() => {
-  return props.width
-    ?? (props.height ? 'auto' : LOGO_SIZE_MAP[props.size].width);
+  return props.width ?? (props.height ? 'auto' : LOGO_SIZE_MAP[props.size].width);
 });
 
 const resolvedHeight = computed(() => {
-  return props.height
-    ?? (props.width ? 'auto' : 'auto');
+  return props.height ?? (props.width ? 'auto' : 'auto');
 });
 
-const blurClass = computed(() => [
-  'app-logo',
-  props.blur ? 'app-logo--blur' : '',
-]);
+const blurClass = computed(() => ['app-logo', props.blur ? 'app-logo--blur' : '']);
 </script>
 
 <template>
-  <AppIcon
-    :class="blurClass"
-    group="logo"
-    :icon="logo"
-    :width="resolvedWidth"
-    :height="resolvedHeight"
-    :max-width="maxWidth"
-    alt="Blind"
-  />
+  <AppIcon :class="blurClass" group="logo" :icon="logo" :width="resolvedWidth" :height="resolvedHeight" :max-width="maxWidth" alt="Blind" />
 </template>
 
 <style scoped lang="css">

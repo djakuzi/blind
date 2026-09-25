@@ -1,7 +1,5 @@
 {
-  "include": [
-    "vite.config.*",
-  ],
+  "include": ["vite.config.*"],
   "compilerOptions": {
     "module": "preserve",
     "moduleResolution": "bundler",

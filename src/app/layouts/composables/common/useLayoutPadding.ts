@@ -41,23 +41,13 @@ function resolveLayoutPadding(safeArea: tLayoutSafeArea) {
 export function useLayoutPadding() {
   const route = useRoute();
 
-  const resolvedPadding = computed(() =>
-    resolveLayoutPadding(
-      route.meta.layout?.safeArea ?? true,
-    ),
-  );
+  const resolvedPadding = computed(() => resolveLayoutPadding(route.meta.layout?.safeArea ?? true));
 
-  const layoutPadding = computed(() =>
-    resolvedPadding.value.value,
-  );
+  const layoutPadding = computed(() => resolvedPadding.value.value);
 
-  const layoutPaddingHorizontal = computed(() =>
-    resolvedPadding.value.horizontal,
-  );
+  const layoutPaddingHorizontal = computed(() => resolvedPadding.value.horizontal);
 
-  const layoutPaddingVertical = computed(() =>
-    resolvedPadding.value.vertical,
-  );
+  const layoutPaddingVertical = computed(() => resolvedPadding.value.vertical);
 
   return {
     layoutPadding,

@@ -8,15 +8,11 @@ import type { iLanguageFile } from '../language.type';
 
 type tStoredLanguage = ConstructorParameters<typeof ModelLanguage>[0];
 
-function getLanguageFilePath(
-  code: string,
-) {
+function getLanguageFilePath(code: string) {
   return `${LANGUAGE_FILE_DIR}/${code}.json`;
 }
 
-export function normalizeLanguageCodes(
-  code: string,
-) {
+export function normalizeLanguageCodes(code: string) {
   const normalizedCode = code.trim().replaceAll('_', '-').toLowerCase();
 
   const baseCode = normalizedCode.split('-')[0] ?? normalizedCode;
@@ -27,56 +23,39 @@ export function normalizeLanguageCodes(
   };
 }
 
-export function findLanguageByCode(
-  languages: ModelLanguage[],
-  code: string | null,
-) {
+export function findLanguageByCode(languages: ModelLanguage[], code: string | null) {
   if (!code) {
     return null;
   }
 
   const normalizedCodes = normalizeLanguageCodes(code);
 
-  return languages.find((language) =>
-    language.key.toLowerCase() === normalizedCodes.exact,
-  ) ?? languages.find((language) =>
-    language.key.toLowerCase() === normalizedCodes.base,
-  ) ?? null;
+  return (
+    languages.find((language) => language.key.toLowerCase() === normalizedCodes.exact) ??
+    languages.find((language) => language.key.toLowerCase() === normalizedCodes.base) ??
+    null
+  );
 }
 
-export function findDefaultLanguage(
-  languages: ModelLanguage[],
-) {
-  return languages.find((language) =>
-    language.isDefault,
-  ) ?? languages[0] ?? null;
+export function findDefaultLanguage(languages: ModelLanguage[]) {
+  return languages.find((language) => language.isDefault) ?? languages[0] ?? null;
 }
 
 export async function getFallbackLanguages() {
-  const cachedLanguages =
-    await ToolStorage.getJson<tStoredLanguage[]>(
-      LANGUAGE_LIST_STORAGE_KEY,
-    );
+  const cachedLanguages = await ToolStorage.getJson<tStoredLanguage[]>(LANGUAGE_LIST_STORAGE_KEY);
 
   if (!cachedLanguages?.length) {
-    return [
-      await apiLanguage.getDefaultLanguage(),
-    ];
+    return [await apiLanguage.getDefaultLanguage()];
   }
 
-  return cachedLanguages.map((language) =>
-    new ModelLanguage(language),
-  );
+  return cachedLanguages.map((language) => new ModelLanguage(language));
 }
 
 export async function loadLanguages() {
   try {
     const languages = await apiLanguage.getLanguages();
 
-    await ToolStorage.setJson<tStoredLanguage[]>(
-      LANGUAGE_LIST_STORAGE_KEY,
-      languages,
-    );
+    await ToolStorage.setJson<tStoredLanguage[]>(LANGUAGE_LIST_STORAGE_KEY, languages);
 
     return languages;
   } catch {
@@ -84,10 +63,7 @@ export async function loadLanguages() {
   }
 }
 
-export async function resolveInitialLanguage(
-  languages: ModelLanguage[],
-  preferredLanguageCode: string | null,
-) {
+export async function resolveInitialLanguage(languages: ModelLanguage[], preferredLanguageCode: string | null) {
   const preferredLanguage = findLanguageByCode(languages, preferredLanguageCode);
 
   if (preferredLanguage) {
@@ -108,29 +84,21 @@ export async function loadDefaultLanguageFallback() {
   };
 }
 
-export async function loadLanguageLocale(
-  language: ModelLanguage,
-): Promise<Locale> {
+export async function loadLanguageLocale(language: ModelLanguage): Promise<Locale> {
   const path = getLanguageFilePath(language.key);
 
   const languageFile = await ToolFilesystem.getJson<iLanguageFile>(path);
 
-  if (
-    languageFile
-    && languageFile.version === language.version
-  ) {
+  if (languageFile && languageFile.version === language.version) {
     return languageFile.locale;
   }
 
   const locale = await apiLanguage.getLanguageInterface(language.key);
 
-  await ToolFilesystem.setJson<iLanguageFile>(
-    path,
-    {
-      version: language.version,
-      locale,
-    },
-  );
+  await ToolFilesystem.setJson<iLanguageFile>(path, {
+    version: language.version,
+    locale,
+  });
 
   return locale;
 }

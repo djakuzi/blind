@@ -1,4 +1,3 @@
-
 import { LibBoolean } from '@/core/lib/boolean';
 import type { AppConfig, AppMode } from '../types';
 

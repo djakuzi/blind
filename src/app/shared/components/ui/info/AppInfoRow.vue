@@ -12,37 +12,31 @@ import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contrac
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 
-export interface iAppInfoRowImage extends Pick<
-  PropsAppImage,
-  | 'loading'
-  | 'decoding'
-  | 'objectFit'
-  | 'aspectRatio'
-> {
-  src: string
-  alt?: string
+export interface iAppInfoRowImage extends Pick<PropsAppImage, 'loading' | 'decoding' | 'objectFit' | 'aspectRatio'> {
+  src: string;
+  alt?: string;
 }
 
 export type tAppInfoRowMediaPosition = 'left' | 'right';
 
 export interface PropsAppInfoRow {
-  text: string
-  image?: iAppInfoRowImage
-  mediaPosition?: tAppInfoRowMediaPosition
-  size?: tBaseSizeVariant
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  paddingX?: tPaddingValue
-  paddingY?: tPaddingValue
-  mediaWidth?: tStyleSizeValue
-  mediaHeight?: tStyleSizeValue
-  mediaGap?: tSpaceValue
-  fontSize?: tFontSizeValue
-  fontWeight?: tFontWeightValue
-  textColor?: tColorValue
-  uppercase?: boolean
-  ellipsis?: boolean
-  maxLines?: number
+  text: string;
+  image?: iAppInfoRowImage;
+  mediaPosition?: tAppInfoRowMediaPosition;
+  size?: tBaseSizeVariant;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  paddingX?: tPaddingValue;
+  paddingY?: tPaddingValue;
+  mediaWidth?: tStyleSizeValue;
+  mediaHeight?: tStyleSizeValue;
+  mediaGap?: tSpaceValue;
+  fontSize?: tFontSizeValue;
+  fontWeight?: tFontWeightValue;
+  textColor?: tColorValue;
+  uppercase?: boolean;
+  ellipsis?: boolean;
+  maxLines?: number;
 }
 
 const props = withDefaults(defineProps<PropsAppInfoRow>(), {
@@ -66,11 +60,14 @@ const props = withDefaults(defineProps<PropsAppInfoRow>(), {
 
 const slots = useSlots();
 
-const SIZE_MAP: Record<tBaseSizeVariant, {
-  fontSize: tFontSizeValue
-  mediaWidth: tStyleSizeValue
-  mediaGap: tSpaceValue
-}> = {
+const SIZE_MAP: Record<
+  tBaseSizeVariant,
+  {
+    fontSize: tFontSizeValue;
+    mediaWidth: tStyleSizeValue;
+    mediaGap: tSpaceValue;
+  }
+> = {
   small: {
     fontSize: 'sm',
     mediaWidth: '2rem',
@@ -104,13 +101,9 @@ const rowStyle = computed(() => ({
   '--cp-info-row-max-width': LibStyle.toSizeValue(props.maxWidth),
   '--cp-info-row-padding-x': resolvePaddingValue(props.paddingX),
   '--cp-info-row-padding-y': resolvePaddingValue(props.paddingY),
-  '--cp-info-row-media-width': LibStyle.toSizeValue(
-    props.mediaWidth ?? sizeConfig.value.mediaWidth,
-  ),
+  '--cp-info-row-media-width': LibStyle.toSizeValue(props.mediaWidth ?? sizeConfig.value.mediaWidth),
   '--cp-info-row-media-height': LibStyle.toSizeValue(props.mediaHeight),
-  '--cp-info-row-media-gap': resolveSpaceValue(
-    props.mediaGap ?? sizeConfig.value.mediaGap,
-  ),
+  '--cp-info-row-media-gap': resolveSpaceValue(props.mediaGap ?? sizeConfig.value.mediaGap),
   '--cp-info-row-text-color': resolveColorValue(props.textColor),
 }));
 
@@ -118,14 +111,8 @@ const rowFontSize = computed(() => props.fontSize ?? sizeConfig.value.fontSize);
 </script>
 
 <template>
-  <div
-    :class="rowClass"
-    :style="rowStyle"
-  >
-    <div
-      v-if="hasMedia"
-      class="app-info-row__media"
-    >
+  <div :class="rowClass" :style="rowStyle">
+    <div v-if="hasMedia" class="app-info-row__media">
       <slot name="media">
         <AppImage
           v-if="image"
@@ -163,9 +150,7 @@ const rowFontSize = computed(() => props.fontSize ?? sizeConfig.value.fontSize);
   max-width: var(--cp-info-row-max-width);
   min-width: 0;
   box-sizing: border-box;
-  padding:
-    var(--cp-info-row-padding-y)
-    var(--cp-info-row-padding-x);
+  padding: var(--cp-info-row-padding-y) var(--cp-info-row-padding-x);
   color: var(--cp-info-row-text-color);
 }
 

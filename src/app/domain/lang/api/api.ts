@@ -4,39 +4,25 @@ import type { iResponseLanguage, iResponseLanguageInterface } from '../type/api/
 
 export class ApiLanguage {
   async getLanguages(): Promise<ModelLanguage[]> {
-    const languages =
-      await publicClient.get<iResponseLanguage[]>(
-        '/lang/languages.json',
-      );
+    const languages = await publicClient.get<iResponseLanguage[]>('/lang/languages.json');
 
-    return languages.map((language) =>
-      new ModelLanguage(language),
-    );
+    return languages.map((language) => new ModelLanguage(language));
   }
 
   async getLanguageCodes(): Promise<string[]> {
     const languages = await this.getLanguages();
 
-    return languages.map((language) =>
-      language.key,
-    );
+    return languages.map((language) => language.key);
   }
 
-  async getLanguageInterface(
-    code: string,
-  ): Promise<iResponseLanguageInterface> {
-    return publicClient.get<iResponseLanguageInterface>(
-      `/lang/${code}.json`,
-    );
+  async getLanguageInterface(code: string): Promise<iResponseLanguageInterface> {
+    return publicClient.get<iResponseLanguageInterface>(`/lang/${code}.json`);
   }
 
   async getDefaultLanguage(): Promise<ModelLanguage> {
     const languages = await this.getLanguages();
 
-    const language =
-      languages.find((item) =>
-        item.isDefault,
-      ) ?? languages[0];
+    const language = languages.find((item) => item.isDefault) ?? languages[0];
 
     if (!language) {
       throw new Error('Language API returned an empty language list');
@@ -48,9 +34,7 @@ export class ApiLanguage {
   async getDefaultLanguageInterface(): Promise<iResponseLanguageInterface> {
     const language = await this.getDefaultLanguage();
 
-    return this.getLanguageInterface(
-      language.key,
-    );
+    return this.getLanguageInterface(language.key);
   }
 }
 

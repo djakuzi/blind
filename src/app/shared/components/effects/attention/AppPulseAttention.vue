@@ -2,9 +2,9 @@
 import { computed } from 'vue';
 
 interface Props {
-  isActive?: boolean
-  duration?: number
-  scale?: number
+  isActive?: boolean;
+  duration?: number;
+  scale?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -29,10 +29,7 @@ function normalizeScale(value: number) {
   return Math.max(1, value);
 }
 
-const pulseClass = computed(() => [
-  'app-pulse-attention',
-  { 'app-pulse-attention--active': props.isActive },
-]);
+const pulseClass = computed(() => ['app-pulse-attention', { 'app-pulse-attention--active': props.isActive }]);
 
 const pulseStyle = computed(() => ({
   '--cp-pulse-attention-duration': `${normalizeDuration(props.duration)}ms`,
@@ -41,10 +38,7 @@ const pulseStyle = computed(() => ({
 </script>
 
 <template>
-  <span
-    :class="pulseClass"
-    :style="pulseStyle"
-  >
+  <span :class="pulseClass" :style="pulseStyle">
     <slot />
   </span>
 </template>

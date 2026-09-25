@@ -6,7 +6,7 @@ import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldActio
 import type { PropsAppHoldAction } from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 
 export interface PropsAppCardHold extends PropsAppCard, PropsAppHoldAction {
-  bloodFlowFrontDuration?: number
+  bloodFlowFrontDuration?: number;
 }
 
 withDefaults(defineProps<PropsAppCardHold>(), {
@@ -33,7 +33,7 @@ withDefaults(defineProps<PropsAppCardHold>(), {
 });
 
 const emit = defineEmits<{
-  complete: []
+  complete: [];
 }>();
 
 function handleComplete() {
@@ -77,18 +77,10 @@ function handleComplete() {
         :border-radius="borderRadius"
         :overflow="overflow"
       >
-        <AppBloodFill
-          :flow-front-duration="bloodFlowFrontDuration"
-          :is-active="isProgressActive"
-          :progress-ratio="progressRatio"
-        />
+        <AppBloodFill :flow-front-duration="bloodFlowFrontDuration" :is-active="isProgressActive" :progress-ratio="progressRatio" />
 
         <div class="app-card-hold__content">
-          <slot
-            :is-holding="isHolding"
-            :is-complete="isComplete"
-            :progress-ratio="progressRatio"
-          />
+          <slot :is-holding="isHolding" :is-complete="isComplete" :progress-ratio="progressRatio" />
         </div>
       </AppCard>
     </template>

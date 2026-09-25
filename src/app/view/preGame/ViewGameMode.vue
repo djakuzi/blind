@@ -4,14 +4,7 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 </script>
 
 <template>
-  <ViewLayout
-    class="view-game-mode"
-    align="center"
-    justify="center"
-    padding="none"
-    overflow="hidden"
-    bleed="horizontal"
-  >
+  <ViewLayout class="view-game-mode" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
     <WidgetSliderGameMode />
   </ViewLayout>
 </template>

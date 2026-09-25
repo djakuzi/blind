@@ -4,21 +4,15 @@ import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/colo
 import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import { resolveFontWeightValue, type tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
 
-type tAppTitleTag =
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6';
+type tAppTitleTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
 interface Props {
-  text: string
-  tag?: tAppTitleTag
-  color?: tColorValue
-  fontSize?: tFontSizeValue
-  fontWeight?: tFontWeightValue
-  uppercase?: boolean
+  text: string;
+  tag?: tAppTitleTag;
+  color?: tColorValue;
+  fontSize?: tFontSizeValue;
+  fontWeight?: tFontWeightValue;
+  uppercase?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -38,20 +32,13 @@ const titleClass = computed(() => [
 
 const titleColor = computed(() => resolveColorValue(props.color));
 
-const titleFontSize = computed(() =>
-  resolveFontSizeValue(props.fontSize),
-);
+const titleFontSize = computed(() => resolveFontSizeValue(props.fontSize));
 
-const titleFontWeight = computed(() =>
-  resolveFontWeightValue(props.fontWeight),
-);
+const titleFontWeight = computed(() => resolveFontWeightValue(props.fontWeight));
 </script>
 
 <template>
-  <component
-    :is="tag"
-    :class="titleClass"
-  >
+  <component :is="tag" :class="titleClass">
     <slot>{{ text }}</slot>
   </component>
 </template>

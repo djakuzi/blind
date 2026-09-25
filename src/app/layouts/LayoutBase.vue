@@ -13,11 +13,7 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 
 const { hasLayoutHeader } = useLayoutHeader();
 const { hasLayoutVersion } = useLayoutVersion();
-const {
-  layoutPadding,
-  layoutPaddingHorizontal,
-  layoutPaddingVertical,
-} = useLayoutPadding();
+const { layoutPadding, layoutPaddingHorizontal, layoutPaddingVertical } = useLayoutPadding();
 
 const layoutStyle = computed(() => ({
   '--cp-layout-padding': layoutPadding.value,
@@ -27,10 +23,7 @@ const layoutStyle = computed(() => ({
 </script>
 
 <template>
-  <main
-    class="layout"
-    :style="layoutStyle"
-  >
+  <main class="layout" :style="layoutStyle">
     <AppLayoutBackground />
 
     <AppTransitionHeader :show="hasLayoutHeader">
@@ -39,10 +32,7 @@ const layoutStyle = computed(() => ({
 
     <RouterView v-slot="{ Component, route }">
       <AppTransitionScreen>
-        <component
-          :is="Component"
-          :key="route.name ?? route.path"
-        />
+        <component :is="Component" :key="route.name ?? route.path" />
       </AppTransitionScreen>
     </RouterView>
 

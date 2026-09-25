@@ -3,12 +3,7 @@ import * as viewFeature from './features/view';
 import * as helpers from './helpers';
 import type { iEnterViewFullscreenOptions, iSetupViewOptions } from './type';
 
-export type {
-  iEnterViewFullscreenOptions,
-  iSetupViewOptions,
-  tViewFullscreenNavigation,
-  tViewOrientation,
-} from './type';
+export type { iEnterViewFullscreenOptions, iSetupViewOptions, tViewFullscreenNavigation, tViewOrientation } from './type';
 
 export function getViewportRatio() {
   if (typeof window === 'undefined' || window.innerHeight === 0) {

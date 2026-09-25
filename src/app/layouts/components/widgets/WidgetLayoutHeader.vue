@@ -7,9 +7,7 @@ import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
 
 const router = useRouter();
 
-const commonLocale = useLocale(
-  locale => locale.common,
-);
+const commonLocale = useLocale((locale) => locale.common);
 
 function handleBack() {
   router.back();
@@ -18,11 +16,7 @@ function handleBack() {
 
 <template>
   <header class="layout-header">
-    <AppFlex
-      align="center"
-      justify="between"
-      width="100%"
-    >
+    <AppFlex align="center" justify="between" width="100%">
       <AppButtonIcon
         class="layout-header__back"
         group="back"
@@ -33,15 +27,9 @@ function handleBack() {
         @click="handleBack"
       />
 
-      <AppLogo
-        class="layout-header__logo"
-        size="small"
-      />
+      <AppLogo class="layout-header__logo" size="small" />
 
-      <span
-        class="layout-header__spacer"
-        aria-hidden="true"
-      />
+      <span class="layout-header__spacer" aria-hidden="true" />
     </AppFlex>
   </header>
 </template>

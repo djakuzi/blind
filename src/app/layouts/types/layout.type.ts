@@ -3,7 +3,7 @@ export type tLayoutSafeArea = boolean | 'none' | 'horizontal' | 'vertical';
 export type tLayoutHeader = boolean;
 
 export interface iLayoutRouteMeta {
-  header?: tLayoutHeader
-  safeArea?: tLayoutSafeArea
-  version?: boolean
+  header?: tLayoutHeader;
+  safeArea?: tLayoutSafeArea;
+  version?: boolean;
 }

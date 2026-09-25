@@ -11,21 +11,21 @@ import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/spac
 export type tAppHoldHintDirection = 'row' | 'column';
 
 export interface PropsAppHoldHint {
-  text?: string
-  items?: readonly string[]
-  desktopItems?: readonly string[]
-  size?: tBaseSizeVariant
-  direction?: tAppHoldHintDirection
-  desktopDirection?: tAppHoldHintDirection
-  gap?: tSpaceValue
-  desktopGap?: tSpaceValue
-  maxWidth?: tStyleSizeValue
-  color?: tColorValue
-  fontSize?: tFontSizeValue
-  pulse?: boolean
-  pulseDuration?: number
-  pulseScale?: number
-  uppercase?: boolean
+  text?: string;
+  items?: readonly string[];
+  desktopItems?: readonly string[];
+  size?: tBaseSizeVariant;
+  direction?: tAppHoldHintDirection;
+  desktopDirection?: tAppHoldHintDirection;
+  gap?: tSpaceValue;
+  desktopGap?: tSpaceValue;
+  maxWidth?: tStyleSizeValue;
+  color?: tColorValue;
+  fontSize?: tFontSizeValue;
+  pulse?: boolean;
+  pulseDuration?: number;
+  pulseScale?: number;
+  uppercase?: boolean;
 }
 
 const props = withDefaults(defineProps<PropsAppHoldHint>(), {
@@ -44,10 +44,13 @@ const props = withDefaults(defineProps<PropsAppHoldHint>(), {
   uppercase: true,
 });
 
-const SIZE_MAP: Record<tBaseSizeVariant, {
-  fontSize: tFontSizeValue
-  gap: tSpaceValue
-}> = {
+const SIZE_MAP: Record<
+  tBaseSizeVariant,
+  {
+    fontSize: tFontSizeValue;
+    gap: tSpaceValue;
+  }
+> = {
   small: {
     fontSize: 'sm',
     gap: 2,
@@ -86,43 +89,21 @@ const resolvedDesktopItems = computed<readonly string[]>(() => {
 
 const hintDirection = computed(() => props.direction);
 
-const hintDesktopDirection = computed(() =>
-  props.desktopDirection ?? props.direction,
-);
+const hintDesktopDirection = computed(() => props.desktopDirection ?? props.direction);
 
-const hintGap = computed(() =>
-  resolveSpaceValue(props.gap ?? sizeConfig.value.gap),
-);
+const hintGap = computed(() => resolveSpaceValue(props.gap ?? sizeConfig.value.gap));
 
-const hintDesktopGap = computed(() =>
-  resolveSpaceValue(
-    props.desktopGap
-      ?? props.gap
-      ?? sizeConfig.value.gap,
-  ),
-);
+const hintDesktopGap = computed(() => resolveSpaceValue(props.desktopGap ?? props.gap ?? sizeConfig.value.gap));
 
-const hintMaxWidth = computed(() =>
-  LibStyle.toSizeValue(props.maxWidth),
-);
+const hintMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 
-const hintColor = computed(() =>
-  resolveColorValue(props.color),
-);
+const hintColor = computed(() => resolveColorValue(props.color));
 
-const hintFontSize = computed(() =>
-  resolveFontSizeValue(
-    props.fontSize ?? sizeConfig.value.fontSize,
-  ),
-);
+const hintFontSize = computed(() => resolveFontSizeValue(props.fontSize ?? sizeConfig.value.fontSize));
 </script>
 
 <template>
-  <AppPulseAttention
-    :is-active="pulse"
-    :duration="pulseDuration"
-    :scale="pulseScale"
-  >
+  <AppPulseAttention :is-active="pulse" :duration="pulseDuration" :scale="pulseScale">
     <div
       class="app-hold-hint"
       :class="{
@@ -130,21 +111,13 @@ const hintFontSize = computed(() =>
       }"
     >
       <div class="app-hold-hint__content app-hold-hint__content--default">
-        <span
-          v-for="(item, index) in items"
-          :key="index"
-          class="app-hold-hint__item"
-        >
+        <span v-for="(item, index) in items" :key="index" class="app-hold-hint__item">
           {{ item }}
         </span>
       </div>
 
       <div class="app-hold-hint__content app-hold-hint__content--desktop">
-        <span
-          v-for="(item, index) in resolvedDesktopItems"
-          :key="index"
-          class="app-hold-hint__item"
-        >
+        <span v-for="(item, index) in resolvedDesktopItems" :key="index" class="app-hold-hint__item">
           {{ item }}
         </span>
       </div>

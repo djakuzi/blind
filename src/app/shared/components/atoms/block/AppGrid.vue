@@ -9,13 +9,13 @@ import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 type tAppGridTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer';
 
 interface Props {
-  tag?: tAppGridTag
-  placeItems?: CSSProperties['placeItems']
-  gap?: tSpaceValue
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  minHeight?: tStyleSizeValue
-  margin?: tSpaceValue
+  tag?: tAppGridTag;
+  placeItems?: CSSProperties['placeItems'];
+  gap?: tSpaceValue;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  minHeight?: tStyleSizeValue;
+  margin?: tSpaceValue;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -39,11 +39,7 @@ const gridStyle = computed(() => ({
 </script>
 
 <template>
-  <component
-    :is="tag"
-    class="app-grid"
-    :style="gridStyle"
-  >
+  <component :is="tag" class="app-grid" :style="gridStyle">
     <slot />
   </component>
 </template>

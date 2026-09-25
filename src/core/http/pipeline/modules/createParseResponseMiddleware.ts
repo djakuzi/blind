@@ -3,10 +3,7 @@ import * as helpers from '../../helpers';
 import type { tHttpMiddleware } from '../../type';
 
 export function createParseResponseMiddleware(): tHttpMiddleware {
-  return async function parseResponseMiddleware(
-    context,
-    next,
-  ) {
+  return async function parseResponseMiddleware(context, next) {
     if (!context.request || !context.response) {
       return await next();
     }
@@ -21,12 +18,7 @@ export function createParseResponseMiddleware(): tHttpMiddleware {
       });
     }
 
-    context.data =
-      await helpers.parseResponseData(
-        context.response,
-        context.responseType,
-        context.request.url,
-      );
+    context.data = await helpers.parseResponseData(context.response, context.responseType, context.request.url);
 
     return await next();
   };

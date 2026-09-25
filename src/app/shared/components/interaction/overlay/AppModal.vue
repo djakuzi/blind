@@ -2,36 +2,41 @@
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import { resolveBorderStyleValue, resolveBorderWidthValue, type tBorderStyleValue, type tBorderWidthValue } from '@/app/styles/contracts/border.contract';
+import {
+  resolveBorderStyleValue,
+  resolveBorderWidthValue,
+  type tBorderStyleValue,
+  type tBorderWidthValue,
+} from '@/app/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveLayerValue, type tLayerValue } from '@/app/styles/contracts/layer.contract';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
 
 export interface PropsAppModal {
-  modelValue: boolean
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  maxHeight?: tStyleSizeValue
-  layer?: tLayerValue
-  backdropColor?: tColorValue
-  backgroundColor?: tColorValue
-  borderColor?: tColorValue
-  borderWidth?: tBorderWidthValue
-  borderStyle?: tBorderStyleValue
-  borderRadius?: tRadiusValue
-  headerPaddingX?: tPaddingValue
-  headerPaddingY?: tPaddingValue
-  bodyPaddingX?: tPaddingValue
-  bodyPaddingY?: tPaddingValue
-  footerPaddingX?: tPaddingValue
-  footerPaddingY?: tPaddingValue
-  closeOnBackdrop?: boolean
-  closeOnEscape?: boolean
-  lockScroll?: boolean
-  ariaLabel?: string
-  ariaLabelledby?: string
-  ariaDescribedby?: string
+  modelValue: boolean;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  maxHeight?: tStyleSizeValue;
+  layer?: tLayerValue;
+  backdropColor?: tColorValue;
+  backgroundColor?: tColorValue;
+  borderColor?: tColorValue;
+  borderWidth?: tBorderWidthValue;
+  borderStyle?: tBorderStyleValue;
+  borderRadius?: tRadiusValue;
+  headerPaddingX?: tPaddingValue;
+  headerPaddingY?: tPaddingValue;
+  bodyPaddingX?: tPaddingValue;
+  bodyPaddingY?: tPaddingValue;
+  footerPaddingX?: tPaddingValue;
+  footerPaddingY?: tPaddingValue;
+  closeOnBackdrop?: boolean;
+  closeOnEscape?: boolean;
+  lockScroll?: boolean;
+  ariaLabel?: string;
+  ariaLabelledby?: string;
+  ariaDescribedby?: string;
 }
 
 const props = withDefaults(defineProps<PropsAppModal>(), {
@@ -60,7 +65,7 @@ const props = withDefaults(defineProps<PropsAppModal>(), {
 });
 
 const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
+  'update:modelValue': [value: boolean];
 }>();
 
 const slots = useSlots();
@@ -143,8 +148,7 @@ function removeDocumentListeners() {
 
 async function handleOpen() {
   const activeElement = document.activeElement;
-  const shouldSaveFocus = activeElement instanceof HTMLElement
-    && !modalPanelRef.value?.contains(activeElement);
+  const shouldSaveFocus = activeElement instanceof HTMLElement && !modalPanelRef.value?.contains(activeElement);
 
   if (shouldSaveFocus) {
     elementToRestoreFocus.value = activeElement;
@@ -203,16 +207,8 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport to="body">
-    <Transition
-      name="app-modal"
-      @after-leave="handleAfterLeave"
-    >
-      <div
-        v-if="modelValue"
-        class="app-modal"
-        :style="modalStyle"
-        @click="handleBackdropClick"
-      >
+    <Transition name="app-modal" @after-leave="handleAfterLeave">
+      <div v-if="modelValue" class="app-modal" :style="modalStyle" @click="handleBackdropClick">
         <div
           ref="modalPanelRef"
           class="app-modal__panel"
@@ -223,10 +219,7 @@ onBeforeUnmount(() => {
           :aria-describedby="ariaDescribedby"
           tabindex="-1"
         >
-          <header
-            v-if="hasHeaderSlot"
-            class="app-modal__header"
-          >
+          <header v-if="hasHeaderSlot" class="app-modal__header">
             <slot name="header" />
           </header>
 
@@ -234,10 +227,7 @@ onBeforeUnmount(() => {
             <slot />
           </div>
 
-          <footer
-            v-if="hasFooterSlot"
-            class="app-modal__footer"
-          >
+          <footer v-if="hasFooterSlot" class="app-modal__footer">
             <slot name="footer" />
           </footer>
         </div>
@@ -257,11 +247,7 @@ onBeforeUnmount(() => {
   width: 100%;
   min-width: 0;
   height: 100dvh;
-  padding:
-    var(--app-safe-area-top)
-    var(--app-safe-area-right)
-    var(--app-safe-area-bottom)
-    var(--app-safe-area-left);
+  padding: var(--app-safe-area-top) var(--app-safe-area-right) var(--app-safe-area-bottom) var(--app-safe-area-left);
   box-sizing: border-box;
   background: var(--cp-modal-backdrop-color);
 }
@@ -275,10 +261,7 @@ onBeforeUnmount(() => {
   min-width: 0;
   min-height: 0;
   box-sizing: border-box;
-  border:
-    var(--cp-modal-border-width)
-    var(--cp-modal-border-style)
-    var(--cp-modal-border-color);
+  border: var(--cp-modal-border-width) var(--cp-modal-border-style) var(--cp-modal-border-color);
   border-radius: var(--cp-modal-border-radius);
   background: var(--cp-modal-background-color);
   overflow: hidden;
@@ -297,18 +280,14 @@ onBeforeUnmount(() => {
 .app-modal__header {
   flex: 0 0 auto;
   min-width: 0;
-  padding:
-    var(--cp-modal-header-padding-y)
-    var(--cp-modal-header-padding-x);
+  padding: var(--cp-modal-header-padding-y) var(--cp-modal-header-padding-x);
 }
 
 .app-modal__body {
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  padding:
-    var(--cp-modal-body-padding-y)
-    var(--cp-modal-body-padding-x);
+  padding: var(--cp-modal-body-padding-y) var(--cp-modal-body-padding-x);
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -316,9 +295,7 @@ onBeforeUnmount(() => {
 .app-modal__footer {
   flex: 0 0 auto;
   min-width: 0;
-  padding:
-    var(--cp-modal-footer-padding-y)
-    var(--cp-modal-footer-padding-x);
+  padding: var(--cp-modal-footer-padding-y) var(--cp-modal-footer-padding-x);
 }
 
 .app-modal-enter-active,

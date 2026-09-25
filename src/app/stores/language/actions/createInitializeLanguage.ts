@@ -2,16 +2,10 @@ import { loadLanguageLocale, loadLanguages, loadDefaultLanguageFallback, resolve
 import type { iLanguageState } from '../language.type';
 
 export function createInitializeLanguage() {
-  return async function initializeLanguage(
-    this: iLanguageState,
-  ) {
+  return async function initializeLanguage(this: iLanguageState) {
     const languages = await loadLanguages();
 
-    const language =
-      await resolveInitialLanguage(
-        languages,
-        this.preferredLanguageCode,
-      );
+    const language = await resolveInitialLanguage(languages, this.preferredLanguageCode);
 
     if (!language) {
       this.languages = languages;

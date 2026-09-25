@@ -1,8 +1,4 @@
-<script
-  setup
-  lang="ts"
-  generic="TGroup extends tIconGroup"
->
+<script setup lang="ts" generic="TGroup extends tIconGroup">
 import { computed } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
@@ -10,13 +6,13 @@ import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode
 import { ICONS_ASSETS, type tIconAssets, type tIconGroup, type tIconName } from '@/core/media/assets';
 
 export interface PropsAppIcon {
-  group: tIconGroup
-  icon: tIconName<tIconGroup>
-  width: PropsAppBlock['width']
-  height?: PropsAppBlock['height']
-  maxWidth?: PropsAppBlock['maxWidth']
-  display?: PropsAppBlock['display']
-  alt?: string
+  group: tIconGroup;
+  icon: tIconName<tIconGroup>;
+  width: PropsAppBlock['width'];
+  height?: PropsAppBlock['height'];
+  maxWidth?: PropsAppBlock['maxWidth'];
+  display?: PropsAppBlock['display'];
+  alt?: string;
 }
 
 const props = withDefaults(defineProps<PropsAppIcon>(), {
@@ -31,15 +27,11 @@ const { resolvedThemeMode } = useAppThemeMode();
 const iconSvg = computed(() => {
   const groupAssets = ICONS_ASSETS[props.group] as tIconAssets;
 
-  const themeSuffix = resolvedThemeMode.value === 'dark'
-    ? 'Dark'
-    : 'Light';
+  const themeSuffix = resolvedThemeMode.value === 'dark' ? 'Dark' : 'Light';
 
   const themedIconName = `${props.icon}${themeSuffix}`;
 
-  return groupAssets[themedIconName]
-    ?? groupAssets[props.icon]
-    ?? '';
+  return groupAssets[themedIconName] ?? groupAssets[props.icon] ?? '';
 });
 </script>
 
@@ -54,10 +46,7 @@ const iconSvg = computed(() => {
     :aria-label="alt || undefined"
     :aria-hidden="alt ? undefined : true"
   >
-    <span
-      class="app-icon__media"
-      v-html="iconSvg"
-    />
+    <span class="app-icon__media" v-html="iconSvg" />
   </AppBlock>
 </template>
 

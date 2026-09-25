@@ -5,9 +5,9 @@ import type { LocaleSettings } from './settings';
 import type { LocaleViews } from './views';
 
 export interface Locale {
-  common: LocaleCommon
-  views: LocaleViews
-  game: LocaleGame
-  connectionTypes: LocaleConnectionTypes
-  settings: LocaleSettings
+  common: LocaleCommon;
+  views: LocaleViews;
+  game: LocaleGame;
+  connectionTypes: LocaleConnectionTypes;
+  settings: LocaleSettings;
 }

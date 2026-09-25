@@ -6,12 +6,12 @@ import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/colo
 type tAppFillAwareTag = 'span' | 'div';
 
 export interface PropsAppFillAware {
-  tag?: tAppFillAwareTag
-  threshold?: number
-  color?: tColorValue
-  filledColor?: tColorValue
-  initialFilled?: boolean
-  transitionDuration?: number
+  tag?: tAppFillAwareTag;
+  threshold?: number;
+  color?: tColorValue;
+  filledColor?: tColorValue;
+  initialFilled?: boolean;
+  transitionDuration?: number;
 }
 
 const props = withDefaults(defineProps<PropsAppFillAware>(), {
@@ -24,10 +24,7 @@ const props = withDefaults(defineProps<PropsAppFillAware>(), {
 });
 
 defineSlots<{
-  default(props: {
-    filled: boolean
-    coverageRatio: number
-  }): unknown
+  default(props: { filled: boolean; coverageRatio: number }): unknown;
 }>();
 
 const context = inject(FILL_CONTEXT, null);
@@ -39,9 +36,7 @@ const isMeasured = ref(false);
 
 let resizeObserver: ResizeObserver | null = null;
 
-const normalizedThreshold = computed(() => (
-  Math.min(1, Math.max(0, props.threshold))
-));
+const normalizedThreshold = computed(() => Math.min(1, Math.max(0, props.threshold)));
 
 const coverageRatio = computed(() => {
   if (!isMeasured.value) {
@@ -69,9 +64,7 @@ const filled = computed(() => {
   return coverageRatio.value >= normalizedThreshold.value;
 });
 
-const currentColor = computed(() => resolveColorValue(
-  filled.value ? props.filledColor : props.color,
-));
+const currentColor = computed(() => resolveColorValue(filled.value ? props.filledColor : props.color));
 
 const elementStyle = computed(() => ({
   color: currentColor.value,
@@ -93,15 +86,9 @@ function updatePosition() {
     return;
   }
 
-  topRatio.value = Math.min(
-    1,
-    Math.max(0, (targetRect.top - rootRect.top) / rootRect.height),
-  );
+  topRatio.value = Math.min(1, Math.max(0, (targetRect.top - rootRect.top) / rootRect.height));
 
-  bottomRatio.value = Math.min(
-    1,
-    Math.max(0, (targetRect.bottom - rootRect.top) / rootRect.height),
-  );
+  bottomRatio.value = Math.min(1, Math.max(0, (targetRect.bottom - rootRect.top) / rootRect.height));
 
   isMeasured.value = true;
 }
@@ -121,23 +108,29 @@ function observeElements() {
   }
 }
 
-watch(() => context?.rootElement.value, async () => {
-  isMeasured.value = false;
+watch(
+  () => context?.rootElement.value,
+  async () => {
+    isMeasured.value = false;
 
-  await nextTick();
+    await nextTick();
 
-  observeElements();
-  updatePosition();
-});
+    observeElements();
+    updatePosition();
+  },
+);
 
-watch(() => context?.isActive.value, async (isActive) => {
-  if (!isActive) {
-    return;
-  }
+watch(
+  () => context?.isActive.value,
+  async (isActive) => {
+    if (!isActive) {
+      return;
+    }
 
-  await nextTick();
-  updatePosition();
-});
+    await nextTick();
+    updatePosition();
+  },
+);
 
 onMounted(() => {
   resizeObserver = new ResizeObserver(updatePosition);
@@ -152,17 +145,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <component
-    :is="tag"
-    ref="element"
-    class="app-fill-aware"
-    :class="{ 'app-fill-aware--filled': filled }"
-    :style="elementStyle"
-  >
-    <slot
-      :filled="filled"
-      :coverage-ratio="coverageRatio"
-    />
+  <component :is="tag" ref="element" class="app-fill-aware" :class="{ 'app-fill-aware--filled': filled }" :style="elementStyle">
+    <slot :filled="filled" :coverage-ratio="coverageRatio" />
   </component>
 </template>
 

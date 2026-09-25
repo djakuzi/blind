@@ -8,7 +8,7 @@ import { ToolSystem } from '@/core/tool/system';
 type tThemeMode = ToolSystem.tSystemThemeMode;
 
 interface Props {
-  tileWidth?: number
+  tileWidth?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -74,22 +74,16 @@ watch(
 </script>
 
 <template>
-  <div
-    class="app-layout-background"
-    aria-hidden="true"
-  >
+  <div class="app-layout-background" aria-hidden="true">
     <div
-      v-for="themeMode in (['light', 'dark'] as const)"
+      v-for="themeMode in ['light', 'dark'] as const"
       :key="themeMode"
       class="app-layout-background__layer"
       :class="{
-        'app-layout-background__layer--visible':
-          isThemeVisible(themeMode),
+        'app-layout-background__layer--visible': isThemeVisible(themeMode),
       }"
       :style="{
-        backgroundImage: shouldLoad[themeMode]
-          ? `url(${sourceMap[themeMode]})`
-          : undefined,
+        backgroundImage: shouldLoad[themeMode] ? `url(${sourceMap[themeMode]})` : undefined,
       }"
     >
       <img
@@ -98,7 +92,7 @@ watch(
         :src="sourceMap[themeMode]"
         alt=""
         @load="handleLoad(themeMode)"
-      >
+      />
     </div>
   </div>
 </template>

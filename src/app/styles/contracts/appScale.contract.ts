@@ -1,9 +1,4 @@
-export const APP_SCALE_MODE_LIST = [
-  'system',
-  'small',
-  'default',
-  'large',
-] as const;
+export const APP_SCALE_MODE_LIST = ['system', 'small', 'default', 'large'] as const;
 
 export const APP_SCALE_CSS_VARIABLE_NAME = '--app-scale';
 
@@ -19,46 +14,22 @@ export const APP_SCALE_MODE = {
 
 export const APP_SCALE_SYSTEM_MODE = 'system' as const;
 
-export type tAppScalePresetMode =
-  keyof typeof APP_SCALE_MODE;
+export type tAppScalePresetMode = keyof typeof APP_SCALE_MODE;
 
-export type tAppScaleMode =
-  (typeof APP_SCALE_MODE_LIST)[number];
+export type tAppScaleMode = (typeof APP_SCALE_MODE_LIST)[number];
 
-export function isAppScaleMode(
-  value: string,
-): value is tAppScaleMode {
-  return APP_SCALE_MODE_LIST.includes(
-    value as tAppScaleMode,
-  );
+export function isAppScaleMode(value: string): value is tAppScaleMode {
+  return APP_SCALE_MODE_LIST.includes(value as tAppScaleMode);
 }
 
-export function resolveNearestAppScalePresetMode(
-  scaleValue: number,
-): tAppScalePresetMode {
-  const scaleEntries = Object.entries(
-    APP_SCALE_MODE,
-  ) as [
-    tAppScalePresetMode,
-    number,
-  ][];
+export function resolveNearestAppScalePresetMode(scaleValue: number): tAppScalePresetMode {
+  const scaleEntries = Object.entries(APP_SCALE_MODE) as [tAppScalePresetMode, number][];
 
-  return scaleEntries.reduce(
-    (
-      nearestEntry,
-      currentEntry,
-    ) => {
-      const nearestDistance = Math.abs(
-        nearestEntry[1] - scaleValue,
-      );
+  return scaleEntries.reduce((nearestEntry, currentEntry) => {
+    const nearestDistance = Math.abs(nearestEntry[1] - scaleValue);
 
-      const currentDistance = Math.abs(
-        currentEntry[1] - scaleValue,
-      );
+    const currentDistance = Math.abs(currentEntry[1] - scaleValue);
 
-      return currentDistance < nearestDistance
-        ? currentEntry
-        : nearestEntry;
-    },
-  )[0];
+    return currentDistance < nearestDistance ? currentEntry : nearestEntry;
+  })[0];
 }

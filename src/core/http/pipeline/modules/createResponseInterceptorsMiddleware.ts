@@ -1,12 +1,7 @@
 import type { tHttpMiddleware, tHttpResponseInterceptor } from '../../type';
 
-export function createResponseInterceptorsMiddleware(
-  interceptors: tHttpResponseInterceptor[],
-): tHttpMiddleware {
-  return async function responseInterceptorsMiddleware(
-    context,
-    next,
-  ) {
+export function createResponseInterceptorsMiddleware(interceptors: tHttpResponseInterceptor[]): tHttpMiddleware {
+  return async function responseInterceptorsMiddleware(context, next) {
     if (!context.request || !context.response) {
       return await next();
     }

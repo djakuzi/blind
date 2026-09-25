@@ -1,15 +1,8 @@
 import { HttpError } from '../../httpError';
 import type { tHttpResponseType } from '../../type';
 
-export async function parseResponseData(
-  response: Response,
-  responseType: tHttpResponseType,
-  url: string,
-) {
-  if (
-    response.status === 204
-    || response.status === 205
-  ) {
+export async function parseResponseData(response: Response, responseType: tHttpResponseType, url: string) {
+  if (response.status === 204 || response.status === 205) {
     return null;
   }
 
@@ -41,9 +34,7 @@ export async function parseResponseData(
   }
 }
 
-export async function parseErrorData(
-  response: Response,
-) {
+export async function parseErrorData(response: Response) {
   const text = await response.text();
 
   if (!text) {

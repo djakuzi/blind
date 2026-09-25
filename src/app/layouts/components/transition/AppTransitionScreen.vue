@@ -1,9 +1,6 @@
 <template>
   <div class="app-transition-screen">
-    <Transition
-      name="app-transition-screen-view"
-      mode="out-in"
-    >
+    <Transition name="app-transition-screen-view" mode="out-in">
       <slot />
     </Transition>
   </div>
@@ -35,37 +32,27 @@
   transition:
     opacity 230ms ease,
     transform 230ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change:
-    opacity,
-    transform;
+  will-change: opacity, transform;
 }
 
 .app-transition-screen-view-enter-from {
   opacity: 0;
-  transform:
-    translateZ(70px)
-    scale(1.05);
+  transform: translateZ(70px) scale(1.05);
 }
 
 .app-transition-screen-view-enter-to {
   opacity: 1;
-  transform:
-    translateZ(0)
-    scale(1);
+  transform: translateZ(0) scale(1);
 }
 
 .app-transition-screen-view-leave-from {
   opacity: 1;
-  transform:
-    translateZ(0)
-    scale(1);
+  transform: translateZ(0) scale(1);
 }
 
 .app-transition-screen-view-leave-to {
   opacity: 0;
-  transform:
-    translateZ(-90px)
-    scale(0.94);
+  transform: translateZ(-90px) scale(0.94);
 }
 
 @media (prefers-reduced-motion: reduce) {

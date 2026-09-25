@@ -7,129 +7,80 @@ import type { tColorValue } from '@/app/styles/contracts/color.contract';
 import type { tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
-export type tWidgetListKey =
-  | string
-  | number;
+export type tWidgetListKey = string | number;
 
-export interface PropsWidgetList<
-  TItem extends Record<string, unknown> = Record<string, unknown>,
-> {
-  items: readonly TItem[]
-  itemKey?:
-    | string
-    | (
-      (
-        item: TItem,
-        index: number,
-      ) => tWidgetListKey
-    )
-  size?: tBaseSizeVariant
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  gap?: tSpaceValue
-  paddingX?: tPaddingValue
-  paddingY?: tPaddingValue
-  rowGap?: tSpaceValue
-  rowAlign?:
-    | CSSProperties['alignItems']
-    | 'start'
-    | 'end'
-  rowJustify?:
-    | CSSProperties['justifyContent']
-    | 'start'
-    | 'end'
-    | 'between'
-  rowWrap?: CSSProperties['flexWrap']
-  divider?: boolean
-  dividerColor?: tColorValue
-  dividerWidth?: tBorderWidthValue
-  dividerStyle?: tBorderStyleValue
-  showLastDivider?: boolean
-  accessibilityLabel?: string
+export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<string, unknown>> {
+  items: readonly TItem[];
+  itemKey?: string | ((item: TItem, index: number) => tWidgetListKey);
+  size?: tBaseSizeVariant;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  gap?: tSpaceValue;
+  paddingX?: tPaddingValue;
+  paddingY?: tPaddingValue;
+  rowGap?: tSpaceValue;
+  rowAlign?: CSSProperties['alignItems'] | 'start' | 'end';
+  rowJustify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between';
+  rowWrap?: CSSProperties['flexWrap'];
+  divider?: boolean;
+  dividerColor?: tColorValue;
+  dividerWidth?: tBorderWidthValue;
+  dividerStyle?: tBorderStyleValue;
+  showLastDivider?: boolean;
+  accessibilityLabel?: string;
 }
 </script>
 
-<script
-  setup
-  lang="ts"
-  generic="TItem extends Record<string, unknown>"
->
+<script setup lang="ts" generic="TItem extends Record<string, unknown>">
 import { computed } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/styles/contracts/border.contract';
 import { resolveColorValue } from '@/app/styles/contracts/color.contract';
 import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
 
-const props = withDefaults(
-  defineProps<PropsWidgetList<TItem>>(),
-  {
-    itemKey: undefined,
-    size: 'middle',
-    width: '100%',
-    maxWidth: '100%',
-    gap: 0,
-    paddingX: 0,
-    paddingY: undefined,
-    rowGap: 0,
-    rowAlign: 'center',
-    rowJustify: 'between',
-    rowWrap: 'nowrap',
-    divider: true,
-    dividerColor: 'border-default',
-    dividerWidth: 'thin',
-    dividerStyle: 'solid',
-    showLastDivider: false,
-    accessibilityLabel: undefined,
-  },
-);
+const props = withDefaults(defineProps<PropsWidgetList<TItem>>(), {
+  itemKey: undefined,
+  size: 'middle',
+  width: '100%',
+  maxWidth: '100%',
+  gap: 0,
+  paddingX: 0,
+  paddingY: undefined,
+  rowGap: 0,
+  rowAlign: 'center',
+  rowJustify: 'between',
+  rowWrap: 'nowrap',
+  divider: true,
+  dividerColor: 'border-default',
+  dividerWidth: 'thin',
+  dividerStyle: 'solid',
+  showLastDivider: false,
+  accessibilityLabel: undefined,
+});
 
 defineSlots<{
-  item(props: {
-    item: TItem
-    index: number
-    isFirst: boolean
-    isLast: boolean
-  }): unknown
+  item(props: { item: TItem; index: number; isFirst: boolean; isLast: boolean }): unknown;
 
-  empty?(): unknown
+  empty?(): unknown;
 }>();
 
-const ROW_PADDING_Y_MAP: Record<
-  tBaseSizeVariant,
-  tPaddingValue
-> = {
+const ROW_PADDING_Y_MAP: Record<tBaseSizeVariant, tPaddingValue> = {
   small: 3,
   middle: 4,
   big: 5,
 };
 
-const rowPaddingX = computed(() =>
-  resolvePaddingValue(props.paddingX),
-);
+const rowPaddingX = computed(() => resolvePaddingValue(props.paddingX));
 
-const rowPaddingY = computed(() =>
-  resolvePaddingValue(
-    props.paddingY
-      ?? ROW_PADDING_Y_MAP[props.size],
-  ),
-);
+const rowPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? ROW_PADDING_Y_MAP[props.size]));
 
-const listDividerColor = computed(() =>
-  resolveColorValue(props.dividerColor),
-);
+const listDividerColor = computed(() => resolveColorValue(props.dividerColor));
 
-const listDividerWidth = computed(() =>
-  resolveBorderWidthValue(props.dividerWidth),
-);
+const listDividerWidth = computed(() => resolveBorderWidthValue(props.dividerWidth));
 
-const listDividerStyle = computed(() =>
-  resolveBorderStyleValue(props.dividerStyle),
-);
+const listDividerStyle = computed(() => resolveBorderStyleValue(props.dividerStyle));
 
-function resolveItemKey(
-  item: TItem,
-  index: number,
-): tWidgetListKey {
+function resolveItemKey(item: TItem, index: number): tWidgetListKey {
   if (typeof props.itemKey === 'function') {
     return props.itemKey(item, index);
   }
@@ -137,10 +88,7 @@ function resolveItemKey(
   if (typeof props.itemKey === 'string') {
     const value = item[props.itemKey];
 
-    if (
-      typeof value === 'string'
-      || typeof value === 'number'
-    ) {
+    if (typeof value === 'string' || typeof value === 'number') {
       return value;
     }
   }
@@ -175,8 +123,7 @@ function hasDivider(index: number) {
         :key="resolveItemKey(item, index)"
         class="widget-list__row"
         :class="{
-          'widget-list__row--divider':
-            hasDivider(index),
+          'widget-list__row--divider': hasDivider(index),
         }"
         :align="rowAlign"
         :justify="rowJustify"
@@ -185,20 +132,11 @@ function hasDivider(index: number) {
         width="100%"
         role="listitem"
       >
-        <slot
-          name="item"
-          :item="item"
-          :index="index"
-          :is-first="index === 0"
-          :is-last="index === items.length - 1"
-        />
+        <slot name="item" :item="item" :index="index" :is-first="index === 0" :is-last="index === items.length - 1" />
       </AppFlex>
     </template>
 
-    <slot
-      v-else
-      name="empty"
-    />
+    <slot v-else name="empty" />
   </AppFlex>
 </template>
 
@@ -209,15 +147,10 @@ function hasDivider(index: number) {
 
 .widget-list__row {
   min-width: 0;
-  padding:
-    v-bind(rowPaddingY)
-    v-bind(rowPaddingX);
+  padding: v-bind(rowPaddingY) v-bind(rowPaddingX);
 }
 
 .widget-list__row--divider {
-  border-bottom:
-    v-bind(listDividerWidth)
-    v-bind(listDividerStyle)
-    v-bind(listDividerColor);
+  border-bottom: v-bind(listDividerWidth) v-bind(listDividerStyle) v-bind(listDividerColor);
 }
 </style>

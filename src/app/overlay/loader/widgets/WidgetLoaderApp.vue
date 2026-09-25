@@ -10,9 +10,9 @@ import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 type tWidgetLoaderPhase = 'loading' | 'complete' | 'leaving';
 
 interface Props {
-  isLoading?: boolean
-  progress?: number
-  text: string
+  isLoading?: boolean;
+  progress?: number;
+  text: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,10 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
 const isRendered = ref(props.isLoading);
 const phase = ref<tWidgetLoaderPhase>('loading');
 
-const loaderClass = computed(() => [
-  'widget-loader-app',
-  `widget-loader-app--${phase.value}`,
-]);
+const loaderClass = computed(() => ['widget-loader-app', `widget-loader-app--${phase.value}`]);
 
 watch(
   () => props.isLoading,
@@ -72,24 +69,9 @@ function handleLoaderAnimationEnd() {
       left: 0,
     }"
   >
-    <AppGrid
-      :class="loaderClass"
-      place-items="center"
-      min-height="100dvh"
-      @animationend="handleLoaderAnimationEnd"
-    >
-      <AppFlex
-        class="widget-loader-app__content"
-        direction="column"
-        align="center"
-        max-width="100%"
-        width="100%"
-      >
-        <AppLogo
-          logo="blindTextRight"
-          width="100rem"
-          height="auto"
-        />
+    <AppGrid :class="loaderClass" place-items="center" min-height="100dvh" @animationend="handleLoaderAnimationEnd">
+      <AppFlex class="widget-loader-app__content" direction="column" align="center" max-width="100%" width="100%">
+        <AppLogo logo="blindTextRight" width="100rem" height="auto" />
 
         <AppLineLoader
           :progress="progress"
@@ -108,10 +90,7 @@ function handleLoaderAnimationEnd() {
           bottom: 'vertical',
         }"
       >
-        <AppVersion
-          class="widget-loader-app__version"
-          size="big"
-        />
+        <AppVersion class="widget-loader-app__version" size="big" />
       </AppPosition>
     </AppGrid>
   </AppPosition>
@@ -130,7 +109,7 @@ function handleLoaderAnimationEnd() {
 }
 
 .widget-loader-app__content {
-  gap: var(--app-space-5);;
+  gap: var(--app-space-5);
   transform: translateY(-2dvh);
 }
 

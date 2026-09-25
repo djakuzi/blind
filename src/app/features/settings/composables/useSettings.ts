@@ -6,29 +6,21 @@ import { applyAppScaleMode } from '../helpers/applyAppScaleMode.helper';
 import { applyAppThemeMode } from '../helpers/applyAppThemeMode.helper';
 
 export interface iSettingsPatch {
-  appThemeMode?: tAppThemeMode
-  appScaleMode?: tAppScalePresetMode
-  soundEnabled?: boolean
+  appThemeMode?: tAppThemeMode;
+  appScaleMode?: tAppScalePresetMode;
+  soundEnabled?: boolean;
 }
 
 export function useSettings() {
   const settingsStore = useSettingsStore();
 
-  const appThemeMode = computed(() =>
-    settingsStore.appThemeMode,
-  );
+  const appThemeMode = computed(() => settingsStore.appThemeMode);
 
-  const appScaleMode = computed(() =>
-    settingsStore.appScaleMode,
-  );
+  const appScaleMode = computed(() => settingsStore.appScaleMode);
 
-  const soundEnabled = computed(() =>
-    settingsStore.soundEnabled,
-  );
+  const soundEnabled = computed(() => settingsStore.soundEnabled);
 
-  async function setAppThemeMode(
-    value: tAppThemeMode,
-  ) {
+  async function setAppThemeMode(value: tAppThemeMode) {
     const savePromise = settingsStore.setAppThemeMode(value);
 
     applyAppThemeMode(value);
@@ -36,42 +28,27 @@ export function useSettings() {
     await savePromise;
   }
 
-  async function setAppScaleMode(
-    value: tAppScalePresetMode,
-  ) {
-    await Promise.all([
-      settingsStore.setAppScaleMode(value),
-      applyAppScaleMode(value),
-    ]);
+  async function setAppScaleMode(value: tAppScalePresetMode) {
+    await Promise.all([settingsStore.setAppScaleMode(value), applyAppScaleMode(value)]);
   }
 
-  function setSoundEnabled(
-    value: boolean,
-  ) {
+  function setSoundEnabled(value: boolean) {
     settingsStore.setSoundEnabled(value);
   }
 
   function toggleSoundEnabled() {
-    setSoundEnabled(
-      !settingsStore.soundEnabled,
-    );
+    setSoundEnabled(!settingsStore.soundEnabled);
   }
 
-  async function updateSettings(
-    patch: iSettingsPatch,
-  ) {
+  async function updateSettings(patch: iSettingsPatch) {
     const operations: Promise<void>[] = [];
 
     if (patch.appThemeMode !== undefined) {
-      operations.push(
-        setAppThemeMode(patch.appThemeMode),
-      );
+      operations.push(setAppThemeMode(patch.appThemeMode));
     }
 
     if (patch.appScaleMode !== undefined) {
-      operations.push(
-        setAppScaleMode(patch.appScaleMode),
-      );
+      operations.push(setAppScaleMode(patch.appScaleMode));
     }
 
     if (patch.soundEnabled !== undefined) {

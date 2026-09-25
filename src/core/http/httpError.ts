@@ -1,12 +1,12 @@
 import type { tHttpErrorType } from './type';
 
 export interface iPayloadHttpError {
-  message: string
-  type: tHttpErrorType
-  status: number | null
-  url: string
-  data?: unknown
-  cause?: unknown
+  message: string;
+  type: tHttpErrorType;
+  status: number | null;
+  url: string;
+  data?: unknown;
+  cause?: unknown;
 }
 
 export class HttpError extends Error {
@@ -15,15 +15,10 @@ export class HttpError extends Error {
   readonly url: string;
   readonly data: unknown;
 
-  constructor(
-    payload: iPayloadHttpError,
-  ) {
-    super(
-      payload.message,
-      {
-        cause: payload.cause,
-      },
-    );
+  constructor(payload: iPayloadHttpError) {
+    super(payload.message, {
+      cause: payload.cause,
+    });
 
     this.name = 'HttpError';
     this.type = payload.type;

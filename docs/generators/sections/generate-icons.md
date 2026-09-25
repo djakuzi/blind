@@ -12,7 +12,7 @@
 
 Источником данных для генератора является директория:
 
-* `src/app/assets/icons/`
+- `src/app/assets/icons/`
 
 Генератор автоматически обрабатывает SVG-файлы во всех вложенных директориях.
 
@@ -22,23 +22,23 @@
 
 Генератор обновляет файл:
 
-* `src/core/media/assets.ts`
+- `src/core/media/assets.ts`
 
 В файл автоматически добавляются:
 
-* imports всех найденных SVG-иконок;
-* объект `ICONS_ASSETS`;
-* тип `IconAssetName`.
+- imports всех найденных SVG-иконок;
+- объект `ICONS_ASSETS`;
+- тип `IconAssetName`.
 
 Пример сгенерированной структуры:
 
 ```ts
 export const ICONS_ASSETS = {
   'arrow-left': ArrowLeft,
-  'settings': Settings,
-} as const
+  settings: Settings,
+} as const;
 
-export type IconAssetName = keyof typeof ICONS_ASSETS
+export type IconAssetName = keyof typeof ICONS_ASSETS;
 ```
 
 Таким образом, `IconAssetName` всегда содержит только реально существующие в проекте иконки.
@@ -81,17 +81,17 @@ src/app/assets/icons/navigation/navigation--arrow-left.svg
 
 Генератор нужно запускать, если:
 
-* добавлена новая SVG-иконка в `src/app/assets/icons/`;
-* удалена существующая иконка;
-* изменено имя или расположение SVG-файла;
-* изменена структура директорий с иконками;
-* нужно восстановить `assets.ts` в актуальное состояние.
+- добавлена новая SVG-иконка в `src/app/assets/icons/`;
+- удалена существующая иконка;
+- изменено имя или расположение SVG-файла;
+- изменена структура директорий с иконками;
+- нужно восстановить `assets.ts` в актуальное состояние.
 
 ## Важное правило
 
 Файл:
 
-* `src/core/media/assets.ts`
+- `src/core/media/assets.ts`
 
 не должен редактироваться вручную.
 

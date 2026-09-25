@@ -2,20 +2,13 @@ import { HttpError } from '../../httpError';
 import type { tHttpMiddleware } from '../../type';
 
 export function createFetchMiddleware(): tHttpMiddleware {
-  return async function fetchMiddleware(
-    context,
-    next,
-  ) {
+  return async function fetchMiddleware(context, next) {
     if (!context.request) {
       throw new Error('Http request context is not prepared');
     }
 
     try {
-      context.response =
-        await fetch(
-          context.request.url,
-          context.request.init,
-        );
+      context.response = await fetch(context.request.url, context.request.init);
     } catch (error) {
       if (context.abortState?.signal.aborted) {
         throw error;

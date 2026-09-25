@@ -2,9 +2,9 @@
 import { computed } from 'vue';
 
 interface Props {
-  flowFrontDuration?: number
-  isActive?: boolean
-  progressRatio?: number
+  flowFrontDuration?: number;
+  isActive?: boolean;
+  progressRatio?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -38,18 +38,11 @@ const fillStyle = computed(() => {
   };
 });
 
-const fillClass = computed(() => [
-  'app-blood-fill',
-  { 'app-blood-fill--active': props.isActive },
-]);
+const fillClass = computed(() => ['app-blood-fill', { 'app-blood-fill--active': props.isActive }]);
 </script>
 
 <template>
-  <span
-    :class="fillClass"
-    :style="fillStyle"
-    aria-hidden="true"
-  >
+  <span :class="fillClass" :style="fillStyle" aria-hidden="true">
     <span class="app-blood-fill__body" />
     <span class="app-blood-fill__wave app-blood-fill__wave--front" />
   </span>
@@ -114,5 +107,4 @@ const fillClass = computed(() => [
     transform: translate3d(-50%, var(--cp-blood-fill-front-wave-y), 0);
   }
 }
-
 </style>

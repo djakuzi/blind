@@ -7,29 +7,26 @@ import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/colo
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 export interface PropsAppSlider {
-  modelValue: number
-  count: number
-  size?: tBaseSizeVariant
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  itemWidth?: tStyleSizeValue
-  itemMaxWidth?: tStyleSizeValue
-  itemGap?: tSpaceValue
-  inactiveScale?: number
-  inactiveOpacity?: number
-  contentDotsGap?: tSpaceValue
-  dotsHintGap?: tSpaceValue
-  dotsGap?: tSpaceValue
-  dotSize?: tStyleSizeValue
-  dotColor?: tColorValue
-  activeDotColor?: tColorValue
-  wheel?: boolean
-  disabled?: boolean
-  accessibilityLabel: string
-  itemAccessibilityLabel: (
-    index: number,
-    count: number,
-  ) => string
+  modelValue: number;
+  count: number;
+  size?: tBaseSizeVariant;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  itemWidth?: tStyleSizeValue;
+  itemMaxWidth?: tStyleSizeValue;
+  itemGap?: tSpaceValue;
+  inactiveScale?: number;
+  inactiveOpacity?: number;
+  contentDotsGap?: tSpaceValue;
+  dotsHintGap?: tSpaceValue;
+  dotsGap?: tSpaceValue;
+  dotSize?: tStyleSizeValue;
+  dotColor?: tColorValue;
+  activeDotColor?: tColorValue;
+  wheel?: boolean;
+  disabled?: boolean;
+  accessibilityLabel: string;
+  itemAccessibilityLabel: (index: number, count: number) => string;
 }
 
 const props = withDefaults(defineProps<PropsAppSlider>(), {
@@ -52,26 +49,23 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
 });
 
 const emit = defineEmits<{
-  'update:modelValue': [value: number]
+  'update:modelValue': [value: number];
 }>();
 
 defineSlots<{
-  item(props: {
-    index: number
-    active: boolean
-  }): unknown
+  item(props: { index: number; active: boolean }): unknown;
 
-  hint?(props: {
-    wheelEnabled: boolean
-    canNavigate: boolean
-  }): unknown
+  hint?(props: { wheelEnabled: boolean; canNavigate: boolean }): unknown;
 }>();
 
-const SIZE_MAP: Record<tBaseSizeVariant, {
-  contentDotsGap: tSpaceValue
-  dotsHintGap: tSpaceValue
-  dotsGap: tSpaceValue
-}> = {
+const SIZE_MAP: Record<
+  tBaseSizeVariant,
+  {
+    contentDotsGap: tSpaceValue;
+    dotsHintGap: tSpaceValue;
+    dotsGap: tSpaceValue;
+  }
+> = {
   small: {
     contentDotsGap: 4,
     dotsHintGap: 2,
@@ -117,24 +111,16 @@ const sliderMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 const sliderItemWidth = computed(() => LibStyle.toSizeValue(props.itemWidth));
 const sliderItemMaxWidth = computed(() => LibStyle.toSizeValue(props.itemMaxWidth));
 const sliderItemGap = computed(() => resolveSpaceValue(props.itemGap));
-const sliderContentDotsGap = computed(() => resolveSpaceValue(
-  props.contentDotsGap ?? sizeConfig.value.contentDotsGap,
-));
-const sliderDotsHintGap = computed(() => resolveSpaceValue(
-  props.dotsHintGap ?? sizeConfig.value.dotsHintGap,
-));
-const sliderDotsGap = computed(() => resolveSpaceValue(
-  props.dotsGap ?? sizeConfig.value.dotsGap,
-));
+const sliderContentDotsGap = computed(() => resolveSpaceValue(props.contentDotsGap ?? sizeConfig.value.contentDotsGap));
+const sliderDotsHintGap = computed(() => resolveSpaceValue(props.dotsHintGap ?? sizeConfig.value.dotsHintGap));
+const sliderDotsGap = computed(() => resolveSpaceValue(props.dotsGap ?? sizeConfig.value.dotsGap));
 const sliderDotSize = computed(() => LibStyle.toSizeValue(props.dotSize));
 const sliderDotColor = computed(() => resolveColorValue(props.dotColor));
 const sliderActiveDotColor = computed(() => resolveColorValue(props.activeDotColor));
 const sliderInactiveScale = computed(() => Math.min(1, Math.max(0, props.inactiveScale)));
 const sliderInactiveOpacity = computed(() => Math.min(1, Math.max(0, props.inactiveOpacity)));
 
-const trackTransform = computed(() =>
-  `translate3d(${trackTranslate.value + dragOffset.value}px, 0, 0)`,
-);
+const trackTransform = computed(() => `translate3d(${trackTranslate.value + dragOffset.value}px, 0, 0)`);
 
 function isItemActive(index: number) {
   return index === activeIndex.value;
@@ -301,8 +287,7 @@ function handlePointerUp(event: PointerEvent) {
 
   if (offset <= -threshold) {
     nextIndex++;
-  }
-  else if (offset >= threshold) {
+  } else if (offset >= threshold) {
     nextIndex--;
   }
 
@@ -346,9 +331,7 @@ function handleWheel(event: WheelEvent) {
     return;
   }
 
-  const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
-    ? event.deltaX
-    : event.deltaY;
+  const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
 
   if (Math.abs(delta) < 4) {
     return;
@@ -391,18 +374,9 @@ function handleKeydown(event: KeyboardEvent) {
   }
 }
 
-watch(
-  [
-    activeIndex,
-    () => props.count,
-    () => props.itemWidth,
-    () => props.itemMaxWidth,
-    () => props.itemGap,
-  ],
-  () => {
-    updateTrackPosition();
-  },
-);
+watch([activeIndex, () => props.count, () => props.itemWidth, () => props.itemMaxWidth, () => props.itemGap], () => {
+  updateTrackPosition();
+});
 
 onMounted(() => {
   updateTrackPosition();
@@ -456,11 +430,7 @@ onBeforeUnmount(() => {
       @wheel="handleWheel"
       @keydown="handleKeydown"
     >
-      <div
-        ref="trackElement"
-        class="app-slider__track"
-        :style="{ transform: trackTransform }"
-      >
+      <div ref="trackElement" class="app-slider__track" :style="{ transform: trackTransform }">
         <div
           v-for="index in indexes"
           :key="index"
@@ -471,38 +441,19 @@ onBeforeUnmount(() => {
           :aria-hidden="!isItemActive(index)"
         >
           <div class="app-slider__item-content">
-            <slot
-              name="item"
-              :index="index"
-              :active="isItemActive(index)"
-            />
+            <slot name="item" :index="index" :active="isItemActive(index)" />
           </div>
         </div>
       </div>
     </div>
 
     <div class="app-slider__footer">
-      <div
-        class="app-slider__dots"
-        aria-hidden="true"
-      >
-        <span
-          v-for="index in indexes"
-          :key="index"
-          class="app-slider__dot"
-          :class="{ 'app-slider__dot--active': isItemActive(index) }"
-        />
+      <div class="app-slider__dots" aria-hidden="true">
+        <span v-for="index in indexes" :key="index" class="app-slider__dot" :class="{ 'app-slider__dot--active': isItemActive(index) }" />
       </div>
 
-      <div
-        v-if="$slots.hint"
-        class="app-slider__hint"
-      >
-        <slot
-          name="hint"
-          :wheel-enabled="wheel && count > 1"
-          :can-navigate="count > 1"
-        />
+      <div v-if="$slots.hint" class="app-slider__hint">
+        <slot name="hint" :wheel-enabled="wheel && count > 1" :can-navigate="count > 1" />
       </div>
     </div>
   </div>

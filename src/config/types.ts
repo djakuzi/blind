@@ -1,27 +1,27 @@
 export type AppMode = 'prod' | 'debug';
 
 export interface ApiConfig {
-  baseUrl: string
-  api: string
+  baseUrl: string;
+  api: string;
 }
 
 export interface AppDeepLinkConfig {
-  scheme: string
+  scheme: string;
 }
 
 export interface AppStateConfig {
-  checkVersion: boolean
-  checkVersionPrompt: boolean
+  checkVersion: boolean;
+  checkVersionPrompt: boolean;
 }
 
 export interface AppConfig {
-  mode: AppMode
-  version: string
-  state: AppStateConfig
-  deepLink: AppDeepLinkConfig
+  mode: AppMode;
+  version: string;
+  state: AppStateConfig;
+  deepLink: AppDeepLinkConfig;
 }
 
 export interface AppConfigShape {
-  app: AppConfig
-  api: ApiConfig
+  app: AppConfig;
+  api: ApiConfig;
 }

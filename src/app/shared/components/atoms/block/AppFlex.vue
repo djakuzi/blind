@@ -9,15 +9,15 @@ import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 type tAppFlexTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer';
 
 interface Props {
-  tag?: tAppFlexTag
-  direction?: CSSProperties['flexDirection']
-  align?: CSSProperties['alignItems'] | 'start' | 'end'
-  justify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between'
-  wrap?: CSSProperties['flexWrap']
-  gap?: tSpaceValue
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  margin?: tSpaceValue
+  tag?: tAppFlexTag;
+  direction?: CSSProperties['flexDirection'];
+  align?: CSSProperties['alignItems'] | 'start' | 'end';
+  justify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between';
+  wrap?: CSSProperties['flexWrap'];
+  gap?: tSpaceValue;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  margin?: tSpaceValue;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -73,11 +73,7 @@ const flexStyle = computed(() => ({
 </script>
 
 <template>
-  <component
-    :is="tag"
-    class="app-flex"
-    :style="flexStyle"
-  >
+  <component :is="tag" class="app-flex" :style="flexStyle">
     <slot />
   </component>
 </template>

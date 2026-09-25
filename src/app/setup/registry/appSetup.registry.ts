@@ -4,13 +4,6 @@ import { createScaleSetup } from '../modules/scale.setup';
 import { createThemeSetup } from '../modules/theme.setup';
 import { createViewSetup } from '../modules/view.setup';
 
-export function createAppSetupRegistry(
-  pinia: Pinia,
-) {
-  return [
-    createViewSetup(),
-    createLanguageSetup(pinia),
-    createScaleSetup(pinia),
-    createThemeSetup(pinia),
-  ];
+export function createAppSetupRegistry(pinia: Pinia) {
+  return [createViewSetup(), createLanguageSetup(pinia), createScaleSetup(pinia), createThemeSetup(pinia)];
 }

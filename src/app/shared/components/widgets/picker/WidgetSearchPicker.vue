@@ -10,23 +10,23 @@ import AppInputSearch from '@/app/shared/components/ui/input/AppInputSearch.vue'
 import type { PropsInputSearch } from '@/app/shared/components/ui/input/AppInputSearch.vue';
 
 export interface iWidgetSearchPickerItem {
-  value: string
-  label: string
-  image?: iAppInfoRowImage
-  searchText?: string
-  disabled?: boolean
+  value: string;
+  label: string;
+  image?: iAppInfoRowImage;
+  searchText?: string;
+  disabled?: boolean;
 }
 
 export interface PropsWidgetSearchPicker {
-  modelValue: boolean
-  items: readonly iWidgetSearchPickerItem[]
-  selectedValue?: string
-  title?: string
-  emptyText?: string
-  triggerAriaLabel?: string
-  modal?: Omit<PropsAppModal, 'modelValue'>
-  search?: Omit<PropsInputSearch, 'modelValue'>
-  row?: Omit<PropsAppInfoRow, 'text' | 'image'>
+  modelValue: boolean;
+  items: readonly iWidgetSearchPickerItem[];
+  selectedValue?: string;
+  title?: string;
+  emptyText?: string;
+  triggerAriaLabel?: string;
+  modal?: Omit<PropsAppModal, 'modelValue'>;
+  search?: Omit<PropsInputSearch, 'modelValue'>;
+  row?: Omit<PropsAppInfoRow, 'text' | 'image'>;
 }
 
 const props = withDefaults(defineProps<PropsWidgetSearchPicker>(), {
@@ -40,23 +40,19 @@ const props = withDefaults(defineProps<PropsWidgetSearchPicker>(), {
 });
 
 const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
-  select: [value: string, item: iWidgetSearchPickerItem]
+  'update:modelValue': [value: boolean];
+  select: [value: string, item: iWidgetSearchPickerItem];
 }>();
 
 defineSlots<{
-  empty?(): unknown
+  empty?(): unknown;
 }>();
 
 const searchQuery = ref('');
 
-const selectedItem = computed(() =>
-  props.items.find((item) => item.value === props.selectedValue),
-);
+const selectedItem = computed(() => props.items.find((item) => item.value === props.selectedValue));
 
-const triggerText = computed(() =>
-  selectedItem.value?.label ?? props.selectedValue ?? '',
-);
+const triggerText = computed(() => selectedItem.value?.label ?? props.selectedValue ?? '');
 
 const modalProps = computed<Omit<PropsAppModal, 'modelValue'>>(() => ({
   bodyPaddingX: 0,
@@ -76,9 +72,7 @@ const rowProps = computed<Omit<PropsAppInfoRow, 'text' | 'image'>>(() => ({
   ...props.row,
 }));
 
-const normalizedSearchQuery = computed(() =>
-  searchQuery.value.trim().toLocaleLowerCase(),
-);
+const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLocaleLowerCase());
 
 const filteredItems = computed(() => {
   const query = normalizedSearchQuery.value;
@@ -88,9 +82,7 @@ const filteredItems = computed(() => {
   }
 
   return props.items.filter((item) => {
-    const searchValue = `${item.label} ${item.searchText ?? ''}`
-      .trim()
-      .toLocaleLowerCase();
+    const searchValue = `${item.label} ${item.searchText ?? ''}`.trim().toLocaleLowerCase();
 
     return searchValue.includes(query);
   });
@@ -105,10 +97,7 @@ function handleTriggerClick() {
 }
 
 function handleSelect(item: iWidgetSearchPickerItem) {
-  if (
-    item.disabled
-    || item.value === props.selectedValue
-  ) {
+  if (item.disabled || item.value === props.selectedValue) {
     return;
   }
 
@@ -137,32 +126,13 @@ watch(
 </script>
 
 <template>
-  <button
-    class="widget-search-picker__trigger"
-    type="button"
-    :aria-label="triggerAriaLabel"
-    @click="handleTriggerClick"
-  >
-    <AppInfoRow
-      :text="triggerText"
-      :image="selectedItem?.image"
-      size="big"
-      :padding-x="5"
-      :padding-y="3"
-    />
+  <button class="widget-search-picker__trigger" type="button" :aria-label="triggerAriaLabel" @click="handleTriggerClick">
+    <AppInfoRow :text="triggerText" :image="selectedItem?.image" size="big" :padding-x="5" :padding-y="3" />
   </button>
 
-  <AppModal
-    v-bind="modalProps"
-    :model-value="modelValue"
-    @update:model-value="handleModelValueUpdate"
-  >
+  <AppModal v-bind="modalProps" :model-value="modelValue" @update:model-value="handleModelValueUpdate">
     <template #header>
-      <AppFlex
-        direction="column"
-        :gap="4"
-        width="100%"
-      >
+      <AppFlex direction="column" :gap="4" width="100%">
         <AppText
           v-if="title"
           :text="title"
@@ -174,10 +144,7 @@ watch(
           :max-lines="1"
         />
 
-        <AppInputSearch
-          v-bind="searchProps"
-          v-model="searchQuery"
-        />
+        <AppInputSearch v-bind="searchProps" v-model="searchQuery" />
       </AppFlex>
     </template>
 
@@ -188,26 +155,18 @@ watch(
           :key="item.value"
           class="widget-search-picker__item"
           :class="{
-            'widget-search-picker__item--selected':
-              item.value === selectedValue,
+            'widget-search-picker__item--selected': item.value === selectedValue,
           }"
           type="button"
           :disabled="item.disabled"
           :aria-pressed="item.value === selectedValue"
           @click="handleSelect(item)"
         >
-          <AppInfoRow
-            v-bind="rowProps"
-            :text="item.label"
-            :image="resolveItemImage(item)"
-          />
+          <AppInfoRow v-bind="rowProps" :text="item.label" :image="resolveItemImage(item)" />
         </button>
       </template>
 
-      <slot
-        v-else
-        name="empty"
-      >
+      <slot v-else name="empty">
         <AppText
           v-if="emptyText"
           class="widget-search-picker__empty"

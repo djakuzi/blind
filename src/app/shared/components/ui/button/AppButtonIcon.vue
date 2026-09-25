@@ -1,7 +1,4 @@
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import { computed } from 'vue';
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
@@ -10,14 +7,14 @@ import { LibStyle } from '@/app/shared/lib/style';
 import type { tIconGroup, tIconName } from '@/core/media/assets';
 
 interface Props {
-  group: tIconGroup
-  icon: tIconName<tIconGroup>
-  width: PropsAppBlock['width']
-  height?: PropsAppBlock['height']
-  iconWidth?: PropsAppBlock['width']
-  iconHeight?: PropsAppBlock['height']
-  disabled?: boolean
-  ariaLabel: string
+  group: tIconGroup;
+  icon: tIconName<tIconGroup>;
+  width: PropsAppBlock['width'];
+  height?: PropsAppBlock['height'];
+  iconWidth?: PropsAppBlock['width'];
+  iconHeight?: PropsAppBlock['height'];
+  disabled?: boolean;
+  ariaLabel: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -28,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 defineEmits<{
-  click: [event: MouseEvent]
+  click: [event: MouseEvent];
 }>();
 
 const buttonStyle = computed(() => ({
@@ -47,12 +44,7 @@ const buttonStyle = computed(() => ({
       :aria-label="ariaLabel"
       @click="$emit('click', $event)"
     >
-      <AppIcon
-        :group="group"
-        :icon="icon"
-        :width="iconWidth"
-        :height="iconHeight"
-      />
+      <AppIcon :group="group" :icon="icon" :width="iconWidth" :height="iconHeight" />
     </button>
   </AppInteractionScale>
 </template>

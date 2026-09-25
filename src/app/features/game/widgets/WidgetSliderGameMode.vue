@@ -16,17 +16,10 @@ const activeIndex = ref(0);
 const isLoading = ref(false);
 const hasLoadError = ref(false);
 
-const preGameLocale = useLocale(
-  locale => locale.views.preGame.index.ui,
-);
+const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
 
-function formatItemAccessibilityLabel(
-  index: number,
-  count: number,
-) {
-  return preGameLocale.value.itemAccessibilityLabel
-    .replace('{current}', String(index + 1))
-    .replace('{total}', String(count));
+function formatItemAccessibilityLabel(index: number, count: number) {
+  return preGameLocale.value.itemAccessibilityLabel.replace('{current}', String(index + 1)).replace('{total}', String(count));
 }
 
 async function loadModes() {
@@ -36,13 +29,11 @@ async function loadModes() {
   try {
     modes.value = await apiGame.getModes();
     activeIndex.value = 0;
-  }
-  catch (error) {
+  } catch (error) {
     modes.value = [];
     hasLoadError.value = true;
     console.error('Failed to load game modes:', error);
-  }
-  finally {
+  } finally {
     isLoading.value = false;
   }
 }
@@ -89,10 +80,7 @@ onMounted(() => {
       <template #hint>
         <AppHoldHint
           :text="preGameLocale.holdHint"
-          :desktop-items="[
-            preGameLocale.desktopWheelHint,
-            preGameLocale.desktopSelectHint,
-          ]"
+          :desktop-items="[preGameLocale.desktopWheelHint, preGameLocale.desktopSelectHint]"
           direction="column"
           desktop-direction="column"
           size="middle"
@@ -101,17 +89,11 @@ onMounted(() => {
       </template>
     </AppSlider>
 
-    <div
-      v-else-if="hasLoadError"
-      class="widget-slider-game-mode__state"
-    >
+    <div v-else-if="hasLoadError" class="widget-slider-game-mode__state">
       {{ preGameLocale.loadError }}
     </div>
 
-    <div
-      v-else-if="isLoading"
-      class="widget-slider-game-mode__state"
-    >
+    <div v-else-if="isLoading" class="widget-slider-game-mode__state">
       {{ preGameLocale.loading }}
     </div>
   </div>

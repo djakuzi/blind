@@ -6,13 +6,13 @@ import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 type tAppBlockTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer' | 'span';
 
 export interface PropsAppBlock {
-  tag?: tAppBlockTag
-  display?: CSSProperties['display']
-  overflow?: CSSProperties['overflow']
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  height?: tStyleSizeValue
-  margin?: tSpaceValue
+  tag?: tAppBlockTag;
+  display?: CSSProperties['display'];
+  overflow?: CSSProperties['overflow'];
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  height?: tStyleSizeValue;
+  margin?: tSpaceValue;
 }
 </script>
 
@@ -31,9 +31,7 @@ const props = withDefaults(defineProps<PropsAppBlock>(), {
   margin: undefined,
 });
 
-const blockClass = computed(() => [
-  'app-block',
-]);
+const blockClass = computed(() => ['app-block']);
 
 const blockStyle = computed(() => ({
   '--cp-block-display': props.display,
@@ -46,11 +44,7 @@ const blockStyle = computed(() => ({
 </script>
 
 <template>
-  <component
-    :is="tag"
-    :class="blockClass"
-    :style="blockStyle"
-  >
+  <component :is="tag" :class="blockClass" :style="blockStyle">
     <slot />
   </component>
 </template>

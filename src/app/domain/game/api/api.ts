@@ -4,14 +4,9 @@ import type { iResponseGameMode } from '../type/api/res';
 
 export class ApiGame {
   async getModes(): Promise<ModelGameMode[]> {
-    const modes =
-      await publicClient.get<iResponseGameMode[]>(
-        '/game/gameModes.json',
-      );
+    const modes = await publicClient.get<iResponseGameMode[]>('/game/gameModes.json');
 
-    return modes.map((mode) =>
-      new ModelGameMode(mode),
-    );
+    return modes.map((mode) => new ModelGameMode(mode));
   }
 }
 

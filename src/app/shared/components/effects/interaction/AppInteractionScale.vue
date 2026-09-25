@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface Props {
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -24,8 +24,7 @@ withDefaults(defineProps<Props>(), {
   display: inline-flex;
   transform: scale(1);
   transform-origin: center;
-  transition:
-    transform 140ms ease;
+  transition: transform 140ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {

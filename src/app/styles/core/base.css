@@ -1,6 +1,6 @@
 :root {
-    --app-font-family-base: 'Inter', sans-serif;
-    --app-font-family-accent: 'Comfortaa', sans-serif;
+  --app-font-family-base: 'Inter', sans-serif;
+  --app-font-family-accent: 'Comfortaa', sans-serif;
 }
 
 html,
@@ -11,21 +11,21 @@ body,
 }
 
 body {
-    background: var(--app-color-background);
-    font-family: var(--app-font-family-accent);
-    font-weight: var(--app-font-weight-regular);
-    line-height: var(--app-line-height-display);
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  background: var(--app-color-background);
+  font-family: var(--app-font-family-accent);
+  font-weight: var(--app-font-weight-regular);
+  line-height: var(--app-line-height-display);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button {
-    font-family: var(--app-font-family-accent);
-    font-weight: var(--app-font-weight-bold);
+  font-family: var(--app-font-family-accent);
+  font-weight: var(--app-font-weight-bold);
 }
 
 #app {
-    text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }

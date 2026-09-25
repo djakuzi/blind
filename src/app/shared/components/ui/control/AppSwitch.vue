@@ -8,19 +8,19 @@ import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/ra
 import { ToolVibration } from '@/core/tool/vibration';
 
 export interface PropsAppSwitch {
-  modelValue: boolean
-  accessibilityLabel: string
-  disabled?: boolean
-  vibration?: boolean
-  size?: tBaseSizeVariant
-  width?: tStyleSizeValue
-  maxWidth?: tStyleSizeValue
-  borderRadius?: tRadiusValue
-  thumbBorderRadius?: tRadiusValue
-  activeColor?: tColorValue
-  inactiveColor?: tColorValue
-  thumbColor?: tColorValue
-  borderColor?: tColorValue
+  modelValue: boolean;
+  accessibilityLabel: string;
+  disabled?: boolean;
+  vibration?: boolean;
+  size?: tBaseSizeVariant;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  borderRadius?: tRadiusValue;
+  thumbBorderRadius?: tRadiusValue;
+  activeColor?: tColorValue;
+  inactiveColor?: tColorValue;
+  thumbColor?: tColorValue;
+  borderColor?: tColorValue;
 }
 
 const props = withDefaults(defineProps<PropsAppSwitch>(), {
@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<PropsAppSwitch>(), {
 });
 
 const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
+  'update:modelValue': [value: boolean];
 }>();
 
 const SWITCH_WIDTH_MAP: Record<tBaseSizeVariant, string> = {
@@ -47,9 +47,7 @@ const SWITCH_WIDTH_MAP: Record<tBaseSizeVariant, string> = {
   big: '14rem',
 };
 
-const switchWidth = computed(() => LibStyle.toSizeValue(
-  props.width ?? SWITCH_WIDTH_MAP[props.size],
-));
+const switchWidth = computed(() => LibStyle.toSizeValue(props.width ?? SWITCH_WIDTH_MAP[props.size]));
 
 const switchMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 const switchBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
@@ -86,10 +84,7 @@ function handleToggle() {
     :disabled="disabled"
     @click="handleToggle"
   >
-    <span
-      class="app-switch__thumb-track"
-      aria-hidden="true"
-    >
+    <span class="app-switch__thumb-track" aria-hidden="true">
       <span class="app-switch__thumb" />
     </span>
   </button>
@@ -161,8 +156,7 @@ function handleToggle() {
 @media (hover: hover) and (pointer: fine) {
   .app-switch:not(.app-switch--disabled):hover {
     border-color: var(--app-color-primary);
-    box-shadow: 0 0 0 var(--app-border-width-medium)
-      color-mix(in srgb, var(--app-color-primary) 20%, transparent);
+    box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 20%, transparent);
   }
 }
 

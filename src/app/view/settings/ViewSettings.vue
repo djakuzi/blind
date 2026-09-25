@@ -5,25 +5,12 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 
-const settingsLocale = useLocale(
-  locale => locale.views.settings.index.ui,
-);
+const settingsLocale = useLocale((locale) => locale.views.settings.index.ui);
 </script>
 
 <template>
-  <ViewLayout
-    class="view-settings"
-    align="center"
-    justify="center"
-    padding="none"
-    overflow="auto"
-  >
-    <AppFlex
-      direction="column"
-      align="center"
-      width="100%"
-      :gap="12"
-    >
+  <ViewLayout class="view-settings" align="center" justify="center" padding="none" overflow="auto">
+    <AppFlex direction="column" align="center" width="100%" :gap="12">
       <AppTitle :text="settingsLocale.title" />
 
       <WidgetSettingsPanel />

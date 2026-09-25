@@ -64,9 +64,9 @@
 export const TAB_KEYS = {
   home: 'home',
   catalog: 'catalog',
-} as const
+} as const;
 
-export type TabKey = (typeof TAB_KEYS)[keyof typeof TAB_KEYS]
+export type TabKey = (typeof TAB_KEYS)[keyof typeof TAB_KEYS];
 ```
 
 ## 4. Переменные и функции
@@ -137,17 +137,17 @@ export type TabKey = (typeof TAB_KEYS)[keyof typeof TAB_KEYS]
 ```vue
 <script setup lang="ts">
 interface iUserActions {
-  openProfile: () => void
+  openProfile: () => void;
 }
 
 interface Props {
-  actions: iUserActions
-  visible?: boolean
+  actions: iUserActions;
+  visible?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
-})
+});
 </script>
 ```
 

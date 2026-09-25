@@ -11,9 +11,7 @@ import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
 
 const router = useRouter();
 
-const menuLocale = useLocale(
-  locale => locale.views.menu.index.ui,
-);
+const menuLocale = useLocale((locale) => locale.views.menu.index.ui);
 
 function handlePlay() {
   router.push({ name: KEY_ROUTE.preGame.index });
@@ -42,33 +40,11 @@ const menuActions = computed(() => [
 </script>
 
 <template>
-  <ViewLayout
-    class="view-menu"
-    align="center"
-    justify="center"
-    padding="none"
-  >
-    <AppFlex
-      direction="column"
-      align="center"
-      width="100%"
-      :gap="16"
-    >
-      <AppLogo
-        size="big"
-        logo="blindTextRight"
-        width="85rem"
-        height="auto"
-      />
+  <ViewLayout class="view-menu" align="center" justify="center" padding="none">
+    <AppFlex direction="column" align="center" width="100%" :gap="16">
+      <AppLogo size="big" logo="blindTextRight" width="85rem" height="auto" />
 
-      <AppFlex
-        class="view-menu__nav"
-        direction="column"
-        justify="center"
-        align="center"
-        :gap="8"
-        width="100%"
-      >
+      <AppFlex class="view-menu__nav" direction="column" justify="center" align="center" :gap="8" width="100%">
         <AppButtonHold
           v-for="menuAction in menuActions"
           :key="menuAction.key"

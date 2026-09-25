@@ -4,15 +4,8 @@ import { findLanguageByCode, loadLanguageLocale } from '../helpers/language.help
 import type { iLanguageState } from '../language.type';
 
 export function createSetLanguage() {
-  return async function setLanguage(
-    this: iLanguageState,
-    code: string,
-  ) {
-    const language =
-      findLanguageByCode(
-        this.languages,
-        code,
-      );
+  return async function setLanguage(this: iLanguageState, code: string) {
+    const language = findLanguageByCode(this.languages, code);
 
     if (!language) {
       return this.currentLanguage;
@@ -20,10 +13,7 @@ export function createSetLanguage() {
 
     const locale = await loadLanguageLocale(language);
 
-    await ToolStorage.setItem(
-      LANGUAGE_SELECTED_CODE_STORAGE_KEY,
-      language.key,
-    );
+    await ToolStorage.setItem(LANGUAGE_SELECTED_CODE_STORAGE_KEY, language.key);
 
     this.preferredLanguageCode = language.key;
     this.currentLanguage = language;

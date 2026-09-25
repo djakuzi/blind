@@ -6,9 +6,5 @@ const loaderView = useLoaderView();
 </script>
 
 <template>
-  <WidgetLoaderApp
-    :is-loading="loaderView.isLoading.value"
-    :progress="loaderView.progress.value"
-    :text="loaderView.text.value"
-  />
+  <WidgetLoaderApp :is-loading="loaderView.isLoading.value" :progress="loaderView.progress.value" :text="loaderView.text.value" />
 </template>

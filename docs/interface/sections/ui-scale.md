@@ -12,9 +12,7 @@
 :root {
   --app-scale: 1;
   --app-root-font-size-base: 1vmin;
-  --app-root-font-size: calc(
-    var(--app-root-font-size-base) * var(--app-scale)
-  );
+  --app-root-font-size: calc(var(--app-root-font-size-base) * var(--app-scale));
 }
 ```
 
@@ -60,18 +58,18 @@ components
 
 Так как игра рассчитана на горизонтальную ориентацию, responsive-логика должна учитывать:
 
-* ширину и высоту viewport;
-* aspect ratio;
-* landscape-сценарии;
-* safe area;
-* способ ввода, если он влияет на hit area.
+- ширину и высоту viewport;
+- aspect ratio;
+- landscape-сценарии;
+- safe area;
+- способ ввода, если он влияет на hit area.
 
 Не следует строить систему вокруг `phone / tablet / desktop`. Лучше использовать режимы доступного пространства:
 
-* compact landscape;
-* regular landscape;
-* wide;
-* ultrawide.
+- compact landscape;
+- regular landscape;
+- wide;
+- ultrawide.
 
 ## UI Scale
 
@@ -94,9 +92,7 @@ desktop = 1.3
 `--app-scale` применяется только внутри:
 
 ```css
---app-root-font-size: calc(
-  var(--app-root-font-size-base) * var(--app-scale)
-);
+--app-root-font-size: calc(var(--app-root-font-size-base) * var(--app-scale));
 ```
 
 В остальных токенах повторно умножать значения на `--app-scale` нельзя, иначе масштаб применится дважды.
@@ -140,11 +136,11 @@ Primitive tokens задают шкалу значений, semantic tokens — �
 
 Визуальная адаптация должна выполняться в CSS:
 
-* `clamp()`;
-* `min()`;
-* `max()`;
-* media queries;
-* container queries.
+- `clamp()`;
+- `min()`;
+- `max()`;
+- media queries;
+- container queries.
 
 Не следует использовать JS только для изменения раскладки:
 
@@ -175,9 +171,7 @@ Safe area защищает UI от notch, скруглений экрана, hom
 
 ```css
 .screen {
-  padding:
-    var(--app-safe-area-vertical)
-    var(--app-safe-area-horizontal);
+  padding: var(--app-safe-area-vertical) var(--app-safe-area-horizontal);
 }
 ```
 
@@ -189,12 +183,12 @@ Safe area защищает UI от notch, скруглений экрана, hom
 
 `--app-scale` влияет только на интерфейс:
 
-* меню;
-* настройки;
-* HUD;
-* кнопки;
-* текст;
-* overlay.
+- меню;
+- настройки;
+- HUD;
+- кнопки;
+- текст;
+- overlay.
 
 Он не должен влиять на canvas или Three.js renderer.
 
