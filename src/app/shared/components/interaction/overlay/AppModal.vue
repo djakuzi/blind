@@ -186,7 +186,7 @@ watch(
   () => props.modelValue,
   (isOpen) => {
     if (isOpen) {
-      void handleOpen();
+      handleOpen();
       return;
     }
 
