@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import { useAppSetup } from '@/app/setup/composables/useAppSetup';
 import ProviderLoaderApp from '@/app/providers/ProviderLoaderApp.vue';
 import '@/app/styles/index.css';
+import { useSetup } from '@/core/lifecycle/setup/useSetup';
 
-const appSetup = useAppSetup();
+const setup = useSetup();
 </script>
 
 <template>
-  <RouterView v-if="appSetup.isReady.value" key="app-router" />
+  <RouterView v-if="setup.isReady.value" key="app-router" />
   <ProviderLoaderApp />
 </template>

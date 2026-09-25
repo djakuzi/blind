@@ -5,21 +5,17 @@ import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import { normalizeLanguageCodes } from '@/app/stores/language/helpers/language.helper';
 import { LANGUAGE_SELECTED_CODE_STORAGE_KEY } from '@/app/stores/language/language.const';
 import { useLanguageStore } from '@/app/stores/language/language.store';
+import type { iSetup } from '@/core/lifecycle/setup/setup.type';
 import { ToolStorage } from '@/core/tool/storage';
 import { ToolSystem } from '@/core/tool/system';
-import type { iAppSetup } from '../core/setup.type';
 
 const APP_SETUP_LANGUAGE_SCOPE_KEY = 'app-setup-language';
-
 const APP_SETUP_LANGUAGE_RESOURCE_KEY = 'language';
 
-export function createLanguageSetup(pinia: Pinia): iAppSetup {
+export function createLanguageSetup(pinia: Pinia): iSetup {
   const languageStore = useLanguageStore(pinia);
-
   const loaderStore = useLoaderStore(pinia);
-
   const { initializeAppLanguage } = useAppLanguage(pinia);
-
   const staticLocale = useStaticLocale(['loading'], pinia);
 
   return {

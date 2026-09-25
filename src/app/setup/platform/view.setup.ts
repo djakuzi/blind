@@ -1,7 +1,7 @@
+import type { iSetup } from '@/core/lifecycle/setup/setup.type';
 import { ToolView } from '@/core/tool/view';
-import type { iAppSetup } from '../core/setup.type';
 
-export function createViewSetup(): iAppSetup {
+export function createViewSetup(): iSetup {
   return {
     key: 'view',
 

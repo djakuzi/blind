@@ -61,33 +61,51 @@ execution mode
 
 ## Setup Structure
 
-Setup-инфраструктуру полезно разделять по ответственности:
+Setup разделён на универсальный lifecycle-механизм и composition конкретного приложения:
 
 ```text
-setup
+src
 ├── core
-├── registry
-├── modules
-└── composables
+│   └── lifecycle
+│       └── setup
+│           ├── setup.runner.ts
+│           ├── setup.state.ts
+│           ├── setup.type.ts
+│           └── useSetup.ts
+│
+└── app
+    └── setup
+        ├── registry
+        │   └── appSetup.registry.ts
+        ├── interface
+        │   ├── language.setup.ts
+        │   ├── scale.setup.ts
+        │   └── theme.setup.ts
+        └── platform
+            └── view.setup.ts
 ```
 
-### core
+### `core/lifecycle/setup`
 
-Содержит общий контракт lifecycle, runner и внутреннее состояние setup.
+Содержит общий контракт lifecycle, runner, внутреннее состояние setup и reactive API состояния.
 
-Core не должен знать о конкретных app-системах.
+Механизм не должен знать о конкретных app-системах, Pinia stores, loader, языке, теме или platform setup Blind.
 
-### registry
+### `app/setup/registry`
 
-Определяет, какие setup-модули участвуют в lifecycle приложения.
+Определяет, какие setup-модули конкретного приложения участвуют в lifecycle.
 
 Registry является composition point и может меняться по мере появления или удаления app-систем.
 
-### modules
+### `app/setup/interface`
 
-Содержат setup конкретных систем.
+Содержит setup интерфейсных систем приложения, например языка, темы и UI scale.
 
-Один модуль может реализовывать:
+### `app/setup/platform`
+
+Содержит setup platform presentation и окружения, например orientation, status bar и WebView.
+
+Конкретный setup-модуль может реализовывать:
 
 - только `preMount`;
 - только `postMount`;
@@ -95,11 +113,7 @@ Registry является composition point и может меняться по 
 
 Setup-модуль должен координировать систему через её публичный API, а не дублировать внутреннюю business/domain логику.
 
-### composables
-
-Предоставляют reactive доступ к общему состоянию lifecycle, например app readiness.
-
-UI не должен зависеть от внутренней реализации runner.
+UI получает reactive состояние lifecycle через `useSetup` и не зависит от внутренней реализации runner.
 
 ## App Readiness
 
@@ -301,7 +315,7 @@ Styles описывают визуальные правила и не должн
 
 ```text
 main
-→ setup / router
+→ app setup / core lifecycle setup / router
 
 setup
 → feature / store / overlay / shared / core
@@ -341,7 +355,7 @@ shared
 - layout → узкосценарная feature logic;
 - store → конкретный component/view;
 - setup → screen-specific presentation;
-- setup core → конкретный feature/store/overlay.
+- core lifecycle setup → конкретный feature/store/overlay.
 
 Если связь нужна только одному экрану, её место обычно во view или feature, а не в app lifecycle.
 
@@ -418,11 +432,11 @@ setup module
 
 ## Базовые Правила
 
-1. Startup lifecycle приложения живёт в `app/setup`.
+1. Универсальный setup lifecycle живёт в `core/lifecycle/setup`, а setup конкретных систем приложения — в `app/setup`.
 2. `preMount` используется для работы, обязательной до mount.
 3. Blocking `postMount` определяет app readiness.
 4. Background `postMount` не блокирует основной UI.
-5. Setup core не знает о конкретных системах.
+5. `core/lifecycle/setup` не знает о конкретных системах приложения.
 6. Registry является composition point setup-модулей.
 7. View остаётся точкой сборки route screen.
 8. Feature инкапсулирует сценарии и переиспользуемые app-композиции.
@@ -436,6 +450,7 @@ setup module
 Основные app-области:
 
 ```text
+src/core/lifecycle/setup
 src/app/setup
 src/app/router
 src/app/layouts
