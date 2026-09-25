@@ -30,7 +30,7 @@ export async function runPostMountSetup(
       .then(() => postMount.run());
 
     if (postMount.mode === 'background') {
-      void task.catch((error) => {
+      task.catch((error) => {
         console.error(
           `Background app setup "${setup.key}" failed:`,
           error,
