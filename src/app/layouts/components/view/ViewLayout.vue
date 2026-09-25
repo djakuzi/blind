@@ -110,8 +110,7 @@ const viewLayoutStyle = computed(() => {
   const isFullHeight = props.height === 'full';
 
   return {
-    '--cp-view-layout-align':
-      resolveViewLayoutAlign(props.align),
+    '--cp-view-layout-align': resolveViewLayoutAlign(props.align),
 
     '--cp-view-layout-flex':
       isFullHeight
@@ -123,25 +122,20 @@ const viewLayoutStyle = computed(() => {
         ? '100%'
         : 'auto',
 
-    '--cp-view-layout-justify':
-      resolveViewLayoutJustify(props.justify),
+    '--cp-view-layout-justify': resolveViewLayoutJustify(props.justify),
 
     '--cp-view-layout-max-height':
       isFullHeight
         ? '100%'
         : 'none',
 
-    '--cp-view-layout-padding':
-      resolveViewLayoutPadding(props.padding),
+    '--cp-view-layout-padding': resolveViewLayoutPadding(props.padding),
 
-    '--cp-view-layout-overflow':
-      props.overflow,
+    '--cp-view-layout-overflow': props.overflow,
 
-    '--cp-view-layout-bleed-horizontal':
-      resolveBleedHorizontal(props.bleed),
+    '--cp-view-layout-bleed-horizontal': resolveBleedHorizontal(props.bleed),
 
-    '--cp-view-layout-bleed-vertical':
-      resolveBleedVertical(props.bleed),
+    '--cp-view-layout-bleed-vertical': resolveBleedVertical(props.bleed),
   };
 });
 </script>

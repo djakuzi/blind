@@ -89,8 +89,7 @@ export class HttpClient {
       abortState: null,
     };
 
-    const result =
-      await this.runPipeline(context);
+    const result = await this.runPipeline(context);
 
     return result.data as TResponse;
   }
@@ -178,8 +177,7 @@ export class HttpClient {
     interceptors: TInterceptor[],
     interceptor: TInterceptor,
   ) {
-    const index =
-      interceptors.indexOf(interceptor);
+    const index = interceptors.indexOf(interceptor);
 
     if (index === -1) {
       return;

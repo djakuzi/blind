@@ -17,11 +17,9 @@ function getLanguageFilePath(
 export function normalizeLanguageCodes(
   code: string,
 ) {
-  const normalizedCode =
-    code.trim().replaceAll('_', '-').toLowerCase();
+  const normalizedCode = code.trim().replaceAll('_', '-').toLowerCase();
 
-  const baseCode =
-    normalizedCode.split('-')[0] ?? normalizedCode;
+  const baseCode = normalizedCode.split('-')[0] ?? normalizedCode;
 
   return {
     exact: normalizedCode,
@@ -37,8 +35,7 @@ export function findLanguageByCode(
     return null;
   }
 
-  const normalizedCodes =
-    normalizeLanguageCodes(code);
+  const normalizedCodes = normalizeLanguageCodes(code);
 
   return languages.find((language) =>
     language.key.toLowerCase() === normalizedCodes.exact,
@@ -74,8 +71,7 @@ export async function getFallbackLanguages() {
 
 export async function loadLanguages() {
   try {
-    const languages =
-      await apiLanguage.getLanguages();
+    const languages = await apiLanguage.getLanguages();
 
     await ToolStorage.setJson<tStoredLanguage[]>(
       LANGUAGE_LIST_STORAGE_KEY,
@@ -92,8 +88,7 @@ export async function resolveInitialLanguage(
   languages: ModelLanguage[],
   preferredLanguageCode: string | null,
 ) {
-  const preferredLanguage =
-    findLanguageByCode(languages, preferredLanguageCode);
+  const preferredLanguage = findLanguageByCode(languages, preferredLanguageCode);
 
   if (preferredLanguage) {
     return preferredLanguage;
@@ -103,11 +98,9 @@ export async function resolveInitialLanguage(
 }
 
 export async function loadDefaultLanguageFallback() {
-  const language =
-    await apiLanguage.getDefaultLanguage();
+  const language = await apiLanguage.getDefaultLanguage();
 
-  const locale =
-    await apiLanguage.getDefaultLanguageInterface();
+  const locale = await apiLanguage.getDefaultLanguageInterface();
 
   return {
     language,
@@ -118,11 +111,9 @@ export async function loadDefaultLanguageFallback() {
 export async function loadLanguageLocale(
   language: ModelLanguage,
 ): Promise<Locale> {
-  const path =
-    getLanguageFilePath(language.key);
+  const path = getLanguageFilePath(language.key);
 
-  const languageFile =
-    await ToolFilesystem.getJson<iLanguageFile>(path);
+  const languageFile = await ToolFilesystem.getJson<iLanguageFile>(path);
 
   if (
     languageFile
@@ -131,8 +122,7 @@ export async function loadLanguageLocale(
     return languageFile.locale;
   }
 
-  const locale =
-    await apiLanguage.getLanguageInterface(language.key);
+  const locale = await apiLanguage.getLanguageInterface(language.key);
 
   await ToolFilesystem.setJson<iLanguageFile>(
     path,

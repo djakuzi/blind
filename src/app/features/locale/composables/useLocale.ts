@@ -8,8 +8,7 @@ export function useLocale<TResult = Locale>(
   selector?: (locale: Locale) => TResult,
   pinia?: Pinia,
 ): ComputedRef<TResult> {
-  const languageStore =
-    useLanguageStore(pinia);
+  const languageStore = useLanguageStore(pinia);
 
   return computed(() => {
     if (!languageStore.locale) {

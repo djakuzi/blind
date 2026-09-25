@@ -6,8 +6,7 @@ export function useAppThemeSetup(pinia: Pinia) {
   const settingsStore = useSettingsStore(pinia);
 
   async function setupAppTheme() {
-    const savedAppThemeMode =
-      await settingsStore.loadAppThemeMode();
+    const savedAppThemeMode = await settingsStore.loadAppThemeMode();
 
     applyAppThemeMode(savedAppThemeMode);
   }

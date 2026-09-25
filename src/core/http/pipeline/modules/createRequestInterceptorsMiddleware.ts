@@ -12,8 +12,7 @@ export function createRequestInterceptorsMiddleware(
     }
 
     for (const interceptor of interceptors) {
-      context.request =
-        await interceptor(context.request);
+      context.request = await interceptor(context.request);
     }
 
     return await next();

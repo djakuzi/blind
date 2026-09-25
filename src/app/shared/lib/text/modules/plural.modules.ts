@@ -21,8 +21,7 @@ function formatPluralCount(
     new Intl.PluralRules(languageCode)
       .select(count);
 
-  const template =
-    forms[category] ?? forms.other;
+  const template = forms[category] ?? forms.other;
 
   return template.replace(
     /\{count\}/g,

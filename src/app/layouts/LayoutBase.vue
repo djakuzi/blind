@@ -21,10 +21,8 @@ const {
 
 const layoutStyle = computed(() => ({
   '--cp-layout-padding': layoutPadding.value,
-  '--cp-layout-padding-horizontal':
-    layoutPaddingHorizontal.value,
-  '--cp-layout-padding-vertical':
-    layoutPaddingVertical.value,
+  '--cp-layout-padding-horizontal': layoutPaddingHorizontal.value,
+  '--cp-layout-padding-vertical': layoutPaddingVertical.value,
 }));
 </script>
 

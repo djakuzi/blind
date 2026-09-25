@@ -30,8 +30,7 @@ export function useStaticLocale<
   sections?: readonly TSection[],
   pinia?: Pinia,
 ): ComputedRef<tStaticLocaleResult<TSection>> {
-  const languageStore =
-    useLanguageStore(pinia);
+  const languageStore = useLanguageStore(pinia);
 
   return computed(() => {
     const staticLocale =

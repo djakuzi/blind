@@ -5,8 +5,7 @@ import type { tStaticLocaleLanguage } from './locale.registry';
 function normalizeStaticLocaleCode(
   code: string,
 ) {
-  const exact =
-    code.trim().replaceAll('_', '-').toLowerCase();
+  const exact = code.trim().replaceAll('_', '-').toLowerCase();
 
   return {
     exact,
@@ -27,8 +26,7 @@ export function getStaticLocale(
     return STATIC_LOCALE_REGISTRY[STATIC_LOCALE_DEFAULT_LANGUAGE];
   }
 
-  const normalizedCode =
-    normalizeStaticLocaleCode(code);
+  const normalizedCode = normalizeStaticLocaleCode(code);
 
   if (isStaticLocaleLanguage(normalizedCode.exact)) {
     return STATIC_LOCALE_REGISTRY[normalizedCode.exact];

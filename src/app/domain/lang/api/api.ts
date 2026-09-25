@@ -15,8 +15,7 @@ export class ApiLanguage {
   }
 
   async getLanguageCodes(): Promise<string[]> {
-    const languages =
-      await this.getLanguages();
+    const languages = await this.getLanguages();
 
     return languages.map((language) =>
       language.key,
@@ -32,8 +31,7 @@ export class ApiLanguage {
   }
 
   async getDefaultLanguage(): Promise<ModelLanguage> {
-    const languages =
-      await this.getLanguages();
+    const languages = await this.getLanguages();
 
     const language =
       languages.find((item) =>
@@ -48,8 +46,7 @@ export class ApiLanguage {
   }
 
   async getDefaultLanguageInterface(): Promise<iResponseLanguageInterface> {
-    const language =
-      await this.getDefaultLanguage();
+    const language = await this.getDefaultLanguage();
 
     return this.getLanguageInterface(
       language.key,

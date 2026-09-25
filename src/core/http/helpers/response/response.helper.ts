@@ -21,8 +21,7 @@ export async function parseResponseData(
     return await response.text();
   }
 
-  const text =
-    await response.text();
+  const text = await response.text();
 
   if (!text) {
     return null;
@@ -45,8 +44,7 @@ export async function parseResponseData(
 export async function parseErrorData(
   response: Response,
 ) {
-  const text =
-    await response.text();
+  const text = await response.text();
 
   if (!text) {
     return null;

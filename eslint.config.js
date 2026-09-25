@@ -94,8 +94,7 @@ const localStylisticRules = {
         fixable: 'whitespace',
         schema: [],
         messages: {
-          compactSinglePropertyObjectPattern:
-            'Single-property object destructuring should stay on one line.',
+          compactSinglePropertyObjectPattern: 'Single-property object destructuring should stay on one line.',
         },
       },
       create(context) {
@@ -148,8 +147,7 @@ const localStylisticRules = {
               loc: openBrace.loc,
               messageId: 'compactSinglePropertyObjectPattern',
               fix(fixer) {
-                const propertyText =
-                  sourceCode.getText(node.properties[0]).replace(/,$/, '');
+                const propertyText = sourceCode.getText(node.properties[0]).replace(/,$/, '');
 
                 return fixer.replaceTextRange(
                   [
@@ -164,14 +162,194 @@ const localStylisticRules = {
         };
       },
     },
+    'compact-single-line-variable-initializer': {
+      meta: {
+        type: 'layout',
+        fixable: 'whitespace',
+        schema: [],
+        messages: {
+          compactSingleLineVariableInitializer: 'Single-line variable initializer should stay on the declaration line.',
+        },
+      },
+      create(context) {
+        const sourceCode = context.sourceCode;
+
+        return {
+          VariableDeclarator(node) {
+            if (
+              !node.init
+              || node.id.type !== 'Identifier'
+              || node.id.loc.end.line === node.init.loc.start.line
+              || node.init.loc.start.line !== node.init.loc.end.line
+            ) {
+              return;
+            }
+
+            const equalToken =
+              sourceCode.getTokenBefore(
+                node.init,
+                (token) => token.value === '=',
+              );
+
+            if (!equalToken) {
+              return;
+            }
+
+            const textBetweenEqualAndInitializer = sourceCode.text.slice(equalToken.range[1], node.init.range[0]);
+
+            if (
+              !textBetweenEqualAndInitializer.includes('\n')
+              || textBetweenEqualAndInitializer.includes('//')
+              || textBetweenEqualAndInitializer.includes('/*')
+            ) {
+              return;
+            }
+
+            context.report({
+              node,
+              loc: equalToken.loc,
+              messageId: 'compactSingleLineVariableInitializer',
+              fix(fixer) {
+                return fixer.replaceTextRange(
+                  [
+                    equalToken.range[1],
+                    node.init.range[0],
+                  ],
+                  ' ',
+                );
+              },
+            });
+          },
+        };
+      },
+    },
+    'compact-single-line-assignment': {
+      meta: {
+        type: 'layout',
+        fixable: 'whitespace',
+        schema: [],
+        messages: {
+          compactSingleLineAssignment: 'Single-line assignment value should stay on the assignment line.',
+        },
+      },
+      create(context) {
+        const sourceCode = context.sourceCode;
+
+        return {
+          AssignmentExpression(node) {
+            if (
+              node.left.loc.end.line === node.right.loc.start.line
+              || node.right.loc.start.line !== node.right.loc.end.line
+            ) {
+              return;
+            }
+
+            const equalToken =
+              sourceCode.getTokenBefore(
+                node.right,
+                (token) => token.value === node.operator,
+              );
+
+            if (!equalToken) {
+              return;
+            }
+
+            const textBetweenEqualAndValue = sourceCode.text.slice(equalToken.range[1], node.right.range[0]);
+
+            if (
+              !textBetweenEqualAndValue.includes('\n')
+              || textBetweenEqualAndValue.includes('//')
+              || textBetweenEqualAndValue.includes('/*')
+            ) {
+              return;
+            }
+
+            context.report({
+              node,
+              loc: equalToken.loc,
+              messageId: 'compactSingleLineAssignment',
+              fix(fixer) {
+                return fixer.replaceTextRange(
+                  [
+                    equalToken.range[1],
+                    node.right.range[0],
+                  ],
+                  ' ',
+                );
+              },
+            });
+          },
+        };
+      },
+    },
+    'compact-single-line-property-value': {
+      meta: {
+        type: 'layout',
+        fixable: 'whitespace',
+        schema: [],
+        messages: {
+          compactSingleLinePropertyValue: 'Single-line object property value should stay on the property line.',
+        },
+      },
+      create(context) {
+        const sourceCode = context.sourceCode;
+
+        return {
+          Property(node) {
+            if (
+              node.shorthand
+              || node.kind !== 'init'
+              || node.key.loc.end.line === node.value.loc.start.line
+              || node.value.loc.start.line !== node.value.loc.end.line
+            ) {
+              return;
+            }
+
+            const colonToken =
+              sourceCode.getTokenBefore(
+                node.value,
+                (token) => token.value === ':',
+              );
+
+            if (!colonToken) {
+              return;
+            }
+
+            const textBetweenColonAndValue = sourceCode.text.slice(colonToken.range[1], node.value.range[0]);
+
+            if (
+              !textBetweenColonAndValue.includes('\n')
+              || textBetweenColonAndValue.includes('//')
+              || textBetweenColonAndValue.includes('/*')
+            ) {
+              return;
+            }
+
+            context.report({
+              node,
+              loc: colonToken.loc,
+              messageId: 'compactSingleLinePropertyValue',
+              fix(fixer) {
+                return fixer.replaceTextRange(
+                  [
+                    colonToken.range[1],
+                    node.value.range[0],
+                  ],
+                  ' ',
+                );
+              },
+            });
+          },
+        };
+      },
+    },
     'no-blank-lines-between-css-declarations': {
       meta: {
         type: 'layout',
         fixable: 'whitespace',
         schema: [],
         messages: {
-          noBlankLinesBetweenCssDeclarations:
-            'Do not separate CSS declarations with a blank line.',
+          noBlankLinesBetweenCssDeclarations: 'Do not separate CSS declarations with a blank line.',
         },
       },
       create(context) {
@@ -184,38 +362,29 @@ const localStylisticRules = {
 
         return {
           Program(node) {
-            const styleBlockPattern =
-              /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
+            const styleBlockPattern = /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
 
             for (
               let styleMatch = styleBlockPattern.exec(sourceCode.text);
               styleMatch;
               styleMatch = styleBlockPattern.exec(sourceCode.text)
             ) {
-              const styleStartIndex =
-                styleMatch.index + styleMatch[0].indexOf(styleMatch[1]);
-              const lines =
-                styleMatch[1].split('\n');
-              let lineStartIndex =
-                styleStartIndex;
+              const styleStartIndex = styleMatch.index + styleMatch[0].indexOf(styleMatch[1]);
+              const lines = styleMatch[1].split('\n');
+              let lineStartIndex = styleStartIndex;
 
               for (let index = 1; index < lines.length - 1; index += 1) {
-                const line =
-                  lines[index];
-                const previousLine =
-                  lines[index - 1];
-                const nextLine =
-                  lines[index + 1];
+                const line = lines[index];
+                const previousLine = lines[index - 1];
+                const nextLine = lines[index + 1];
 
                 if (
                   line.trim() === ''
                   && isDeclaration(previousLine)
                   && isDeclaration(nextLine)
                 ) {
-                  const blankLineStart =
-                    lineStartIndex;
-                  const blankLineEnd =
-                    lineStartIndex + line.length + 1;
+                  const blankLineStart = lineStartIndex;
+                  const blankLineEnd = lineStartIndex + line.length + 1;
 
                   context.report({
                     node,
@@ -312,7 +481,10 @@ export default tseslint.config(
           next: 'import',
         },
       ],
+      'local-stylistic/compact-single-line-assignment': 'error',
+      'local-stylistic/compact-single-line-property-value': 'error',
       'local-stylistic/compact-single-property-object-pattern': 'error',
+      'local-stylistic/compact-single-line-variable-initializer': 'error',
       'local-stylistic/compact-named-imports': 'error',
       'local-stylistic/no-blank-lines-between-css-declarations': 'error',
       '@stylistic/quotes': [

@@ -16,8 +16,7 @@ export function createAbortMiddleware(): tHttpMiddleware {
         timeout,
       );
 
-    context.abortState =
-      abortState;
+    context.abortState = abortState;
 
     if (context.request) {
       context.request = {

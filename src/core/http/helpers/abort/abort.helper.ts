@@ -4,8 +4,7 @@ export function createAbortState(
   signal: AbortSignal | undefined,
   timeout: number | undefined,
 ): iHttpAbortState {
-  const controller =
-    new AbortController();
+  const controller = new AbortController();
 
   let isTimeout = false;
 

@@ -6,8 +6,7 @@ export function useAppScaleSetup(pinia: Pinia) {
   const settingsStore = useSettingsStore(pinia);
 
   async function setupAppScale() {
-    const savedAppScaleMode =
-      await settingsStore.loadAppScaleMode();
+    const savedAppScaleMode = await settingsStore.loadAppScaleMode();
 
     await applyAppScaleMode(savedAppScaleMode);
   }

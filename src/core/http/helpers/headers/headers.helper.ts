@@ -2,8 +2,7 @@ export function mergeHeaders(
   defaultHeaders?: HeadersInit,
   requestHeaders?: HeadersInit,
 ) {
-  const headers =
-    new Headers(defaultHeaders);
+  const headers = new Headers(defaultHeaders);
 
   new Headers(requestHeaders).forEach((
     value,

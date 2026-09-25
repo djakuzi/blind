@@ -6,8 +6,7 @@ import { applyAppLanguage } from '../helpers/applyAppLanguage.helper';
 export function useAppLanguage(
   pinia?: Pinia,
 ) {
-  const languageStore =
-    useLanguageStore(pinia);
+  const languageStore = useLanguageStore(pinia);
 
   const languages = computed(() =>
     languageStore.languages,
@@ -18,8 +17,7 @@ export function useAppLanguage(
   );
 
   async function initializeAppLanguage() {
-    const language =
-      await languageStore.initializeLanguage();
+    const language = await languageStore.initializeLanguage();
 
     applyAppLanguage(language.key);
 
@@ -29,8 +27,7 @@ export function useAppLanguage(
   async function setAppLanguage(
     code: string,
   ) {
-    const language =
-      await languageStore.setLanguage(code);
+    const language = await languageStore.setLanguage(code);
 
     if (language) {
       applyAppLanguage(language.key);

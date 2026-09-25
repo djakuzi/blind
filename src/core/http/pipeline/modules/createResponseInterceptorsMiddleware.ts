@@ -17,14 +17,11 @@ export function createResponseInterceptorsMiddleware(
     };
 
     for (const interceptor of interceptors) {
-      responseContext =
-        await interceptor(responseContext);
+      responseContext = await interceptor(responseContext);
     }
 
-    context.request =
-      responseContext.request;
-    context.response =
-      responseContext.response;
+    context.request = responseContext.request;
+    context.response = responseContext.response;
 
     return await next();
   };

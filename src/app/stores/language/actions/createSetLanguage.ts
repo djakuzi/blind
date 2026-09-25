@@ -18,8 +18,7 @@ export function createSetLanguage() {
       return this.currentLanguage;
     }
 
-    const locale =
-      await loadLanguageLocale(language);
+    const locale = await loadLanguageLocale(language);
 
     await ToolStorage.setItem(
       LANGUAGE_SELECTED_CODE_STORAGE_KEY,

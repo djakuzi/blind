@@ -25,8 +25,7 @@ export function formatGameModePlayers(
     );
   }
 
-  const teamCount =
-    players / teamSize;
+  const teamCount = players / teamSize;
 
   if (teamCount < 2) {
     return LibText.formatPluralCount(

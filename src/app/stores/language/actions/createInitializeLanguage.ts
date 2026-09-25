@@ -5,8 +5,7 @@ export function createInitializeLanguage() {
   return async function initializeLanguage(
     this: iLanguageState,
   ) {
-    const languages =
-      await loadLanguages();
+    const languages = await loadLanguages();
 
     const language =
       await resolveInitialLanguage(
@@ -20,22 +19,17 @@ export function createInitializeLanguage() {
       throw new Error('Language initialization failed: language list does not contain an available language');
     }
 
-    let currentLanguage =
-      language;
+    let currentLanguage = language;
 
     let locale;
 
     try {
-      locale =
-        await loadLanguageLocale(language);
+      locale = await loadLanguageLocale(language);
     } catch {
-      const fallback =
-        await loadDefaultLanguageFallback();
+      const fallback = await loadDefaultLanguageFallback();
 
-      currentLanguage =
-        fallback.language;
-      locale =
-        fallback.locale;
+      currentLanguage = fallback.language;
+      locale = fallback.locale;
     }
 
     this.languages = languages;

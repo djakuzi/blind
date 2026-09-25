@@ -29,8 +29,7 @@ export function useSettings() {
   async function setAppThemeMode(
     value: tAppThemeMode,
   ) {
-    const savePromise =
-      settingsStore.setAppThemeMode(value);
+    const savePromise = settingsStore.setAppThemeMode(value);
 
     applyAppThemeMode(value);
 

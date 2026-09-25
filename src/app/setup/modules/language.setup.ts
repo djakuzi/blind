@@ -9,25 +9,20 @@ import { ToolStorage } from '@/core/tool/storage';
 import { ToolSystem } from '@/core/tool/system';
 import type { iAppSetup } from '../core/setup.type';
 
-const APP_SETUP_LANGUAGE_SCOPE_KEY =
-  'app-setup-language';
+const APP_SETUP_LANGUAGE_SCOPE_KEY = 'app-setup-language';
 
-const APP_SETUP_LANGUAGE_RESOURCE_KEY =
-  'language';
+const APP_SETUP_LANGUAGE_RESOURCE_KEY = 'language';
 
 export function createLanguageSetup(
   pinia: Pinia,
 ): iAppSetup {
-  const languageStore =
-    useLanguageStore(pinia);
+  const languageStore = useLanguageStore(pinia);
 
-  const loaderStore =
-    useLoaderStore(pinia);
+  const loaderStore = useLoaderStore(pinia);
 
   const { initializeAppLanguage } = useAppLanguage(pinia);
 
-  const staticLocale =
-    useStaticLocale(['loading'], pinia);
+  const staticLocale = useStaticLocale(['loading'], pinia);
 
   return {
     key: 'language',
@@ -39,18 +34,14 @@ export function createLanguageSetup(
         );
 
       if (selectedCode) {
-        languageStore.preferredLanguageCode =
-          selectedCode;
+        languageStore.preferredLanguageCode = selectedCode;
       } else {
         try {
-          const systemCode =
-            await ToolSystem.getSystemLanguage();
+          const systemCode = await ToolSystem.getSystemLanguage();
 
-          languageStore.preferredLanguageCode =
-            normalizeLanguageCodes(systemCode).exact;
+          languageStore.preferredLanguageCode = normalizeLanguageCodes(systemCode).exact;
         } catch {
-          languageStore.preferredLanguageCode =
-            null;
+          languageStore.preferredLanguageCode = null;
         }
       }
 
@@ -71,8 +62,7 @@ export function createLanguageSetup(
 
         loaderStore.setResourceState({
           scopeKey: APP_SETUP_LANGUAGE_SCOPE_KEY,
-          resourceKey:
-            APP_SETUP_LANGUAGE_RESOURCE_KEY,
+          resourceKey: APP_SETUP_LANGUAGE_RESOURCE_KEY,
           isLoaded: true,
         });
       },

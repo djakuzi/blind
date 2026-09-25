@@ -17,8 +17,7 @@ export function createHttpPipeline(
 
       index = currentIndex;
 
-      const middleware =
-        middlewares[currentIndex];
+      const middleware = middlewares[currentIndex];
 
       if (!middleware) {
         return context;

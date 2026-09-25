@@ -11,8 +11,7 @@ export function createHttpUrl(
       url,
     );
 
-  const searchParams =
-    new URLSearchParams();
+  const searchParams = new URLSearchParams();
 
   Object.entries(query ?? {}).forEach(([
     key,
@@ -28,8 +27,7 @@ export function createHttpUrl(
     );
   });
 
-  const queryString =
-    searchParams.toString();
+  const queryString = searchParams.toString();
 
   if (!queryString) {
     return requestUrl;

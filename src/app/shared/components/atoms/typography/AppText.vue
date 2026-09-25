@@ -40,10 +40,8 @@ const textClass = computed(() => [
   {
     'app-text--uppercase': props.uppercase,
     'app-text--ellipsis': props.ellipsis,
-    'app-text--ellipsis-single':
-      props.ellipsis && resolvedMaxLines.value === 1,
-    'app-text--ellipsis-multiple':
-      props.ellipsis && resolvedMaxLines.value > 1,
+    'app-text--ellipsis-single': props.ellipsis && resolvedMaxLines.value === 1,
+    'app-text--ellipsis-multiple': props.ellipsis && resolvedMaxLines.value > 1,
   },
 ]);
 
