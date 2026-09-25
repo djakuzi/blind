@@ -5,7 +5,7 @@ import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import { normalizeLanguageCodes } from '@/app/stores/language/helpers/language.helper';
 import { LANGUAGE_SELECTED_CODE_STORAGE_KEY } from '@/app/stores/language/language.const';
 import { useLanguageStore } from '@/app/stores/language/language.store';
-import type { iSetup } from '@/core/lifecycle/setup/setup.type';
+import type { iSetup } from '@/core/app/setup/setup.type';
 import { ToolStorage } from '@/core/tool/storage';
 import { ToolSystem } from '@/core/tool/system';
 

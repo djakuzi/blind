@@ -1,4 +1,4 @@
-import type { iSetup } from '@/core/lifecycle/setup/setup.type';
+import type { iSetup } from '@/core/app/setup/setup.type';
 import { ToolView } from '@/core/tool/view';
 
 export function createViewSetup(): iSetup {

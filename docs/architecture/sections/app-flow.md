@@ -66,7 +66,7 @@ Setup разделён на универсальный lifecycle-механиз�
 ```text
 src
 ├── core
-│   └── lifecycle
+│   └── app
 │       └── setup
 │           ├── setup.runner.ts
 │           ├── setup.state.ts
@@ -85,7 +85,7 @@ src
             └── view.setup.ts
 ```
 
-### `core/lifecycle/setup`
+### `core/app/setup`
 
 Содержит общий контракт lifecycle, runner, внутреннее состояние setup и reactive API состояния.
 
@@ -315,7 +315,7 @@ Styles описывают визуальные правила и не должн
 
 ```text
 main
-→ app setup / core lifecycle setup / router
+→ app setup / core app setup / router
 
 setup
 → feature / store / overlay / shared / core
@@ -355,7 +355,7 @@ shared
 - layout → узкосценарная feature logic;
 - store → конкретный component/view;
 - setup → screen-specific presentation;
-- core lifecycle setup → конкретный feature/store/overlay.
+- core app setup → конкретный feature/store/overlay.
 
 Если связь нужна только одному экрану, её место обычно во view или feature, а не в app lifecycle.
 
@@ -432,11 +432,11 @@ setup module
 
 ## Базовые Правила
 
-1. Универсальный setup lifecycle живёт в `core/lifecycle/setup`, а setup конкретных систем приложения — в `app/setup`.
+1. Универсальный setup lifecycle живёт в `core/app/setup`, а setup конкретных систем приложения — в `app/setup`.
 2. `preMount` используется для работы, обязательной до mount.
 3. Blocking `postMount` определяет app readiness.
 4. Background `postMount` не блокирует основной UI.
-5. `core/lifecycle/setup` не знает о конкретных системах приложения.
+5. `core/app/setup` не знает о конкретных системах приложения.
 6. Registry является composition point setup-модулей.
 7. View остаётся точкой сборки route screen.
 8. Feature инкапсулирует сценарии и переиспользуемые app-композиции.
@@ -450,7 +450,7 @@ setup module
 Основные app-области:
 
 ```text
-src/core/lifecycle/setup
+src/core/app/setup
 src/app/setup
 src/app/router
 src/app/layouts
