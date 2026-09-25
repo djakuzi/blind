@@ -30,8 +30,8 @@
   transform-origin: center;
   backface-visibility: hidden;
   transition:
-    opacity 230ms ease,
-    transform 230ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 230ms var(--app-motion-ease-default),
+    transform 230ms var(--app-motion-ease-enter);
   will-change: opacity, transform;
 }
 

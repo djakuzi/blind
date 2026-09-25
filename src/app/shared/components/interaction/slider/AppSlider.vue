@@ -493,7 +493,7 @@ onBeforeUnmount(() => {
   width: 100%;
   gap: v-bind(sliderItemGap);
   will-change: transform;
-  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--app-motion-duration-slower) var(--app-motion-ease-enter);
 }
 
 .app-slider__item {
@@ -507,7 +507,7 @@ onBeforeUnmount(() => {
   pointer-events: none;
   will-change: transform, opacity;
   transition:
-    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--app-motion-duration-slower) var(--app-motion-ease-enter),
     opacity 220ms ease;
 
   &.app-slider__item--active {
@@ -546,8 +546,8 @@ onBeforeUnmount(() => {
   border-radius: 50%;
   background: v-bind(sliderDotColor);
   transition:
-    background-color 180ms ease,
-    opacity 180ms ease;
+    background-color var(--app-motion-duration-medium) var(--app-motion-ease-default),
+    opacity var(--app-motion-duration-medium) var(--app-motion-ease-default);
 }
 
 .app-slider__dot--active {

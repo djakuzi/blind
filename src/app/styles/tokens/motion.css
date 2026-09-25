@@ -1,0 +1,12 @@
+:root {
+  --app-motion-duration-fast: 140ms;
+  --app-motion-duration-base: 160ms;
+  --app-motion-duration-medium: 180ms;
+  --app-motion-duration-slow: 220ms;
+  --app-motion-duration-slower: 320ms;
+
+  --app-motion-ease-default: ease;
+  --app-motion-ease-in-out: ease-in-out;
+  --app-motion-ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --app-motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}

@@ -300,12 +300,12 @@ onBeforeUnmount(() => {
 
 .app-modal-enter-active,
 .app-modal-leave-active {
-  transition: opacity 180ms ease;
+  transition: opacity var(--app-motion-duration-medium) var(--app-motion-ease-default);
 
   .app-modal__panel {
     transition:
-      opacity 180ms ease,
-      transform 180ms ease;
+      opacity var(--app-motion-duration-medium) var(--app-motion-ease-default),
+      transform var(--app-motion-duration-medium) var(--app-motion-ease-default);
   }
 }
 

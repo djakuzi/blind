@@ -33,13 +33,13 @@ defineProps<Props>();
 /* Enter */
 
 .app-transition-header-enter-active {
-  transition: grid-template-rows 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: grid-template-rows var(--app-motion-duration-slow) var(--app-motion-ease-enter);
 }
 
 .app-transition-header-enter-active .app-transition-header__content {
   transition:
-    opacity 180ms ease 40ms,
-    transform 220ms cubic-bezier(0.22, 1, 0.36, 1) 40ms;
+    opacity var(--app-motion-duration-medium) var(--app-motion-ease-default) 40ms,
+    transform var(--app-motion-duration-slow) var(--app-motion-ease-enter) 40ms;
 }
 
 .app-transition-header-enter-from {
@@ -63,13 +63,13 @@ defineProps<Props>();
 /* Leave */
 
 .app-transition-header-leave-active {
-  transition: grid-template-rows 180ms cubic-bezier(0.4, 0, 1, 1) 70ms;
+  transition: grid-template-rows var(--app-motion-duration-medium) var(--app-motion-ease-exit) 70ms;
 }
 
 .app-transition-header-leave-active .app-transition-header__content {
   transition:
-    opacity 140ms ease,
-    transform 170ms cubic-bezier(0.4, 0, 1, 1);
+    opacity var(--app-motion-duration-fast) var(--app-motion-ease-default),
+    transform 170ms var(--app-motion-ease-exit);
 }
 
 .app-transition-header-leave-from {

@@ -10,6 +10,7 @@
 @import './tokens/typography.css';
 @import './tokens/padding.css';
 @import './tokens/safearea.css';
+@import './tokens/motion.css';
 
 @import './core/base.css';
 @import './core/root.css';

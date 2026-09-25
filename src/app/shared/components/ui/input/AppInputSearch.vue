@@ -175,10 +175,10 @@ defineExpose({
   -webkit-appearance: none;
   outline: none;
   transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    background-color 160ms ease,
-    color 160ms ease;
+    border-color var(--app-motion-duration-base) var(--app-motion-ease-default),
+    box-shadow var(--app-motion-duration-base) var(--app-motion-ease-default),
+    background-color var(--app-motion-duration-base) var(--app-motion-ease-default),
+    color var(--app-motion-duration-base) var(--app-motion-ease-default);
 
   &::placeholder {
     color: var(--cp-input-search-placeholder-color);

@@ -136,7 +136,7 @@ watch(
   border-radius: inherit;
   transform: scaleX(var(--cp-line-loader-progress));
   transform-origin: left center;
-  transition: transform 180ms ease;
+  transition: transform var(--app-motion-duration-medium) var(--app-motion-ease-default);
 }
 
 .app-line-loader__text {

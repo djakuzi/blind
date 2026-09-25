@@ -178,10 +178,10 @@ const buttonStyle = computed(() => ({
   appearance: none;
   -webkit-tap-highlight-color: transparent;
   transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease,
-    box-shadow 160ms ease;
+    background-color var(--app-motion-duration-base) var(--app-motion-ease-default),
+    border-color var(--app-motion-duration-base) var(--app-motion-ease-default),
+    color var(--app-motion-duration-base) var(--app-motion-ease-default),
+    box-shadow var(--app-motion-duration-base) var(--app-motion-ease-default);
 }
 
 @media (hover: hover) and (pointer: fine) {

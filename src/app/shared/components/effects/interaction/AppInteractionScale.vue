@@ -24,7 +24,7 @@ withDefaults(defineProps<Props>(), {
   display: inline-flex;
   transform: scale(1);
   transform-origin: center;
-  transition: transform 140ms ease;
+  transition: transform var(--app-motion-duration-fast) var(--app-motion-ease-default);
 }
 
 @media (hover: hover) and (pointer: fine) {

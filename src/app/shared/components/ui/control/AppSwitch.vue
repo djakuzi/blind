@@ -109,10 +109,10 @@ function handleToggle() {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    opacity 160ms ease;
+    background-color var(--app-motion-duration-base) var(--app-motion-ease-default),
+    border-color var(--app-motion-duration-base) var(--app-motion-ease-default),
+    box-shadow var(--app-motion-duration-base) var(--app-motion-ease-default),
+    opacity var(--app-motion-duration-base) var(--app-motion-ease-default);
 
   &.app-switch--active {
     background: v-bind(switchActiveColor);
@@ -134,7 +134,7 @@ function handleToggle() {
   inset: 0;
   transform: translateX(0);
   pointer-events: none;
-  transition: transform 180ms ease;
+  transition: transform var(--app-motion-duration-medium) var(--app-motion-ease-default);
   will-change: transform;
 }
 
@@ -146,7 +146,7 @@ function handleToggle() {
   aspect-ratio: 1;
   border-radius: v-bind(switchThumbBorderRadius);
   background: v-bind(switchThumbColor);
-  transition: background-color 160ms ease;
+  transition: background-color var(--app-motion-duration-base) var(--app-motion-ease-default);
 }
 
 .app-switch--active .app-switch__thumb-track {

@@ -110,7 +110,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
 }
 
 .widget-loader-app--leaving {
-  animation: widget-loader-app-leave 320ms ease forwards;
+  animation: widget-loader-app-leave var(--app-motion-duration-slower) var(--app-motion-ease-default) forwards;
 }
 
 .widget-loader-app__content {
