@@ -48,13 +48,13 @@ async function loadModes() {
 }
 
 function handleModeComplete() {
-  void router.push({
+  router.push({
     name: KEY_ROUTE.preGame.typeConnection,
   });
 }
 
 onMounted(() => {
-  void loadModes();
+  loadModes();
 });
 </script>
 
