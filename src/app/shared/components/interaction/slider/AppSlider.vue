@@ -508,7 +508,7 @@ onBeforeUnmount(() => {
   will-change: transform, opacity;
   transition:
     transform var(--app-motion-duration-slower) var(--app-motion-ease-enter),
-    opacity 220ms ease;
+    opacity var(--app-motion-duration-slow) var(--app-motion-ease-default);
 
   &.app-slider__item--active {
     opacity: 1;
