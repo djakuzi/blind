@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './app/router';
-import { createAppSetupRegistry } from './app/setup/registry/appSetup.registry';
+import { createAppSetupRegistry } from './app/setup/appSetup.registry.ts';
 import { runPostMountSetup, runPreMountSetup } from './core/app/setup/setup.runner';
 
 const app = createApp(App);
