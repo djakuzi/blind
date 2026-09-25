@@ -77,8 +77,23 @@ Domain API не должен напрямую работать с `fetch`, ес�
 
 - контракт setup-задач;
 - runner фаз `preMount` и `postMount`;
-- состояние readiness/running;
+- runtime-state blocking setup;
+- retry API для recoverable blocking setup;
 - reactive API `useSetup`.
+
+Blocking post-mount setup использует общий async-status из `core/types/status`:
+
+```text
+pending
+loaded
+error
+```
+
+Runner хранит registry blocking setup только как runtime-механизм текущего запуска приложения. Он не знает о loader, Pinia stores или конкретных системах Blind.
+
+`isReady` вычисляется из runtime-state: post-mount должен быть начат, а все blocking setup должны иметь статус `loaded`.
+
+`retryPostMountSetup(setupKey)` повторно запускает только blocking setup, который находится в `error`.
 
 Setup-механизм в `core/app` не должен знать, какие конкретно системы Blind участвуют в setup. Состав приложения и setup языка, темы, масштаба или platform presentation остаются в `src/app/setup`.
 

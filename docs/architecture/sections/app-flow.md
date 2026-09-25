@@ -75,8 +75,7 @@ src
 │
 └── app
     └── setup
-        ├── registry
-        │   └── appSetup.registry.ts
+        ├── appSetup.registry.ts
         ├── interface
         │   ├── language.setup.ts
         │   ├── scale.setup.ts
@@ -117,16 +116,31 @@ UI получает reactive состояние lifecycle через `useSetup` 
 
 ## App Readiness
 
-Готовность приложения определяется завершением всех обязательных blocking post-mount задач.
+Готовность приложения определяется runtime-состоянием обязательных blocking post-mount задач.
+
+Для каждой blocking-задачи runner хранит статус:
+
+```text
+pending
+loaded
+error
+```
 
 Инвариант:
 
 ```text
 app isReady
-→ все blocking postMount setup завершены
+→ postMount lifecycle уже начался
+→ все blocking postMount setup имеют status = loaded
 ```
 
-Background-задачи не должны удерживать основной UI.
+Если хотя бы один blocking setup имеет `pending`, приложение ещё запускается.
+
+Если хотя бы один blocking setup имеет `error`, основной route UI остаётся закрытым до восстановления этой задачи.
+
+Если blocking setup отсутствуют, после старта post-mount lifecycle приложение считается готовым сразу.
+
+Background-задачи не входят в карту blocking-состояний и не удерживают основной UI.
 
 App readiness не равен состоянию глобального loader:
 
@@ -136,23 +150,93 @@ setup readiness
 global loader activity
 ```
 
-Loader может использоваться в любой момент жизни приложения и не должен повторно переводить весь route UI в состояние "not ready".
+Loader может использоваться в любой момент жизни приложения и не должен повторно переводить уже запущенный route UI в состояние "not ready".
 
 ## Loader И Setup
 
 Setup-модуль может регистрировать loader resource, если его initialization должен быть визуально представлен пользователю.
 
+Loader resource имеет собственное состояние:
+
+```text
+pending
+├── success → loaded
+└── failure → error
+                 │
+                 └── retry → pending
+```
+
+Resource является единственным источником истины для своего loading-состояния. Ошибка хранится непосредственно внутри resource и может содержать action для восстановления.
+
+Scope группирует связанные resources и может содержать presentation-title. Отдельный `scope.isLoaded` не хранится: завершённость scope вычисляется по его resources.
+
+Глобальный loader считает progress как отношение:
+
+```text
+loaded resources / all resources
+```
+
+Presentation выбирается provider-слоем:
+
+```text
+есть error resource
+→ показать error state
+
+иначе есть pending resource
+→ показать progress state
+
+все resources loaded
+→ завершить visual lifecycle и скрыть overlay
+```
+
+Если ошибок несколько, provider показывает первую доступную ошибку. После её успешного retry следующая ошибка, если она существует, становится текущей.
+
 При этом:
 
 - setup lifecycle определяет готовность приложения;
-- loader отвечает за отображение процесса;
-- конкретный setup-модуль связывает свою задачу с loader resource при необходимости;
+- loader отвечает только за визуальное отображение loading/error процесса;
+- конкретный setup-модуль связывает свою задачу с loader resource;
 - завершённые loader scopes сохраняются до окончания визуального ухода глобального loader;
-- после завершения leave-анимации provider очищает завершённые scopes через loader orchestration.
+- после leave-анимации provider очищает завершённые scopes.
 
-Runner не должен зависеть от конкретного loader implementation.
+Runner не зависит от loader implementation.
 
-Widget глобального loader остаётся presentation-компонентом: он сообщает о завершении визуального lifecycle через событие, но не зависит напрямую от store. Связь между widget и loader store находится в provider composable.
+Widget глобального loader остаётся presentation-компонентом: он получает `progress`, `text`, `error` и action через provider, отображает `AppLineLoader` или `AppStatusBlock`, но напрямую store не использует.
+
+### Blocking Setup Retry
+
+Recoverable blocking setup может быть повторно запущен через generic runner API:
+
+```text
+retryPostMountSetup(setupKey)
+```
+
+Retry допустим только для blocking setup со статусом `error`.
+
+Поток восстановления:
+
+```text
+blocking setup = error
+loader resource = error
+↓
+user action
+↓
+retryPostMountSetup(setupKey)
+↓
+blocking setup = pending
+loader resource = pending
+↓
+setup.run()
+├── success
+│   ├── loader resource = loaded
+│   └── blocking setup = loaded
+│
+└── failure
+    ├── loader resource = error
+    └── blocking setup = error
+```
+
+Когда после retry все blocking setup становятся `loaded`, `useSetup().isReady` автоматически становится `true`.
 
 ## Router
 
@@ -370,45 +454,51 @@ shared
 ```text
 create application
 ↓
-install app-level infrastructure
+install Pinia
 ↓
-create setup registry
+create app setup registry
 ↓
-run preMount setup
+run preMount setup sequentially
 ↓
-prepare router
+install/prepare router
 ↓
 mount root UI
 ↓
 run postMount setup
-├── blocking
-└── background
+├── blocking → tracked by pending / loaded / error
+└── background → fire-and-handle-error, readiness не блокирует
 ↓
-blocking complete
+all blocking = loaded
 ↓
 app isReady
 ↓
 normal route UI
 ```
 
-Конкретный набор setup-модулей и их внутренний порядок может меняться.
+`App.vue` всегда держит глобальные providers смонтированными, но `RouterView` показывает только при `isReady = true`.
 
-Основной route UI должен открываться только после готовности обязательных app-систем.
+Если blocking setup падает, приложение остаётся смонтированным, providers продолжают работать, а route UI остаётся закрытым. Это позволяет loader показать recoverable error и выполнить retry без перезагрузки приложения.
+
+Конкретный набор setup-модулей и их внутренний порядок может меняться.
 
 ## Error Handling
 
 Setup-системы должны различать:
 
-- recoverable failure;
+- recoverable blocking failure;
 - fallback;
-- critical blocking failure;
+- fatal pre-mount failure;
 - background failure.
 
-Если существует fallback, система должна по возможности сохранить рабочее состояние.
+Recoverable blocking failure должен оставить setup в `error`, не открывать route UI и предоставить app-level способ восстановления, например loader action с `retryPostMountSetup`.
+
+Если существует безопасный fallback, особенно в `preMount`, его предпочтительно применить локально и продолжить startup.
+
+`preMount` выполняется до `app.mount()`, поэтому глобальный loader в этой фазе ещё недоступен. Ошибка, вышедшая наружу из `runPreMountSetup`, считается fatal startup error. Верхний `setupApp().catch(...)` обязан как минимум явно её зафиксировать; конкретные pre-mount системы должны по возможности иметь собственные fallback.
+
+Ошибка background-задачи логируется, но не блокирует основной UI.
 
 Critical blocking failure не должен тихо переводить приложение в состояние ready.
-
-Ошибка background-задачи не должна блокировать основной UI, но должна быть явно обработана или зафиксирована.
 
 ## Setup Module Design
 

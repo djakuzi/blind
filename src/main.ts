@@ -23,4 +23,6 @@ async function setupApp() {
   await runPostMountSetup(setups);
 }
 
-setupApp();
+setupApp().catch((error) => {
+  console.error('Application setup failed:', error);
+});
