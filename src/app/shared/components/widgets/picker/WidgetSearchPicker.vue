@@ -252,7 +252,6 @@ watch(
 @media (hover: hover) and (pointer: fine) {
   .widget-search-picker__trigger:hover {
     color: var(--app-color-primary);
-    border-color: var(--app-color-primary);
     background: var(--app-color-surface-interactive);
   }
 
