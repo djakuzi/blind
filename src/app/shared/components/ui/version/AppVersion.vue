@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import { resolveFontSizeValue } from '@/app/styles/contracts/fontSize.contract';

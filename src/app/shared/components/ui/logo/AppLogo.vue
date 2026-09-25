@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 

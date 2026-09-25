@@ -4,16 +4,10 @@
   generic="TGroup extends tIconGroup"
 >
 import { computed } from 'vue';
-
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
-import {
-  ICONS_ASSETS,
-  type tIconAssets,
-  type tIconGroup,
-  type tIconName,
-} from '@/core/media/assets';
+import { ICONS_ASSETS, type tIconAssets, type tIconGroup, type tIconName } from '@/core/media/assets';
 
 export interface PropsAppIcon {
   group: tIconGroup

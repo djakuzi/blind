@@ -1,11 +1,7 @@
 import { Capacitor } from '@capacitor/core';
-
 import * as viewFeature from './features/view';
 import * as helpers from './helpers';
-import type {
-  iEnterViewFullscreenOptions,
-  iSetupViewOptions,
-} from './type';
+import type { iEnterViewFullscreenOptions, iSetupViewOptions } from './type';
 
 export type {
   iEnterViewFullscreenOptions,

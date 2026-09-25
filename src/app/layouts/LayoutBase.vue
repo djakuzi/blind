@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { RouterView } from 'vue-router';
-
 import AppLayoutBackground from '@/app/layouts/components/background/AppLayoutBackground.vue';
 import AppTransitionHeader from '@/app/layouts/components/transition/AppTransitionHeader.vue';
 import AppTransitionScreen from '@/app/layouts/components/transition/AppTransitionScreen.vue';
 import WidgetLayoutHeader from '@/app/layouts/components/widgets/WidgetLayoutHeader.vue';
-
 import { useLayoutHeader } from '@/app/layouts/composables/common/useLayoutHeader';
 import { useLayoutPadding } from '@/app/layouts/composables/common/useLayoutPadding';
 import { useLayoutVersion } from '@/app/layouts/composables/common/useLayoutVersion';
-
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
 import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 

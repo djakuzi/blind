@@ -1,32 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
-
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-
-import {
-  resolveBorderStyleValue,
-  resolveBorderWidthValue,
-  type tBorderStyleValue,
-  type tBorderWidthValue,
-} from '@/app/styles/contracts/border.contract';
-
-import {
-  resolveColorValue,
-  type tColorValue,
-} from '@/app/styles/contracts/color.contract';
-
-import {
-  resolvePaddingValue,
-  type tPaddingValue,
-} from '@/app/styles/contracts/padding.contract';
-
-import {
-  resolveRadiusValue,
-  type tRadiusValue,
-} from '@/app/styles/contracts/radius.contract';
+import { resolveBorderStyleValue, resolveBorderWidthValue, type tBorderStyleValue, type tBorderWidthValue } from '@/app/styles/contracts/border.contract';
+import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
+import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
+import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
 
 type tAppCardTag =
   | 'div'

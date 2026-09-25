@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
 import type { tLayerValue } from '@/app/styles/contracts/layer.contract';
 import { resolveLayerValue } from '@/app/styles/contracts/layer.contract';
 import type { tSafeAreaToken } from '@/app/styles/contracts/safeArea.contract';

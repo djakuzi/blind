@@ -1,8 +1,4 @@
-import type {
-  iLoaderScope,
-  iLoaderState,
-  iRegisterLoaderScopePayload,
-} from './loader.type';
+import type { iLoaderScope, iLoaderState, iRegisterLoaderScopePayload } from './loader.type';
 
 export function getScopeLoadedState(resources: iLoaderScope['resources']) {
   const resourceStates = Object.values(resources);

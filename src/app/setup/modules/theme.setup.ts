@@ -5,9 +5,7 @@ import type { iAppSetup } from '../core/setup.type';
 export function createThemeSetup(
   pinia: Pinia,
 ): iAppSetup {
-  const {
-    setupAppTheme,
-  } = useAppThemeSetup(pinia);
+  const { setupAppTheme } = useAppThemeSetup(pinia);
 
   return {
     key: 'theme',

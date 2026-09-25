@@ -1,17 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import {
-  resolveColorValue,
-  type tColorValue,
-} from '@/app/styles/contracts/color.contract';
-import {
-  resolveFontSizeValue,
-  type tFontSizeValue,
-} from '@/app/styles/contracts/fontSize.contract';
-import {
-  resolveFontWeightValue,
-  type tFontWeightValue,
-} from '@/app/styles/contracts/fontWeight.contract';
+import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
+import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
+import { resolveFontWeightValue, type tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
 
 type tAppTitleTag =
   | 'h1'

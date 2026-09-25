@@ -1,5 +1,4 @@
 import type { RouteRecordRaw } from 'vue-router';
-
 import { KEY_ROUTE } from '../constants/route.const';
 
 const ViewSettings = () => import('@/app/view/settings/ViewSettings.vue');

@@ -1,11 +1,7 @@
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { StatusBar } from '@capacitor/status-bar';
-
 import * as helpers from '../helpers';
-import type {
-  iEnterViewFullscreenOptions,
-  iSetupViewOptions,
-} from '../type';
+import type { iEnterViewFullscreenOptions, iSetupViewOptions } from '../type';
 
 export async function setupNativeView(options: iSetupViewOptions) {
   const orientation = options.orientation;

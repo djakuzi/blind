@@ -1,10 +1,5 @@
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
-import type {
-  iRegisterLoaderScopePayload,
-  iSetLoaderResourceStatePayload,
-  tAddLoaderResourceErrorPayload,
-  tLoaderScopeKey,
-} from '@/app/stores/loader/loader.type';
+import type { iRegisterLoaderScopePayload, iSetLoaderResourceStatePayload, tAddLoaderResourceErrorPayload, tLoaderScopeKey } from '@/app/stores/loader/loader.type';
 
 export function useLoaderRegistry() {
   const loaderStore = useLoaderStore();

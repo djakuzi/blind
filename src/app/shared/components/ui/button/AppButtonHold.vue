@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
 import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';

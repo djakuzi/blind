@@ -1,6 +1,5 @@
 <script lang="ts">
 import type { CSSProperties } from 'vue';
-
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
@@ -19,7 +18,6 @@ export interface PropsAppBlock {
 
 <script setup lang="ts">
 import { computed } from 'vue';
-
 import { LibStyle } from '@/app/shared/lib/style';
 import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 

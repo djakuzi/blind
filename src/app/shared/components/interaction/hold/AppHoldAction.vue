@@ -5,7 +5,6 @@ import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { ToolVibration } from '@/core/tool/vibration';
 
-
 interface iAppHoldActionActions {
   complete?: () => void
 }

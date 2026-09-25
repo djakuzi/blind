@@ -3,15 +3,11 @@
   lang="ts"
 >
 import { computed } from 'vue';
-
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type {
-  tIconGroup,
-  tIconName,
-} from '@/core/media/assets';
+import type { tIconGroup, tIconName } from '@/core/media/assets';
 
 interface Props {
   group: tIconGroup
@@ -66,15 +62,11 @@ const buttonStyle = computed(() => ({
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: var(--cp-button-icon-width);
   height: var(--cp-button-icon-height);
-
   padding: 0;
   border: 0;
-
   background: transparent;
-
   cursor: pointer;
   appearance: none;
   -webkit-tap-highlight-color: transparent;

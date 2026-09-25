@@ -9,7 +9,7 @@ export interface PropsAppCardHold extends PropsAppCard, PropsAppHoldAction {
   bloodFlowFrontDuration?: number
 }
 
-const props = withDefaults(defineProps<PropsAppCardHold>(), {
+withDefaults(defineProps<PropsAppCardHold>(), {
   tag: 'div',
   size: 'middle',
   width: '100%',

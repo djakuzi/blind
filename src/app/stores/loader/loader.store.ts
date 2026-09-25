@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-
 import { createAddResourceError } from './actions/createAddResourceError';
 import { createClearErrors } from './actions/createClearErrors';
 import { createClearScope } from './actions/createClearScope';
@@ -7,13 +6,8 @@ import { createCompleteScope } from './actions/createCompleteScope';
 import { createRegisterScope } from './actions/createRegisterScope';
 import { createResetLoader } from './actions/createResetLoader';
 import { createSetResourceState } from './actions/createSetResourceState';
-import {
-  getLoadedResourcesCount,
-  getResourcesCount,
-} from './loader.helper';
-import type {
-  iLoaderState,
-} from './loader.type';
+import { getLoadedResourcesCount, getResourcesCount } from './loader.helper';
+import type { iLoaderState } from './loader.type';
 
 export const useLoaderStore = defineStore('loader', {
   state: (): iLoaderState => ({

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
-
 import { safeAreaTokenVar } from '@/app/styles/contracts/safeArea.contract';
 
 type tViewLayoutPadding =
@@ -163,7 +162,6 @@ const viewLayoutStyle = computed(() => {
   flex: var(--cp-view-layout-flex);
   flex-direction: column;
   justify-content: var(--cp-view-layout-justify);
-
   width:
     calc(
       100%
@@ -178,7 +176,6 @@ const viewLayoutStyle = computed(() => {
 
   min-height: 0;
   max-width: none;
-
   margin-inline:
     calc(
       var(--cp-view-layout-bleed-horizontal) * -1

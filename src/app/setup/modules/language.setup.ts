@@ -24,9 +24,7 @@ export function createLanguageSetup(
   const loaderStore =
     useLoaderStore(pinia);
 
-  const {
-    initializeAppLanguage,
-  } = useAppLanguage(pinia);
+  const { initializeAppLanguage } = useAppLanguage(pinia);
 
   const staticLocale =
     useStaticLocale(['loading'], pinia);

@@ -1,9 +1,4 @@
-import {
-  createRouter,
-  createWebHistory,
-  type RouteRecordRaw,
-} from 'vue-router';
-
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import { KEY_ROUTE } from './constants/route.const';
 import { routeGame } from './routes/game';
 import { routeMenu } from './routes/menu';

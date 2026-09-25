@@ -1,16 +1,8 @@
-import {
-  APP_SCALE_SYSTEM_MODE,
-  isAppScaleMode,
-  resolveNearestAppScalePresetMode,
-} from '@/app/styles/contracts/appScale.contract';
+import { APP_SCALE_SYSTEM_MODE, isAppScaleMode, resolveNearestAppScalePresetMode } from '@/app/styles/contracts/appScale.contract';
 import { ToolStorage } from '@/core/tool/storage';
 import { ToolSystem } from '@/core/tool/system';
-import {
-  APP_SCALE_MODE_STORAGE_KEY,
-} from '../settings.const';
-import type {
-  iSettingsState,
-} from '../settings.type';
+import { APP_SCALE_MODE_STORAGE_KEY } from '../settings.const';
+import type { iSettingsState } from '../settings.type';
 
 export function createLoadAppScaleMode() {
   return async function loadAppScaleMode(

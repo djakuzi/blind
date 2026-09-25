@@ -22,10 +22,8 @@ withDefaults(defineProps<Props>(), {
 <style scoped>
 .app-interaction-scale {
   display: inline-flex;
-
   transform: scale(1);
   transform-origin: center;
-
   transition:
     transform 140ms ease;
 }

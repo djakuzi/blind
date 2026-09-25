@@ -1,5 +1,4 @@
 import type { RouteRecordRaw } from 'vue-router';
-
 import { KEY_ROUTE } from '../constants/route.const';
 
 const ViewGame = () => import('@/app/view/game/ViewGame.vue');

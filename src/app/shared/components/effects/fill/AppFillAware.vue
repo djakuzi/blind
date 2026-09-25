@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-
 import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 

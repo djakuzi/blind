@@ -1,10 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
-import type {
-  iVibrationImpactOptions,
-  iVibrationNotificationOptions,
-  iVibrationOptions,
-} from './type';
+import type { iVibrationImpactOptions, iVibrationNotificationOptions, iVibrationOptions } from './type';
 
 const DEFAULT_VIBRATION_DURATION = 45;
 const DEFAULT_IMPACT_STYLE = ImpactStyle.Light;

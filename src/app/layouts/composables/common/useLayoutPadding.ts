@@ -1,6 +1,5 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-
 import type { tLayoutSafeArea } from '@/app/layouts/types/layout.type';
 import { safeAreaTokenVar } from '@/app/styles/contracts/safeArea.contract';
 

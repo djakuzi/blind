@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppDistributedRow from '@/app/shared/components/layout/row/AppDistributedRow.vue';

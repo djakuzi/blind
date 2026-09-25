@@ -5,9 +5,7 @@ import type { iAppSetup } from '../core/setup.type';
 export function createScaleSetup(
   pinia: Pinia,
 ): iAppSetup {
-  const {
-    setupAppScale,
-  } = useAppScaleSetup(pinia);
+  const { setupAppScale } = useAppScaleSetup(pinia);
 
   return {
     key: 'scale',
