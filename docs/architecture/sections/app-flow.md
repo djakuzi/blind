@@ -146,9 +146,13 @@ Setup-модуль может регистрировать loader resource, ес
 
 - setup lifecycle определяет готовность приложения;
 - loader отвечает за отображение процесса;
-- конкретный setup-модуль связывает свою задачу с loader resource при необходимости.
+- конкретный setup-модуль связывает свою задачу с loader resource при необходимости;
+- завершённые loader scopes сохраняются до окончания визуального ухода глобального loader;
+- после завершения leave-анимации provider очищает завершённые scopes через loader orchestration.
 
 Runner не должен зависеть от конкретного loader implementation.
+
+Widget глобального loader остаётся presentation-компонентом: он сообщает о завершении визуального lifecycle через событие, но не зависит напрямую от store. Связь между widget и loader store находится в provider composable.
 
 ## Router
 

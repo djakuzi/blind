@@ -2,9 +2,9 @@ import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
 
-export function useLoaderView() {
+export function useLoaderProvider() {
   const loaderStore = useLoaderStore();
-  const { errors, loadedResourcesCount, pendingResourcesCount, progress, scopesList, totalResourcesCount } = storeToRefs(loaderStore);
+  const { pendingResourcesCount, progress, scopesList, totalResourcesCount } = storeToRefs(loaderStore);
 
   const isLoading = computed(() => {
     return totalResourcesCount.value > 0 && pendingResourcesCount.value > 0;
@@ -16,14 +16,14 @@ export function useLoaderView() {
     return loadingScope?.title ?? '';
   });
 
+  function handleHidden() {
+    loaderStore.clearCompletedScopes();
+  }
+
   return {
-    errors,
+    handleHidden,
     isLoading,
-    loadedResourcesCount,
-    pendingResourcesCount,
     progress,
-    scopesList,
     text,
-    totalResourcesCount,
   };
 }

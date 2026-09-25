@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { createAddResourceError } from './actions/createAddResourceError';
+import { createClearCompletedScopes } from './actions/createClearCompletedScopes';
 import { createClearErrors } from './actions/createClearErrors';
 import { createClearScope } from './actions/createClearScope';
 import { createCompleteScope } from './actions/createCompleteScope';
@@ -35,6 +36,7 @@ export const useLoaderStore = defineStore('loader', {
   },
   actions: {
     addResourceError: createAddResourceError(),
+    clearCompletedScopes: createClearCompletedScopes(),
     clearErrors: createClearErrors(),
     clearScope: createClearScope(),
     completeScope: createCompleteScope(),

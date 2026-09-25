@@ -20,6 +20,10 @@ const props = withDefaults(defineProps<Props>(), {
   progress: 0,
 });
 
+const emit = defineEmits<{
+  hidden: [];
+}>();
+
 const isRendered = ref(props.isLoading);
 const phase = ref<tWidgetLoaderPhase>('loading');
 
@@ -48,12 +52,13 @@ function handleLoaderProgressComplete() {
   phase.value = 'leaving';
 }
 
-function handleLoaderAnimationEnd() {
-  if (phase.value !== 'leaving') {
+function handleLoaderAnimationEnd(event: AnimationEvent) {
+  if (event.target !== event.currentTarget || phase.value !== 'leaving') {
     return;
   }
 
   isRendered.value = false;
+  emit('hidden');
 }
 </script>
 
