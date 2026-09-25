@@ -7,9 +7,10 @@ const loader = useLoaderProvider();
 
 <template>
   <WidgetLoaderApp
-    :is-loading="loader.isLoading.value"
+    :is-active="loader.isActive.value"
     :progress="loader.progress.value"
     :text="loader.text.value"
+    :error="loader.error.value"
     @hidden="loader.handleHidden"
   />
 </template>

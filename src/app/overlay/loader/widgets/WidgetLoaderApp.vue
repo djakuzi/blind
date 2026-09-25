@@ -3,36 +3,42 @@ import { computed, ref, watch } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppGrid from '@/app/shared/components/atoms/block/AppGrid.vue';
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
+import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
 import AppLineLoader from '@/app/shared/components/ui/loader/AppLineLoader.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
+import AppStatusBlock from '@/app/shared/components/ui/status/AppStatusBlock.vue';
 import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
+import type { iLoaderResourceError } from '@/app/stores/loader/loader.type';
 
 type tWidgetLoaderPhase = 'loading' | 'complete' | 'leaving';
 
 interface Props {
-  isLoading?: boolean;
+  isActive?: boolean;
   progress?: number;
   text: string;
+  error?: iLoaderResourceError;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  isLoading: false,
+  isActive: false,
   progress: 0,
+  error: undefined,
 });
 
 const emit = defineEmits<{
   hidden: [];
 }>();
 
-const isRendered = ref(props.isLoading);
+const isRendered = ref(props.isActive);
+const isActionRunning = ref(false);
 const phase = ref<tWidgetLoaderPhase>('loading');
 
 const loaderClass = computed(() => ['widget-loader-app', `widget-loader-app--${phase.value}`]);
 
 watch(
-  () => props.isLoading,
-  (isLoading) => {
-    if (!isLoading) {
+  () => props.isActive,
+  (isActive) => {
+    if (!isActive) {
       phase.value = 'complete';
 
       return;
@@ -44,12 +50,35 @@ watch(
   { immediate: true },
 );
 
+watch(
+  () => props.error,
+  () => {
+    isActionRunning.value = false;
+  },
+);
+
 function handleLoaderProgressComplete() {
-  if (props.isLoading || phase.value !== 'complete') {
+  if (props.isActive || phase.value !== 'complete') {
     return;
   }
 
   phase.value = 'leaving';
+}
+
+async function handleErrorAction() {
+  const action = props.error?.action;
+
+  if (!action || isActionRunning.value) {
+    return;
+  }
+
+  isActionRunning.value = true;
+
+  try {
+    await action.callback();
+  } finally {
+    isActionRunning.value = false;
+  }
 }
 
 function handleLoaderAnimationEnd(event: AnimationEvent) {
@@ -78,7 +107,26 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
       <AppFlex class="widget-loader-app__content" direction="column" align="center" max-width="100%" width="100%">
         <AppLogo logo="blindTextRight" width="100rem" height="auto" />
 
+        <AppStatusBlock
+          v-if="error"
+          :text="error.title"
+          variant="error"
+          size="big"
+          width="70rem"
+          max-width="100%"
+        >
+          <template v-if="error.action" #action>
+            <AppButton
+              :text="error.action.title"
+              :disabled="isActionRunning"
+              size="small"
+              @click="handleErrorAction"
+            />
+          </template>
+        </AppStatusBlock>
+
         <AppLineLoader
+          v-else
           :progress="progress"
           :text="text"
           size="big"
