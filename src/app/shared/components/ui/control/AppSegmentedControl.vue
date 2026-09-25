@@ -89,7 +89,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
   emit('update:modelValue', option.value);
 
   if (props.vibration) {
-    void ToolVibration.selectionChanged();
+    ToolVibration.selectionChanged();
   }
 }
 </script>
