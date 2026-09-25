@@ -68,7 +68,7 @@ function handleToggle() {
   emit('update:modelValue', !props.modelValue);
 
   if (props.vibration) {
-    void ToolVibration.selectionChanged();
+    ToolVibration.selectionChanged();
   }
 }
 </script>
