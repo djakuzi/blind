@@ -1,17 +1,6 @@
-import {
-  access,
-  readFile,
-  readdir,
-  writeFile,
-} from 'node:fs/promises';
-import {
-  dirname,
-  extname,
-  relative,
-  resolve,
-} from 'node:path';
+import { access, readFile, readdir, writeFile } from 'node:fs/promises';
+import { dirname, extname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import wawoff2 from 'wawoff2';
 
 const ROOT_PATH = resolve(
@@ -77,6 +66,7 @@ async function validateWoff2(woff2Buffer, inputPath) {
 
     throw new Error(
       `Generated WOFF2 validation failed for "${relative(ROOT_PATH, inputPath)}": ${message}`,
+      { cause: error },
     );
   }
 }
@@ -101,6 +91,7 @@ async function convertFont(inputPath) {
 
     throw new Error(
       `Failed to convert font "${inputRelativePath}": ${message}`,
+      { cause: error },
     );
   }
 

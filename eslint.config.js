@@ -88,6 +88,155 @@ const localStylisticRules = {
         };
       },
     },
+    'compact-single-property-object-pattern': {
+      meta: {
+        type: 'layout',
+        fixable: 'whitespace',
+        schema: [],
+        messages: {
+          compactSinglePropertyObjectPattern:
+            'Single-property object destructuring should stay on one line.',
+        },
+      },
+      create(context) {
+        const sourceCode = context.sourceCode;
+
+        function hasCommentsBetween(openBrace, closeBrace) {
+          return sourceCode
+            .getTokensBetween(
+              openBrace,
+              closeBrace,
+              { includeComments: true },
+            )
+            .some((token) =>
+              token.type === 'Block'
+              || token.type === 'Line',
+            );
+        }
+
+        return {
+          ObjectPattern(node) {
+            if (node.properties.length !== 1) {
+              return;
+            }
+
+            const openBrace =
+              sourceCode.getFirstToken(
+                node,
+                (token) => token.value === '{',
+              );
+
+            const closeBrace =
+              sourceCode.getLastToken(
+                node,
+                (token) => token.value === '}',
+              );
+
+            if (
+              !openBrace
+              || !closeBrace
+              || !sourceCode.text
+                .slice(openBrace.range[1], closeBrace.range[0])
+                .includes('\n')
+              || hasCommentsBetween(openBrace, closeBrace)
+            ) {
+              return;
+            }
+
+            context.report({
+              node,
+              loc: openBrace.loc,
+              messageId: 'compactSinglePropertyObjectPattern',
+              fix(fixer) {
+                const propertyText =
+                  sourceCode.getText(node.properties[0]).replace(/,$/, '');
+
+                return fixer.replaceTextRange(
+                  [
+                    openBrace.range[0],
+                    closeBrace.range[1],
+                  ],
+                  `{ ${propertyText} }`,
+                );
+              },
+            });
+          },
+        };
+      },
+    },
+    'no-blank-lines-between-css-declarations': {
+      meta: {
+        type: 'layout',
+        fixable: 'whitespace',
+        schema: [],
+        messages: {
+          noBlankLinesBetweenCssDeclarations:
+            'Do not separate CSS declarations with a blank line.',
+        },
+      },
+      create(context) {
+        const sourceCode = context.sourceCode;
+        const declarationPattern = /^\s*(?!--)[a-z-]+(?:\s*:[\s\S]*|:)\s*;?\s*$/i;
+
+        function isDeclaration(line) {
+          return declarationPattern.test(line.trim());
+        }
+
+        return {
+          Program(node) {
+            const styleBlockPattern =
+              /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
+
+            for (
+              let styleMatch = styleBlockPattern.exec(sourceCode.text);
+              styleMatch;
+              styleMatch = styleBlockPattern.exec(sourceCode.text)
+            ) {
+              const styleStartIndex =
+                styleMatch.index + styleMatch[0].indexOf(styleMatch[1]);
+              const lines =
+                styleMatch[1].split('\n');
+              let lineStartIndex =
+                styleStartIndex;
+
+              for (let index = 1; index < lines.length - 1; index += 1) {
+                const line =
+                  lines[index];
+                const previousLine =
+                  lines[index - 1];
+                const nextLine =
+                  lines[index + 1];
+
+                if (
+                  line.trim() === ''
+                  && isDeclaration(previousLine)
+                  && isDeclaration(nextLine)
+                ) {
+                  const blankLineStart =
+                    lineStartIndex;
+                  const blankLineEnd =
+                    lineStartIndex + line.length + 1;
+
+                  context.report({
+                    node,
+                    loc: sourceCode.getLocFromIndex(blankLineStart),
+                    messageId: 'noBlankLinesBetweenCssDeclarations',
+                    fix(fixer) {
+                      return fixer.removeRange([
+                        blankLineStart,
+                        blankLineEnd,
+                      ]);
+                    },
+                  });
+                }
+
+                lineStartIndex += line.length + 1;
+              }
+            }
+          },
+        };
+      },
+    },
   },
 };
 
@@ -163,7 +312,9 @@ export default tseslint.config(
           next: 'import',
         },
       ],
+      'local-stylistic/compact-single-property-object-pattern': 'error',
       'local-stylistic/compact-named-imports': 'error',
+      'local-stylistic/no-blank-lines-between-css-declarations': 'error',
       '@stylistic/quotes': [
         'error',
         'single',
