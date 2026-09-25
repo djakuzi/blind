@@ -23,4 +23,4 @@ async function setupApp() {
   await runPostMountSetup(setups);
 }
 
-void setupApp();
+setupApp();
