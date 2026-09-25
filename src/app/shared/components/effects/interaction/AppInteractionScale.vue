@@ -22,20 +22,22 @@ withDefaults(defineProps<Props>(), {
 <style scoped>
 .app-interaction-scale {
   display: inline-flex;
-  transform: scale(1);
+  transform: translate3d(0, 0, 0) scale(1);
   transform-origin: center;
-  transition: transform var(--app-motion-duration-fast) var(--app-motion-ease-default);
+  backface-visibility: hidden;
+  will-change: transform;
+  transition: transform var(--app-motion-duration-fast) var(--app-motion-ease-enter);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .app-interaction-scale:not(.app-interaction-scale--disabled):hover {
-    transform: scale(1.03);
+    transform: translate3d(0, 0, 0) scale(1.015);
   }
 }
 
 .app-interaction-scale:not(.app-interaction-scale--disabled):active {
-  transform: scale(0.92);
-  transition-duration: 70ms;
+  transform: translate3d(0, 0, 0) scale(0.97);
+  transition-duration: 90ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
