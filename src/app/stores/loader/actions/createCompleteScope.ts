@@ -8,9 +8,9 @@ export function createCompleteScope() {
       return;
     }
 
-    Object.keys(currentScope.resources).forEach((resourceKey) => {
-      currentScope.resources[resourceKey] = true;
+    Object.values(currentScope.resources).forEach((resource) => {
+      resource.state = 'loaded';
+      delete resource.error;
     });
-    currentScope.isLoaded = true;
   };
 }

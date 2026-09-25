@@ -40,7 +40,7 @@ export function createLanguageSetup(pinia: Pinia): iSetup {
         scopeKey: APP_SETUP_LANGUAGE_SCOPE_KEY,
         title: staticLocale.value.loading.language,
         resources: {
-          [APP_SETUP_LANGUAGE_RESOURCE_KEY]: false,
+          [APP_SETUP_LANGUAGE_RESOURCE_KEY]: 'pending',
         },
       });
     },
@@ -51,10 +51,9 @@ export function createLanguageSetup(pinia: Pinia): iSetup {
       async run() {
         await initializeAppLanguage();
 
-        loaderStore.setResourceState({
+        loaderStore.setResourceLoaded({
           scopeKey: APP_SETUP_LANGUAGE_SCOPE_KEY,
           resourceKey: APP_SETUP_LANGUAGE_RESOURCE_KEY,
-          isLoaded: true,
         });
       },
     },

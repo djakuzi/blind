@@ -1,8 +1,8 @@
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import type {
+  iLoaderResourcePayload,
   iRegisterLoaderScopePayload,
-  iSetLoaderResourceStatePayload,
-  tAddLoaderResourceErrorPayload,
+  iSetLoaderResourceErrorPayload,
   tLoaderScopeKey,
 } from '@/app/stores/loader/loader.type';
 
@@ -13,12 +13,16 @@ export function useLoaderRegistry() {
     loaderStore.registerScope(payload);
   }
 
-  function setResourceState(payload: iSetLoaderResourceStatePayload) {
-    loaderStore.setResourceState(payload);
+  function setResourcePending(payload: iLoaderResourcePayload) {
+    loaderStore.setResourcePending(payload);
   }
 
-  function addResourceError(payload: tAddLoaderResourceErrorPayload) {
-    loaderStore.addResourceError(payload);
+  function setResourceLoaded(payload: iLoaderResourcePayload) {
+    loaderStore.setResourceLoaded(payload);
+  }
+
+  function setResourceError(payload: iSetLoaderResourceErrorPayload) {
+    loaderStore.setResourceError(payload);
   }
 
   function completeScope(scopeKey: tLoaderScopeKey) {
@@ -34,11 +38,12 @@ export function useLoaderRegistry() {
   }
 
   return {
-    addResourceError,
     clearScope,
     completeScope,
     registerScope,
     reset,
-    setResourceState,
+    setResourceError,
+    setResourceLoaded,
+    setResourcePending,
   };
 }

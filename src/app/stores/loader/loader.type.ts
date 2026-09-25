@@ -1,41 +1,45 @@
+import type { tAppLoadingStatus } from '@/app/shared/types/status';
+
 export type tLoaderScopeKey = string;
 export type tLoaderResourceKey = string;
 
 export interface iLoaderErrorAction {
   title: string;
-  callback: () => void;
+  callback: () => void | Promise<void>;
 }
 
 export interface iLoaderResourceError {
-  scopeKey: tLoaderScopeKey;
-  resourceKey: tLoaderResourceKey;
   title: string;
   description?: string;
   action?: iLoaderErrorAction;
 }
 
+export interface iLoaderResource {
+  state: tAppLoadingStatus;
+  error?: iLoaderResourceError;
+}
+
 export interface iLoaderScope {
   key: tLoaderScopeKey;
   title?: string;
-  resources: Record<tLoaderResourceKey, boolean>;
-  isLoaded: boolean;
+  resources: Record<tLoaderResourceKey, iLoaderResource>;
 }
 
 export interface iLoaderState {
   scopes: Record<tLoaderScopeKey, iLoaderScope>;
-  errors: iLoaderResourceError[];
 }
 
 export interface iRegisterLoaderScopePayload {
   scopeKey: tLoaderScopeKey;
   title?: string;
-  resources: Record<tLoaderResourceKey, boolean>;
+  resources: Record<tLoaderResourceKey, tAppLoadingStatus>;
 }
 
-export interface iSetLoaderResourceStatePayload {
+export interface iLoaderResourcePayload {
   scopeKey: tLoaderScopeKey;
   resourceKey: tLoaderResourceKey;
-  isLoaded: boolean;
 }
 
-export type tAddLoaderResourceErrorPayload = iLoaderResourceError;
+export interface iSetLoaderResourceErrorPayload extends iLoaderResourcePayload {
+  error: iLoaderResourceError;
+}

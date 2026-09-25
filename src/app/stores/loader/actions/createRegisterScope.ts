@@ -1,4 +1,4 @@
-import { createLoaderScope, getScopeLoadedState } from '../loader.helper';
+import { createLoaderResource, createLoaderScope } from '../loader.helper';
 import type { iLoaderState, iRegisterLoaderScopePayload } from '../loader.type';
 
 export function createRegisterScope() {
@@ -12,10 +12,9 @@ export function createRegisterScope() {
     }
 
     currentScope.title = payload.title ?? currentScope.title;
-    currentScope.resources = {
-      ...currentScope.resources,
-      ...payload.resources,
-    };
-    currentScope.isLoaded = getScopeLoadedState(currentScope.resources);
+
+    Object.entries(payload.resources).forEach(([resourceKey, state]) => {
+      currentScope.resources[resourceKey] = createLoaderResource(state);
+    });
   };
 }
