@@ -128,7 +128,6 @@ async function handleLanguageChange(value: string) {
       padding-x="0"
       :padding-y="10"
       :row-gap="6"
-      row-wrap="wrap"
       divider-color="border-default"
       divider-width="thin"
       :accessibility-label="settingsLocale.accessibilityLabel"
