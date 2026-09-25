@@ -5,12 +5,16 @@ export const STATIC_LOCALE_REGISTRY = {
     loading: {
       base: 'Loading',
       language: 'Checking your language',
+      languageError: 'Failed to load language',
+      retry: 'Retry',
     },
   },
   ru: {
     loading: {
       base: 'Загрузка',
       language: 'Проверяем ваш язык',
+      languageError: 'Не удалось загрузить язык',
+      retry: 'Повторить',
     },
   },
 } satisfies Record<string, iStaticLocale>;

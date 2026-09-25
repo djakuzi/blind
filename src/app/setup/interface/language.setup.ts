@@ -18,6 +18,34 @@ export function createLanguageSetup(pinia: Pinia): iSetup {
   const { initializeAppLanguage } = useAppLanguage(pinia);
   const staticLocale = useStaticLocale(['loading'], pinia);
 
+  const resourcePayload = {
+    scopeKey: APP_SETUP_LANGUAGE_SCOPE_KEY,
+    resourceKey: APP_SETUP_LANGUAGE_RESOURCE_KEY,
+  };
+
+  async function loadLanguage() {
+    loaderStore.setResourcePending(resourcePayload);
+
+    try {
+      await initializeAppLanguage();
+
+      loaderStore.setResourceLoaded(resourcePayload);
+    } catch (error) {
+      loaderStore.setResourceError({
+        ...resourcePayload,
+        error: {
+          title: staticLocale.value.loading.languageError,
+          action: {
+            title: staticLocale.value.loading.retry,
+            callback: loadLanguage,
+          },
+        },
+      });
+
+      throw error;
+    }
+  }
+
   return {
     key: 'language',
 
@@ -47,15 +75,7 @@ export function createLanguageSetup(pinia: Pinia): iSetup {
 
     postMount: {
       mode: 'blocking',
-
-      async run() {
-        await initializeAppLanguage();
-
-        loaderStore.setResourceLoaded({
-          scopeKey: APP_SETUP_LANGUAGE_SCOPE_KEY,
-          resourceKey: APP_SETUP_LANGUAGE_RESOURCE_KEY,
-        });
-      },
+      run: loadLanguage,
     },
   };
 }

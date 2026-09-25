@@ -76,6 +76,8 @@ async function handleErrorAction() {
 
   try {
     await action.callback();
+  } catch {
+    // The resource callback updates the loader error state.
   } finally {
     isActionRunning.value = false;
   }
