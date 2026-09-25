@@ -1,9 +1,9 @@
 import { computed } from 'vue';
-import { setupState } from './setup.state';
+import { getSetupReadyState, getSetupRunningState } from './setup.state';
 
 export function useSetup() {
-  const isReady = computed(() => setupState.isReady);
-  const isRunning = computed(() => setupState.isRunning);
+  const isReady = computed(() => getSetupReadyState());
+  const isRunning = computed(() => getSetupRunningState());
 
   return {
     isReady,
