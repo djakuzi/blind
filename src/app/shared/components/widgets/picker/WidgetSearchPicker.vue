@@ -126,7 +126,7 @@ watch(
 </script>
 
 <template>
-  <button class="widget-search-picker__trigger" type="button" :aria-label="triggerAriaLabel" @click="handleTriggerClick">
+  <button class="widget-search-picker__trigger app-interactive" type="button" :aria-label="triggerAriaLabel" @click="handleTriggerClick">
     <AppInfoRow :text="triggerText" :image="selectedItem?.image" size="big" :padding-x="5" :padding-y="3" />
   </button>
 
@@ -153,9 +153,9 @@ watch(
         <button
           v-for="item in filteredItems"
           :key="item.value"
-          class="widget-search-picker__item"
+          class="widget-search-picker__item app-interactive"
           :class="{
-            'widget-search-picker__item--selected': item.value === selectedValue,
+            'app-interactive--selected': item.value === selectedValue,
           }"
           type="button"
           :disabled="item.disabled"
@@ -195,17 +195,7 @@ watch(
   background: var(--app-color-surface-primary);
   color: var(--app-color-text-primary);
   text-align: left;
-  cursor: pointer;
   appearance: none;
-  transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    box-shadow 160ms ease;
-
-  &:focus-visible {
-    outline: none;
-    box-shadow: inset 0 0 0 var(--app-border-width-medium) var(--app-color-primary);
-  }
 }
 
 .widget-search-picker {
@@ -222,48 +212,13 @@ watch(
   background: transparent;
   color: var(--app-color-text-primary);
   text-align: left;
-  cursor: pointer;
   appearance: none;
-
-  &:focus-visible {
-    position: relative;
-    z-index: 1;
-    outline: none;
-    box-shadow: inset 0 0 0 var(--app-border-width-medium) var(--app-color-primary);
-  }
-
-  &:disabled {
-    color: var(--app-color-text-disabled);
-    cursor: default;
-  }
 }
 
-.widget-search-picker__item--selected:not(:disabled) {
-  background: var(--app-color-primary);
-  color: var(--app-color-on-primary);
-  cursor: default;
-}
 
 .widget-search-picker__empty {
   display: block;
   padding: var(--app-padding-6);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .widget-search-picker__trigger:hover {
-    color: var(--app-color-primary);
-    background: var(--app-color-surface-interactive);
-  }
-
-  .widget-search-picker__item:not(.widget-search-picker__item--selected):not(:disabled):hover {
-    background: var(--app-color-surface-interactive);
-    color: var(--app-color-primary);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .widget-search-picker__trigger {
-    transition: none;
-  }
-}
 </style>

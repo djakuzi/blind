@@ -97,9 +97,9 @@ function handleSelect(option: iAppSegmentedControlOption) {
     <button
       v-for="option in options"
       :key="option.value"
-      class="app-segmented-control__item"
+      class="app-segmented-control__item app-interactive"
       :class="{
-        'app-segmented-control__item--active': option.value === modelValue,
+        'app-interactive--selected': option.value === modelValue,
       }"
       type="button"
       role="radio"
@@ -144,34 +144,12 @@ function handleSelect(option: iAppSegmentedControlOption) {
   border-right: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-border-contrast);
   background: var(--app-color-surface-primary);
   color: var(--app-color-text-primary);
-  cursor: pointer;
   appearance: none;
-  transition:
-    background-color 160ms ease,
-    color 160ms ease,
-    box-shadow 160ms ease;
 
   &:last-child {
     border-right: 0;
   }
 
-  &.app-segmented-control__item--active {
-    background: var(--app-color-primary);
-    color: var(--app-color-on-primary);
-    cursor: default;
-  }
-
-  &:disabled {
-    color: var(--app-color-text-disabled);
-    cursor: default;
-  }
-
-  &:focus-visible {
-    position: relative;
-    z-index: 1;
-    outline: none;
-    box-shadow: inset 0 0 0 var(--app-border-width-medium) var(--app-color-primary);
-  }
 }
 
 .app-segmented-control__text {
@@ -181,16 +159,4 @@ function handleSelect(option: iAppSegmentedControlOption) {
   max-width: 100%;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .app-segmented-control__item:not(.app-segmented-control__item--active):not(:disabled):hover {
-    background: var(--app-color-surface-interactive);
-    color: var(--app-color-primary);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .app-segmented-control__item {
-    transition: none;
-  }
-}
 </style>
