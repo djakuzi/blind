@@ -11,8 +11,7 @@ const pinia = createPinia();
 app.use(pinia);
 
 async function setupApp() {
-  const setups =
-    createAppSetupRegistry(pinia);
+  const setups = createAppSetupRegistry(pinia);
 
   await runPreMountSetup(setups);
 
