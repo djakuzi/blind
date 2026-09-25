@@ -4,6 +4,7 @@ import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import type { tAppStatus } from '@/app/shared/types/status';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import type { tBorderStyleValue, tBorderWidthValue } from '@/app/styles/contracts/border.contract';
 import type { tColorValue } from '@/app/styles/contracts/color.contract';
@@ -13,12 +14,11 @@ import type { tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import type { tRadiusValue } from '@/app/styles/contracts/radius.contract';
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
-export type tAppStatusBlockVariant = 'info' | 'success' | 'warning' | 'error';
 export type tAppStatusBlockAlign = 'left' | 'center' | 'right';
 
 export interface PropsAppStatusBlock {
   text: string;
-  variant?: tAppStatusBlockVariant;
+  variant?: tAppStatus;
   size?: tBaseSizeVariant;
   width?: tStyleSizeValue;
   maxWidth?: tStyleSizeValue;
@@ -62,7 +62,7 @@ const props = withDefaults(defineProps<PropsAppStatusBlock>(), {
 const slots = useSlots();
 
 const VARIANT_MAP: Record<
-  tAppStatusBlockVariant,
+  tAppStatus,
   {
     backgroundColor: tColorValue;
     borderColor: tColorValue;
