@@ -138,6 +138,8 @@ async function handleLanguageChange(value: string) {
   loader.registerScope({
     scopeKey: LANGUAGE_CHANGE_SCOPE_KEY,
     title: changeLanguageModalLocale.value.loading,
+    progressMode: 'indeterminate',
+    displayMode: 'delayed',
     resources: {
       [LANGUAGE_CHANGE_RESOURCE_KEY]: 'pending',
     },
