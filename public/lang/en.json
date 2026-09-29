@@ -41,11 +41,11 @@
       "index": {
         "ui": {
           "title": "Settings",
-          "theme": "App theme",
+          "theme": "Theme",
           "scale": "Interface size",
           "sound": "Sound",
           "language": "Language",
-          "accessibilityLabel": "App settings",
+          "accessibilityLabel": "Settings",
           "changeTheme": "Change theme",
           "changeLanguage": "Change language"
         },
