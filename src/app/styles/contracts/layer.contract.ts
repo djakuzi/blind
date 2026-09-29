@@ -1,4 +1,4 @@
-export const LAYER_TOKENS = ['base', 'raised', 'sticky', 'overlay', 'modal', 'toast'] as const;
+export const LAYER_TOKENS = ['base', 'raised', 'sticky', 'overlay', 'modal', 'toast', 'loader'] as const;
 
 export type tLayerToken = (typeof LAYER_TOKENS)[number];
 

@@ -95,7 +95,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
   <AppPosition
     :is-show="isRendered"
     type="fixed"
-    layer="overlay"
+    layer="loader"
     :position="{
       top: 0,
       right: 0,
