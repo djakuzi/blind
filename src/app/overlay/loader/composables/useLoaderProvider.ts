@@ -1,6 +1,7 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { LOADER_MIN_VISIBLE_DURATION_MS, LOADER_PROGRESS_MODE_DEFAULT } from '@/app/stores/loader/loader.const';
+import { LibScheduler } from '@/core/lib/scheduler';
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import type {
   iLoaderResourceError,
@@ -52,19 +53,11 @@ export function useLoaderProvider() {
   const presentationError = ref<iLoaderResourceError>();
   const sessionProgressMode = ref<tLoaderProgressMode>(LOADER_PROGRESS_MODE_DEFAULT);
 
+  const hideTimer = LibScheduler.createTimeout();
+
   let visibleStartedAt = 0;
-  let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
   const isInputBlocked = computed(() => isStoreActive.value || hasVisualSession.value);
-
-  function clearHideTimer() {
-    if (!hideTimer) {
-      return;
-    }
-
-    clearTimeout(hideTimer);
-    hideTimer = null;
-  }
 
   function syncPresentationContent() {
     if (currentText.value) {
@@ -83,7 +76,7 @@ export function useLoaderProvider() {
   }
 
   function showVisualNow() {
-    clearHideTimer();
+    hideTimer.cancel();
 
     if (!hasVisualSession.value) {
       hasVisualSession.value = true;
@@ -103,7 +96,7 @@ export function useLoaderProvider() {
       return;
     }
 
-    if (!isVisible.value || hideTimer) {
+    if (!isVisible.value || hideTimer.isActive()) {
       return;
     }
 
@@ -120,9 +113,7 @@ export function useLoaderProvider() {
       return;
     }
 
-    hideTimer = setTimeout(() => {
-      hideTimer = null;
-
+    hideTimer.start(() => {
       if (!isStoreActive.value) {
         isVisible.value = false;
       }
@@ -135,12 +126,12 @@ export function useLoaderProvider() {
       return;
     }
 
-    clearHideTimer();
+    hideTimer.cancel();
     showVisualNow();
   }
 
   function handleHidden() {
-    clearHideTimer();
+    hideTimer.cancel();
 
     hasVisualSession.value = false;
     isVisible.value = false;
@@ -161,7 +152,7 @@ export function useLoaderProvider() {
   });
 
   onBeforeUnmount(() => {
-    clearHideTimer();
+    hideTimer.cancel();
   });
 
   return {

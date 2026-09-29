@@ -4,6 +4,7 @@ import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { LibNumber } from '@/core/lib/number';
+import { LibScheduler } from '@/core/lib/scheduler';
 import { ToolInput } from '@/core/tool/input';
 import { ToolVibration } from '@/core/tool/vibration';
 
@@ -51,8 +52,8 @@ const rootElement = ref<HTMLElement | null>(null);
 let holdStartedAt = 0;
 let holdStartX = 0;
 let holdStartY = 0;
-let animationFrameId: number | undefined;
-let holdStartTimerId: ReturnType<typeof setTimeout> | undefined;
+const progressFrame = LibScheduler.createAnimationFrame();
+const holdStartTimer = LibScheduler.createTimeout();
 
 let activePointerId: number | undefined;
 let activePointerTarget: HTMLElement | undefined;
@@ -108,29 +109,6 @@ watch(normalizedInitialProgress, (initialProgress) => {
   progress.value = initialProgress;
 });
 
-function stopProgressAnimation() {
-  if (animationFrameId === undefined) {
-    return;
-  }
-
-  cancelAnimationFrame(animationFrameId);
-  animationFrameId = undefined;
-}
-
-function stopHoldStartTimer() {
-  if (holdStartTimerId === undefined) {
-    return;
-  }
-
-  clearTimeout(holdStartTimerId);
-  holdStartTimerId = undefined;
-}
-
-function requestProgressAnimation(callback: FrameRequestCallback) {
-  stopProgressAnimation();
-  animationFrameId = requestAnimationFrame(callback);
-}
-
 function completeHold() {
   if (hasCompleted.value) {
     return;
@@ -149,7 +127,6 @@ function completeHold() {
 
 function updateHoldProgress() {
   if (!isHolding.value) {
-    animationFrameId = undefined;
     return;
   }
 
@@ -161,11 +138,10 @@ function updateHoldProgress() {
 
   if (progress.value >= 100) {
     completeHold();
-    stopProgressAnimation();
     return;
   }
 
-  animationFrameId = requestAnimationFrame(updateHoldProgress);
+  progressFrame.request(updateHoldProgress);
 }
 
 function beginHold() {
@@ -173,18 +149,18 @@ function beginHold() {
     return;
   }
 
-  stopProgressAnimation();
+  progressFrame.cancel();
 
   isHolding.value = true;
   hasCompleted.value = false;
   progress.value = normalizedInitialProgress.value;
   holdStartedAt = getCurrentTime();
 
-  animationFrameId = requestAnimationFrame(updateHoldProgress);
+  progressFrame.request(updateHoldProgress);
 }
 
 function scheduleHold() {
-  stopHoldStartTimer();
+  holdStartTimer.cancel();
 
   const delay = normalizedHoldStartDelay.value;
 
@@ -193,10 +169,7 @@ function scheduleHold() {
     return;
   }
 
-  holdStartTimerId = setTimeout(() => {
-    holdStartTimerId = undefined;
-    beginHold();
-  }, delay);
+  holdStartTimer.start(beginHold, delay);
 }
 
 function animateReleaseProgress() {
@@ -219,14 +192,13 @@ function animateReleaseProgress() {
 
     if (releaseProgress >= 1) {
       progress.value = finishProgress;
-      animationFrameId = undefined;
       return;
     }
 
-    animationFrameId = requestAnimationFrame(updateReleaseProgress);
+    progressFrame.request(updateReleaseProgress);
   }
 
-  requestProgressAnimation(updateReleaseProgress);
+  progressFrame.request(updateReleaseProgress);
 }
 
 function releasePointerCapture() {
@@ -255,8 +227,8 @@ function releasePointerCapture() {
 function resetHoldState(isImmediate = false) {
   const shouldAnimateRelease = !isImmediate && progress.value > normalizedInitialProgress.value;
 
-  stopHoldStartTimer();
-  stopProgressAnimation();
+  holdStartTimer.cancel();
+  progressFrame.cancel();
 
   isHolding.value = false;
   hasCompleted.value = false;

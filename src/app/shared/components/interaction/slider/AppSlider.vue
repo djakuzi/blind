@@ -6,6 +6,7 @@ import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 import { LibNumber } from '@/core/lib/number';
+import { LibScheduler } from '@/core/lib/scheduler';
 
 export interface PropsAppSlider {
   modelValue: number;
@@ -96,11 +97,12 @@ const isDragging = ref(false);
 let activePointerId: number | null = null;
 let pointerStartX = 0;
 let pointerMoved = false;
-let dragFrameId: number | null = null;
-let positionFrameId: number | null = null;
+const dragFrame = LibScheduler.createAnimationFrame();
+const positionFrame = LibScheduler.createAnimationFrame();
+const wheelResetTimer = LibScheduler.createTimeout();
+
 let resizeObserver: ResizeObserver | null = null;
 let wheelGestureActive = false;
-let wheelResetTimer: number | null = null;
 
 const sizeConfig = computed(() => SIZE_MAP[props.size]);
 const indexes = computed(() => Array.from({ length: Math.max(0, props.count) }, (_, index) => index));
@@ -154,12 +156,7 @@ function getActiveItemElement() {
 async function updateTrackPosition() {
   await nextTick();
 
-  if (positionFrameId !== null) {
-    cancelAnimationFrame(positionFrameId);
-  }
-
-  positionFrameId = requestAnimationFrame(() => {
-    positionFrameId = null;
+  positionFrame.request(() => {
 
     const viewport = viewportElement.value;
     const activeItem = getActiveItemElement();
@@ -190,20 +187,8 @@ function resolveVisualDragOffset(offset: number) {
   return offset;
 }
 
-function cancelDragFrame() {
-  if (dragFrameId === null) {
-    return;
-  }
-
-  cancelAnimationFrame(dragFrameId);
-  dragFrameId = null;
-}
-
 function updateDragOffset(offset: number) {
-  cancelDragFrame();
-
-  dragFrameId = requestAnimationFrame(() => {
-    dragFrameId = null;
+  dragFrame.request(() => {
     dragOffset.value = resolveVisualDragOffset(offset);
   });
 }
@@ -229,7 +214,7 @@ function releaseSliderPointer(pointerId: number) {
 }
 
 function resetPointerState() {
-  cancelDragFrame();
+  dragFrame.cancel();
 
   activePointerId = null;
   pointerStartX = 0;
@@ -317,13 +302,8 @@ function handleClickCapture(event: MouseEvent) {
 }
 
 function resetWheelGestureSoon() {
-  if (wheelResetTimer !== null) {
-    window.clearTimeout(wheelResetTimer);
-  }
-
-  wheelResetTimer = window.setTimeout(() => {
+  wheelResetTimer.start(() => {
     wheelGestureActive = false;
-    wheelResetTimer = null;
   }, 180);
 }
 
@@ -397,15 +377,9 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   resizeObserver?.disconnect();
-  cancelDragFrame();
-
-  if (positionFrameId !== null) {
-    cancelAnimationFrame(positionFrameId);
-  }
-
-  if (wheelResetTimer !== null) {
-    window.clearTimeout(wheelResetTimer);
-  }
+  dragFrame.cancel();
+  positionFrame.cancel();
+  wheelResetTimer.cancel();
 });
 </script>
 
