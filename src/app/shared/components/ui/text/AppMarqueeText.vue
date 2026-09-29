@@ -17,59 +17,62 @@ const props = withDefaults(defineProps<PropsAppMarqueeText>(), {
   fontWeight: 'medium',
   uppercase: false,
   speed: 32,
-  minDuration: 4500,
+  minDuration: 5000,
 });
 
 const viewportRef = ref<HTMLElement | null>(null);
 const contentRef = ref<HTMLElement | null>(null);
-const overflowDistance = ref(0);
+const cloneRef = ref<HTMLElement | null>(null);
+
+const isOverflowing = ref(false);
+const loopDistance = ref(0);
 
 let resizeObserver: ResizeObserver | null = null;
 
-const isOverflowing = computed(() => overflowDistance.value > 1);
-
 const marqueeDuration = computed(() => {
   const speed = Math.max(1, props.speed);
-  const movementRatio = 0.7;
-  const movementDuration = (overflowDistance.value / speed / movementRatio) * 1000;
+  const duration = (loopDistance.value / speed) * 1000;
 
-  return `${Math.max(props.minDuration, movementDuration)}ms`;
+  return `${Math.max(props.minDuration, duration)}ms`;
 });
 
 const marqueeStyle = computed(() => ({
-  '--cp-marquee-text-distance': `${overflowDistance.value}px`,
+  '--cp-marquee-text-distance': `${loopDistance.value}px`,
   '--cp-marquee-text-duration': marqueeDuration.value,
 }));
 
-function updateOverflow() {
+function updateMarquee() {
   const viewport = viewportRef.value;
   const content = contentRef.value;
+  const clone = cloneRef.value;
 
-  if (!viewport || !content) {
-    overflowDistance.value = 0;
+  if (!viewport || !content || !clone) {
+    isOverflowing.value = false;
+    loopDistance.value = 0;
     return;
   }
 
-  overflowDistance.value = Math.max(0, content.scrollWidth - viewport.clientWidth);
+  isOverflowing.value = content.scrollWidth - viewport.clientWidth > 1;
+  loopDistance.value = Math.max(0, clone.offsetLeft - content.offsetLeft);
 }
 
 watch(
   () => [props.text, props.fontSize, props.fontWeight, props.uppercase],
   async () => {
     await nextTick();
-    updateOverflow();
+    updateMarquee();
   },
 );
 
 onMounted(async () => {
   await nextTick();
-  updateOverflow();
+  updateMarquee();
 
   if (typeof ResizeObserver === 'undefined') {
     return;
   }
 
-  resizeObserver = new ResizeObserver(updateOverflow);
+  resizeObserver = new ResizeObserver(updateMarquee);
 
   if (viewportRef.value) {
     resizeObserver.observe(viewportRef.value);
@@ -92,15 +95,28 @@ onBeforeUnmount(() => {
     :class="{ 'app-marquee-text--active': isOverflowing }"
     :style="marqueeStyle"
   >
-    <span ref="contentRef" class="app-marquee-text__content">
-      <AppText
-        :text="text"
-        tag="span"
-        :color="color"
-        :font-size="fontSize"
-        :font-weight="fontWeight"
-        :uppercase="uppercase"
-      />
+    <span class="app-marquee-text__track">
+      <span ref="contentRef" class="app-marquee-text__item">
+        <AppText
+          :text="text"
+          tag="span"
+          :color="color"
+          :font-size="fontSize"
+          :font-weight="fontWeight"
+          :uppercase="uppercase"
+        />
+      </span>
+
+      <span ref="cloneRef" class="app-marquee-text__item app-marquee-text__item--clone" aria-hidden="true">
+        <AppText
+          :text="text"
+          tag="span"
+          :color="color"
+          :font-size="fontSize"
+          :font-weight="fontWeight"
+          :uppercase="uppercase"
+        />
+      </span>
     </span>
   </span>
 </template>
@@ -113,37 +129,70 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
-.app-marquee-text__content {
-  display: inline-block;
+.app-marquee-text__track {
+  display: inline-flex;
+  align-items: center;
   min-width: max-content;
-  white-space: nowrap;
+  gap: var(--app-space-8);
   transform: translate3d(0, 0, 0);
 }
 
-.app-marquee-text--active .app-marquee-text__content {
-  animation: app-marquee-text-scroll var(--cp-marquee-text-duration) linear infinite alternate;
+.app-marquee-text__item {
+  display: inline-block;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.app-marquee-text--active {
+  --cp-marquee-text-edge-fade: var(--app-space-5);
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--cp-marquee-text-edge-fade),
+    #000 calc(100% - var(--cp-marquee-text-edge-fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--cp-marquee-text-edge-fade),
+    #000 calc(100% - var(--cp-marquee-text-edge-fade)),
+    transparent 100%
+  );
+}
+
+.app-marquee-text--active .app-marquee-text__track {
+  animation: app-marquee-text-scroll var(--cp-marquee-text-duration) linear infinite;
   will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .app-marquee-text--active .app-marquee-text__content {
-    width: 100%;
+  .app-marquee-text--active {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .app-marquee-text--active .app-marquee-text__track {
+    display: block;
     min-width: 0;
-    max-width: 100%;
+    animation: none;
+  }
+
+  .app-marquee-text--active .app-marquee-text__item:first-child {
+    display: block;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    animation: none;
+  }
+
+  .app-marquee-text__item--clone {
+    display: none;
   }
 }
 
 @keyframes app-marquee-text-scroll {
-  0%,
-  15% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  85%,
-  100% {
+  to {
     transform: translate3d(calc(var(--cp-marquee-text-distance) * -1), 0, 0);
   }
 }
