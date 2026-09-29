@@ -122,51 +122,56 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
   >
     <AppGrid :class="loaderClass" place-items="center" min-height="100dvh" @animationend="handleLoaderAnimationEnd">
       <AppFlex class="widget-loader-app__content" direction="column" align="center" max-width="100%" width="100%">
-        <AppLogo logo="blindTextRight" width="100rem" height="auto" />
+        <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
 
-        <AppStatusBlock
-          v-if="error"
-          :text="error.title"
-          variant="error"
-          size="big"
-          width="70rem"
-          max-width="100%"
-        >
-          <template v-if="error.actions?.length" #action>
-            <AppFlex align="center" justify="center" wrap="wrap" :gap="3" width="100%">
-              <AppButton
-                v-for="(action, index) in error.actions"
-                :key="`${action.title}-${index}`"
-                :text="action.title"
-                :variant="index === 0 ? 'primary' : 'secondary'"
-                :disabled="isActionRunning"
-                size="small"
-                @click="handleErrorAction(action)"
-              />
-            </AppFlex>
-          </template>
-        </AppStatusBlock>
+        <div class="widget-loader-app__status">
+          <AppStatusBlock
+            v-if="error"
+            :text="error.title"
+            variant="error"
+            size="big"
+            width="70rem"
+            max-width="100%"
+          >
+            <template v-if="error.actions?.length" #action>
+              <AppFlex align="center" justify="center" wrap="wrap" :gap="3" width="100%">
+                <AppButton
+                  v-for="(action, index) in error.actions"
+                  :key="`${action.title}-${index}`"
+                  :text="action.title"
+                  :variant="index === 0 ? 'primary' : 'secondary'"
+                  :disabled="isActionRunning"
+                  size="small"
+                  @click="handleErrorAction(action)"
+                />
+              </AppFlex>
+            </template>
+          </AppStatusBlock>
 
-        <AppLineLoader
-          v-else
-          :mode="progressMode"
-          :progress="progress"
-          :text="text"
-          size="big"
-          width="70rem"
-          max-width="100%"
-          @complete="handleLoaderProgressComplete"
-        />
+          <AppLineLoader
+            v-else
+            :mode="progressMode"
+            :progress="progress"
+            :text="text"
+            size="big"
+            width="70rem"
+            max-width="100%"
+            @complete="handleLoaderProgressComplete"
+          />
+        </div>
       </AppFlex>
 
+      <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="20rem" height="20rem" />
+
       <AppPosition
+        class="widget-loader-app__version"
         type="absolute"
         :position="{
           right: 'horizontal',
           bottom: 'vertical',
         }"
       >
-        <AppVersion class="widget-loader-app__version" size="big" />
+        <AppVersion size="big" />
       </AppPosition>
     </AppGrid>
   </AppPosition>
@@ -182,7 +187,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
 
 .widget-loader-app--leaving {
   pointer-events: none;
-  animation: widget-loader-app-leave var(--app-motion-duration-slower) var(--app-motion-ease-default) forwards;
+  animation: widget-loader-app-leave 1100ms var(--app-motion-ease-default) forwards;
 }
 
 .widget-loader-app__content {
@@ -190,13 +195,104 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
   transform: translateY(-2dvh);
 }
 
-@keyframes widget-loader-app-leave {
-  from {
+.widget-loader-app__status {
+  display: contents;
+}
+
+.widget-loader-app__exit-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) translate(-42rem, -2dvh) scale(0.92);
+  will-change: transform, opacity, filter;
+}
+
+.widget-loader-app--leaving .widget-loader-app__status,
+.widget-loader-app--leaving .widget-loader-app__version {
+  animation: widget-loader-app-secondary-leave 180ms var(--app-motion-ease-default) forwards;
+}
+
+.widget-loader-app--leaving .widget-loader-app__wordmark {
+  animation: widget-loader-app-wordmark-leave 260ms 100ms var(--app-motion-ease-default) forwards;
+}
+
+.widget-loader-app--leaving .widget-loader-app__exit-logo {
+  animation: widget-loader-app-logo-leave 900ms 100ms var(--app-motion-ease-default) forwards;
+}
+
+@keyframes widget-loader-app-secondary-leave {
+  to {
+    opacity: 0;
+    filter: blur(3px);
+    transform: translateY(1rem);
+  }
+}
+
+@keyframes widget-loader-app-wordmark-leave {
+  0%,
+  35% {
     opacity: 1;
   }
 
-  to {
+  100% {
     opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+@keyframes widget-loader-app-logo-leave {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(-42rem, -2dvh) scale(0.92);
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  55% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    filter: blur(2px);
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+
+@keyframes widget-loader-app-leave {
+  0%,
+  72% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .widget-loader-app--leaving {
+    animation-duration: var(--app-motion-duration-slower);
+  }
+
+  .widget-loader-app--leaving .widget-loader-app__status,
+  .widget-loader-app--leaving .widget-loader-app__version,
+  .widget-loader-app--leaving .widget-loader-app__wordmark {
+    animation: none;
+  }
+
+  .widget-loader-app--leaving .widget-loader-app__exit-logo {
+    display: none;
   }
 }
 </style>
