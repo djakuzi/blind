@@ -66,6 +66,7 @@ export function useLoaderProvider() {
   let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
   const isInteractionBlocked = computed(() => isStoreActive.value && !isVisible.value);
+  const isInputBlocked = computed(() => isStoreActive.value || hasVisualSession.value);
 
   function clearShowTimer() {
     if (!showTimer) {
@@ -143,6 +144,11 @@ export function useLoaderProvider() {
       return;
     }
 
+    if (presentationError.value) {
+      isVisible.value = false;
+      return;
+    }
+
     const visibleDuration = Date.now() - visibleStartedAt;
     const remainingDuration = Math.max(0, LOADER_MIN_VISIBLE_DURATION_MS - visibleDuration);
 
@@ -212,6 +218,7 @@ export function useLoaderProvider() {
   return {
     error: presentationError,
     handleHidden,
+    isInputBlocked,
     isInteractionBlocked,
     isVisible,
     progress,

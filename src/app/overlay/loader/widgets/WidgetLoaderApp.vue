@@ -11,7 +11,7 @@ import AppStatusBlock from '@/app/shared/components/ui/status/AppStatusBlock.vue
 import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 import type { iLoaderErrorAction, iLoaderResourceError } from '@/app/stores/loader/loader.type';
 
-type tWidgetLoaderPhase = 'loading' | 'complete' | 'leaving';
+type tWidgetLoaderPhase = 'loading' | 'leaving';
 
 interface Props {
   isVisible?: boolean;
@@ -46,7 +46,7 @@ watch(
         return;
       }
 
-      phase.value = props.progressMode === 'determinate' && props.progress >= 100 ? 'complete' : 'leaving';
+      phase.value = 'leaving';
 
       return;
     }
@@ -63,14 +63,6 @@ watch(
     isActionRunning.value = false;
   },
 );
-
-function handleLoaderProgressComplete() {
-  if (props.isVisible || phase.value !== 'complete') {
-    return;
-  }
-
-  phase.value = 'leaving';
-}
 
 async function handleErrorAction(action: iLoaderErrorAction) {
   if (isActionRunning.value) {
@@ -101,6 +93,8 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
 <template>
   <AppPosition
     :is-show="isRendered"
+    data-app-loader-root
+    tabindex="-1"
     type="fixed"
     layer="loader"
     :position="{
@@ -145,7 +139,6 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
           size="big"
           width="70rem"
           max-width="100%"
-          @complete="handleLoaderProgressComplete"
         />
       </AppFlex>
 
@@ -171,6 +164,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
 }
 
 .widget-loader-app--leaving {
+  pointer-events: none;
   animation: widget-loader-app-leave var(--app-motion-duration-slower) var(--app-motion-ease-default) forwards;
 }
 
