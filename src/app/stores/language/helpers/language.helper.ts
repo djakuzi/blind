@@ -1,5 +1,6 @@
 import { apiLanguage } from '@/app/domain/lang/api/api';
 import { ModelLanguage } from '@/app/domain/lang/models/Language.model';
+import { LibLocale } from '@/core/lib/locale';
 import { ToolFilesystem } from '@/core/tool/filesystem';
 import { ToolStorage } from '@/core/tool/storage';
 import { LANGUAGE_FILE_DIR, LANGUAGE_LIST_STORAGE_KEY } from '../language.const';
@@ -12,16 +13,7 @@ function getLanguageFilePath(code: string) {
   return `${LANGUAGE_FILE_DIR}/${code}.json`;
 }
 
-export function normalizeLanguageCodes(code: string) {
-  const normalizedCode = code.trim().replaceAll('_', '-').toLowerCase();
-
-  const baseCode = normalizedCode.split('-')[0] ?? normalizedCode;
-
-  return {
-    exact: normalizedCode,
-    base: baseCode,
-  };
-}
+export const normalizeLanguageCodes = LibLocale.normalizeCode;
 
 export function findLanguageByCode(languages: ModelLanguage[], code: string | null) {
   if (!code) {

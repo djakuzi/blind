@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import type { PropsAppText } from '@/app/shared/components/atoms/typography/AppText.vue';
 
 export interface PropsAppMarqueeText extends Pick<
@@ -28,8 +29,6 @@ const isOverflowing = ref(false);
 const loopDistance = ref(0);
 
 const isMarqueeActive = computed(() => isOverflowing.value && loopDistance.value > 0);
-
-let resizeObserver: ResizeObserver | null = null;
 
 const marqueeDuration = computed(() => {
   const speed = Math.max(1, props.speed);
@@ -82,27 +81,13 @@ watch(
   },
 );
 
+useResizeObserver([viewportRef, contentRef], () => {
+  updateMarquee();
+});
+
 onMounted(async () => {
   await nextTick();
   updateMarquee();
-
-  if (typeof ResizeObserver === 'undefined') {
-    return;
-  }
-
-  resizeObserver = new ResizeObserver(updateMarquee);
-
-  if (viewportRef.value) {
-    resizeObserver.observe(viewportRef.value);
-  }
-
-  if (contentRef.value) {
-    resizeObserver.observe(contentRef.value);
-  }
-});
-
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect();
 });
 </script>
 

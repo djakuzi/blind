@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, watch } from 'vue';
+import { nextTick, watch } from 'vue';
 import { useLoaderProvider } from '@/app/overlay/loader/composables/useLoaderProvider';
+import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import WidgetLoaderApp from '@/app/overlay/loader/widgets/WidgetLoaderApp.vue';
 
 const loader = useLoaderProvider();
@@ -96,12 +97,8 @@ watch(
   },
 );
 
-onMounted(() => {
-  document.addEventListener('keydown', handleDocumentKeydown, true);
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener('keydown', handleDocumentKeydown, true);
+useEventListener(document, 'keydown', handleDocumentKeydown, {
+  capture: true,
 });
 </script>
 

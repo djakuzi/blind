@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
+import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import {
@@ -138,13 +139,9 @@ function unlockBodyScroll() {
   isScrollLocked.value = false;
 }
 
-function addDocumentListeners() {
-  document.addEventListener('keydown', handleKeydown);
-}
-
-function removeDocumentListeners() {
-  document.removeEventListener('keydown', handleKeydown);
-}
+const documentKeydownListener = useEventListener(document, 'keydown', handleKeydown, {
+  autoStart: false,
+});
 
 async function handleOpen() {
   const activeElement = document.activeElement;
@@ -159,7 +156,7 @@ async function handleOpen() {
   }
 
   lockBodyScroll();
-  addDocumentListeners();
+  documentKeydownListener.start();
 
   await nextTick();
   modalPanelRef.value?.focus({ preventScroll: true });
@@ -182,7 +179,7 @@ function handleAfterLeave() {
 }
 
 function handleClose() {
-  removeDocumentListeners();
+  documentKeydownListener.stop();
   unlockBodyScroll();
 }
 
@@ -200,7 +197,6 @@ watch(
 );
 
 onBeforeUnmount(() => {
-  removeDocumentListeners();
   unlockBodyScroll();
 });
 </script>

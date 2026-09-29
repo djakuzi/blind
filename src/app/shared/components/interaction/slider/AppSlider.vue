@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
@@ -101,7 +102,6 @@ const dragFrame = LibScheduler.createAnimationFrame();
 const positionFrame = LibScheduler.createAnimationFrame();
 const wheelResetTimer = LibScheduler.createTimeout();
 
-let resizeObserver: ResizeObserver | null = null;
 let wheelGestureActive = false;
 
 const sizeConfig = computed(() => SIZE_MAP[props.size]);
@@ -359,24 +359,15 @@ watch([activeIndex, () => props.count, () => props.itemWidth, () => props.itemMa
   updateTrackPosition();
 });
 
+useResizeObserver([viewportElement, trackElement], () => {
+  updateTrackPosition();
+});
+
 onMounted(() => {
   updateTrackPosition();
-
-  resizeObserver = new ResizeObserver(() => {
-    updateTrackPosition();
-  });
-
-  if (viewportElement.value) {
-    resizeObserver.observe(viewportElement.value);
-  }
-
-  if (trackElement.value) {
-    resizeObserver.observe(trackElement.value);
-  }
 });
 
 onBeforeUnmount(() => {
-  resizeObserver?.disconnect();
   dragFrame.cancel();
   positionFrame.cancel();
   wheelResetTimer.cancel();
