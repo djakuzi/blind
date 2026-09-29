@@ -6,8 +6,11 @@ export interface iAudioConfigureOptions {
   backgroundPlayback?: boolean;
 }
 
-export interface iAudioPreloadOptions {
+export interface iAudioResource {
   id: string;
+}
+
+export interface iAudioPreloadResource extends iAudioResource {
   src: string;
   channels?: number;
   volume?: number;
