@@ -11,7 +11,7 @@ import AppStatusBlock from '@/app/shared/components/ui/status/AppStatusBlock.vue
 import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
 import type { iLoaderErrorAction, iLoaderResourceError } from '@/app/stores/loader/loader.type';
 
-type tWidgetLoaderPhase = 'loading' | 'leaving';
+type tWidgetLoaderPhase = 'loading' | 'completing' | 'leaving';
 
 interface Props {
   isVisible?: boolean;
@@ -34,6 +34,7 @@ const emit = defineEmits<{
 
 const isRendered = ref(props.isVisible);
 const isActionRunning = ref(false);
+const isProgressComplete = ref(false);
 const phase = ref<tWidgetLoaderPhase>('loading');
 
 const loaderClass = computed(() => ['widget-loader-app', `widget-loader-app--${phase.value}`]);
@@ -46,12 +47,19 @@ watch(
         return;
       }
 
+      if (props.progressMode === 'determinate' && props.progress >= 100 && !props.error) {
+        phase.value = isProgressComplete.value ? 'leaving' : 'completing';
+
+        return;
+      }
+
       phase.value = 'leaving';
 
       return;
     }
 
     isRendered.value = true;
+    isProgressComplete.value = false;
     phase.value = 'loading';
   },
   { immediate: true },
@@ -63,6 +71,14 @@ watch(
     isActionRunning.value = false;
   },
 );
+
+function handleLoaderProgressComplete() {
+  isProgressComplete.value = true;
+
+  if (!props.isVisible && phase.value === 'completing') {
+    phase.value = 'leaving';
+  }
+}
 
 async function handleErrorAction(action: iLoaderErrorAction) {
   if (isActionRunning.value) {
@@ -139,6 +155,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
           size="big"
           width="70rem"
           max-width="100%"
+          @complete="handleLoaderProgressComplete"
         />
       </AppFlex>
 
