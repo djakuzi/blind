@@ -95,10 +95,14 @@ export async function loadLanguageLocale(language: ModelLanguage): Promise<Local
 
   const locale = await apiLanguage.getLanguageInterface(language.key);
 
-  await ToolFilesystem.setJson<iLanguageFile>(path, {
-    version: language.version,
-    locale,
-  });
+  try {
+    await ToolFilesystem.setJson<iLanguageFile>(path, {
+      version: language.version,
+      locale,
+    });
+  } catch {
+    // Cache is optional once the locale has been loaded.
+  }
 
   return locale;
 }

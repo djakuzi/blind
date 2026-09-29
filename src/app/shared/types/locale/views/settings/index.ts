@@ -15,6 +15,10 @@ export interface LocaleViewSettings {
         title: string;
         searchPlaceholder: string;
         emptyText: string;
+        loading: string;
+        loadError: string;
+        retry: string;
+        cancel: string;
       };
     };
   };

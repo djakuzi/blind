@@ -36,10 +36,12 @@ export function createLanguageSetup(pinia: Pinia): iSetup {
         ...resourcePayload,
         error: {
           title: staticLocale.value.loading.languageError,
-          action: {
-            title: staticLocale.value.loading.retry,
-            callback: () => retryPostMountSetup('language'),
-          },
+          actions: [
+            {
+              title: staticLocale.value.loading.retry,
+              callback: () => retryPostMountSetup('language'),
+            },
+          ],
         },
       });
 

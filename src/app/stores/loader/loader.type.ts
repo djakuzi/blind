@@ -11,7 +11,7 @@ export interface iLoaderErrorAction {
 export interface iLoaderResourceError {
   title: string;
   description?: string;
-  action?: iLoaderErrorAction;
+  actions?: iLoaderErrorAction[];
 }
 
 export interface iLoaderResource {

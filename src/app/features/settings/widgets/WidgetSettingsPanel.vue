@@ -13,9 +13,13 @@ import { isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
 import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
 import { useAppLanguage } from '@/app/features/locale/composables/useAppLanguage';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
+import { useLoaderRegistry } from '@/app/overlay/loader/composables/useLoaderRegistry';
 import { LibText } from '@/app/shared/lib/text';
 import { SETTINGS_SCALE_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
 import { useSettings } from '../composables/useSettings';
+
+const LANGUAGE_CHANGE_SCOPE_KEY = 'app-language-change';
+const LANGUAGE_CHANGE_RESOURCE_KEY = 'language';
 
 const SETTINGS_ITEMS = [
   {
@@ -37,8 +41,10 @@ const { appThemeMode, appScaleMode, soundEnabled, setAppThemeMode, setAppScaleMo
 const { languages, currentLanguage, setAppLanguage } = useAppLanguage();
 
 const isLanguagePickerOpen = ref(false);
+const isLanguageChangeRunning = ref(false);
 
 const locale = useLocale();
+const loader = useLoaderRegistry();
 
 const currentLanguageCode = computed(() => {
   if (!currentLanguage.value) {
@@ -113,9 +119,55 @@ function handleSoundEnabledChange(value: boolean) {
   setSoundEnabled(value);
 }
 
+function cancelLanguageChange() {
+  loader.clearScope(LANGUAGE_CHANGE_SCOPE_KEY);
+}
+
 async function handleLanguageChange(value: string) {
-  await setAppLanguage(value);
-  isLanguagePickerOpen.value = false;
+  if (isLanguageChangeRunning.value) {
+    return;
+  }
+
+  isLanguageChangeRunning.value = true;
+
+  const resourcePayload = {
+    scopeKey: LANGUAGE_CHANGE_SCOPE_KEY,
+    resourceKey: LANGUAGE_CHANGE_RESOURCE_KEY,
+  };
+
+  loader.registerScope({
+    scopeKey: LANGUAGE_CHANGE_SCOPE_KEY,
+    title: changeLanguageModalLocale.value.loading,
+    resources: {
+      [LANGUAGE_CHANGE_RESOURCE_KEY]: 'pending',
+    },
+  });
+
+  try {
+    await setAppLanguage(value);
+
+    isLanguagePickerOpen.value = false;
+    loader.setResourceLoaded(resourcePayload);
+  } catch {
+    loader.setResourceError({
+      ...resourcePayload,
+      error: {
+        title: changeLanguageModalLocale.value.loadError,
+        actions: [
+          {
+            title: changeLanguageModalLocale.value.retry,
+            callback: () => handleLanguageChange(value),
+          },
+          {
+            title: changeLanguageModalLocale.value.cancel,
+            callback: cancelLanguageChange,
+          },
+        ],
+      },
+    });
+  } finally {
+    isLanguageChangeRunning.value = false;
+  }
 }
 </script>
 

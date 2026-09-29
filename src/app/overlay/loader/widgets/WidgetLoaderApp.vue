@@ -8,7 +8,7 @@ import AppLineLoader from '@/app/shared/components/ui/loader/AppLineLoader.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
 import AppStatusBlock from '@/app/shared/components/ui/status/AppStatusBlock.vue';
 import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
-import type { iLoaderResourceError } from '@/app/stores/loader/loader.type';
+import type { iLoaderErrorAction, iLoaderResourceError } from '@/app/stores/loader/loader.type';
 
 type tWidgetLoaderPhase = 'loading' | 'complete' | 'leaving';
 
@@ -39,7 +39,7 @@ watch(
   () => props.isActive,
   (isActive) => {
     if (!isActive) {
-      phase.value = 'complete';
+      phase.value = props.progress >= 100 ? 'complete' : 'leaving';
 
       return;
     }
@@ -65,10 +65,8 @@ function handleLoaderProgressComplete() {
   phase.value = 'leaving';
 }
 
-async function handleErrorAction() {
-  const action = props.error?.action;
-
-  if (!action || isActionRunning.value) {
+async function handleErrorAction(action: iLoaderErrorAction) {
+  if (isActionRunning.value) {
     return;
   }
 
@@ -77,7 +75,7 @@ async function handleErrorAction() {
   try {
     await action.callback();
   } catch {
-    // The resource callback updates the loader error state.
+    // The resource callback owns its error state.
   } finally {
     isActionRunning.value = false;
   }
@@ -117,13 +115,18 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
           width="70rem"
           max-width="100%"
         >
-          <template v-if="error.action" #action>
-            <AppButton
-              :text="error.action.title"
-              :disabled="isActionRunning"
-              size="small"
-              @click="handleErrorAction"
-            />
+          <template v-if="error.actions?.length" #action>
+            <AppFlex align="center" justify="center" wrap="wrap" :gap="3" width="100%">
+              <AppButton
+                v-for="(action, index) in error.actions"
+                :key="`${action.title}-${index}`"
+                :text="action.title"
+                :variant="index === 0 ? 'primary' : 'secondary'"
+                :disabled="isActionRunning"
+                size="small"
+                @click="handleErrorAction(action)"
+              />
+            </AppFlex>
           </template>
         </AppStatusBlock>
 

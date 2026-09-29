@@ -13,11 +13,15 @@ export function createSetLanguage() {
 
     const locale = await loadLanguageLocale(language);
 
-    await ToolStorage.setItem(LANGUAGE_SELECTED_CODE_STORAGE_KEY, language.key);
-
     this.preferredLanguageCode = language.key;
     this.currentLanguage = language;
     this.locale = locale;
+
+    try {
+      await ToolStorage.setItem(LANGUAGE_SELECTED_CODE_STORAGE_KEY, language.key);
+    } catch {
+      // Persistence is optional for the current session.
+    }
 
     return language;
   };

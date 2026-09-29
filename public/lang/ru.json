@@ -53,7 +53,11 @@
           "changeLanguage": {
             "title": "Сменить язык",
             "searchPlaceholder": "Поиск языка",
-            "emptyText": "Языки не найдены"
+            "emptyText": "Языки не найдены",
+            "loading": "Загружаем язык",
+            "loadError": "Не удалось загрузить язык",
+            "retry": "Повторить",
+            "cancel": "Отмена"
           }
         }
       }

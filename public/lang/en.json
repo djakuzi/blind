@@ -53,7 +53,11 @@
           "changeLanguage": {
             "title": "Change language",
             "searchPlaceholder": "Search language",
-            "emptyText": "No languages found"
+            "emptyText": "No languages found",
+            "loading": "Loading language",
+            "loadError": "Failed to load language",
+            "retry": "Retry",
+            "cancel": "Cancel"
           }
         }
       }
