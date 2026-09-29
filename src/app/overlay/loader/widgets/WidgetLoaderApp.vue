@@ -32,7 +32,7 @@ const emit = defineEmits<{
   hidden: [];
 }>();
 
-const LEAVE_DURATION = 2200;
+const LEAVE_DURATION = 2600;
 
 const isRendered = ref(props.isVisible);
 const isActionRunning = ref(false);
@@ -213,7 +213,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 
 .widget-loader-app--leaving {
   pointer-events: none;
-  animation: widget-loader-app-background-leave 2200ms var(--app-motion-ease-default) forwards;
+  animation: widget-loader-app-background-leave 2600ms linear forwards;
 }
 
 .widget-loader-app__content {
@@ -234,15 +234,15 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 
 .widget-loader-app--leaving .widget-loader-app__status,
 .widget-loader-app--leaving .widget-loader-app__version {
-  animation: widget-loader-app-secondary-leave 320ms ease-out forwards;
+  animation: widget-loader-app-secondary-leave 300ms ease-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__wordmark {
-  animation: widget-loader-app-wordmark-leave 620ms 60ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: widget-loader-app-wordmark-leave 520ms 300ms ease-in-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__exit-logo {
-  animation: widget-loader-app-logo-to-center 1940ms 40ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: widget-loader-app-logo-to-center 2200ms 300ms linear forwards;
 }
 
 @keyframes widget-loader-app-secondary-leave {
@@ -253,16 +253,9 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 }
 
 @keyframes widget-loader-app-wordmark-leave {
-  0% {
+  0%,
+  20% {
     opacity: 1;
-  }
-
-  35% {
-    opacity: 0.82;
-  }
-
-  70% {
-    opacity: 0.3;
   }
 
   100% {
@@ -276,34 +269,34 @@ async function handleErrorAction(action: iLoaderErrorAction) {
     transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
   }
 
-  10% {
-    opacity: 0.16;
+  5% {
+    opacity: 0;
     transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
   }
 
-  22% {
-    opacity: 0.5;
-    transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
-  }
-
-  34% {
+  24% {
     opacity: 1;
     transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
   }
 
-  70% {
+  32% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
+  }
+
+  68% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
 
-  90% {
+  88% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
 
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(1.04);
+    transform: translate(-50%, -50%) scale(1.03);
   }
 }
 
