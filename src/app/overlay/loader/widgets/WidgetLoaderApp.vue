@@ -5,6 +5,7 @@ import AppGrid from '@/app/shared/components/atoms/block/AppGrid.vue';
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
 import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
 import AppLineLoader from '@/app/shared/components/ui/loader/AppLineLoader.vue';
+import type { tAppLineLoaderMode } from '@/app/shared/components/ui/loader/AppLineLoader.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
 import AppStatusBlock from '@/app/shared/components/ui/status/AppStatusBlock.vue';
 import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
@@ -13,15 +14,17 @@ import type { iLoaderErrorAction, iLoaderResourceError } from '@/app/stores/load
 type tWidgetLoaderPhase = 'loading' | 'complete' | 'leaving';
 
 interface Props {
-  isActive?: boolean;
+  isVisible?: boolean;
   progress?: number;
+  progressMode?: tAppLineLoaderMode;
   text: string;
   error?: iLoaderResourceError;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  isActive: false,
+  isVisible: false,
   progress: 0,
+  progressMode: 'determinate',
   error: undefined,
 });
 
@@ -29,17 +32,21 @@ const emit = defineEmits<{
   hidden: [];
 }>();
 
-const isRendered = ref(props.isActive);
+const isRendered = ref(props.isVisible);
 const isActionRunning = ref(false);
 const phase = ref<tWidgetLoaderPhase>('loading');
 
 const loaderClass = computed(() => ['widget-loader-app', `widget-loader-app--${phase.value}`]);
 
 watch(
-  () => props.isActive,
-  (isActive) => {
-    if (!isActive) {
-      phase.value = props.progress >= 100 ? 'complete' : 'leaving';
+  () => props.isVisible,
+  (isVisible) => {
+    if (!isVisible) {
+      if (!isRendered.value) {
+        return;
+      }
+
+      phase.value = props.progressMode === 'determinate' && props.progress >= 100 ? 'complete' : 'leaving';
 
       return;
     }
@@ -58,7 +65,7 @@ watch(
 );
 
 function handleLoaderProgressComplete() {
-  if (props.isActive || phase.value !== 'complete') {
+  if (props.isVisible || phase.value !== 'complete') {
     return;
   }
 
@@ -132,6 +139,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
 
         <AppLineLoader
           v-else
+          :mode="progressMode"
           :progress="progress"
           :text="text"
           size="big"

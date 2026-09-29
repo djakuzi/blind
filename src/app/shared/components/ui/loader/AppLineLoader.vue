@@ -6,6 +6,7 @@ import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { LibNumber } from '@/core/lib/number';
 
+export type tAppLineLoaderMode = 'determinate' | 'indeterminate';
 type tAppLineLoaderVariant = 'primary';
 
 interface iAppLineLoaderActions {
@@ -13,6 +14,7 @@ interface iAppLineLoaderActions {
 }
 
 interface Props {
+  mode?: tAppLineLoaderMode;
   progress?: number;
   size?: tBaseSizeVariant;
   maxWidth?: PropsAppBlock['maxWidth'];
@@ -23,6 +25,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  mode: 'determinate',
   progress: 0,
   size: 'middle',
   maxWidth: '100%',
@@ -44,6 +47,7 @@ const loaderClass = computed(() => [
   'app-line-loader',
   `app-line-loader--${props.variant}`,
   `app-line-loader--size-${props.size}`,
+  `app-line-loader--${props.mode}`,
   {
     'app-line-loader--has-text': Boolean(props.text),
   },
@@ -51,8 +55,20 @@ const loaderClass = computed(() => [
 
 const progressScale = computed(() => normalizedProgress.value / 100);
 
+const progressAria = computed(() => {
+  if (props.mode === 'indeterminate') {
+    return {};
+  }
+
+  return {
+    'aria-valuenow': normalizedProgress.value,
+    'aria-valuemin': 0,
+    'aria-valuemax': 100,
+  };
+});
+
 function handleProgressTransitionEnd(event: TransitionEvent) {
-  if (event.propertyName !== 'transform' || normalizedProgress.value < 100) {
+  if (props.mode !== 'determinate' || event.propertyName !== 'transform' || normalizedProgress.value < 100) {
     return;
   }
 
@@ -70,6 +86,10 @@ function emitComplete() {
 }
 
 async function waitProgressAnimationComplete() {
+  if (props.mode !== 'determinate') {
+    return;
+  }
+
   await nextTick();
 
   const animations = progressElement.value?.getAnimations() ?? [];
@@ -85,9 +105,9 @@ async function waitProgressAnimationComplete() {
 }
 
 watch(
-  normalizedProgress,
-  (progress) => {
-    if (progress < 100) {
+  [normalizedProgress, () => props.mode],
+  ([progress, mode]) => {
+    if (mode !== 'determinate' || progress < 100) {
       hasCompleted.value = false;
 
       return;
@@ -101,14 +121,7 @@ watch(
 
 <template>
   <AppFlex :class="loaderClass" direction="column" align="center" :width="width" :max-width="maxWidth">
-    <AppBlock
-      class="app-line-loader__track"
-      overflow="hidden"
-      role="progressbar"
-      :aria-valuenow="normalizedProgress"
-      aria-valuemin="0"
-      aria-valuemax="100"
-    >
+    <AppBlock class="app-line-loader__track" overflow="hidden" role="progressbar" v-bind="progressAria">
       <div
         ref="progressElement"
         class="app-line-loader__progress"
@@ -134,9 +147,20 @@ watch(
   width: 100%;
   height: 100%;
   border-radius: inherit;
+  background: var(--app-color-primary);
+}
+
+.app-line-loader--determinate .app-line-loader__progress {
   transform: scaleX(var(--cp-line-loader-progress));
   transform-origin: left center;
   transition: transform var(--app-motion-duration-medium) var(--app-motion-ease-default);
+}
+
+.app-line-loader--indeterminate .app-line-loader__progress {
+  width: 34%;
+  transform: translate3d(-120%, 0, 0);
+  animation: app-line-loader-indeterminate 1.15s var(--app-motion-ease-in-out) infinite;
+  will-change: transform;
 }
 
 .app-line-loader__text {
@@ -145,12 +169,6 @@ watch(
   line-height: var(--app-line-height-control);
   letter-spacing: var(--app-letter-spacing-wider);
   text-transform: uppercase;
-}
-
-.app-line-loader--primary {
-  .app-line-loader__progress {
-    background: var(--app-color-primary);
-  }
 }
 
 .app-line-loader--size-small {
@@ -194,6 +212,24 @@ watch(
 
   &.app-line-loader--size-big {
     gap: var(--app-space-7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-line-loader--indeterminate .app-line-loader__progress {
+    width: 34%;
+    transform: translate3d(0, 0, 0);
+    animation: none;
+  }
+}
+
+@keyframes app-line-loader-indeterminate {
+  from {
+    transform: translate3d(-120%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(395%, 0, 0);
   }
 }
 </style>
