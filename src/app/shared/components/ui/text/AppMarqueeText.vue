@@ -27,6 +27,8 @@ const cloneRef = ref<HTMLElement | null>(null);
 const isOverflowing = ref(false);
 const loopDistance = ref(0);
 
+const isMarqueeActive = computed(() => isOverflowing.value && loopDistance.value > 0);
+
 let resizeObserver: ResizeObserver | null = null;
 
 const marqueeDuration = computed(() => {
@@ -41,18 +43,34 @@ const marqueeStyle = computed(() => ({
   '--cp-marquee-text-duration': marqueeDuration.value,
 }));
 
-function updateMarquee() {
+async function updateMarquee() {
   const viewport = viewportRef.value;
   const content = contentRef.value;
-  const clone = cloneRef.value;
 
-  if (!viewport || !content || !clone) {
+  if (!viewport || !content) {
     isOverflowing.value = false;
     loopDistance.value = 0;
     return;
   }
 
-  isOverflowing.value = content.scrollWidth - viewport.clientWidth > 1;
+  const nextIsOverflowing = content.scrollWidth - viewport.clientWidth > 1;
+
+  isOverflowing.value = nextIsOverflowing;
+
+  if (!nextIsOverflowing) {
+    loopDistance.value = 0;
+    return;
+  }
+
+  await nextTick();
+
+  const clone = cloneRef.value;
+
+  if (!clone) {
+    loopDistance.value = 0;
+    return;
+  }
+
   loopDistance.value = Math.max(0, clone.offsetLeft - content.offsetLeft);
 }
 
@@ -92,7 +110,7 @@ onBeforeUnmount(() => {
   <span
     ref="viewportRef"
     class="app-marquee-text"
-    :class="{ 'app-marquee-text--active': isOverflowing }"
+    :class="{ 'app-marquee-text--active': isMarqueeActive }"
     :style="marqueeStyle"
   >
     <span class="app-marquee-text__track">
@@ -107,7 +125,12 @@ onBeforeUnmount(() => {
         />
       </span>
 
-      <span ref="cloneRef" class="app-marquee-text__item app-marquee-text__item--clone" aria-hidden="true">
+      <span
+        v-if="isOverflowing"
+        ref="cloneRef"
+        class="app-marquee-text__item app-marquee-text__item--clone"
+        aria-hidden="true"
+      >
         <AppText
           :text="text"
           tag="span"
