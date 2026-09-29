@@ -32,7 +32,7 @@ const emit = defineEmits<{
   hidden: [];
 }>();
 
-const LEAVE_DURATION = 1700;
+const LEAVE_DURATION = 2200;
 
 const isRendered = ref(props.isVisible);
 const isActionRunning = ref(false);
@@ -150,8 +150,8 @@ async function handleErrorAction(action: iLoaderErrorAction) {
       <AppFlex class="widget-loader-app__content" direction="column" align="center" max-width="100%" width="100%">
         <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
 
-        <div class="widget-loader-app__status">
-          <AppStatusBlock
+        <AppStatusBlock
+            class="widget-loader-app__status"
             v-if="error"
             :text="error.title"
             variant="error"
@@ -174,8 +174,9 @@ async function handleErrorAction(action: iLoaderErrorAction) {
             </template>
           </AppStatusBlock>
 
-          <AppLineLoader
-            v-else
+        <AppLineLoader
+          v-else
+          class="widget-loader-app__status"
             :mode="progressMode"
             :progress="progress"
             :text="text"
@@ -183,8 +184,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
             width="70rem"
             max-width="100%"
             @complete="handleLoaderProgressComplete"
-          />
-        </div>
+        />
       </AppFlex>
 
       <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="52rem" height="52rem" />
@@ -213,16 +213,12 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 
 .widget-loader-app--leaving {
   pointer-events: none;
-  animation: widget-loader-app-background-leave 1700ms var(--app-motion-ease-default) forwards;
+  animation: widget-loader-app-background-leave 2200ms var(--app-motion-ease-default) forwards;
 }
 
 .widget-loader-app__content {
   gap: var(--app-space-5);
   transform: translateY(-2dvh);
-}
-
-.widget-loader-app__status {
-  display: contents;
 }
 
 .widget-loader-app__exit-logo {
@@ -232,21 +228,21 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   z-index: 1;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) translateX(-24rem) translateY(-2dvh) scale(0.48);
+  transform: translate(-50%, -50%) translateX(-42rem) translateY(-2dvh) scale(0.82);
   will-change: transform, opacity;
 }
 
 .widget-loader-app--leaving .widget-loader-app__status,
 .widget-loader-app--leaving .widget-loader-app__version {
-  animation: widget-loader-app-secondary-leave 260ms ease-out forwards;
+  animation: widget-loader-app-secondary-leave 320ms ease-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__wordmark {
-  animation: widget-loader-app-wordmark-leave 360ms 120ms ease-out forwards;
+  animation: widget-loader-app-wordmark-leave 420ms 180ms ease-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__exit-logo {
-  animation: widget-loader-app-logo-to-center 1500ms 80ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: widget-loader-app-logo-to-center 1900ms 120ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes widget-loader-app-secondary-leave {
@@ -270,25 +266,25 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 @keyframes widget-loader-app-logo-to-center {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) translateX(-24rem) translateY(-2dvh) scale(0.48);
+    transform: translate(-50%, -50%) translateX(-42rem) translateY(-2dvh) scale(0.82);
   }
 
-  8% {
+  6% {
     opacity: 1;
-    transform: translate(-50%, -50%) translateX(-24rem) translateY(-2dvh) scale(0.48);
+    transform: translate(-50%, -50%) translateX(-42rem) translateY(-2dvh) scale(0.82);
   }
 
-  24% {
+  28% {
     opacity: 1;
-    transform: translate(-50%, -50%) translateX(-24rem) translateY(-2dvh) scale(0.48);
+    transform: translate(-50%, -50%) translateX(-42rem) translateY(-2dvh) scale(0.82);
   }
 
-  62% {
+  68% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
 
-  88% {
+  90% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
@@ -301,7 +297,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 
 @keyframes widget-loader-app-background-leave {
   0%,
-  90% {
+  92% {
     opacity: 1;
   }
 
