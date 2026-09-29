@@ -18,6 +18,15 @@ function handleDocumentKeydown(event: KeyboardEvent) {
     return;
   }
 
+  if (!loader.isVisible.value) {
+    if (!event.metaKey && !event.ctrlKey && !event.altKey) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+
+    return;
+  }
+
   const loaderRoot = getLoaderRoot();
   const target = event.target;
 
@@ -52,6 +61,18 @@ function handleDocumentKeydown(event: KeyboardEvent) {
   const lastElement = focusableElements[focusableElements.length - 1];
 
   if (!firstElement || !lastElement) {
+    return;
+  }
+
+  if (document.activeElement === loaderRoot) {
+    event.preventDefault();
+
+    if (event.shiftKey) {
+      lastElement.focus({ preventScroll: true });
+    } else {
+      firstElement.focus({ preventScroll: true });
+    }
+
     return;
   }
 
