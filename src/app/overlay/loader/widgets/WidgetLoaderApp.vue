@@ -228,7 +228,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   z-index: 1;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) translateX(-42rem) translateY(-2dvh) scale(0.82);
+  transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
   will-change: transform, opacity;
 }
 
@@ -238,11 +238,11 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 }
 
 .widget-loader-app--leaving .widget-loader-app__wordmark {
-  animation: widget-loader-app-wordmark-leave 420ms 180ms ease-out forwards;
+  animation: widget-loader-app-wordmark-leave 620ms 60ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__exit-logo {
-  animation: widget-loader-app-logo-to-center 1900ms 120ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: widget-loader-app-logo-to-center 1940ms 40ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes widget-loader-app-secondary-leave {
@@ -253,9 +253,16 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 }
 
 @keyframes widget-loader-app-wordmark-leave {
-  0%,
-  30% {
+  0% {
     opacity: 1;
+  }
+
+  35% {
+    opacity: 0.82;
+  }
+
+  70% {
+    opacity: 0.3;
   }
 
   100% {
@@ -266,20 +273,25 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 @keyframes widget-loader-app-logo-to-center {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) translateX(-42rem) translateY(-2dvh) scale(0.82);
+    transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
   }
 
-  6% {
+  10% {
+    opacity: 0.16;
+    transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
+  }
+
+  22% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
+  }
+
+  34% {
     opacity: 1;
-    transform: translate(-50%, -50%) translateX(-42rem) translateY(-2dvh) scale(0.82);
+    transform: translate(-50%, -50%) translateX(-38.2rem) translateY(-2dvh) scale(0.69);
   }
 
-  28% {
-    opacity: 1;
-    transform: translate(-50%, -50%) translateX(-42rem) translateY(-2dvh) scale(0.82);
-  }
-
-  68% {
+  70% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
