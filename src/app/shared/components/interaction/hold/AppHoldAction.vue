@@ -4,6 +4,7 @@ import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { LibNumber } from '@/core/lib/number';
+import { ToolInput } from '@/core/tool/input';
 import { ToolVibration } from '@/core/tool/vibration';
 
 interface iAppHoldActionActions {
@@ -59,10 +60,6 @@ let activeTouchId: number | undefined;
 
 function getCurrentTime(): number {
   return performance.now();
-}
-
-function supportsPointerEvents(): boolean {
-  return typeof globalThis.PointerEvent !== 'undefined';
 }
 
 function setHoldStartPosition(x: number, y: number) {
@@ -349,7 +346,7 @@ function getActiveTouch(event: TouchEvent): Touch | undefined {
 }
 
 function startTouchHold(event: TouchEvent) {
-  if (supportsPointerEvents() || props.disabled) {
+  if (ToolInput.supportsPointerEvents() || props.disabled) {
     return;
   }
 
@@ -367,7 +364,7 @@ function startTouchHold(event: TouchEvent) {
 }
 
 function moveTouchHold(event: TouchEvent) {
-  if (supportsPointerEvents()) {
+  if (ToolInput.supportsPointerEvents()) {
     return;
   }
 
@@ -379,7 +376,7 @@ function moveTouchHold(event: TouchEvent) {
 }
 
 function resetTouchHold(event: TouchEvent) {
-  if (supportsPointerEvents()) {
+  if (ToolInput.supportsPointerEvents()) {
     return;
   }
 
@@ -392,7 +389,7 @@ function resetTouchHold(event: TouchEvent) {
 }
 
 function startMouseHold(event: MouseEvent) {
-  if (supportsPointerEvents() || props.disabled || event.button !== 0) {
+  if (ToolInput.supportsPointerEvents() || props.disabled || event.button !== 0) {
     return;
   }
 
@@ -403,7 +400,7 @@ function startMouseHold(event: MouseEvent) {
 }
 
 function moveMouseHold(event: MouseEvent) {
-  if (supportsPointerEvents() || activeTouchId !== undefined) {
+  if (ToolInput.supportsPointerEvents() || activeTouchId !== undefined) {
     return;
   }
 
@@ -413,7 +410,7 @@ function moveMouseHold(event: MouseEvent) {
 }
 
 function resetMouseHold() {
-  if (supportsPointerEvents() || activeTouchId !== undefined) {
+  if (ToolInput.supportsPointerEvents() || activeTouchId !== undefined) {
     return;
   }
 
