@@ -183,38 +183,22 @@ indeterminate
 
 Если в одной visual-session хотя бы один активный scope использует `indeterminate`, вся session остаётся `indeterminate` до полного скрытия loader. Это предотвращает визуальные скачки между неизвестным и процентным progress.
 
-Scope также задаёт display policy:
+Visual loader показывается сразу при появлении первого `pending` или `error` resource.
+
+После появления loader действует только minimum visible duration:
 
 ```text
-immediate
-→ visual loader показывается сразу
+операция завершилась раньше minimum visible duration
+→ дождаться остатка minimum visible duration
+→ начать leave-animation
 
-delayed
-→ visual loader показывается только если pending длится дольше show-delay
-
-Для операций, где пользователь ожидает явное подтверждение перехода состояния, допустим immediate даже при очень быстрой операции. Например ручная смена языка использует `indeterminate + immediate`.
-
-Startup языка использует `determinate + immediate`, чтобы перед открытием route UI полоса визуально дошла до 100%.
+операция длится дольше minimum visible duration
+→ после завершения сразу начать leave-animation
 ```
 
-Delayed policy не откладывает фактическую блокировку взаимодействия: transparent blocker включается сразу. Поэтому пользователь не может закрыть modal, выбрать второй вариант или продолжить ввод, пока visual loader ещё не появился.
+Minimum visible duration отсчитывается от момента фактического появления loader, а не от момента завершения операции. Это предотвращает короткое мерцание даже для очень быстрых операций.
 
-Для delayed loading действуют дополнительные правила:
-
-```text
-быстрый success до show-delay
-→ visual loader не показывается
-→ completed scopes очищаются без leave-animation
-
-error до show-delay
-→ error показывается сразу
-
-loader уже видим + retry
-→ повторный show-delay не применяется
-
-visual loader появился
-→ соблюдается minimum visible duration
-```
+Startup языка использует `determinate`, чтобы перед открытием route UI полоса визуально дошла до 100%. Ручная смена языка использует `indeterminate`, поскольку реальный процент загрузки locale неизвестен.
 
 Error-state удерживает presentation до завершения leave-animation. Explicit cancel runtime-операции может убрать scope и запустить уход loader без возврата к loading-state.
 
@@ -258,7 +242,7 @@ indeterminate
 → при prefers-reduced-motion остаётся статичный сегмент
 ```
 
-Provider также владеет input-blocking lifecycle. Пока delayed loader ещё не видим, pointer и keyboard input блокируются отдельно. Когда visual loader показан, focus переводится в loader и keyboard navigation остаётся внутри него до завершения session.
+Provider также владеет input-blocking lifecycle. Пока loader-session активна, underlying UI недоступен. Когда visual loader показан, focus переводится в loader и keyboard navigation остаётся внутри него до завершения session.
 
 ### Blocking Setup Retry
 

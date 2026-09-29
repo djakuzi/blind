@@ -1,15 +1,10 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
-import {
-  LOADER_MIN_VISIBLE_DURATION_MS,
-  LOADER_PROGRESS_MODE_DEFAULT,
-  LOADER_SHOW_DELAY_MS,
-} from '@/app/stores/loader/loader.const';
+import { LOADER_MIN_VISIBLE_DURATION_MS, LOADER_PROGRESS_MODE_DEFAULT } from '@/app/stores/loader/loader.const';
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import type {
   iLoaderResourceError,
   iLoaderScope,
-  tLoaderDisplayMode,
   tLoaderProgressMode,
 } from '@/app/stores/loader/loader.type';
 
@@ -31,10 +26,6 @@ export function useLoaderProvider() {
 
   const pendingScopes = computed(() => {
     return activeScopes.value.filter((scope) => hasScopeState(scope, ['pending']));
-  });
-
-  const activeDisplayMode = computed<tLoaderDisplayMode>(() => {
-    return pendingScopes.value.some((scope) => scope.displayMode === 'immediate') ? 'immediate' : 'delayed';
   });
 
   const activeProgressMode = computed<tLoaderProgressMode>(() => {
@@ -62,20 +53,9 @@ export function useLoaderProvider() {
   const sessionProgressMode = ref<tLoaderProgressMode>(LOADER_PROGRESS_MODE_DEFAULT);
 
   let visibleStartedAt = 0;
-  let showTimer: ReturnType<typeof setTimeout> | null = null;
   let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
-  const isInteractionBlocked = computed(() => isStoreActive.value && !isVisible.value);
   const isInputBlocked = computed(() => isStoreActive.value || hasVisualSession.value);
-
-  function clearShowTimer() {
-    if (!showTimer) {
-      return;
-    }
-
-    clearTimeout(showTimer);
-    showTimer = null;
-  }
 
   function clearHideTimer() {
     if (!hideTimer) {
@@ -103,7 +83,6 @@ export function useLoaderProvider() {
   }
 
   function showVisualNow() {
-    clearShowTimer();
     clearHideTimer();
 
     if (!hasVisualSession.value) {
@@ -116,23 +95,7 @@ export function useLoaderProvider() {
     isVisible.value = true;
   }
 
-  function scheduleVisualShow() {
-    if (showTimer || hasVisualSession.value) {
-      return;
-    }
-
-    showTimer = setTimeout(() => {
-      showTimer = null;
-
-      if (isStoreActive.value) {
-        showVisualNow();
-      }
-    }, LOADER_SHOW_DELAY_MS);
-  }
-
   function hideVisualWhenAllowed() {
-    clearShowTimer();
-
     if (!hasVisualSession.value) {
       loaderStore.clearCompletedScopes();
       presentationText.value = '';
@@ -168,25 +131,12 @@ export function useLoaderProvider() {
 
   function syncPresentation() {
     if (!isStoreActive.value) {
-      clearHideTimer();
       hideVisualWhenAllowed();
       return;
     }
 
     clearHideTimer();
-    syncPresentationContent();
-
-    if (hasVisualSession.value) {
-      isVisible.value = true;
-      return;
-    }
-
-    if (currentError.value || activeDisplayMode.value === 'immediate') {
-      showVisualNow();
-      return;
-    }
-
-    scheduleVisualShow();
+    showVisualNow();
   }
 
   function handleHidden() {
@@ -206,12 +156,11 @@ export function useLoaderProvider() {
     }
   }
 
-  watch([isStoreActive, currentError, currentText, activeDisplayMode, activeProgressMode], syncPresentation, {
+  watch([isStoreActive, currentError, currentText, activeProgressMode], syncPresentation, {
     immediate: true,
   });
 
   onBeforeUnmount(() => {
-    clearShowTimer();
     clearHideTimer();
   });
 
@@ -219,7 +168,6 @@ export function useLoaderProvider() {
     error: presentationError,
     handleHidden,
     isInputBlocked,
-    isInteractionBlocked,
     isVisible,
     progress,
     progressMode: sessionProgressMode,

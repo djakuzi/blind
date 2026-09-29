@@ -71,7 +71,6 @@ export function createLanguageSetup(pinia: Pinia): iSetup {
         scopeKey: APP_SETUP_LANGUAGE_SCOPE_KEY,
         title: staticLocale.value.loading.language,
         progressMode: 'determinate',
-        displayMode: 'immediate',
         resources: {
           [APP_SETUP_LANGUAGE_RESOURCE_KEY]: 'pending',
         },

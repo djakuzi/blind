@@ -139,7 +139,6 @@ async function handleLanguageChange(value: string) {
     scopeKey: LANGUAGE_CHANGE_SCOPE_KEY,
     title: changeLanguageModalLocale.value.loading,
     progressMode: 'indeterminate',
-    displayMode: 'immediate',
     resources: {
       [LANGUAGE_CHANGE_RESOURCE_KEY]: 'pending',
     },
