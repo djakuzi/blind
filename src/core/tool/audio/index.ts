@@ -5,6 +5,7 @@ export type {
   iAudioConfigureOptions,
   iAudioPlayOnceOptions,
   iAudioPlayOptions,
-  iAudioPreloadOptions,
+  iAudioPreloadResource,
+  iAudioResource,
   iAudioVolumeOptions,
 } from './type';
