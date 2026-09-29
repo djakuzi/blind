@@ -4,7 +4,8 @@ import type {
   iAudioConfigureOptions,
   iAudioPlayOnceOptions,
   iAudioPlayOptions,
-  iAudioPreloadOptions,
+  iAudioPreloadResource,
+  iAudioResource,
   iAudioVolumeOptions,
 } from './type';
 
@@ -16,19 +17,19 @@ export async function configure(options: iAudioConfigureOptions = {}) {
   await NativeAudio.configure(options);
 }
 
-export async function preload(options: iAudioPreloadOptions) {
+export async function preload(audio: iAudioPreloadResource) {
   await NativeAudio.preload({
-    assetId: options.id,
-    assetPath: options.src,
-    audioChannelNum: options.channels,
-    volume: options.volume,
+    assetId: audio.id,
+    assetPath: audio.src,
+    audioChannelNum: audio.channels,
+    volume: audio.volume,
     isUrl: false,
   });
 }
 
-export async function play(id: string, options: iAudioPlayOptions = {}) {
+export async function play(audio: iAudioResource, options: iAudioPlayOptions = {}) {
   await NativeAudio.play({
-    assetId: id,
+    assetId: audio.id,
     ...options,
   });
 }
@@ -41,35 +42,35 @@ export async function playOnce(options: iAudioPlayOnceOptions) {
   });
 }
 
-export async function pause(id: string) {
-  await NativeAudio.pause({ assetId: id });
+export async function pause(audio: iAudioResource) {
+  await NativeAudio.pause({ assetId: audio.id });
 }
 
-export async function resume(id: string) {
-  await NativeAudio.resume({ assetId: id });
+export async function resume(audio: iAudioResource) {
+  await NativeAudio.resume({ assetId: audio.id });
 }
 
-export async function loop(id: string) {
-  await NativeAudio.loop({ assetId: id });
+export async function loop(audio: iAudioResource) {
+  await NativeAudio.loop({ assetId: audio.id });
 }
 
-export async function stop(id: string) {
-  await NativeAudio.stop({ assetId: id });
+export async function stop(audio: iAudioResource) {
+  await NativeAudio.stop({ assetId: audio.id });
 }
 
-export async function unload(id: string) {
-  await NativeAudio.unload({ assetId: id });
+export async function unload(audio: iAudioResource) {
+  await NativeAudio.unload({ assetId: audio.id });
 }
 
-export async function setVolume(id: string, options: iAudioVolumeOptions) {
+export async function setVolume(audio: iAudioResource, options: iAudioVolumeOptions) {
   await NativeAudio.setVolume({
-    assetId: id,
+    assetId: audio.id,
     volume: options.volume,
   });
 }
 
-export async function isPlaying(id: string) {
-  return NativeAudio.isPlaying({ assetId: id });
+export async function isPlaying(audio: iAudioResource) {
+  return NativeAudio.isPlaying({ assetId: audio.id });
 }
 
 export async function destroy() {
