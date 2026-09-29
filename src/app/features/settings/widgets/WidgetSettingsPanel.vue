@@ -164,7 +164,6 @@ async function handleLanguageChange(value: string) {
             v-else-if="item.id === 'sound'"
             :model-value="soundEnabled"
             :accessibility-label="settingsLocale.sound"
-            width="12rem"
             @update:model-value="handleSoundEnabledChange"
           />
 
