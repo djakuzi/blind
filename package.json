@@ -21,7 +21,8 @@
     "format:check": "prettier \"{scripts,src,public}/**/*.{js,ts,vue,css,json,html}\" --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "app:generate:audio-assets": "node scripts/generators/generateAudioProject.js"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",
@@ -36,7 +37,8 @@
     "@capacitor/text-zoom": "^8.0.1",
     "pinia": "^4.0.3",
     "vue": "^3.5.39",
-    "vue-router": "^5.3.0"
+    "vue-router": "^5.3.0",
+    "@capgo/capacitor-native-audio": "^8.4.30"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.5.0",
