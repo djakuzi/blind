@@ -258,7 +258,12 @@ async function handleErrorAction(action: iLoaderErrorAction) {
     transform: translate(-50%, -50%) scale(0.72);
   }
 
-  24% {
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+
+  26% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
@@ -275,7 +280,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.76);
+    transform: translate(-50%, -50%) scale(0.84);
   }
 }
 
