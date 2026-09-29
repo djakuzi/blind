@@ -1,7 +1,6 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import {
-  LOADER_DISPLAY_MODE_DEFAULT,
   LOADER_MIN_VISIBLE_DURATION_MS,
   LOADER_PROGRESS_MODE_DEFAULT,
   LOADER_SHOW_DELAY_MS,
@@ -35,22 +34,16 @@ export function useLoaderProvider() {
   });
 
   const activeDisplayMode = computed<tLoaderDisplayMode>(() => {
-    return pendingScopes.value.some((scope) => scope.displayMode === 'immediate') ? 'immediate' : LOADER_DISPLAY_MODE_DEFAULT === 'immediate'
-      ? 'delayed'
-      : LOADER_DISPLAY_MODE_DEFAULT;
+    return pendingScopes.value.some((scope) => scope.displayMode === 'immediate') ? 'immediate' : 'delayed';
   });
 
   const activeProgressMode = computed<tLoaderProgressMode>(() => {
-    return activeScopes.value.some((scope) => scope.progressMode === 'indeterminate') ? 'indeterminate' : LOADER_PROGRESS_MODE_DEFAULT;
+    return activeScopes.value.some((scope) => scope.progressMode === 'indeterminate') ? 'indeterminate' : 'determinate';
   });
 
-  const text = computed(() => {
-    const loadingScope = pendingScopes.value[0];
+  const currentText = computed(() => pendingScopes.value[0]?.title ?? '');
 
-    return loadingScope?.title ?? '';
-  });
-
-  const error = computed<iLoaderResourceError | undefined>(() => {
+  const currentError = computed<iLoaderResourceError | undefined>(() => {
     for (const scope of scopesList.value) {
       const errorResource = Object.values(scope.resources).find((resource) => resource.state === 'error' && resource.error);
 
@@ -64,13 +57,15 @@ export function useLoaderProvider() {
 
   const isVisible = ref(false);
   const hasVisualSession = ref(false);
+  const presentationText = ref('');
+  const presentationError = ref<iLoaderResourceError>();
   const sessionProgressMode = ref<tLoaderProgressMode>(LOADER_PROGRESS_MODE_DEFAULT);
 
   let visibleStartedAt = 0;
   let showTimer: ReturnType<typeof setTimeout> | null = null;
   let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
-  const isInteractionBlocked = computed(() => isStoreActive.value && !hasVisualSession.value);
+  const isInteractionBlocked = computed(() => isStoreActive.value && !isVisible.value);
 
   function clearShowTimer() {
     if (!showTimer) {
@@ -90,7 +85,17 @@ export function useLoaderProvider() {
     hideTimer = null;
   }
 
-  function updateSessionProgressMode() {
+  function syncPresentationContent() {
+    if (currentText.value) {
+      presentationText.value = currentText.value;
+    }
+
+    if (currentError.value) {
+      presentationError.value = currentError.value;
+    } else if (isStoreActive.value) {
+      presentationError.value = undefined;
+    }
+
     if (activeProgressMode.value === 'indeterminate') {
       sessionProgressMode.value = 'indeterminate';
     }
@@ -104,10 +109,9 @@ export function useLoaderProvider() {
       hasVisualSession.value = true;
       visibleStartedAt = Date.now();
       sessionProgressMode.value = activeProgressMode.value;
-    } else {
-      updateSessionProgressMode();
     }
 
+    syncPresentationContent();
     isVisible.value = true;
   }
 
@@ -130,6 +134,8 @@ export function useLoaderProvider() {
 
     if (!hasVisualSession.value) {
       loaderStore.clearCompletedScopes();
+      presentationText.value = '';
+      presentationError.value = undefined;
       return;
     }
 
@@ -162,14 +168,14 @@ export function useLoaderProvider() {
     }
 
     clearHideTimer();
-    updateSessionProgressMode();
+    syncPresentationContent();
 
     if (hasVisualSession.value) {
       isVisible.value = true;
       return;
     }
 
-    if (error.value || activeDisplayMode.value === 'immediate') {
+    if (currentError.value || activeDisplayMode.value === 'immediate') {
       showVisualNow();
       return;
     }
@@ -183,6 +189,8 @@ export function useLoaderProvider() {
     hasVisualSession.value = false;
     isVisible.value = false;
     visibleStartedAt = 0;
+    presentationText.value = '';
+    presentationError.value = undefined;
     sessionProgressMode.value = LOADER_PROGRESS_MODE_DEFAULT;
 
     loaderStore.clearCompletedScopes();
@@ -192,7 +200,7 @@ export function useLoaderProvider() {
     }
   }
 
-  watch([isStoreActive, error, activeDisplayMode, activeProgressMode], syncPresentation, {
+  watch([isStoreActive, currentError, currentText, activeDisplayMode, activeProgressMode], syncPresentation, {
     immediate: true,
   });
 
@@ -202,12 +210,12 @@ export function useLoaderProvider() {
   });
 
   return {
-    error,
+    error: presentationError,
     handleHidden,
     isInteractionBlocked,
     isVisible,
     progress,
     progressMode: sessionProgressMode,
-    text,
+    text: presentationText,
   };
 }
