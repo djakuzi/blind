@@ -258,7 +258,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
     transform: translate(-50%, -50%) scale(0.72);
   }
 
-  16% {
+  24% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
@@ -268,7 +268,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
     transform: translate(-50%, -50%) scale(1);
   }
 
-  68% {
+  60% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
@@ -281,7 +281,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 
 @keyframes widget-loader-app-background-leave {
   0%,
-  50% {
+  55% {
     opacity: 1;
   }
 
