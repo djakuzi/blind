@@ -10,6 +10,7 @@
     "app:generate:style-contracts": "node scripts/generators/generateStyleContracts.js",
     "app:generate:docs-versions": "node scripts/generators/generateDocsVersions.js",
     "app:generate:icons-assets": "node scripts/generators/generateIconsProject.js",
+    "app:generate:audio-assets": "node scripts/generators/generateAudioProject.js",
     "app:generate:fonts-woff2": "node scripts/generators/generateFontsWoff2.js",
     "dev": "vite --mode debug",
     "dev:debug": "vite --mode debug",
@@ -21,8 +22,7 @@
     "format:check": "prettier \"{scripts,src,public}/**/*.{js,ts,vue,css,json,html}\" --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preview": "vite preview",
-    "app:generate:audio-assets": "node scripts/generators/generateAudioProject.js"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",
@@ -35,10 +35,10 @@
     "@capacitor/screen-orientation": "^8.0.1",
     "@capacitor/status-bar": "^8.0.3",
     "@capacitor/text-zoom": "^8.0.1",
+    "@capgo/capacitor-native-audio": "^8.4.30",
     "pinia": "^4.0.3",
     "vue": "^3.5.39",
-    "vue-router": "^5.3.0",
-    "@capgo/capacitor-native-audio": "^8.4.30"
+    "vue-router": "^5.3.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.5.0",
