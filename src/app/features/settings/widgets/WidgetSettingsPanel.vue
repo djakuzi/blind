@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
 import AppSwitch from '@/app/shared/components/ui/control/AppSwitch.vue';
@@ -133,14 +133,12 @@ async function handleLanguageChange(value: string) {
       :accessibility-label="settingsLocale.accessibilityLabel"
     >
       <template #item="{ item }">
-        <AppText
+        <AppMarqueeText
+          class="widget-settings-panel__label"
           :text="settingsLabelMap[item.id]"
-          tag="span"
           font-size="xl"
           font-weight="medium"
           :uppercase="true"
-          :ellipsis="true"
-          :max-lines="1"
         />
 
         <AppFlex class="widget-settings-panel__control" align="center" justify="end" width="100%" max-width="60rem">
@@ -197,6 +195,11 @@ async function handleLanguageChange(value: string) {
 <style scoped>
 .widget-settings-panel {
   margin-inline: auto;
+}
+
+.widget-settings-panel__label {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .widget-settings-panel__control {
