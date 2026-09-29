@@ -80,9 +80,9 @@ onMounted(() => {
       <template #hint>
         <AppHoldHint
           :text="preGameLocale.holdHint"
-          :desktop-items="[preGameLocale.desktopWheelHint, preGameLocale.desktopSelectHint]"
+          :fine-pointer-items="[preGameLocale.desktopWheelHint, preGameLocale.desktopSelectHint]"
           direction="column"
-          desktop-direction="column"
+          fine-pointer-direction="column"
           size="middle"
           max-width="100%"
         />

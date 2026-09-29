@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import AppPulseAttention from '@/app/shared/components/effects/attention/AppPulseAttention.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
@@ -8,18 +8,19 @@ import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/pres
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+import { ToolInput } from '@/core/tool/input';
 
 export type tAppHoldHintDirection = 'row' | 'column';
 
 export interface PropsAppHoldHint {
   text?: string;
   items?: readonly string[];
-  desktopItems?: readonly string[];
+  finePointerItems?: readonly string[];
   size?: tBaseSizeVariant;
   direction?: tAppHoldHintDirection;
-  desktopDirection?: tAppHoldHintDirection;
+  finePointerDirection?: tAppHoldHintDirection;
   gap?: tSpaceValue;
-  desktopGap?: tSpaceValue;
+  finePointerGap?: tSpaceValue;
   maxWidth?: tStyleSizeValue;
   color?: tColorValue;
   fontSize?: tFontSizeValue;
@@ -30,12 +31,12 @@ export interface PropsAppHoldHint {
 }
 
 const props = withDefaults(defineProps<PropsAppHoldHint>(), {
-  desktopItems: undefined,
+  finePointerItems: undefined,
   size: 'middle',
   direction: 'column',
-  desktopDirection: undefined,
+  finePointerDirection: undefined,
   gap: undefined,
-  desktopGap: undefined,
+  finePointerGap: undefined,
   maxWidth: '100%',
   color: 'text-secondary',
   fontSize: undefined,
@@ -44,6 +45,10 @@ const props = withDefaults(defineProps<PropsAppHoldHint>(), {
   pulseScale: 1.025,
   uppercase: true,
 });
+
+const hasFineHoverPointer = ref(ToolInput.hasFineHoverPointer());
+
+let unsubscribeFineHoverPointer: (() => void) | undefined;
 
 const resolvedItems = computed<readonly string[]>(() => {
   if (props.items?.length) {
@@ -57,27 +62,51 @@ const resolvedItems = computed<readonly string[]>(() => {
   return [];
 });
 
-const resolvedDesktopItems = computed<readonly string[]>(() => {
-  if (props.desktopItems?.length) {
-    return props.desktopItems;
+const resolvedFinePointerItems = computed<readonly string[]>(() => {
+  if (props.finePointerItems?.length) {
+    return props.finePointerItems;
   }
 
   return resolvedItems.value;
 });
 
-const hintDirection = computed(() => props.direction);
+const hintItems = computed(() => {
+  return hasFineHoverPointer.value ? resolvedFinePointerItems.value : resolvedItems.value;
+});
 
-const hintDesktopDirection = computed(() => props.desktopDirection ?? props.direction);
+const hintDirection = computed(() => {
+  if (hasFineHoverPointer.value) {
+    return props.finePointerDirection ?? props.direction;
+  }
 
-const hintGap = computed(() => resolveSpaceValue(props.gap ?? BASE_SIZE_SPACE_PRESET[props.size]));
+  return props.direction;
+});
 
-const hintDesktopGap = computed(() => resolveSpaceValue(props.desktopGap ?? props.gap ?? BASE_SIZE_SPACE_PRESET[props.size]));
+const hintGap = computed(() => {
+  if (hasFineHoverPointer.value) {
+    return resolveSpaceValue(props.finePointerGap ?? props.gap ?? BASE_SIZE_SPACE_PRESET[props.size]);
+  }
+
+  return resolveSpaceValue(props.gap ?? BASE_SIZE_SPACE_PRESET[props.size]);
+});
 
 const hintMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 
 const hintColor = computed(() => resolveColorValue(props.color));
 
 const hintFontSize = computed(() => resolveFontSizeValue(props.fontSize ?? BASE_SIZE_FONT_PRESET[props.size]));
+
+onMounted(() => {
+  hasFineHoverPointer.value = ToolInput.hasFineHoverPointer();
+
+  unsubscribeFineHoverPointer = ToolInput.onFineHoverPointerChange((matches) => {
+    hasFineHoverPointer.value = matches;
+  });
+});
+
+onBeforeUnmount(() => {
+  unsubscribeFineHoverPointer?.();
+});
 </script>
 
 <template>
@@ -88,14 +117,8 @@ const hintFontSize = computed(() => resolveFontSizeValue(props.fontSize ?? BASE_
         'app-hold-hint--uppercase': uppercase,
       }"
     >
-      <div class="app-hold-hint__content app-hold-hint__content--default">
-        <span v-for="(item, index) in items" :key="index" class="app-hold-hint__item">
-          {{ item }}
-        </span>
-      </div>
-
-      <div class="app-hold-hint__content app-hold-hint__content--desktop">
-        <span v-for="(item, index) in resolvedDesktopItems" :key="index" class="app-hold-hint__item">
+      <div class="app-hold-hint__content">
+        <span v-for="(item, index) in hintItems" :key="index" class="app-hold-hint__item">
           {{ item }}
         </span>
       </div>
@@ -123,36 +146,17 @@ const hintFontSize = computed(() => resolveFontSizeValue(props.fontSize ?? BASE_
 }
 
 .app-hold-hint__content {
+  display: flex;
   align-items: center;
   justify-content: center;
   min-width: 0;
   max-width: 100%;
-}
-
-.app-hold-hint__content--default {
-  display: flex;
   flex-direction: v-bind(hintDirection);
   gap: v-bind(hintGap);
-}
-
-.app-hold-hint__content--desktop {
-  display: none;
-  flex-direction: v-bind(hintDesktopDirection);
-  gap: v-bind(hintDesktopGap);
 }
 
 .app-hold-hint__item {
   min-width: 0;
   text-wrap: balance;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .app-hold-hint__content--default {
-    display: none;
-  }
-
-  .app-hold-hint__content--desktop {
-    display: flex;
-  }
 }
 </style>
