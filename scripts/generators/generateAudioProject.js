@@ -36,6 +36,7 @@ const importsBlock = audioFiles
 const entriesBlock = audioFiles
   .map(
     ({ audioId, importName, type }) => `  '${audioId}': {
+    id: '${audioId}',
     src: ${importName},
     type: '${type}',
   },`,
