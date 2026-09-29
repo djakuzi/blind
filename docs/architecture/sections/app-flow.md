@@ -170,11 +170,48 @@ Resource является единственным источником исти
 
 Scope группирует связанные resources и может содержать presentation-title. Отдельный `scope.isLoaded` не хранится: завершённость scope вычисляется по его resources.
 
-Глобальный loader считает progress как отношение:
+Глобальный loader поддерживает два режима progress:
 
 ```text
-loaded resources / all resources
+determinate
+→ progress вычисляется как loaded resources / all resources
+
+indeterminate
+→ процент неизвестен, показывается бесконечное движение сегмента
 ```
+
+Если в одной visual-session хотя бы один активный scope использует `indeterminate`, вся session остаётся `indeterminate` до полного скрытия loader. Это предотвращает визуальные скачки между неизвестным и процентным progress.
+
+Scope также задаёт display policy:
+
+```text
+immediate
+→ visual loader показывается сразу
+
+delayed
+→ visual loader показывается только если pending длится дольше show-delay
+```
+
+Delayed policy не откладывает фактическую блокировку взаимодействия: transparent blocker включается сразу. Поэтому пользователь не может закрыть modal, выбрать второй вариант или продолжить ввод, пока visual loader ещё не появился.
+
+Для delayed loading действуют дополнительные правила:
+
+```text
+быстрый success до show-delay
+→ visual loader не показывается
+→ completed scopes очищаются без leave-animation
+
+error до show-delay
+→ error показывается сразу
+
+loader уже видим + retry
+→ повторный show-delay не применяется
+
+visual loader появился
+→ соблюдается minimum visible duration
+```
+
+Error-state удерживает presentation до завершения leave-animation. Explicit cancel runtime-операции может убрать scope и запустить уход loader без возврата к loading-state.
 
 Presentation выбирается provider-слоем:
 
@@ -201,7 +238,22 @@ Presentation выбирается provider-слоем:
 
 Runner не зависит от loader implementation.
 
-Widget глобального loader остаётся presentation-компонентом: он получает `progress`, `text`, `error` и action через provider, отображает `AppLineLoader` или `AppStatusBlock`, но напрямую store не использует.
+Widget глобального loader остаётся presentation-компонентом: он получает `progress`, `progressMode`, `text`, `error` и actions через provider, отображает `AppLineLoader` или `AppStatusBlock`, но напрямую store не использует.
+
+`AppLineLoader` различает:
+
+```text
+determinate
+→ имеет aria-valuenow/min/max
+→ может завершать собственную progress-анимацию
+
+indeterminate
+→ aria-valuenow отсутствует
+→ бесконечная animation не участвует в completion lifecycle
+→ при prefers-reduced-motion остаётся статичный сегмент
+```
+
+Provider также владеет input-blocking lifecycle. Пока delayed loader ещё не видим, pointer и keyboard input блокируются отдельно. Когда visual loader показан, focus переводится в loader и keyboard navigation остаётся внутри него до завершения session.
 
 ### Blocking Setup Retry
 
