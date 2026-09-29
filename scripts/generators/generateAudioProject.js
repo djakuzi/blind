@@ -6,7 +6,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const audioDir = resolve(root, 'src/assets/audio');
 const outputDirectory = resolve(root, 'src/core/media');
 const outputPath = resolve(outputDirectory, 'audio.ts');
-const supportedExtensions = new Set(['.mp3', '.wav', '.ogg']);
+const supportedExtensions = new Set(['.mp3', '.wav']);
 
 const audioFiles = collectAudioFiles(audioDir)
   .sort((left, right) => left.localeCompare(right))
