@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppGrid from '@/app/shared/components/atoms/block/AppGrid.vue';
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
@@ -32,10 +32,13 @@ const emit = defineEmits<{
   hidden: [];
 }>();
 
+const LEAVE_DURATION = 900;
+
 const isRendered = ref(props.isVisible);
 const isActionRunning = ref(false);
 const isProgressComplete = ref(false);
 const phase = ref<tWidgetLoaderPhase>('loading');
+let leaveTimer: ReturnType<typeof setTimeout> | undefined;
 
 const loaderClass = computed(() => ['widget-loader-app', `widget-loader-app--${phase.value}`]);
 
@@ -58,6 +61,7 @@ watch(
       return;
     }
 
+    clearLeaveTimer();
     isRendered.value = true;
     isProgressComplete.value = false;
     phase.value = 'loading';
@@ -65,12 +69,43 @@ watch(
   { immediate: true },
 );
 
+watch(phase, (currentPhase) => {
+  if (currentPhase !== 'leaving') {
+    return;
+  }
+
+  clearLeaveTimer();
+  leaveTimer = setTimeout(finishLeaving, LEAVE_DURATION);
+});
+
 watch(
   () => props.error,
   () => {
     isActionRunning.value = false;
   },
 );
+
+onBeforeUnmount(clearLeaveTimer);
+
+function clearLeaveTimer() {
+  if (leaveTimer === undefined) {
+    return;
+  }
+
+  clearTimeout(leaveTimer);
+  leaveTimer = undefined;
+}
+
+function finishLeaving() {
+  clearLeaveTimer();
+
+  if (phase.value !== 'leaving') {
+    return;
+  }
+
+  isRendered.value = false;
+  emit('hidden');
+}
 
 function handleLoaderProgressComplete() {
   isProgressComplete.value = true;
@@ -95,15 +130,6 @@ async function handleErrorAction(action: iLoaderErrorAction) {
     isActionRunning.value = false;
   }
 }
-
-function handleLoaderAnimationEnd(event: AnimationEvent) {
-  if (event.target !== event.currentTarget || phase.value !== 'leaving') {
-    return;
-  }
-
-  isRendered.value = false;
-  emit('hidden');
-}
 </script>
 
 <template>
@@ -120,7 +146,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
       left: 0,
     }"
   >
-    <AppGrid :class="loaderClass" place-items="center" min-height="100dvh" @animationend="handleLoaderAnimationEnd">
+    <AppGrid :class="loaderClass" place-items="center" min-height="100dvh">
       <AppFlex class="widget-loader-app__content" direction="column" align="center" max-width="100%" width="100%">
         <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
 
@@ -161,7 +187,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
         </div>
       </AppFlex>
 
-      <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="20rem" height="20rem" />
+      <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="34rem" height="34rem" />
 
       <AppPosition
         class="widget-loader-app__version"
@@ -187,7 +213,7 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
 
 .widget-loader-app--leaving {
   pointer-events: none;
-  animation: widget-loader-app-leave 1100ms var(--app-motion-ease-default) forwards;
+  animation: widget-loader-app-background-leave 900ms var(--app-motion-ease-default) forwards;
 }
 
 .widget-loader-app__content {
@@ -203,75 +229,73 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
   position: absolute;
   top: 50%;
   left: 50%;
+  z-index: 1;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) translate(-42rem, -2dvh) scale(0.92);
-  will-change: transform, opacity, filter;
+  transform: translate(-50%, -50%) translateX(-31rem) translateY(-2dvh) scale(0.72);
+  will-change: transform, opacity;
 }
 
 .widget-loader-app--leaving .widget-loader-app__status,
 .widget-loader-app--leaving .widget-loader-app__version {
-  animation: widget-loader-app-secondary-leave 180ms var(--app-motion-ease-default) forwards;
+  animation: widget-loader-app-secondary-leave 160ms ease-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__wordmark {
-  animation: widget-loader-app-wordmark-leave 260ms 100ms var(--app-motion-ease-default) forwards;
+  animation: widget-loader-app-wordmark-leave 220ms 80ms ease-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__exit-logo {
-  animation: widget-loader-app-logo-leave 900ms 100ms var(--app-motion-ease-default) forwards;
+  animation: widget-loader-app-logo-to-center 780ms 40ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes widget-loader-app-secondary-leave {
   to {
     opacity: 0;
-    filter: blur(3px);
-    transform: translateY(1rem);
+    transform: translateY(0.5rem);
   }
 }
 
 @keyframes widget-loader-app-wordmark-leave {
   0%,
-  35% {
+  30% {
     opacity: 1;
   }
 
   100% {
     opacity: 0;
-    filter: blur(2px);
   }
 }
 
-@keyframes widget-loader-app-logo-leave {
+@keyframes widget-loader-app-logo-to-center {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) translate(-42rem, -2dvh) scale(0.92);
+    transform: translate(-50%, -50%) translateX(-31rem) translateY(-2dvh) scale(0.72);
   }
 
-  12% {
+  10% {
     opacity: 1;
   }
 
-  55% {
+  58% {
     opacity: 1;
-    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 
-  72% {
+  82% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
 
   100% {
     opacity: 0;
-    filter: blur(2px);
-    transform: translate(-50%, -50%) scale(1.12);
+    transform: translate(-50%, -50%) scale(1.06);
   }
 }
 
-@keyframes widget-loader-app-leave {
+@keyframes widget-loader-app-background-leave {
   0%,
-  72% {
+  82% {
     opacity: 1;
   }
 
@@ -282,17 +306,20 @@ function handleLoaderAnimationEnd(event: AnimationEvent) {
 
 @media (prefers-reduced-motion: reduce) {
   .widget-loader-app--leaving {
-    animation-duration: var(--app-motion-duration-slower);
+    animation: widget-loader-app-reduced-leave 200ms ease-out forwards;
   }
 
   .widget-loader-app--leaving .widget-loader-app__status,
   .widget-loader-app--leaving .widget-loader-app__version,
-  .widget-loader-app--leaving .widget-loader-app__wordmark {
+  .widget-loader-app--leaving .widget-loader-app__wordmark,
+  .widget-loader-app--leaving .widget-loader-app__exit-logo {
     animation: none;
   }
 
-  .widget-loader-app--leaving .widget-loader-app__exit-logo {
-    display: none;
+  @keyframes widget-loader-app-reduced-leave {
+    to {
+      opacity: 0;
+    }
   }
 }
 </style>
