@@ -20,9 +20,9 @@
         "ui": {
           "accessibilityLabel": "Выбор режима игры",
           "itemAccessibilityLabel": "{current} из {total}",
-          "holdHint": "Зажмите карточку по центру, чтобы выбрать",
+          "holdHint": "Зажмите кнопку для выбора",
           "desktopWheelHint": "Колесо мыши — смена режима",
-          "desktopSelectHint": "Зажмите карточку — выбрать",
+          "desktopSelectHint": "Зажмите кнопку для выбора",
           "loadError": "Не удалось загрузить режимы игры",
           "loading": "Загрузка...",
           "modeOptionsAccessibilityLabel": "Параметры режима",

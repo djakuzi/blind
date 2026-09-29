@@ -20,9 +20,9 @@
         "ui": {
           "accessibilityLabel": "Game mode selection",
           "itemAccessibilityLabel": "{current} of {total}",
-          "holdHint": "Hold the centered card to select",
+          "holdHint": "Hold button to select",
           "desktopWheelHint": "Mouse wheel — change mode",
-          "desktopSelectHint": "Hold the card — select",
+          "desktopSelectHint": "Hold button to select",
           "loadError": "Failed to load game modes",
           "loading": "Loading...",
           "modeOptionsAccessibilityLabel": "Game mode parameters",
