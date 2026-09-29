@@ -151,39 +151,39 @@ async function handleErrorAction(action: iLoaderErrorAction) {
         <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
 
         <AppStatusBlock
-            class="widget-loader-app__status"
-            v-if="error"
-            :text="error.title"
-            variant="error"
-            size="big"
-            width="70rem"
-            max-width="100%"
-          >
-            <template v-if="error.actions?.length" #action>
-              <AppFlex align="center" justify="center" wrap="wrap" :gap="3" width="100%">
-                <AppButton
-                  v-for="(action, index) in error.actions"
-                  :key="`${action.title}-${index}`"
-                  :text="action.title"
-                  :variant="index === 0 ? 'primary' : 'secondary'"
-                  :disabled="isActionRunning"
-                  size="small"
-                  @click="handleErrorAction(action)"
-                />
-              </AppFlex>
-            </template>
-          </AppStatusBlock>
+          v-if="error"
+          class="widget-loader-app__status"
+          :text="error.title"
+          variant="error"
+          size="big"
+          width="70rem"
+          max-width="100%"
+        >
+          <template v-if="error.actions?.length" #action>
+            <AppFlex align="center" justify="center" wrap="wrap" :gap="3" width="100%">
+              <AppButton
+                v-for="(action, index) in error.actions"
+                :key="`${action.title}-${index}`"
+                :text="action.title"
+                :variant="index === 0 ? 'primary' : 'secondary'"
+                :disabled="isActionRunning"
+                size="small"
+                @click="handleErrorAction(action)"
+              />
+            </AppFlex>
+          </template>
+        </AppStatusBlock>
 
         <AppLineLoader
           v-else
           class="widget-loader-app__status"
-            :mode="progressMode"
-            :progress="progress"
-            :text="text"
-            size="big"
-            width="70rem"
-            max-width="100%"
-            @complete="handleLoaderProgressComplete"
+          :mode="progressMode"
+          :progress="progress"
+          :text="text"
+          size="big"
+          width="70rem"
+          max-width="100%"
+          @complete="handleLoaderProgressComplete"
         />
       </AppFlex>
 
@@ -209,11 +209,12 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   overflow: hidden;
   padding: var(--app-safe-area-vertical) var(--app-safe-area-horizontal);
   background: var(--app-color-background);
+  --widget-loader-app-leave-duration: 1900ms;
 }
 
 .widget-loader-app--leaving {
   pointer-events: none;
-  animation: widget-loader-app-background-leave 1900ms ease-out forwards;
+  animation: widget-loader-app-background-leave var(--widget-loader-app-leave-duration) ease-out forwards;
 }
 
 .widget-loader-app__content {
@@ -232,20 +233,17 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   will-change: transform, opacity;
 }
 
+.widget-loader-app--leaving .widget-loader-app__wordmark,
 .widget-loader-app--leaving .widget-loader-app__status,
 .widget-loader-app--leaving .widget-loader-app__version {
-  animation: widget-loader-app-secondary-leave 240ms ease-out forwards;
-}
-
-.widget-loader-app--leaving .widget-loader-app__wordmark {
-  animation: widget-loader-app-secondary-leave 240ms ease-out forwards;
+  animation: widget-loader-app-content-leave 240ms ease-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__exit-logo {
   animation: widget-loader-app-logo-leave 1750ms 100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-@keyframes widget-loader-app-secondary-leave {
+@keyframes widget-loader-app-content-leave {
   to {
     opacity: 0;
   }
@@ -264,11 +262,6 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   }
 
   26% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  55% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
