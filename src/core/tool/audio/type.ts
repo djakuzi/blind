@@ -3,6 +3,7 @@ export interface iAudioConfigureOptions {
   background?: boolean;
   ignoreSilent?: boolean;
   showNotification?: boolean;
+  backgroundPlayback?: boolean;
 }
 
 export interface iAudioPreloadOptions {
