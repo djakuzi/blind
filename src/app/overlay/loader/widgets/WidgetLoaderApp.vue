@@ -32,7 +32,7 @@ const emit = defineEmits<{
   hidden: [];
 }>();
 
-const LEAVE_DURATION = 900;
+const LEAVE_DURATION = 1700;
 
 const isRendered = ref(props.isVisible);
 const isActionRunning = ref(false);
@@ -187,7 +187,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
         </div>
       </AppFlex>
 
-      <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="34rem" height="34rem" />
+      <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="52rem" height="52rem" />
 
       <AppPosition
         class="widget-loader-app__version"
@@ -213,7 +213,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 
 .widget-loader-app--leaving {
   pointer-events: none;
-  animation: widget-loader-app-background-leave 900ms var(--app-motion-ease-default) forwards;
+  animation: widget-loader-app-background-leave 1700ms var(--app-motion-ease-default) forwards;
 }
 
 .widget-loader-app__content {
@@ -232,21 +232,21 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   z-index: 1;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) translateX(-31rem) translateY(-2dvh) scale(0.72);
+  transform: translate(-50%, -50%) translateX(-24rem) translateY(-2dvh) scale(0.48);
   will-change: transform, opacity;
 }
 
 .widget-loader-app--leaving .widget-loader-app__status,
 .widget-loader-app--leaving .widget-loader-app__version {
-  animation: widget-loader-app-secondary-leave 160ms ease-out forwards;
+  animation: widget-loader-app-secondary-leave 260ms ease-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__wordmark {
-  animation: widget-loader-app-wordmark-leave 220ms 80ms ease-out forwards;
+  animation: widget-loader-app-wordmark-leave 360ms 120ms ease-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__exit-logo {
-  animation: widget-loader-app-logo-to-center 780ms 40ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: widget-loader-app-logo-to-center 1500ms 80ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes widget-loader-app-secondary-leave {
@@ -270,32 +270,38 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 @keyframes widget-loader-app-logo-to-center {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) translateX(-31rem) translateY(-2dvh) scale(0.72);
+    transform: translate(-50%, -50%) translateX(-24rem) translateY(-2dvh) scale(0.48);
   }
 
-  10% {
+  8% {
     opacity: 1;
+    transform: translate(-50%, -50%) translateX(-24rem) translateY(-2dvh) scale(0.48);
   }
 
-  58% {
+  24% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateX(-24rem) translateY(-2dvh) scale(0.48);
+  }
+
+  62% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
 
-  82% {
+  88% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
 
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(1.06);
+    transform: translate(-50%, -50%) scale(1.04);
   }
 }
 
 @keyframes widget-loader-app-background-leave {
   0%,
-  82% {
+  90% {
     opacity: 1;
   }
 
