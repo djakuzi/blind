@@ -1,4 +1,5 @@
 import type { tAppLoadingStatus } from '@/app/shared/types/status';
+import { LOADER_DISPLAY_MODE_DEFAULT, LOADER_PROGRESS_MODE_DEFAULT } from './loader.const';
 import type {
   iLoaderResource,
   iLoaderResourceError,
@@ -22,6 +23,8 @@ export function createLoaderScope(payload: iRegisterLoaderScopePayload): iLoader
   return {
     key: payload.scopeKey,
     title: payload.title,
+    progressMode: payload.progressMode ?? LOADER_PROGRESS_MODE_DEFAULT,
+    displayMode: payload.displayMode ?? LOADER_DISPLAY_MODE_DEFAULT,
     resources,
   };
 }
@@ -54,6 +57,8 @@ export function setLoaderResourceStatus(
     loaderState.scopes[payload.scopeKey] ??
     (loaderState.scopes[payload.scopeKey] = {
       key: payload.scopeKey,
+      progressMode: LOADER_PROGRESS_MODE_DEFAULT,
+      displayMode: LOADER_DISPLAY_MODE_DEFAULT,
       resources: {},
     });
 

@@ -2,6 +2,8 @@ import type { tAppLoadingStatus } from '@/app/shared/types/status';
 
 export type tLoaderScopeKey = string;
 export type tLoaderResourceKey = string;
+export type tLoaderProgressMode = 'determinate' | 'indeterminate';
+export type tLoaderDisplayMode = 'immediate' | 'delayed';
 
 export interface iLoaderErrorAction {
   title: string;
@@ -22,6 +24,8 @@ export interface iLoaderResource {
 export interface iLoaderScope {
   key: tLoaderScopeKey;
   title?: string;
+  progressMode: tLoaderProgressMode;
+  displayMode: tLoaderDisplayMode;
   resources: Record<tLoaderResourceKey, iLoaderResource>;
 }
 
@@ -32,6 +36,8 @@ export interface iLoaderState {
 export interface iRegisterLoaderScopePayload {
   scopeKey: tLoaderScopeKey;
   title?: string;
+  progressMode?: tLoaderProgressMode;
+  displayMode?: tLoaderDisplayMode;
   resources: Record<tLoaderResourceKey, tAppLoadingStatus>;
 }
 

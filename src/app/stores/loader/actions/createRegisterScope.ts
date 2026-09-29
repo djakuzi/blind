@@ -12,6 +12,8 @@ export function createRegisterScope() {
     }
 
     currentScope.title = payload.title ?? currentScope.title;
+    currentScope.progressMode = payload.progressMode ?? currentScope.progressMode;
+    currentScope.displayMode = payload.displayMode ?? currentScope.displayMode;
 
     Object.entries(payload.resources).forEach(([resourceKey, state]) => {
       currentScope.resources[resourceKey] = createLoaderResource(state);
