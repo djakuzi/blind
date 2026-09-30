@@ -21,10 +21,12 @@ export type tAudioId = keyof typeof AUDIO_ASSETS
 export type tAudioGroupId = keyof typeof AUDIO_GROUPS
 export type tAudioType = 'sfx' | 'music'
 
-export function getAudio(id: tAudioId) {
-  return AUDIO_ASSETS[id]
-}
+export const MediaAudio = {
+  getAudio(id: tAudioId) {
+    return AUDIO_ASSETS[id]
+  },
 
-export function getAudioGroup(id: tAudioGroupId) {
-  return AUDIO_GROUPS[id].map((audioId) => AUDIO_ASSETS[audioId])
-}
+  getAudioGroup(id: tAudioGroupId) {
+    return AUDIO_GROUPS[id].map((audioId) => AUDIO_ASSETS[audioId])
+  },
+} as const
