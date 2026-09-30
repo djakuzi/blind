@@ -53,7 +53,7 @@ ${audioIds.map((audioId) => `    '${audioId}',`).join('\n')}
   )
   .join('\n');
 
-const content = `${importsBlock}${importsBlock ? '\n\n' : ''}export const AUDIO_ASSETS = {
+const content = `${importsBlock}${importsBlock ? '\n\n' : ''}const AUDIO_ASSETS = {
 ${entriesBlock}
 } as const
 
@@ -65,13 +65,15 @@ export type tAudioId = keyof typeof AUDIO_ASSETS
 export type tAudioGroupId = keyof typeof AUDIO_GROUPS
 export type tAudioType = 'sfx' | 'music'
 
-export function getAudio(id: tAudioId) {
-  return AUDIO_ASSETS[id]
-}
+export const MediaAudio = {
+  getAudio(id: tAudioId) {
+    return AUDIO_ASSETS[id]
+  },
 
-export function getAudioGroup(id: tAudioGroupId) {
-  return AUDIO_GROUPS[id].map((audioId) => AUDIO_ASSETS[audioId])
-}
+  getAudioGroup(id: tAudioGroupId) {
+    return AUDIO_GROUPS[id].map((audioId) => AUDIO_ASSETS[audioId])
+  },
+} as const
 `;
 
 mkdirSync(outputDirectory, { recursive: true });
