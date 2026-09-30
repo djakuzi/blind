@@ -4,8 +4,9 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const audioDir = resolve(root, 'src/assets/audio');
-const outputDirectory = resolve(root, 'src/core/media');
-const outputPath = resolve(outputDirectory, 'audio.ts');
+const outputDirectory = resolve(root, 'src/core/media/audio');
+const outputConstPath = resolve(outputDirectory, 'const.ts');
+const outputTypePath = resolve(outputDirectory, 'type.ts');
 const supportedExtensions = new Set(['.mp3', '.wav']);
 
 const audioFiles = collectAudioFiles(audioDir)
@@ -53,31 +54,25 @@ ${audioIds.map((audioId) => `    '${audioId}',`).join('\n')}
   )
   .join('\n');
 
-const content = `${importsBlock}${importsBlock ? '\n\n' : ''}const AUDIO_ASSETS = {
+const constContent = `${importsBlock}${importsBlock ? '\n\n' : ''}export const AUDIO_ASSETS = {
 ${entriesBlock}
 } as const
 
-const AUDIO_GROUPS = {
+export const AUDIO_GROUPS = {
 ${groupsBlock}
-} as const
-
-export type tAudioId = keyof typeof AUDIO_ASSETS
-export type tAudioGroupId = keyof typeof AUDIO_GROUPS
-export type tAudioType = 'sfx' | 'music'
-
-export const MediaAudio = {
-  getAudio(id: tAudioId) {
-    return AUDIO_ASSETS[id]
-  },
-
-  getAudioGroup(id: tAudioGroupId) {
-    return AUDIO_GROUPS[id].map((audioId) => AUDIO_ASSETS[audioId])
-  },
 } as const
 `;
 
+const typeContent = `import type { AUDIO_ASSETS, AUDIO_GROUPS } from './const';
+
+export type tAudioId = keyof typeof AUDIO_ASSETS;
+export type tAudioGroupId = keyof typeof AUDIO_GROUPS;
+export type tAudioType = 'sfx' | 'music';
+`;
+
 mkdirSync(outputDirectory, { recursive: true });
-writeFileSync(outputPath, content);
+writeFileSync(outputConstPath, constContent);
+writeFileSync(outputTypePath, typeContent);
 
 console.log(`audio generated: ${audioFiles.length}`);
 
