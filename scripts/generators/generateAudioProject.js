@@ -29,6 +29,8 @@ const audioFiles = collectAudioFiles(audioDir)
 
 validateAudioIds(audioFiles);
 
+const audioGroups = buildAudioGroups(audioFiles);
+
 const importsBlock = audioFiles
   .map(({ importName, relativePath }) => `import ${importName} from '@/assets/audio/${relativePath}'`)
   .join('\n');
@@ -43,11 +45,24 @@ const entriesBlock = audioFiles
   )
   .join('\n');
 
+const groupsBlock = audioGroups
+  .map(
+    ({ groupId, audioIds }) => `  '${groupId}': [
+${audioIds.map((audioId) => `    AUDIO_ASSETS['${audioId}'],`).join('\n')}
+  ],`,
+  )
+  .join('\n');
+
 const content = `${importsBlock}${importsBlock ? '\n\n' : ''}export const AUDIO_ASSETS = {
 ${entriesBlock}
 } as const
 
+export const AUDIO_GROUPS = {
+${groupsBlock}
+} as const
+
 export type tAudioId = keyof typeof AUDIO_ASSETS
+export type tAudioGroupId = keyof typeof AUDIO_GROUPS
 export type tAudioType = 'sfx' | 'music'
 `;
 
@@ -76,6 +91,29 @@ function collectAudioFiles(directoryPath) {
 function buildAudioId(relativePath) {
   const extension = extname(relativePath);
   return relativePath.slice(0, -extension.length).split('/').join('.');
+}
+
+function buildAudioGroups(audioFiles) {
+  const groups = new Map();
+
+  for (const { relativePath, audioId } of audioFiles) {
+    const directoryParts = relativePath.split('/').slice(0, -1);
+
+    for (let depth = 1; depth <= directoryParts.length; depth += 1) {
+      const groupId = directoryParts.slice(0, depth).join('.');
+      const audioIds = groups.get(groupId) ?? [];
+
+      audioIds.push(audioId);
+      groups.set(groupId, audioIds);
+    }
+  }
+
+  return [...groups.entries()]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([groupId, audioIds]) => ({
+      groupId,
+      audioIds,
+    }));
 }
 
 function validateAudioIds(audioFiles) {
