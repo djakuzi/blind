@@ -1,14 +1,14 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TGroup extends tIconGroup">
 import { computed } from 'vue';
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tIconGroup, tIconName } from '@/core/media/assets';
+import type { tIconGroup, tIconName } from '@/core/media/icons';
 
 interface Props {
-  group: tIconGroup;
-  icon: tIconName<tIconGroup>;
+  group: TGroup;
+  icon: tIconName<TGroup>;
   width: PropsAppBlock['width'];
   height?: PropsAppBlock['height'];
   iconWidth?: PropsAppBlock['width'];
