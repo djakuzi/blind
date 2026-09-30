@@ -6,10 +6,10 @@ import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
 import { MediaAudio } from '@/core/media/audio';
-import { ToolAudio } from '@/core/tool/audio';
 import type { iAudioResource } from '@/core/tool/audio';
 import { ToolInput } from '@/core/tool/input';
 import { ToolVibration } from '@/core/tool/vibration';
+import { useAudio } from '@/app/shared/composables/audio/useAudio';
 
 interface iAppHoldActionActions {
   complete?: () => void;
@@ -48,6 +48,8 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
 const emit = defineEmits<{
   complete: [];
 }>();
+
+const { play } = useAudio();
 
 const isHolding = ref(false);
 const hasCompleted = ref(false);
@@ -127,9 +129,7 @@ function completeHold() {
   });
 
   if (props.sound !== null) {
-    ToolAudio.play(props.sound).catch((error) => {
-      console.error('Failed to play hold completion sound:', error);
-    });
+    play(props.sound);
   }
 
   props.actions?.complete?.();
