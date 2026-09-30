@@ -6,6 +6,7 @@ import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldActio
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import type { iAudioResource } from '@/core/tool/audio';
 
 type tAppButtonHoldVariant = 'primary';
 
@@ -21,6 +22,7 @@ interface Props {
   fillDuration?: number;
   initialProgress?: number;
   releaseDuration?: number;
+  sound?: iAudioResource | null;
   vibrationDuration?: number;
   size?: tBaseSizeVariant;
   maxWidth?: tStyleSizeValue;
@@ -68,6 +70,7 @@ function handleComplete() {
     :initial-progress="initialProgress"
     :max-width="holdActionMaxWidth"
     :release-duration="releaseDuration"
+    :sound="sound"
     :vibration-duration="vibrationDuration"
     :width="holdActionWidth"
     @complete="handleComplete"
