@@ -8,8 +8,8 @@ import { createViewSetup } from './platform/view.setup';
 export function createAppSetupRegistry(pinia: Pinia) {
   return [
     createViewSetup(),
-    createAudioSetup(pinia),
     createLanguageSetup(pinia),
+    createAudioSetup(pinia),
     createScaleSetup(pinia),
     createThemeSetup(pinia),
   ];
