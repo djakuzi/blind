@@ -12,6 +12,8 @@ import type {
 let muted = false;
 const activeAudioIds = new Set<string>();
 const activeLoops = new Map<string, iAudioResource>();
+const preloadedAudioIds = new Set<string>();
+const preloadRequests = new Map<string, Promise<void>>();
 
 export async function configure(options: iAudioConfigureOptions = {}) {
   if (!Capacitor.isNativePlatform()) {
@@ -21,14 +23,57 @@ export async function configure(options: iAudioConfigureOptions = {}) {
   await NativeAudio.configure(options);
 }
 
-export async function preload(audio: iAudioPreloadResource) {
-  await NativeAudio.preload({
+function isAudioPreloadResourceList(
+  input: iAudioPreloadResource | readonly iAudioPreloadResource[],
+): input is readonly iAudioPreloadResource[] {
+  return Array.isArray(input);
+}
+
+async function preloadResource(audio: iAudioPreloadResource) {
+  if (preloadedAudioIds.has(audio.id)) {
+    return;
+  }
+
+  const activeRequest = preloadRequests.get(audio.id);
+
+  if (activeRequest !== undefined) {
+    await activeRequest;
+    return;
+  }
+
+  const options = {
     assetId: audio.id,
     assetPath: audio.src,
     audioChannelNum: audio.channels,
     volume: audio.volume,
     isUrl: false,
-  });
+  };
+
+  const request = (async () => {
+    const { found } = await NativeAudio.isPreloaded(options);
+
+    if (!found) {
+      await NativeAudio.preload(options);
+    }
+
+    preloadedAudioIds.add(audio.id);
+  })();
+
+  preloadRequests.set(audio.id, request);
+
+  try {
+    await request;
+  } finally {
+    if (preloadRequests.get(audio.id) === request) {
+      preloadRequests.delete(audio.id);
+    }
+  }
+}
+
+export async function preload(audio: iAudioPreloadResource | readonly iAudioPreloadResource[]) {
+  const resources = isAudioPreloadResourceList(audio) ? audio : [audio];
+
+  await Promise.all(resources.map((resource) => preloadResource(resource)));
 }
 
 export async function play(audio: iAudioResource, options: iAudioPlayOptions = {}) {
@@ -104,7 +149,15 @@ export async function unload(audio: iAudioResource) {
   activeAudioIds.delete(audio.id);
   activeLoops.delete(audio.id);
 
+  const preloadRequest = preloadRequests.get(audio.id);
+
+  if (preloadRequest !== undefined) {
+    await preloadRequest;
+  }
+
   await NativeAudio.unload({ assetId: audio.id });
+
+  preloadedAudioIds.delete(audio.id);
 }
 
 export async function setVolume(audio: iAudioResource, options: iAudioVolumeOptions) {
@@ -142,8 +195,12 @@ export async function setMuted(value: boolean) {
 }
 
 export async function destroy() {
+  await Promise.allSettled([...preloadRequests.values()]);
+
   activeAudioIds.clear();
   activeLoops.clear();
+  preloadedAudioIds.clear();
+  preloadRequests.clear();
 
   await NativeAudio.deinitPlugin();
 }
