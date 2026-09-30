@@ -51,6 +51,7 @@ function handleComplete() {
     :initial-progress="initialProgress"
     :move-cancel-threshold="moveCancelThreshold"
     :release-duration="releaseDuration"
+    :sound="sound"
     :vibration-duration="vibrationDuration"
     :width="width"
     :max-width="maxWidth"
