@@ -21,7 +21,7 @@ Attribution:
 No separate attribution requirement was identified in the Adobe documentation checked on the date above.
 
 Content Credentials:
-Adobe may attach Content Credentials / C2PA metadata to qualifying Firefly-generated assets. Preserve provenance metadata when practical and do not intentionally misrepresent the origin of generated assets.
+If Adobe attaches Content Credentials to generated output, they must not be removed, altered, or disabled.
 
 Official references:
 
