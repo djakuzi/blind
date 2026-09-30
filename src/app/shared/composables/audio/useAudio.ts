@@ -7,8 +7,10 @@ type tAudioInput = iAudioResource | iAudioResource[];
 export function useAudio() {
   const loops = shallowReactive(new Map<string, iAudioResource>());
 
-  async function play(audio: iAudioResource, options: iAudioPlayOptions = {}) {
-    await ToolAudio.play(audio, options);
+  function play(audio: iAudioResource, options: iAudioPlayOptions = {}) {
+    ToolAudio.play(audio, options).catch((error) => {
+      console.error(`Failed to play audio "${audio.id}":`, error);
+    });
   }
 
   async function loop(input: tAudioInput) {
