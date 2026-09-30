@@ -4,9 +4,9 @@ export const STATIC_LOCALE_REGISTRY = {
   en: {
     loading: {
       base: 'Loading',
-      language: 'Checking your language',
+      language: 'Finding the right words',
       languageError: 'Failed to load language',
-      audio: 'Loading audio',
+      audio: 'Tuning your hearing',
       audioError: 'Failed to load audio',
       retry: 'Retry',
     },
@@ -14,9 +14,9 @@ export const STATIC_LOCALE_REGISTRY = {
   ru: {
     loading: {
       base: 'Загрузка',
-      language: 'Проверяем ваш язык',
+      language: 'Подбираем слова',
       languageError: 'Не удалось загрузить язык',
-      audio: 'Загружаем звук',
+      audio: 'Настраиваем слух',
       audioError: 'Не удалось загрузить звук',
       retry: 'Повторить',
     },
