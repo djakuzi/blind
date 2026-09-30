@@ -2,7 +2,7 @@ import { watch } from 'vue';
 import type { Pinia } from 'pinia';
 import { useSettingsStore } from '@/app/stores/settings/settings.store';
 import type { iSetup } from '@/core/app/setup/setup.type';
-import { AUDIO_GROUPS } from '@/core/media/audio';
+import { getAudioGroup } from '@/core/media/audio';
 import { ToolAudio } from '@/core/tool/audio';
 
 export function createAudioSetup(pinia: Pinia): iSetup {
@@ -12,7 +12,7 @@ export function createAudioSetup(pinia: Pinia): iSetup {
     key: 'audio',
 
     async preMount() {
-      await ToolAudio.preload(AUDIO_GROUPS['sfx.interaction']);
+      await ToolAudio.preload(getAudioGroup('sfx.interaction'));
       await ToolAudio.setMuted(!settingsStore.soundEnabled);
 
       watch(
