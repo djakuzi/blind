@@ -5,7 +5,7 @@ import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
-import { AUDIO_ASSETS } from '@/core/media/audio';
+import { getAudio } from '@/core/media/audio';
 import { ToolAudio } from '@/core/tool/audio';
 import type { iAudioResource } from '@/core/tool/audio';
 import { ToolInput } from '@/core/tool/input';
@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   maxWidth: '100%',
   moveCancelThreshold: 6,
   releaseDuration: 140,
-  sound: () => AUDIO_ASSETS['sfx.interaction.hold-complete'],
+  sound: () => getAudio('sfx.interaction.hold-complete'),
   vibrationDuration: 45,
   width: '100%',
 });
