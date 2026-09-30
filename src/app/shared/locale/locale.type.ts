@@ -3,6 +3,8 @@ export interface iStaticLocale {
     base: string;
     language: string;
     languageError: string;
+    audio: string;
+    audioError: string;
     retry: string;
   };
 }
