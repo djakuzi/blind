@@ -3,11 +3,11 @@ import { computed } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
-import { ICONS_ASSETS, type tIconAssets, type tIconGroup, type tIconName } from '@/core/media/assets';
+import { MediaIcons, type tIconGroup, type tIconName } from '@/core/media/icons';
 
-export interface PropsAppIcon {
-  group: tIconGroup;
-  icon: tIconName<tIconGroup>;
+export interface PropsAppIcon<TGroup extends tIconGroup = tIconGroup> {
+  group: TGroup;
+  icon: tIconName<TGroup>;
   width: PropsAppBlock['width'];
   height?: PropsAppBlock['height'];
   maxWidth?: PropsAppBlock['maxWidth'];
@@ -15,7 +15,7 @@ export interface PropsAppIcon {
   alt?: string;
 }
 
-const props = withDefaults(defineProps<PropsAppIcon>(), {
+const props = withDefaults(defineProps<PropsAppIcon<TGroup>>(), {
   height: 'auto',
   maxWidth: '100%',
   display: 'block',
@@ -24,15 +24,7 @@ const props = withDefaults(defineProps<PropsAppIcon>(), {
 
 const { resolvedThemeMode } = useAppThemeMode();
 
-const iconSvg = computed(() => {
-  const groupAssets = ICONS_ASSETS[props.group] as tIconAssets;
-
-  const themeSuffix = resolvedThemeMode.value === 'dark' ? 'Dark' : 'Light';
-
-  const themedIconName = `${props.icon}${themeSuffix}`;
-
-  return groupAssets[themedIconName] ?? groupAssets[props.icon] ?? '';
-});
+const iconSvg = computed(() => MediaIcons.getIcon(props.group, props.icon, resolvedThemeMode.value));
 </script>
 
 <template>
