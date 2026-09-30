@@ -1,39 +1,47 @@
 import { onUnmounted, shallowReactive } from 'vue';
+import { MediaAudio } from '@/core/media/audio';
+import type { tAudioId } from '@/core/media/audio';
 import type { iAudioPlayOptions, iAudioResource } from '@/core/tool/audio';
 import { ToolAudio } from '@/core/tool/audio';
 
-type tAudioInput = iAudioResource | iAudioResource[];
+type tAudioInput = tAudioId | readonly tAudioId[];
 
 export function useAudio() {
-  const loops = shallowReactive(new Map<string, iAudioResource>());
+  const loops = shallowReactive(new Map<tAudioId, iAudioResource>());
 
-  function play(audio: iAudioResource, options: iAudioPlayOptions = {}) {
+  function play(id: tAudioId, options: iAudioPlayOptions = {}) {
+    const audio = MediaAudio.getAudio(id);
+
     ToolAudio.play(audio, options).catch((error) => {
-      console.error(`Failed to play audio "${audio.id}":`, error);
+      console.error(`Failed to play audio "${id}":`, error);
     });
   }
 
   async function loop(input: tAudioInput) {
-    const resources = Array.isArray(input) ? input : [input];
+    const ids = Array.isArray(input) ? input : [input];
 
     await Promise.all(
-      resources.map(async (audio) => {
-        if (loops.has(audio.id)) {
+      ids.map(async (id) => {
+        if (loops.has(id)) {
           return;
         }
 
-        loops.set(audio.id, audio);
+        const audio = MediaAudio.getAudio(id);
+
+        loops.set(id, audio);
         await ToolAudio.loop(audio);
       }),
     );
   }
 
   async function stop(input: tAudioInput) {
-    const resources = Array.isArray(input) ? input : [input];
+    const ids = Array.isArray(input) ? input : [input];
 
     await Promise.all(
-      resources.map(async (audio) => {
-        loops.delete(audio.id);
+      ids.map(async (id) => {
+        const audio = loops.get(id) ?? MediaAudio.getAudio(id);
+
+        loops.delete(id);
         await ToolAudio.stop(audio);
       }),
     );
