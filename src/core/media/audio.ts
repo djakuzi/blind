@@ -8,15 +8,23 @@ export const AUDIO_ASSETS = {
   },
 } as const
 
-export const AUDIO_GROUPS = {
+const AUDIO_GROUPS = {
   'sfx': [
-    AUDIO_ASSETS['sfx.interaction.hold-complete'],
+    'sfx.interaction.hold-complete',
   ],
   'sfx.interaction': [
-    AUDIO_ASSETS['sfx.interaction.hold-complete'],
+    'sfx.interaction.hold-complete',
   ],
 } as const
 
 export type tAudioId = keyof typeof AUDIO_ASSETS
 export type tAudioGroupId = keyof typeof AUDIO_GROUPS
 export type tAudioType = 'sfx' | 'music'
+
+export function getAudio(id: tAudioId) {
+  return AUDIO_ASSETS[id]
+}
+
+export function getAudioGroup(id: tAudioGroupId) {
+  return AUDIO_GROUPS[id].map((audioId) => AUDIO_ASSETS[audioId])
+}
