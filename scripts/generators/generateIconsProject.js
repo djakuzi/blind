@@ -4,8 +4,9 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const iconsDir = resolve(root, 'src/assets/icons');
-const outputDirectory = resolve(root, 'src/core/media');
-const outputPath = resolve(outputDirectory, 'assets.ts');
+const outputDirectory = resolve(root, 'src/core/media/icons');
+const outputConstPath = resolve(outputDirectory, 'const.ts');
+const outputTypePath = resolve(outputDirectory, 'type.ts');
 const excludedDirectories = [];
 
 const iconFiles = collectSvgFiles(iconsDir)
@@ -40,34 +41,32 @@ ${entries}
   })
   .join('\n');
 
-const typesBlock = [
-  'export type tIconGroup = keyof typeof ICONS_ASSETS',
-  'export type tIconAssets = Record<string, string>',
-  '',
-  'type tResolveIconName<TName extends string> =',
-  '  TName extends `${infer TIconName}Dark`',
-  '    ? TIconName',
-  '    : TName extends `${infer TIconName}Light`',
-  '      ? TIconName',
-  '      : TName',
-  '',
-  'export type tIconName<TGroup extends tIconGroup> =',
-  '  TGroup extends tIconGroup',
-  '    ? tResolveIconName<Extract<keyof (typeof ICONS_ASSETS)[TGroup], string>>',
-  '    : never',
-].join('\n');
-
-const content = `${importsBlock}
+const constContent = `${importsBlock}
 
 export const ICONS_ASSETS = {
 ${iconsBlock}
 } as const
+`;
 
-${typesBlock}
+const typeContent = `import type { ICONS_ASSETS } from './const';
+
+export type tIconGroup = keyof typeof ICONS_ASSETS;
+export type tIconTheme = 'light' | 'dark';
+
+type tResolveIconName<TName extends string> = TName extends \`${infer TIconName}Dark\`
+  ? TIconName
+  : TName extends \`${infer TIconName}Light\`
+    ? TIconName
+    : TName;
+
+export type tIconName<TGroup extends tIconGroup> = TGroup extends tIconGroup
+  ? tResolveIconName<Extract<keyof (typeof ICONS_ASSETS)[TGroup], string>>
+  : never;
 `;
 
 mkdirSync(outputDirectory, { recursive: true });
-writeFileSync(outputPath, content);
+writeFileSync(outputConstPath, constContent);
+writeFileSync(outputTypePath, typeContent);
 
 console.log(`icons generated: ${iconFiles.length}`);
 
