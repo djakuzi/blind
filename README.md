@@ -8,6 +8,7 @@ blind - the game
 - [Настройка проекта](./docs/settingsProject/index.md)
 - [Работа в проекте(CONTRIBUTING)](CONTRIBUTING.md)
 - [Архетектура](./docs/architecture/index.md)
+- [Аудио](./docs/audio/index.md)
 - [Плагины](./docs/plugins/index.md)
 - [Генераторы](./docs/generators/index.md)
 
