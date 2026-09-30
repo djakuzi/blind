@@ -11,6 +11,7 @@ blind - the game
 - [Плагины](./docs/plugins/index.md)
 - [Генераторы](./docs/generators/index.md)
 - [Интерфейс](./docs/interface/index.md)
+- [Аудио](./docs/audio/index.md)
 
 ## История изменений
 
