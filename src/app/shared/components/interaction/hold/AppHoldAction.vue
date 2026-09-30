@@ -120,9 +120,6 @@ function completeHold() {
     return;
   }
 
-  hasCompleted.value = true;
-  progress.value = 100;
-
   ToolVibration.vibrate({
     duration: props.vibrationDuration,
   });
@@ -130,6 +127,9 @@ function completeHold() {
   if (props.sound !== null) {
     play(props.sound);
   }
+
+  hasCompleted.value = true;
+  progress.value = 100;
 
   props.actions?.complete?.();
   emit('complete');
