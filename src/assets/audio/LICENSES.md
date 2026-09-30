@@ -2,14 +2,18 @@
 
 Audio assets can have licensing and usage terms that differ from the source code of the project.
 
-This directory keeps two kinds of records separate:
+## Structure
 
-- `licenses/sources/` — terms and usage notes for external providers or asset sources;
-- `licenses/assets/` — provenance and modifications for concrete audio assets.
+- `*.license.md` — provenance and usage information for the audio file beside it;
+- `licenses/sources/` — shared terms and notes for providers or asset sources.
 
-## Asset manifests
+Example:
 
-- [Sound effects](./licenses/assets/sfx.md)
+```text
+sfx/interaction/
+├── hold-complete.wav
+└── hold-complete.license.md
+```
 
 ## Sources
 
@@ -17,10 +21,9 @@ This directory keeps two kinds of records separate:
 
 ## Rules
 
-When adding a new audio asset:
+When adding an audio asset from an external source or generator:
 
-1. Record the asset in the appropriate file under `licenses/assets/`.
-2. Record a new source under `licenses/sources/` only when that source is not documented yet.
-3. Keep the source URL, author/provider, license or usage terms, attribution requirement, and acquisition/generation date.
-4. Record material edits such as trimming, conversion, normalization, mixing, or other processing.
-5. Do not add assets with unknown or incompatible usage rights.
+1. Keep its `*.license.md` beside the audio file.
+2. Record the source/provider, source terms, acquisition or generation date, and attribution requirement.
+3. Add a file under `licenses/sources/` only when that source is not documented yet.
+4. Do not add assets with unknown or incompatible usage rights.
