@@ -5,6 +5,9 @@ import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
+import { AUDIO_ASSETS } from '@/core/media/audio';
+import { ToolAudio } from '@/core/tool/audio';
+import type { iAudioResource } from '@/core/tool/audio';
 import { ToolInput } from '@/core/tool/input';
 import { ToolVibration } from '@/core/tool/vibration';
 
@@ -22,6 +25,7 @@ export interface PropsAppHoldAction {
   maxWidth?: tStyleSizeValue;
   moveCancelThreshold?: number;
   releaseDuration?: number;
+  sound?: iAudioResource | null;
   vibrationDuration?: number;
   width?: tStyleSizeValue;
 }
@@ -36,6 +40,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   maxWidth: '100%',
   moveCancelThreshold: 6,
   releaseDuration: 140,
+  sound: () => AUDIO_ASSETS['sfx.interaction.hold-complete'],
   vibrationDuration: 45,
   width: '100%',
 });
@@ -120,6 +125,12 @@ function completeHold() {
   ToolVibration.vibrate({
     duration: props.vibrationDuration,
   });
+
+  if (props.sound !== null) {
+    ToolAudio.play(props.sound).catch((error) => {
+      console.error('Failed to play hold completion sound:', error);
+    });
+  }
 
   props.actions?.complete?.();
   emit('complete');
