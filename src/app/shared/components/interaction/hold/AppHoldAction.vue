@@ -39,7 +39,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   maxWidth: '100%',
   moveCancelThreshold: 6,
   releaseDuration: 140,
-  sound: 'sfx.interaction.hold-complete-v2',
+  sound: 'sfx.interaction.hold-complete',
   vibrationDuration: 45,
   width: '100%',
 });

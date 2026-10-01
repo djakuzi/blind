@@ -18,6 +18,7 @@ sfx/interaction/
 ## Sources
 
 - [Adobe Firefly](./licenses/sources/adobe-firefly.md)
+- [ElevenLabs](./licenses/sources/elevenlabs.md)
 
 ## Rules
 
