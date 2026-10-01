@@ -39,6 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
   fillDuration: undefined,
   initialProgress: 15,
   releaseDuration: 140,
+  sound: 'sfx.interaction.hold-complete',
   vibrationDuration: 45,
   size: 'middle',
   maxWidth: '100%',

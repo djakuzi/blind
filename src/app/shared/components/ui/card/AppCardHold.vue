@@ -29,6 +29,7 @@ withDefaults(defineProps<PropsAppCardHold>(), {
   fillDuration: undefined,
   initialProgress: 15,
   releaseDuration: 140,
+  sound: 'sfx.interaction.hold-complete',
   vibrationDuration: 45,
 });
 
