@@ -1,4 +1,4 @@
-import { ToolStorage } from '@/core/platform/tool/storage';
+import { ToolStorage } from '@/core/platform';
 import { LANGUAGE_SELECTED_CODE_STORAGE_KEY } from '../language.const';
 import { findLanguageByCode, loadLanguageLocale } from '../helpers/language.helper';
 import type { iLanguageState } from '../language.type';
