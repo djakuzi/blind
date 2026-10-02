@@ -8,9 +8,7 @@ import type { iEnterViewFullscreenOptions } from './type';
 export type {
   iEnterViewFullscreenOptions,
   iSetupViewOptions,
-  iViewActionResult,
   iViewAdapter,
-  iViewValue,
   tViewFullscreenNavigation,
   tViewOrientation,
 } from './type';
