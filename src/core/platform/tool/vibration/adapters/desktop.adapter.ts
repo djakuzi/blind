@@ -2,7 +2,7 @@ import type { iVibrationAdapter, iVibrationResult } from '../type';
 
 function createUnsupportedResult(): iVibrationResult {
   return {
-    isPerformed: false,
+    isHandled: false,
   };
 }
 
