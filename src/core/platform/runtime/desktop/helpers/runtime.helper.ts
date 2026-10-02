@@ -1,5 +1,9 @@
-import { getDesktopBridge } from './bridge.helper';
+import { HelperBridge } from './bridge.helper';
 
-export function isDesktopRuntime() {
-  return getDesktopBridge()?.runtime.runtime === 'desktop';
+function isDesktopRuntime() {
+  return HelperBridge.getDesktopBridge()?.runtime.runtime === 'desktop';
 }
+
+export const HelperRuntime = {
+  isDesktopRuntime,
+};
