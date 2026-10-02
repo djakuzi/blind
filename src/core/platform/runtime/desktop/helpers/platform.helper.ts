@@ -1,8 +1,8 @@
-import type { tDesktopAppPlatform } from '../../type';
-import { getDesktopBridge } from './bridge.helper';
+import type { tDesktopAppPlatform } from '../type/platform.type';
+import { HelperBridge } from './bridge.helper';
 
-export function getDesktopPlatform(): tDesktopAppPlatform {
-  const bridge = getDesktopBridge();
+function getDesktopPlatform(): tDesktopAppPlatform {
+  const bridge = HelperBridge.getDesktopBridge();
 
   if (bridge === undefined) {
     throw new Error('Desktop bridge is not available');
@@ -10,3 +10,7 @@ export function getDesktopPlatform(): tDesktopAppPlatform {
 
   return bridge.runtime.platform;
 }
+
+export const HelperPlatform = {
+  getDesktopPlatform,
+};
