@@ -8,14 +8,6 @@ export const DesktopSystemAdapter: iSystemAdapter = {
     return HelperLanguage.getBrowserLanguage();
   },
 
-  async getCurrentScale() {
-    return HelperScale.getDefaultScale();
-  },
-
-  async getPreferredScale() {
-    return HelperScale.getDefaultScale();
-  },
-
   async getSystemScale() {
     return HelperScale.getDefaultScale();
   },
