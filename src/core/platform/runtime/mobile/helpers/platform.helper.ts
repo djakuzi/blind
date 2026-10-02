@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import type { tMobileAppPlatform } from '../../type';
 
-export function getMobilePlatform(): tMobileAppPlatform {
+function getMobilePlatform(): tMobileAppPlatform {
   const platform = Capacitor.getPlatform();
 
   if (platform === 'android' || platform === 'ios') {
@@ -10,3 +10,7 @@ export function getMobilePlatform(): tMobileAppPlatform {
 
   throw new Error(`Unsupported mobile platform: ${platform}`);
 }
+
+export const HelperPlatform = {
+  getMobilePlatform,
+};
