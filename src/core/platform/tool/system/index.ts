@@ -17,8 +17,6 @@ const SystemAdapter = resolveAdapter(
 
 export const {
   getSystemLanguage,
-  getCurrentScale,
-  getPreferredScale,
   getSystemScale,
   getPreferredThemeMode,
 } = SystemAdapter;
