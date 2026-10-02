@@ -1,7 +1,7 @@
 import { contextBridge } from 'electron';
-import type { iBlindBridge, tDesktopAppPlatform } from '../src/core/platform/runtime/type';
+import type { iElectronBridge, tElectronPlatform } from './type';
 
-function getDesktopPlatform(): tDesktopAppPlatform {
+function getDesktopPlatform(): tElectronPlatform {
   switch (process.platform) {
     case 'darwin':
       return 'macos';
@@ -19,6 +19,6 @@ const bridge = {
     runtime: 'desktop',
     platform: getDesktopPlatform(),
   },
-} satisfies iBlindBridge;
+} satisfies iElectronBridge;
 
 contextBridge.exposeInMainWorld('blind', bridge);
