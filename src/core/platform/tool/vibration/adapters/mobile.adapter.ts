@@ -29,7 +29,7 @@ async function performNative(action: () => Promise<void>, fallbackPattern: reado
     await action();
 
     return {
-      isPerformed: true,
+      isHandled: true,
     };
   } catch {
     return HelperBrowserVibration.vibrate(fallbackPattern);
