@@ -1,4 +1,5 @@
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
+import { ELECTRON_FILESYSTEM_IPC } from './ipc/filesystem.ipc';
 import type { iElectronBridge, tElectronPlatform } from './type';
 
 function getDesktopPlatform(): tElectronPlatform {
@@ -18,6 +19,20 @@ const bridge = {
   runtime: {
     runtime: 'desktop',
     platform: getDesktopPlatform(),
+  },
+
+  filesystem: {
+    writeFile(path, data) {
+      return ipcRenderer.invoke(ELECTRON_FILESYSTEM_IPC.writeFile, path, data);
+    },
+
+    readFile(path) {
+      return ipcRenderer.invoke(ELECTRON_FILESYSTEM_IPC.readFile, path);
+    },
+
+    removeFile(path) {
+      return ipcRenderer.invoke(ELECTRON_FILESYSTEM_IPC.removeFile, path);
+    },
   },
 } satisfies iElectronBridge;
 
