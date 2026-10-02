@@ -7,8 +7,7 @@ import { LANGUAGE_SELECTED_CODE_STORAGE_KEY } from '@/app/stores/language/langua
 import { useLanguageStore } from '@/app/stores/language/language.store';
 import { retryPostMountSetup } from '@/core/app/setup/setup.runner';
 import type { iSetup } from '@/core/app/setup/setup.type';
-import { ToolStorage } from '@/core/platform/tool/storage';
-import { ToolSystem } from '@/core/platform';
+import { ToolStorage, ToolSystem } from '@/core/platform';
 
 const APP_SETUP_LANGUAGE_SCOPE_KEY = 'app-setup-language';
 const APP_SETUP_LANGUAGE_RESOURCE_KEY = 'language';
@@ -53,7 +52,7 @@ export function createLanguageSetup(pinia: Pinia): iSetup {
     key: 'language',
 
     async preMount() {
-      const selectedCode = await ToolStorage.getItem(LANGUAGE_SELECTED_CODE_STORAGE_KEY);
+      const { value: selectedCode } = await ToolStorage.getItem(LANGUAGE_SELECTED_CODE_STORAGE_KEY);
 
       if (selectedCode) {
         languageStore.preferredLanguageCode = selectedCode;
