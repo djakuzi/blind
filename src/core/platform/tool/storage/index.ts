@@ -6,7 +6,7 @@ import { WebStorageAdapter } from './adapters/web.adapter';
 import { HelperCache } from './helpers/cache.helper';
 import type { iTimedStorageEntry } from './type';
 
-export type { iStorageAdapter, iStorageValue, iTimedStorageEntry } from './type';
+export type { iStorageAdapter, iTimedStorageEntry } from './type';
 
 const StorageAdapter = resolveAdapter(
   {
