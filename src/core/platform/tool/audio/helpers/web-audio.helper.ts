@@ -24,6 +24,7 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
   const activeSources = new Map<string, Set<AudioBufferSourceNode>>();
   const loopSources = new Map<string, AudioBufferSourceNode>();
   const activeLoops = new Map<string, iAudioResource>();
+  const loopRequests = new Map<string, Promise<void>>();
 
   function getAudioContext() {
     if (audioContext && audioContext.state !== 'closed') {
@@ -119,8 +120,6 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
 
     sources.add(source);
     activeSources.set(id, sources);
-
-    return sources;
   }
 
   function stopSource(source: AudioBufferSourceNode) {
@@ -179,7 +178,7 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
     source.loop = isLoop;
 
     const volume = HelperAudio.normalizeVolume(options.volume ?? resource.volume);
-    const offset = HelperAudio.normalizeTime(options.time);
+    const offset = Math.min(HelperAudio.normalizeTime(options.time), resource.buffer.duration);
     const delay = HelperAudio.normalizeTime(options.delay);
 
     gain.gain.setValueAtTime(volume, context.currentTime);
@@ -217,8 +216,6 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
     }
 
     source.start(context.currentTime + delay, offset);
-
-    return source;
   }
 
   async function play(audio: iAudioResource, options: iAudioPlayOptions) {
@@ -235,24 +232,58 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
     return HelperAudio.createHandledResult();
   }
 
+  async function startLoop(audio: iAudioResource) {
+    if (muted || !activeLoops.has(audio.id) || loopSources.has(audio.id)) {
+      return;
+    }
+
+    const activeRequest = loopRequests.get(audio.id);
+
+    if (activeRequest) {
+      await activeRequest;
+      return;
+    }
+
+    const request = (async () => {
+      if (muted || !activeLoops.has(audio.id) || loopSources.has(audio.id)) {
+        return;
+      }
+
+      await createSource(audio, {}, true);
+
+      if (muted || !activeLoops.has(audio.id)) {
+        stopLoopSource(audio.id);
+      }
+    })();
+
+    loopRequests.set(audio.id, request);
+
+    try {
+      await request;
+    } finally {
+      if (loopRequests.get(audio.id) === request) {
+        loopRequests.delete(audio.id);
+      }
+    }
+  }
+
   async function loop(audio: iAudioResource) {
     activeLoops.set(audio.id, audio);
 
-    if (muted || loopSources.has(audio.id)) {
-      return HelperAudio.createHandledResult();
-    }
-
-    await createSource(audio, {}, true);
-
-    if (muted) {
-      stopLoopSource(audio.id);
-    }
+    await startLoop(audio);
 
     return HelperAudio.createHandledResult();
   }
 
   async function stop(audio: iAudioResource) {
     activeLoops.delete(audio.id);
+
+    const activeLoopRequest = loopRequests.get(audio.id);
+
+    if (activeLoopRequest) {
+      await activeLoopRequest;
+    }
+
     stopActiveSources(audio.id);
     stopLoopSource(audio.id);
 
@@ -271,6 +302,8 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
     }
 
     if (muted) {
+      await Promise.allSettled([...loopRequests.values()]);
+
       for (const id of [...activeSources.keys()]) {
         stopActiveSources(id);
       }
@@ -282,13 +315,18 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
       return HelperAudio.createHandledResult();
     }
 
-    await Promise.all([...activeLoops.values()].map((audio) => loop(audio)));
+    await Promise.all([...activeLoops.values()].map((audio) => startLoop(audio)));
 
     return HelperAudio.createHandledResult();
   }
 
   async function destroy() {
-    await Promise.allSettled([...preloadRequests.values()]);
+    activeLoops.clear();
+
+    await Promise.allSettled([
+      ...preloadRequests.values(),
+      ...loopRequests.values(),
+    ]);
 
     for (const id of [...activeSources.keys()]) {
       stopActiveSources(id);
@@ -298,9 +336,9 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
       stopLoopSource(id);
     }
 
-    activeLoops.clear();
     resources.clear();
     preloadRequests.clear();
+    loopRequests.clear();
 
     const context = audioContext;
 
