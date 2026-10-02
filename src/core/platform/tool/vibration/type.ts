@@ -3,7 +3,7 @@ export type tVibrationNotificationType = 'success' | 'warning' | 'error';
 export type tVibrationSelectionPhase = 'start' | 'changed' | 'end';
 
 export interface iVibrationResult {
-  isPerformed: boolean;
+  isHandled: boolean;
 }
 
 export interface iVibrationOptions {
