@@ -24,7 +24,13 @@ export const {
 } = StorageAdapter;
 
 export async function setJson<T>(key: string, value: T) {
-  await setItem(key, JSON.stringify(value));
+  const data = JSON.stringify(value);
+
+  if (data === undefined) {
+    throw new Error('Storage value is not JSON serializable');
+  }
+
+  await setItem(key, data);
 }
 
 export async function getJson<T>(key: string) {
