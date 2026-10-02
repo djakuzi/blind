@@ -1,11 +1,11 @@
 import { APP_THEME_SYSTEM_MODE, isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
-import { ToolStorage } from '@/core/platform/tool/storage';
+import { ToolStorage } from '@/core/platform';
 import { APP_THEME_MODE_STORAGE_KEY } from '../settings.const';
 import type { iSettingsState } from '../settings.type';
 
 export function createLoadAppThemeMode() {
   return async function loadAppThemeMode(this: iSettingsState) {
-    const savedAppThemeMode = await ToolStorage.getItem(APP_THEME_MODE_STORAGE_KEY);
+    const { value: savedAppThemeMode } = await ToolStorage.getItem(APP_THEME_MODE_STORAGE_KEY);
 
     if (!savedAppThemeMode || !isAppThemeMode(savedAppThemeMode)) {
       this.appThemeMode = APP_THEME_SYSTEM_MODE;
