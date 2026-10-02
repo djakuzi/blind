@@ -1,16 +1,6 @@
 import { HelperBridge } from '../../../runtime/desktop/helpers/bridge.helper';
 import type { iStorageAdapter } from '../type';
 
-function getStorageBridge() {
-  const bridge = HelperBridge.getDesktopBridge();
-
-  if (!bridge) {
-    throw new Error('Desktop storage bridge is not available');
-  }
-
-  return bridge.storage;
-}
-
 function getLegacyStorage() {
   try {
     return typeof localStorage === 'undefined' ? null : localStorage;
@@ -21,12 +11,13 @@ function getLegacyStorage() {
 
 export const DesktopStorageAdapter: iStorageAdapter = {
   async setItem(key, value) {
-    await getStorageBridge().setItem(key, value);
+    await HelperBridge.getCapability('storage').setItem(key, value);
     getLegacyStorage()?.removeItem(key);
   },
 
   async getItem(key) {
-    const result = await getStorageBridge().getItem(key);
+    const storage = HelperBridge.getCapability('storage');
+    const result = await storage.getItem(key);
 
     if (result.value !== null) {
       return result;
@@ -39,7 +30,7 @@ export const DesktopStorageAdapter: iStorageAdapter = {
       return result;
     }
 
-    await getStorageBridge().setItem(key, legacyValue);
+    await storage.setItem(key, legacyValue);
     legacyStorage?.removeItem(key);
 
     return {
@@ -48,7 +39,7 @@ export const DesktopStorageAdapter: iStorageAdapter = {
   },
 
   async removeItem(key) {
-    await getStorageBridge().removeItem(key);
+    await HelperBridge.getCapability('storage').removeItem(key);
     getLegacyStorage()?.removeItem(key);
   },
 };
