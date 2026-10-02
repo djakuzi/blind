@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { ELECTRON_FILESYSTEM_IPC } from './ipc/filesystem.ipc';
 import { ELECTRON_STORAGE_IPC } from './ipc/storage.ipc';
+import { ELECTRON_VIEW_IPC } from './ipc/view.ipc';
 import type { iElectronBridge, tElectronPlatform } from './type';
 
 function getDesktopPlatform(): tElectronPlatform {
@@ -47,6 +48,20 @@ const bridge = {
 
     removeItem(key) {
       return ipcRenderer.invoke(ELECTRON_STORAGE_IPC.removeItem, key);
+    },
+  },
+
+  view: {
+    isFullscreen() {
+      return ipcRenderer.invoke(ELECTRON_VIEW_IPC.isFullscreen);
+    },
+
+    enterFullscreen() {
+      return ipcRenderer.invoke(ELECTRON_VIEW_IPC.enterFullscreen);
+    },
+
+    exitFullscreen() {
+      return ipcRenderer.invoke(ELECTRON_VIEW_IPC.exitFullscreen);
     },
   },
 } satisfies iElectronBridge;
