@@ -20,7 +20,6 @@ export type {
   iVibrationImpactOptions,
   iVibrationNotificationOptions,
   iVibrationOptions,
-  iVibrationResult,
   tVibrationImpactStyle,
   tVibrationNotificationType,
   tVibrationSelectionPhase,
