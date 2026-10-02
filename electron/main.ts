@@ -3,6 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { registerFilesystemIpc } from './main/filesystem';
 import { registerStorageIpc } from './main/storage';
+import { registerViewIpc } from './main/view';
 
 const CURRENT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 
@@ -40,6 +41,7 @@ app
   .then(async () => {
     registerFilesystemIpc();
     registerStorageIpc();
+    registerViewIpc();
 
     await createMainWindow();
 
