@@ -4,6 +4,18 @@ import { HelperScale } from '../helpers/scale.helper';
 import { HelperTheme } from '../helpers/theme.helper';
 import type { iSystemAdapter } from '../type';
 
+async function getPreferredScale() {
+  try {
+    const { value } = await TextZoom.getPreferred();
+
+    return {
+      value: HelperScale.normalizeScaleValue(value),
+    };
+  } catch {
+    return HelperScale.getDefaultScale();
+  }
+}
+
 export const MobileSystemAdapter: iSystemAdapter = {
   async getSystemLanguage() {
     const { value } = await Device.getLanguageTag();
@@ -23,20 +35,10 @@ export const MobileSystemAdapter: iSystemAdapter = {
     }
   },
 
-  async getPreferredScale() {
-    try {
-      const { value } = await TextZoom.getPreferred();
+  getPreferredScale,
 
-      return {
-        value: HelperScale.normalizeScaleValue(value),
-      };
-    } catch {
-      return HelperScale.getDefaultScale();
-    }
-  },
-
-  async getSystemScale() {
-    return this.getPreferredScale();
+  getSystemScale() {
+    return getPreferredScale();
   },
 
   getPreferredThemeMode() {
