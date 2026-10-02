@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { ELECTRON_FILESYSTEM_IPC } from './ipc/filesystem.ipc';
+import { ELECTRON_STORAGE_IPC } from './ipc/storage.ipc';
 import type { iElectronBridge, tElectronPlatform } from './type';
 
 function getDesktopPlatform(): tElectronPlatform {
@@ -32,6 +33,20 @@ const bridge = {
 
     removeFile(path) {
       return ipcRenderer.invoke(ELECTRON_FILESYSTEM_IPC.removeFile, path);
+    },
+  },
+
+  storage: {
+    setItem(key, value) {
+      return ipcRenderer.invoke(ELECTRON_STORAGE_IPC.setItem, key, value);
+    },
+
+    getItem(key) {
+      return ipcRenderer.invoke(ELECTRON_STORAGE_IPC.getItem, key);
+    },
+
+    removeItem(key) {
+      return ipcRenderer.invoke(ELECTRON_STORAGE_IPC.removeItem, key);
     },
   },
 } satisfies iElectronBridge;
