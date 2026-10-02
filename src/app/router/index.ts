@@ -1,4 +1,10 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+  type RouteRecordRaw,
+} from 'vue-router';
+import { PlatformRuntime } from '@/core/platform';
 import { KEY_ROUTE } from './constants/route.const';
 import { routeGame } from './routes/game';
 import { routeMenu } from './routes/menu';
@@ -24,7 +30,9 @@ export const rootRoute: RouteRecordRaw = {
 };
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: PlatformRuntime.isDesktop()
+    ? createWebHashHistory()
+    : createWebHistory(import.meta.env.BASE_URL),
   routes: [rootRoute],
 });
 
