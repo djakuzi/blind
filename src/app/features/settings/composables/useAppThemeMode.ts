@@ -1,7 +1,7 @@
 import { computed } from 'vue';
 import { APP_THEME_SYSTEM_MODE } from '@/app/styles/contracts/appTheme.contract';
 import { useSettingsStore } from '@/app/stores/settings/settings.store';
-import { ToolSystem } from '@/core/platform/tool/system';
+import { ToolSystem } from '@/core/platform';
 
 export function useAppThemeMode() {
   const settingsStore = useSettingsStore();
