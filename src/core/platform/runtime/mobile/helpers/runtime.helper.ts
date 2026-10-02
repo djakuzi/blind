@@ -1,5 +1,9 @@
 import { Capacitor } from '@capacitor/core';
 
-export function isMobileRuntime() {
+function isMobileRuntime() {
   return Capacitor.isNativePlatform();
 }
+
+export const HelperRuntime = {
+  isMobileRuntime,
+};
