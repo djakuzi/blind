@@ -24,7 +24,7 @@
     "format:check": "prettier \"{scripts,src,public}/**/*.{js,ts,vue,css,json,html}\" --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preview": "vite preview",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",
