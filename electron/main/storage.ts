@@ -1,6 +1,6 @@
 import { app, ipcMain } from 'electron';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { ELECTRON_STORAGE_IPC } from '../ipc/storage.ipc';
 
 type tStorageData = Record<string, string>;
@@ -8,7 +8,7 @@ type tStorageData = Record<string, string>;
 let mutationQueue: Promise<void> = Promise.resolve();
 
 function getStoragePath() {
-  return join(app.getPath('userData'), 'preferences.json');
+  return join(app.getPath('userData'), 'storage', 'preferences.json');
 }
 
 function isFileNotFoundError(error: unknown) {
@@ -39,8 +39,10 @@ async function readStorage(): Promise<tStorageData> {
 }
 
 async function writeStorage(value: tStorageData) {
-  await mkdir(app.getPath('userData'), { recursive: true });
-  await writeFile(getStoragePath(), JSON.stringify(value), 'utf8');
+  const path = getStoragePath();
+
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, JSON.stringify(value), 'utf8');
 }
 
 function enqueueMutation(action: () => Promise<void>) {
