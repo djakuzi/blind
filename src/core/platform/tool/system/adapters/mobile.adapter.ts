@@ -2,9 +2,9 @@ import { Device } from '@capacitor/device';
 import { TextZoom } from '@capacitor/text-zoom';
 import { HelperScale } from '../helpers/scale.helper';
 import { HelperTheme } from '../helpers/theme.helper';
-import type { iSystemAdapter } from '../type';
+import type { iSystemScale, iSystemAdapter } from '../type';
 
-async function getPreferredScale() {
+async function getPreferredScale(): Promise<iSystemScale> {
   try {
     const { value } = await TextZoom.getPreferred();
 
@@ -22,20 +22,6 @@ export const MobileSystemAdapter: iSystemAdapter = {
 
     return value;
   },
-
-  async getCurrentScale() {
-    try {
-      const { value } = await TextZoom.get();
-
-      return {
-        value: HelperScale.normalizeScaleValue(value),
-      };
-    } catch {
-      return HelperScale.getDefaultScale();
-    }
-  },
-
-  getPreferredScale,
 
   getSystemScale() {
     return getPreferredScale();
