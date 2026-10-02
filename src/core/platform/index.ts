@@ -1,7 +1,8 @@
+import * as ToolStorage from './tool/storage';
 import * as ToolSystem from './tool/system';
 
 export { PlatformRuntime } from './runtime';
-export { ToolSystem };
+export { ToolStorage, ToolSystem };
 export type {
   tAppPlatform,
   tAppRuntime,
