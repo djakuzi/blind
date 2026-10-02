@@ -1,10 +1,8 @@
-export interface iStorageValue<T> {
-  value: T | null;
-}
+import type { iPlatformValue } from '../../type';
 
 export interface iStorageAdapter {
   setItem(key: string, value: string): Promise<void>;
-  getItem(key: string): Promise<iStorageValue<string>>;
+  getItem(key: string): Promise<iPlatformValue<string | null>>;
   removeItem(key: string): Promise<void>;
 }
 
