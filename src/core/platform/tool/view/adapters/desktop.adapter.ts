@@ -12,9 +12,14 @@ function getViewBridge() {
 }
 
 export const DesktopViewAdapter: iViewAdapter = {
-  async setupView() {
+  async setupView(options) {
+    const hasUnsupportedOptions =
+      options.orientation !== undefined ||
+      options.isStatusBarVisible !== undefined ||
+      options.isWebViewLimitedByStatusBar !== undefined;
+
     return {
-      isHandled: true,
+      isHandled: !hasUnsupportedOptions,
     };
   },
 
