@@ -1,8 +1,8 @@
-import type { iBlindBridge } from './type';
+import type { iDesktopBridge } from './desktop/type';
 
 declare global {
   interface Window {
-    readonly blind?: iBlindBridge;
+    readonly blind?: iDesktopBridge;
   }
 }
 
