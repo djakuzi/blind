@@ -3,7 +3,6 @@ import { PlatformRuntime } from '../../runtime';
 import { DesktopSystemAdapter } from './adapters/desktop.adapter';
 import { MobileSystemAdapter } from './adapters/mobile.adapter';
 import { WebSystemAdapter } from './adapters/web.adapter';
-import type { iSystemAdapter, tSystemThemeMode } from './type';
 
 export type { iSystemAdapter, iSystemScale, tSystemThemeMode } from './type';
 
@@ -32,6 +31,6 @@ export async function getSystemScale() {
   return resolveSystemAdapter().getSystemScale();
 }
 
-export function getPreferredThemeMode(): tSystemThemeMode {
+export function getPreferredThemeMode() {
   return resolveSystemAdapter().getPreferredThemeMode();
 }
