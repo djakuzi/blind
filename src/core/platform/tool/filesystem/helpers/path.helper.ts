@@ -1,8 +1,12 @@
 function normalizePath(path: string) {
-  const normalizedPath = path.replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
+  if (typeof path !== 'string' || !path || path.includes('\0')) {
+    throw new Error('Invalid filesystem path');
+  }
 
-  if (!normalizedPath) {
-    throw new Error('Filesystem path is empty');
+  const normalizedPath = path.replace(/\\/g, '/');
+
+  if (normalizedPath.startsWith('/') || /^[a-zA-Z]:\//.test(normalizedPath)) {
+    throw new Error(`Filesystem path must be relative: ${path}`);
   }
 
   const segments = normalizedPath.split('/');
