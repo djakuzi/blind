@@ -18,13 +18,13 @@
     "build": "vue-tsc -b && vite build --mode prod",
     "build:debug": "vue-tsc -b && vite build --mode debug",
     "build:prod": "vue-tsc -b && vite build --mode prod",
+    "desktop:dev": "vite --config electron.vite.config.ts --mode debug",
+    "desktop:build": "vue-tsc -b && vite build --config electron.vite.config.ts --mode prod",
     "format": "prettier \"{scripts,src,public}/**/*.{js,ts,vue,css,json,html}\" --write",
     "format:check": "prettier \"{scripts,src,public}/**/*.{js,ts,vue,css,json,html}\" --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
-    "desktop:dev": "vite --config electron.vite.config.ts --mode debug",
-    "desktop:build": "vue-tsc -b && vite build --config electron.vite.config.ts --mode prod"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",
