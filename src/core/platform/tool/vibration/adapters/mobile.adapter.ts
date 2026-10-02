@@ -1,4 +1,5 @@
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
+import type { iPlatformActionResult } from '../../../type';
 import {
   WEB_VIBRATION_IMPACT_PATTERN,
   WEB_VIBRATION_NOTIFICATION_PATTERN,
@@ -7,7 +8,6 @@ import {
 import { HelperBrowserVibration } from '../helpers/browser.helper';
 import type {
   iVibrationAdapter,
-  iVibrationResult,
   tVibrationImpactStyle,
   tVibrationNotificationType,
 } from '../type';
@@ -24,7 +24,10 @@ const NOTIFICATION_TYPE_MAP: Record<tVibrationNotificationType, NotificationType
   error: NotificationType.Error,
 };
 
-async function performNative(action: () => Promise<void>, fallbackPattern: readonly number[]): Promise<iVibrationResult> {
+async function performNative(
+  action: () => Promise<void>,
+  fallbackPattern: readonly number[],
+): Promise<iPlatformActionResult> {
   try {
     await action();
 
