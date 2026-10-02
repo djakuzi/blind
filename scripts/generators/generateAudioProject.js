@@ -8,6 +8,10 @@ const outputDirectory = resolve(root, 'src/core/media/audio');
 const outputConstPath = resolve(outputDirectory, 'const.ts');
 const outputTypePath = resolve(outputDirectory, 'type.ts');
 const supportedExtensions = new Set(['.mp3', '.wav']);
+const audioChannelsByType = {
+  sfx: 4,
+  music: 1,
+};
 
 const audioFiles = collectAudioFiles(audioDir)
   .sort((left, right) => left.localeCompare(right))
@@ -24,6 +28,7 @@ const audioFiles = collectAudioFiles(audioDir)
       relativePath,
       audioId,
       type,
+      channels: audioChannelsByType[type],
       importName: `AudioAsset${index + 1}`,
     };
   });
@@ -38,10 +43,11 @@ const importsBlock = audioFiles
 
 const entriesBlock = audioFiles
   .map(
-    ({ audioId, importName, type }) => `  '${audioId}': {
+    ({ audioId, importName, type, channels }) => `  '${audioId}': {
     id: '${audioId}',
     src: ${importName},
     type: '${type}',
+    channels: ${channels},
   },`,
   )
   .join('\n');
