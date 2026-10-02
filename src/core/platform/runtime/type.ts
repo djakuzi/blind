@@ -1,11 +1,12 @@
-export type tAppRuntime = 'web' | 'capacitor' | 'electron';
+export type tAppRuntime = 'web' | 'mobile' | 'desktop';
 
 export type tAppPlatform = 'web' | 'android' | 'ios' | 'windows' | 'macos' | 'linux';
 
+export type tMobileAppPlatform = Extract<tAppPlatform, 'android' | 'ios'>;
 export type tDesktopAppPlatform = Extract<tAppPlatform, 'windows' | 'macos' | 'linux'>;
 
 export interface iBlindRuntimeBridge {
-  runtime: 'electron';
+  runtime: 'desktop';
   platform: tDesktopAppPlatform;
 }
 

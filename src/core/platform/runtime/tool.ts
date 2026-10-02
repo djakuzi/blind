@@ -1,52 +1,42 @@
-import { Capacitor } from '@capacitor/core';
-import type { iBlindBridge, tAppPlatform, tAppRuntime } from './type';
-
-function getElectronBridge(): iBlindBridge | undefined {
-  if (typeof window === 'undefined') {
-    return undefined;
-  }
-
-  return window.blind;
-}
+import { getDesktopPlatform, isDesktopRuntime } from './desktop';
+import { getMobilePlatform, isMobileRuntime } from './mobile';
+import type { tAppPlatform, tAppRuntime } from './type';
+import { getWebPlatform } from './web';
 
 export function getRuntime(): tAppRuntime {
-  if (getElectronBridge()?.runtime.runtime === 'electron') {
-    return 'electron';
+  if (isDesktopRuntime()) {
+    return 'desktop';
   }
 
-  if (Capacitor.isNativePlatform()) {
-    return 'capacitor';
+  if (isMobileRuntime()) {
+    return 'mobile';
   }
 
   return 'web';
 }
 
 export function getPlatform(): tAppPlatform {
-  const electronBridge = getElectronBridge();
+  const runtime = getRuntime();
 
-  if (electronBridge) {
-    return electronBridge.runtime.platform;
+  if (runtime === 'desktop') {
+    return getDesktopPlatform();
   }
 
-  if (Capacitor.isNativePlatform()) {
-    const platform = Capacitor.getPlatform();
-
-    if (platform === 'android' || platform === 'ios') {
-      return platform;
-    }
+  if (runtime === 'mobile') {
+    return getMobilePlatform();
   }
 
-  return 'web';
+  return getWebPlatform();
 }
 
 export function isWeb() {
   return getRuntime() === 'web';
 }
 
-export function isCapacitor() {
-  return getRuntime() === 'capacitor';
+export function isMobile() {
+  return getRuntime() === 'mobile';
 }
 
-export function isElectron() {
-  return getRuntime() === 'electron';
+export function isDesktop() {
+  return getRuntime() === 'desktop';
 }
