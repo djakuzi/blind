@@ -1,5 +1,5 @@
 import { ipcMain, net } from 'electron';
-import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
+import { dirname, isAbsolute, relative, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { ELECTRON_AUDIO_IPC } from '../ipc/audio.ipc';
 
@@ -7,6 +7,31 @@ function isOutsideRoot(root: string, target: string) {
   const relativePath = relative(root, target);
 
   return relativePath === '..' || relativePath.startsWith(`..${sep}`) || isAbsolute(relativePath);
+}
+
+function resolveFileAssetUrl(baseUrl: URL, src: string) {
+  baseUrl.hash = '';
+  baseUrl.search = '';
+
+  const root = dirname(fileURLToPath(baseUrl));
+  const targetUrl = src.startsWith('file:')
+    ? new URL(src)
+    : new URL(src.startsWith('/') ? `.${src}` : src, baseUrl);
+
+  targetUrl.hash = '';
+  targetUrl.search = '';
+
+  if (targetUrl.protocol !== 'file:') {
+    throw new Error('Desktop audio asset must use the file protocol');
+  }
+
+  const target = fileURLToPath(targetUrl);
+
+  if (isOutsideRoot(root, target)) {
+    throw new Error('Audio asset is outside renderer directory');
+  }
+
+  return pathToFileURL(target).toString();
 }
 
 function resolveAssetUrl(rendererUrl: string, src: string) {
@@ -17,14 +42,7 @@ function resolveAssetUrl(rendererUrl: string, src: string) {
   const baseUrl = new URL(rendererUrl);
 
   if (baseUrl.protocol === 'file:') {
-    const root = dirname(fileURLToPath(baseUrl));
-    const target = resolve(root, src.replace(/^\/+/, ''));
-
-    if (isOutsideRoot(root, target)) {
-      throw new Error('Audio asset is outside renderer directory');
-    }
-
-    return pathToFileURL(target).toString();
+    return resolveFileAssetUrl(baseUrl, src);
   }
 
   if (baseUrl.protocol === 'http:' || baseUrl.protocol === 'https:') {
