@@ -25,6 +25,7 @@ export interface PropsAppHoldAction {
   moveCancelThreshold?: number;
   releaseDuration?: number;
   sound?: tAudioId | null;
+  startSound?: tAudioId | null;
   vibrationDuration?: number;
   width?: tStyleSizeValue;
 }
@@ -40,6 +41,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   moveCancelThreshold: 6,
   releaseDuration: 140,
   sound: 'sfx.interaction.hold-complete',
+  startSound: 'sfx.interaction.hold-start',
   vibrationDuration: 45,
   width: '100%',
 });
@@ -165,6 +167,10 @@ function beginHold() {
   hasCompleted.value = false;
   progress.value = normalizedInitialProgress.value;
   holdStartedAt = getCurrentTime();
+
+  if (props.startSound !== null) {
+    play(props.startSound);
+  }
 
   progressFrame.request(updateHoldProgress);
 }
