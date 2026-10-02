@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['**/dist/**', '**/node_modules/**', '**/android/**', '**/ios/**'],
+    ignores: ['**/dist/**', '**/dist-electron/**', '**/node_modules/**', '**/android/**', '**/ios/**'],
   },
   {
     files: ['**/*.{js,ts,vue}'],
@@ -27,6 +27,12 @@ export default tseslint.config(
         },
       ],
       'vue/multi-word-component-names': 'off',
+    },
+  },
+  {
+    files: ['electron/**/*.ts', 'electron.vite.config.ts'],
+    languageOptions: {
+      globals: globals.node,
     },
   },
 );

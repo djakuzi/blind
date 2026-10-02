@@ -22,7 +22,9 @@
     "format:check": "prettier \"{scripts,src,public}/**/*.{js,ts,vue,css,json,html}\" --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "desktop:dev": "vite --config electron.vite.config.ts --mode debug",
+    "desktop:build": "vue-tsc -b && vite build --config electron.vite.config.ts --mode prod"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",
@@ -55,6 +57,9 @@
     "typescript-eslint": "^8.68.0",
     "vite": "^8.1.1",
     "vue-tsc": "^3.3.5",
-    "wawoff2": "^2.0.1"
-  }
+    "wawoff2": "^2.0.1",
+    "electron": "^44.5.1",
+    "vite-plugin-electron": "^1.1.2"
+  },
+  "main": "dist-electron/main.js"
 }
