@@ -1,6 +1,6 @@
-import type { iInputValue } from '../type';
+import type { iPlatformValue } from '../../../type';
 
-function createValue<T>(value: T): iInputValue<T> {
+function createValue<T>(value: T): iPlatformValue<T> {
   return {
     value,
   };
