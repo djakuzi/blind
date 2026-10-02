@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { registerAudioIpc } from './main/audio';
 import { registerFilesystemIpc } from './main/filesystem';
 import { registerStorageIpc } from './main/storage';
 import { registerViewIpc } from './main/view';
@@ -39,6 +40,7 @@ async function createMainWindow() {
 app
   .whenReady()
   .then(async () => {
+    registerAudioIpc();
     registerFilesystemIpc();
     registerStorageIpc();
     registerViewIpc();
