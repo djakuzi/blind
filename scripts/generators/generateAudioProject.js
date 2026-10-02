@@ -38,7 +38,7 @@ validateAudioIds(audioFiles);
 const audioGroups = buildAudioGroups(audioFiles);
 
 const importsBlock = audioFiles
-  .map(({ importName, relativePath }) => `import ${importName} from '@/assets/audio/${relativePath}'`)
+  .map(({ importName, relativePath }) => `import ${importName} from '@/assets/audio/${relativePath}?no-inline'`)
   .join('\n');
 
 const entriesBlock = audioFiles
