@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { ELECTRON_AUDIO_IPC } from './ipc/audio.ipc';
 import { ELECTRON_FILESYSTEM_IPC } from './ipc/filesystem.ipc';
 import { ELECTRON_STORAGE_IPC } from './ipc/storage.ipc';
 import { ELECTRON_VIEW_IPC } from './ipc/view.ipc';
@@ -21,6 +22,12 @@ const bridge = {
   runtime: {
     runtime: 'desktop',
     platform: getDesktopPlatform(),
+  },
+
+  audio: {
+    loadAsset(src) {
+      return ipcRenderer.invoke(ELECTRON_AUDIO_IPC.loadAsset, src);
+    },
   },
 
   filesystem: {
