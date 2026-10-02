@@ -6,7 +6,7 @@ import { useSettingsStore } from '@/app/stores/settings/settings.store';
 import { retryPostMountSetup } from '@/core/app/setup/setup.runner';
 import type { iSetup } from '@/core/app/setup/setup.type';
 import { MediaAudio } from '@/core/media/audio';
-import { ToolAudio } from '@/core/tool/audio';
+import { ToolAudio } from '@/core/platform/tool/audio';
 
 const APP_SETUP_AUDIO_SCOPE_KEY = 'app-setup-audio';
 const APP_SETUP_AUDIO_RESOURCE_KEY = 'audio';

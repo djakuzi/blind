@@ -3,7 +3,7 @@ import { computed, reactive, ref, watch } from 'vue';
 import backgroundLight from '@/assets/images/background/bgLight.png';
 import backgroundDark from '@/assets/images/background/bgDark.png';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
-import { ToolSystem } from '@/core/tool/system';
+import { ToolSystem } from '@/core/platform/tool/system';
 
 type tThemeMode = ToolSystem.tSystemThemeMode;
 

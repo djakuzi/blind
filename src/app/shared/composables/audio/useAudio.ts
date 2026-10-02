@@ -1,8 +1,8 @@
 import { onUnmounted, shallowReactive } from 'vue';
 import { MediaAudio } from '@/core/media/audio';
 import type { tAudioId } from '@/core/media/audio';
-import type { iAudioPlayOptions, iAudioResource } from '@/core/tool/audio';
-import { ToolAudio } from '@/core/tool/audio';
+import type { iAudioPlayOptions, iAudioResource } from '@/core/platform/tool/audio';
+import { ToolAudio } from '@/core/platform/tool/audio';
 
 type tAudioInput = tAudioId | readonly tAudioId[];
 

@@ -6,8 +6,8 @@ import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
 import type { tAudioId } from '@/core/media/audio';
-import { ToolInput } from '@/core/tool/input';
-import { ToolVibration } from '@/core/tool/vibration';
+import { ToolInput } from '@/core/platform/tool/input';
+import { ToolVibration } from '@/core/platform/tool/vibration';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 
 interface iAppHoldActionActions {

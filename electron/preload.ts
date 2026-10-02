@@ -1,5 +1,5 @@
 import { contextBridge } from 'electron';
-import type { iBlindBridge, tDesktopAppPlatform } from '../src/core/tool/runtime/type';
+import type { iBlindBridge, tDesktopAppPlatform } from '../src/core/platform/runtime/type';
 
 function getDesktopPlatform(): tDesktopAppPlatform {
   switch (process.platform) {

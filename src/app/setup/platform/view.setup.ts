@@ -1,5 +1,5 @@
 import type { iSetup } from '@/core/app/setup/setup.type';
-import { ToolView } from '@/core/tool/view';
+import { ToolView } from '@/core/platform/tool/view';
 
 export function createViewSetup(): iSetup {
   return {

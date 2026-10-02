@@ -8,7 +8,7 @@ import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/pres
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
-import { ToolInput } from '@/core/tool/input';
+import { ToolInput } from '@/core/platform/tool/input';
 
 export type tAppHoldHintDirection = 'row' | 'column';
 

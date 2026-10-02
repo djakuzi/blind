@@ -1,6 +1,6 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { APP_THEME_ATTRIBUTE_NAME } from '@/app/styles/contracts/appTheme.contract';
-import { ToolSystem } from '@/core/tool/system';
+import { ToolSystem } from '@/core/platform/tool/system';
 
 const THEME_MEDIA_QUERY = '(prefers-color-scheme: dark)';
 

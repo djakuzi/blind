@@ -1,5 +1,5 @@
 import { APP_THEME_SYSTEM_MODE, isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
-import { ToolStorage } from '@/core/tool/storage';
+import { ToolStorage } from '@/core/platform/tool/storage';
 import { APP_THEME_MODE_STORAGE_KEY } from '../settings.const';
 import type { iSettingsState } from '../settings.type';
 
