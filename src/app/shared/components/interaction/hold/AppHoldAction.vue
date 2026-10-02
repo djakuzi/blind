@@ -6,8 +6,7 @@ import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
 import type { tAudioId } from '@/core/media/audio';
-import { ToolInput } from '@/core/platform/tool/input';
-import { ToolVibration } from '@/core/platform';
+import { ToolInput, ToolVibration } from '@/core/platform';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 
 interface iAppHoldActionActions {
@@ -334,7 +333,7 @@ function getActiveTouch(event: TouchEvent): Touch | undefined {
 }
 
 function startTouchHold(event: TouchEvent) {
-  if (ToolInput.supportsPointerEvents() || props.disabled) {
+  if (ToolInput.supportsPointerEvents().value || props.disabled) {
     return;
   }
 
@@ -352,7 +351,7 @@ function startTouchHold(event: TouchEvent) {
 }
 
 function moveTouchHold(event: TouchEvent) {
-  if (ToolInput.supportsPointerEvents()) {
+  if (ToolInput.supportsPointerEvents().value) {
     return;
   }
 
@@ -364,7 +363,7 @@ function moveTouchHold(event: TouchEvent) {
 }
 
 function resetTouchHold(event: TouchEvent) {
-  if (ToolInput.supportsPointerEvents()) {
+  if (ToolInput.supportsPointerEvents().value) {
     return;
   }
 
@@ -377,7 +376,7 @@ function resetTouchHold(event: TouchEvent) {
 }
 
 function startMouseHold(event: MouseEvent) {
-  if (ToolInput.supportsPointerEvents() || props.disabled || event.button !== 0) {
+  if (ToolInput.supportsPointerEvents().value || props.disabled || event.button !== 0) {
     return;
   }
 
@@ -388,7 +387,7 @@ function startMouseHold(event: MouseEvent) {
 }
 
 function moveMouseHold(event: MouseEvent) {
-  if (ToolInput.supportsPointerEvents() || activeTouchId !== undefined) {
+  if (ToolInput.supportsPointerEvents().value || activeTouchId !== undefined) {
     return;
   }
 
@@ -398,7 +397,7 @@ function moveMouseHold(event: MouseEvent) {
 }
 
 function resetMouseHold() {
-  if (ToolInput.supportsPointerEvents() || activeTouchId !== undefined) {
+  if (ToolInput.supportsPointerEvents().value || activeTouchId !== undefined) {
     return;
   }
 
