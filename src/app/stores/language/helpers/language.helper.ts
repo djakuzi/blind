@@ -78,7 +78,7 @@ export async function loadDefaultLanguageFallback() {
 export async function loadLanguageLocale(language: ModelLanguage): Promise<Locale> {
   const path = getLanguageFilePath(language.key);
 
-  const languageFile = await ToolFilesystem.getJson<iLanguageFile>(path);
+  const { value: languageFile } = await ToolFilesystem.getJson<iLanguageFile>(path);
 
   if (languageFile && languageFile.version === language.version) {
     return languageFile.locale;
