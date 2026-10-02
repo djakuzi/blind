@@ -1,6 +1,6 @@
 import { app, ipcMain } from 'electron';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { dirname, isAbsolute, relative, resolve } from 'node:path';
+import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { ELECTRON_FILESYSTEM_IPC } from '../ipc/filesystem.ipc';
 
 function getFilesystemRoot() {
@@ -8,15 +8,16 @@ function getFilesystemRoot() {
 }
 
 function resolveFilesystemPath(path: string) {
-  if (!path || path.includes('\0') || isAbsolute(path)) {
+  if (typeof path !== 'string' || !path || path.includes('\0') || isAbsolute(path)) {
     throw new Error('Invalid filesystem path');
   }
 
   const root = getFilesystemRoot();
   const target = resolve(root, path);
   const relativePath = relative(root, target);
+  const isOutsideRoot = relativePath === '..' || relativePath.startsWith(`..${sep}`);
 
-  if (!relativePath || relativePath.startsWith('..') || isAbsolute(relativePath)) {
+  if (!relativePath || isOutsideRoot || isAbsolute(relativePath)) {
     throw new Error('Filesystem path is outside application data directory');
   }
 
@@ -33,6 +34,10 @@ export function registerFilesystemIpc() {
   ipcMain.removeHandler(ELECTRON_FILESYSTEM_IPC.removeFile);
 
   ipcMain.handle(ELECTRON_FILESYSTEM_IPC.writeFile, async (_event, path: string, data: string) => {
+    if (typeof data !== 'string') {
+      throw new Error('Invalid filesystem data');
+    }
+
     const target = resolveFilesystemPath(path);
 
     await mkdir(dirname(target), { recursive: true });
