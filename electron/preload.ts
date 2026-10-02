@@ -16,7 +16,7 @@ function getDesktopPlatform(): tDesktopAppPlatform {
 
 const bridge = {
   runtime: {
-    runtime: 'electron',
+    runtime: 'desktop',
     platform: getDesktopPlatform(),
   },
 } satisfies iBlindBridge;

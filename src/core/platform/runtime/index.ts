@@ -1,4 +1,11 @@
-import * as ToolRuntime from './tool';
+import * as PlatformRuntime from './tool';
 
-export { ToolRuntime };
-export type { iBlindBridge, iBlindRuntimeBridge, tAppPlatform, tAppRuntime, tDesktopAppPlatform } from './type';
+export { PlatformRuntime };
+export type {
+  iBlindBridge,
+  iBlindRuntimeBridge,
+  tAppPlatform,
+  tAppRuntime,
+  tDesktopAppPlatform,
+  tMobileAppPlatform,
+} from './type';
