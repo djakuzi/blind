@@ -1,2 +1,2 @@
-export { createAdapterResolver, resolveAdapter } from './tool';
-export type { iAdapterResolverOptions, tAdapterRegistry } from './type';
+export { resolveAdapter } from './tool';
+export type { tAdapterRegistry } from './type';
