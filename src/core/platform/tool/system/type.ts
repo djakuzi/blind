@@ -6,8 +6,6 @@ export interface iSystemScale {
 
 export interface iSystemAdapter {
   getSystemLanguage(): Promise<string>;
-  getCurrentScale(): Promise<iSystemScale>;
-  getPreferredScale(): Promise<iSystemScale>;
   getSystemScale(): Promise<iSystemScale>;
   getPreferredThemeMode(): tSystemThemeMode;
 }
