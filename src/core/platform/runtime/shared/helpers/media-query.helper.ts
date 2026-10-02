@@ -1,3 +1,5 @@
+import type { iPlatformSubscription } from '../../../type';
+
 type tMediaQueryChangeCallback = (matches: boolean) => void;
 
 function matches(query: string) {
@@ -8,7 +10,10 @@ function matches(query: string) {
   return globalThis.matchMedia(query).matches;
 }
 
-function subscribe(query: string, callback: tMediaQueryChangeCallback) {
+function subscribe(
+  query: string,
+  callback: tMediaQueryChangeCallback,
+): iPlatformSubscription {
   if (typeof globalThis.matchMedia !== 'function') {
     return {
       unsubscribe() {},
