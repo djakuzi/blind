@@ -6,58 +6,56 @@ import type { iViewAdapter } from '../type';
 
 export const MobileViewAdapter: iViewAdapter = {
   async setupView(options) {
-    const operations: Promise<boolean>[] = [];
+    let isHandled = true;
 
-    if (options.orientation) {
-      operations.push(
-        HelperAction.runSafe(async () => {
-          if (options.orientation === 'any') {
-            await ScreenOrientation.unlock();
+    const orientation = options.orientation;
 
-            return;
-          }
+    if (orientation) {
+      const isOrientationHandled = await HelperAction.runSafe(async () => {
+        if (orientation === 'any') {
+          await ScreenOrientation.unlock();
 
-          await ScreenOrientation.lock({
-            orientation: options.orientation,
-          });
-        }),
-      );
+          return;
+        }
+
+        await ScreenOrientation.lock({
+          orientation,
+        });
+      });
+
+      isHandled = isOrientationHandled && isHandled;
     }
 
-    if (typeof options.isWebViewLimitedByStatusBar === 'boolean') {
-      operations.push(
-        HelperAction.runSafe(async () => {
-          await StatusBar.setOverlaysWebView({
-            overlay: !options.isWebViewLimitedByStatusBar,
-          });
-        }),
-      );
+    const isWebViewLimitedByStatusBar = options.isWebViewLimitedByStatusBar;
+
+    if (typeof isWebViewLimitedByStatusBar === 'boolean') {
+      const isOverlayHandled = await HelperAction.runSafe(async () => {
+        await StatusBar.setOverlaysWebView({
+          overlay: !isWebViewLimitedByStatusBar,
+        });
+      });
+
+      isHandled = isOverlayHandled && isHandled;
     }
 
-    if (typeof options.isStatusBarVisible === 'boolean') {
-      operations.push(
-        HelperAction.runSafe(async () => {
-          if (options.isStatusBarVisible) {
-            await StatusBar.show();
+    const isStatusBarVisible = options.isStatusBarVisible;
 
-            return;
-          }
+    if (typeof isStatusBarVisible === 'boolean') {
+      const isVisibilityHandled = await HelperAction.runSafe(async () => {
+        if (isStatusBarVisible) {
+          await StatusBar.show();
 
-          await StatusBar.hide();
-        }),
-      );
+          return;
+        }
+
+        await StatusBar.hide();
+      });
+
+      isHandled = isVisibilityHandled && isHandled;
     }
-
-    if (operations.length === 0) {
-      return {
-        isHandled: true,
-      };
-    }
-
-    const results = await Promise.all(operations);
 
     return {
-      isHandled: results.every(Boolean),
+      isHandled,
     };
   },
 
