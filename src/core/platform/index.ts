@@ -14,3 +14,8 @@ export type {
   tDesktopAppPlatform,
   tMobileAppPlatform,
 } from './runtime';
+export type {
+  iPlatformActionResult,
+  iPlatformSubscription,
+  iPlatformValue,
+} from './type';
