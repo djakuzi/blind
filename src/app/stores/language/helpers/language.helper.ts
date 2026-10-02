@@ -1,8 +1,7 @@
 import { apiLanguage } from '@/app/domain/lang/api/api';
 import { ModelLanguage } from '@/app/domain/lang/models/Language.model';
 import { LibLocale } from '@/core/lib/locale';
-import { ToolFilesystem } from '@/core/platform/tool/filesystem';
-import { ToolStorage } from '@/core/platform/tool/storage';
+import { ToolFilesystem, ToolStorage } from '@/core/platform';
 import { LANGUAGE_FILE_DIR, LANGUAGE_LIST_STORAGE_KEY } from '../language.const';
 import type { Locale } from '@/app/shared/types/locale';
 import type { iLanguageFile } from '../language.type';
@@ -34,7 +33,7 @@ export function findDefaultLanguage(languages: ModelLanguage[]) {
 }
 
 export async function getFallbackLanguages() {
-  const cachedLanguages = await ToolStorage.getJson<tStoredLanguage[]>(LANGUAGE_LIST_STORAGE_KEY);
+  const { value: cachedLanguages } = await ToolStorage.getJson<tStoredLanguage[]>(LANGUAGE_LIST_STORAGE_KEY);
 
   if (!cachedLanguages?.length) {
     return [await apiLanguage.getDefaultLanguage()];
