@@ -1,8 +1,7 @@
+import type { iPlatformActionResult, iPlatformValue } from '../../../type';
 import { HelperAction } from './action.helper';
 import type {
   iEnterViewFullscreenOptions,
-  iViewActionResult,
-  iViewValue,
   tViewOrientation,
 } from '../type';
 
@@ -18,7 +17,9 @@ function canUseScreenOrientation() {
   return typeof screen !== 'undefined' && Boolean(screen.orientation);
 }
 
-async function setupOrientation(orientation: tViewOrientation): Promise<iViewActionResult> {
+async function setupOrientation(
+  orientation: tViewOrientation,
+): Promise<iPlatformActionResult> {
   if (!canUseScreenOrientation()) {
     return {
       isHandled: false,
@@ -40,13 +41,15 @@ async function setupOrientation(orientation: tViewOrientation): Promise<iViewAct
   };
 }
 
-async function isFullscreen(): Promise<iViewValue<boolean>> {
+async function isFullscreen(): Promise<iPlatformValue<boolean>> {
   return {
     value: typeof document !== 'undefined' && document.fullscreenElement !== null,
   };
 }
 
-async function enterFullscreen(options: iEnterViewFullscreenOptions): Promise<iViewActionResult> {
+async function enterFullscreen(
+  options: iEnterViewFullscreenOptions,
+): Promise<iPlatformActionResult> {
   if (!canUseFullscreen()) {
     return {
       isHandled: false,
@@ -71,7 +74,7 @@ async function enterFullscreen(options: iEnterViewFullscreenOptions): Promise<iV
   };
 }
 
-async function exitFullscreen(): Promise<iViewActionResult> {
+async function exitFullscreen(): Promise<iPlatformActionResult> {
   if (!canUseFullscreen()) {
     return {
       isHandled: false,
