@@ -1,8 +1,7 @@
-export type tSystemThemeMode = 'light' | 'dark';
+import type { iPlatformValue } from '../../type';
 
-export interface iSystemScale {
-  value: number;
-}
+export type tSystemThemeMode = 'light' | 'dark';
+export type iSystemScale = iPlatformValue<number>;
 
 export interface iSystemAdapter {
   getSystemLanguage(): Promise<string>;
