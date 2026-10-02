@@ -16,7 +16,13 @@ const FilesystemAdapter = resolveAdapter(
 );
 
 export async function setJson<T>(path: string, value: T) {
-  await FilesystemAdapter.writeFile(path, JSON.stringify(value));
+  const data = JSON.stringify(value);
+
+  if (data === undefined) {
+    throw new Error('Filesystem value is not JSON serializable');
+  }
+
+  await FilesystemAdapter.writeFile(path, data);
 }
 
 export async function getJson<T>(path: string) {
