@@ -1,9 +1,7 @@
-export interface iFilesystemValue<T> {
-  value: T | null;
-}
+import type { iPlatformValue } from '../../type';
 
 export interface iFilesystemAdapter {
   writeFile(path: string, data: string): Promise<void>;
-  readFile(path: string): Promise<iFilesystemValue<string>>;
+  readFile(path: string): Promise<iPlatformValue<string | null>>;
   removeFile(path: string): Promise<void>;
 }
