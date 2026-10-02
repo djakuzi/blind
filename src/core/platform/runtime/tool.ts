@@ -1,14 +1,16 @@
-import { getDesktopPlatform, isDesktopRuntime } from './desktop';
-import { getMobilePlatform, isMobileRuntime } from './mobile';
+import { HelperPlatform as HelperDesktopPlatform } from './desktop/helpers/platform.helper';
+import { HelperRuntime as HelperDesktopRuntime } from './desktop/helpers/runtime.helper';
+import { HelperPlatform as HelperMobilePlatform } from './mobile/helpers/platform.helper';
+import { HelperRuntime as HelperMobileRuntime } from './mobile/helpers/runtime.helper';
 import type { tAppPlatform, tAppRuntime } from './type';
-import { getWebPlatform } from './web';
+import { HelperPlatform as HelperWebPlatform } from './web/helpers/platform.helper';
 
 export function getRuntime(): tAppRuntime {
-  if (isDesktopRuntime()) {
+  if (HelperDesktopRuntime.isDesktopRuntime()) {
     return 'desktop';
   }
 
-  if (isMobileRuntime()) {
+  if (HelperMobileRuntime.isMobileRuntime()) {
     return 'mobile';
   }
 
@@ -19,14 +21,14 @@ export function getPlatform(): tAppPlatform {
   const runtime = getRuntime();
 
   if (runtime === 'desktop') {
-    return getDesktopPlatform();
+    return HelperDesktopPlatform.getDesktopPlatform();
   }
 
   if (runtime === 'mobile') {
-    return getMobilePlatform();
+    return HelperMobilePlatform.getMobilePlatform();
   }
 
-  return getWebPlatform();
+  return HelperWebPlatform.getWebPlatform();
 }
 
 export function isWeb() {
