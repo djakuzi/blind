@@ -35,7 +35,14 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
       throw new Error('Web Audio API is not available');
     }
 
-    audioContext = new AudioContext();
+    try {
+      audioContext = new AudioContext({
+        latencyHint: 'interactive',
+      });
+    } catch {
+      audioContext = new AudioContext();
+    }
+
     masterGain = audioContext.createGain();
     masterGain.gain.setValueAtTime(muted ? 0 : 1, audioContext.currentTime);
     masterGain.connect(audioContext.destination);
