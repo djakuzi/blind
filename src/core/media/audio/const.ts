@@ -6,11 +6,13 @@ export const AUDIO_ASSETS = {
     id: 'sfx.interaction.hold-complete',
     src: AudioAsset1,
     type: 'sfx',
+    channels: 4,
   },
   'sfx.interaction.hold-start': {
     id: 'sfx.interaction.hold-start',
     src: AudioAsset2,
     type: 'sfx',
+    channels: 4,
   },
 } as const
 
