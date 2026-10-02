@@ -4,7 +4,7 @@ import { DesktopFilesystemAdapter } from './adapters/desktop.adapter';
 import { MobileFilesystemAdapter } from './adapters/mobile.adapter';
 import { WebFilesystemAdapter } from './adapters/web.adapter';
 
-export type { iFilesystemAdapter, iFilesystemValue } from './type';
+export type { iFilesystemAdapter } from './type';
 
 const FilesystemAdapter = resolveAdapter(
   {
