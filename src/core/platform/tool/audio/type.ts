@@ -1,6 +1,4 @@
-export interface iAudioActionResult {
-  isHandled: boolean;
-}
+import type { iPlatformActionResult } from '../../type';
 
 export interface iAudioResource {
   id: string;
@@ -19,11 +17,11 @@ export interface iAudioPlayOptions {
 }
 
 export interface iAudioAdapter {
-  activate(): Promise<iAudioActionResult>;
-  preload(resources: readonly iAudioPreloadResource[]): Promise<iAudioActionResult>;
-  play(audio: iAudioResource, options: iAudioPlayOptions): Promise<iAudioActionResult>;
-  loop(audio: iAudioResource): Promise<iAudioActionResult>;
-  stop(audio: iAudioResource): Promise<iAudioActionResult>;
-  setMuted(value: boolean): Promise<iAudioActionResult>;
-  destroy(): Promise<iAudioActionResult>;
+  activate(): Promise<iPlatformActionResult>;
+  preload(resources: readonly iAudioPreloadResource[]): Promise<iPlatformActionResult>;
+  play(audio: iAudioResource, options: iAudioPlayOptions): Promise<iPlatformActionResult>;
+  loop(audio: iAudioResource): Promise<iPlatformActionResult>;
+  stop(audio: iAudioResource): Promise<iPlatformActionResult>;
+  setMuted(value: boolean): Promise<iPlatformActionResult>;
+  destroy(): Promise<iPlatformActionResult>;
 }
