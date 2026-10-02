@@ -1,6 +1,6 @@
-import type { iVibrationResult } from '../type';
+import type { iPlatformActionResult } from '../../../type';
 
-function vibrate(pattern: readonly number[]): iVibrationResult {
+function vibrate(pattern: readonly number[]): iPlatformActionResult {
   if (typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') {
     return {
       isHandled: false,
