@@ -1,4 +1,4 @@
-import * as ToolSystem from './tool/system/tool';
+import * as ToolSystem from './tool/system';
 
 export { PlatformRuntime } from './runtime';
 export { ToolSystem };
