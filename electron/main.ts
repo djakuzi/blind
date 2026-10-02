@@ -2,6 +2,7 @@ import { app, BrowserWindow } from 'electron';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { registerFilesystemIpc } from './main/filesystem';
+import { registerStorageIpc } from './main/storage';
 
 const CURRENT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 
@@ -38,6 +39,8 @@ app
   .whenReady()
   .then(async () => {
     registerFilesystemIpc();
+    registerStorageIpc();
+
     await createMainWindow();
 
     app.on('activate', () => {
