@@ -3,7 +3,7 @@ import { Capacitor } from '@capacitor/core';
 import { Device } from '@capacitor/device';
 import { TextZoom } from '@capacitor/text-zoom';
 import { DEFAULT_SCALE_VALUE } from './const';
-import * as helpers from './helpers';
+import * as helpers from './helpers/helpers';
 import type { tSystemThemeMode } from './type';
 
 export function getPlatform() {
