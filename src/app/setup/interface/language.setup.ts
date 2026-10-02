@@ -8,7 +8,7 @@ import { useLanguageStore } from '@/app/stores/language/language.store';
 import { retryPostMountSetup } from '@/core/app/setup/setup.runner';
 import type { iSetup } from '@/core/app/setup/setup.type';
 import { ToolStorage } from '@/core/platform/tool/storage';
-import { ToolSystem } from '@/core/platform/tool/system';
+import { ToolSystem } from '@/core/platform';
 
 const APP_SETUP_LANGUAGE_SCOPE_KEY = 'app-setup-language';
 const APP_SETUP_LANGUAGE_RESOURCE_KEY = 'language';
