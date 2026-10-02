@@ -1,9 +1,13 @@
-import type { iBlindBridge } from '../../type';
+import type { iDesktopBridge } from '../type/bridge.type';
 
-export function getDesktopBridge(): iBlindBridge | undefined {
+function getDesktopBridge(): iDesktopBridge | undefined {
   if (typeof window === 'undefined') {
     return undefined;
   }
 
   return window.blind;
 }
+
+export const HelperBridge = {
+  getDesktopBridge,
+};
