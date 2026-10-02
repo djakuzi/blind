@@ -7,7 +7,7 @@ import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
 import type { tAudioId } from '@/core/media/audio';
 import { ToolInput } from '@/core/platform/tool/input';
-import { ToolVibration } from '@/core/platform/tool/vibration';
+import { ToolVibration } from '@/core/platform';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 
 interface iAppHoldActionActions {
