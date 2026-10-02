@@ -1,11 +1,8 @@
+import { HelperMediaQuery } from '../../../runtime/shared/helpers/media-query.helper';
 import type { tSystemThemeMode } from '../type';
 
 function getBrowserPreferredThemeMode(): tSystemThemeMode {
-  if (typeof globalThis.matchMedia !== 'function') {
-    return 'light';
-  }
-
-  return globalThis.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return HelperMediaQuery.matches('(prefers-color-scheme: dark)') ? 'dark' : 'light';
 }
 
 export const HelperTheme = {
