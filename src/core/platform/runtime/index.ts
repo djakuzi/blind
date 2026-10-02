@@ -1,11 +1,5 @@
 import * as PlatformRuntime from './tool';
 
 export { PlatformRuntime };
-export type {
-  iBlindBridge,
-  iBlindRuntimeBridge,
-  tAppPlatform,
-  tAppRuntime,
-  tDesktopAppPlatform,
-  tMobileAppPlatform,
-} from './type';
+export type { tAppPlatform, tAppRuntime, tMobileAppPlatform } from './type';
+export type { iDesktopBridge, iDesktopRuntimeBridge, tDesktopAppPlatform } from './desktop/type';
