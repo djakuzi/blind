@@ -1,6 +1,6 @@
 import { HelperAudio } from './audio.helper';
+import type { iPlatformActionResult } from '../../../type';
 import type {
-  iAudioActionResult,
   iAudioAdapter,
   iAudioPlayOptions,
   iAudioPreloadResource,
@@ -60,7 +60,7 @@ function createAdapter(loadAudioData: tAudioDataLoader): iAudioAdapter {
     return masterGain;
   }
 
-  async function activate(): Promise<iAudioActionResult> {
+  async function activate(): Promise<iPlatformActionResult> {
     const context = getAudioContext();
 
     if (context.state === 'suspended') {
