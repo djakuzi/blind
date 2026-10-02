@@ -11,8 +11,10 @@ let muted = false;
 
 const activeAudioIds = new Set<string>();
 const activeLoops = new Map<string, iAudioResource>();
+const runningLoopIds = new Set<string>();
 const preloadedAudioIds = new Set<string>();
 const preloadRequests = new Map<string, Promise<void>>();
+const loopRequests = new Map<string, Promise<void>>();
 
 async function preloadResource(audio: iAudioPreloadResource) {
   if (preloadedAudioIds.has(audio.id)) {
@@ -76,6 +78,49 @@ function createPlayOptions(audio: iAudioResource, options: iAudioPlayOptions) {
   };
 }
 
+async function startLoop(audio: iAudioResource) {
+  if (muted || !activeLoops.has(audio.id) || runningLoopIds.has(audio.id)) {
+    return;
+  }
+
+  const activeRequest = loopRequests.get(audio.id);
+
+  if (activeRequest) {
+    await activeRequest;
+    return;
+  }
+
+  const request = (async () => {
+    if (muted || !activeLoops.has(audio.id) || runningLoopIds.has(audio.id)) {
+      return;
+    }
+
+    await NativeAudio.loop({
+      assetId: audio.id,
+    });
+
+    if (muted || !activeLoops.has(audio.id)) {
+      await NativeAudio.stop({
+        assetId: audio.id,
+      });
+
+      return;
+    }
+
+    runningLoopIds.add(audio.id);
+  })();
+
+  loopRequests.set(audio.id, request);
+
+  try {
+    await request;
+  } finally {
+    if (loopRequests.get(audio.id) === request) {
+      loopRequests.delete(audio.id);
+    }
+  }
+}
+
 export const MobileAudioAdapter: iAudioAdapter = {
   async activate() {
     return HelperAudio.createHandledResult();
@@ -110,19 +155,7 @@ export const MobileAudioAdapter: iAudioAdapter = {
   async loop(audio) {
     activeLoops.set(audio.id, audio);
 
-    if (muted) {
-      return HelperAudio.createHandledResult();
-    }
-
-    await NativeAudio.loop({
-      assetId: audio.id,
-    });
-
-    if (muted) {
-      await NativeAudio.stop({
-        assetId: audio.id,
-      });
-    }
+    await startLoop(audio);
 
     return HelperAudio.createHandledResult();
   },
@@ -130,6 +163,14 @@ export const MobileAudioAdapter: iAudioAdapter = {
   async stop(audio) {
     activeAudioIds.delete(audio.id);
     activeLoops.delete(audio.id);
+
+    const activeLoopRequest = loopRequests.get(audio.id);
+
+    if (activeLoopRequest) {
+      await activeLoopRequest;
+    }
+
+    runningLoopIds.delete(audio.id);
 
     await NativeAudio.stop({
       assetId: audio.id,
@@ -146,7 +187,9 @@ export const MobileAudioAdapter: iAudioAdapter = {
     muted = value;
 
     if (muted) {
-      const audioIds = new Set([...activeAudioIds, ...activeLoops.keys()]);
+      await Promise.allSettled([...loopRequests.values()]);
+
+      const audioIds = new Set([...activeAudioIds, ...runningLoopIds]);
 
       await Promise.all(
         [...audioIds].map((assetId) =>
@@ -157,28 +200,29 @@ export const MobileAudioAdapter: iAudioAdapter = {
       );
 
       activeAudioIds.clear();
+      runningLoopIds.clear();
 
       return HelperAudio.createHandledResult();
     }
 
-    await Promise.all(
-      [...activeLoops.values()].map((audio) =>
-        NativeAudio.loop({
-          assetId: audio.id,
-        }),
-      ),
-    );
+    await Promise.all([...activeLoops.values()].map((audio) => startLoop(audio)));
 
     return HelperAudio.createHandledResult();
   },
 
   async destroy() {
-    await Promise.allSettled([...preloadRequests.values()]);
+    activeLoops.clear();
+
+    await Promise.allSettled([
+      ...preloadRequests.values(),
+      ...loopRequests.values(),
+    ]);
 
     activeAudioIds.clear();
-    activeLoops.clear();
+    runningLoopIds.clear();
     preloadedAudioIds.clear();
     preloadRequests.clear();
+    loopRequests.clear();
     muted = false;
 
     await NativeAudio.deinitPlugin();
