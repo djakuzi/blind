@@ -8,7 +8,7 @@ import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/pres
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
-import { ToolInput } from '@/core/platform/tool/input';
+import { ToolInput } from '@/core/platform';
 
 export type tAppHoldHintDirection = 'row' | 'column';
 
@@ -46,7 +46,7 @@ const props = withDefaults(defineProps<PropsAppHoldHint>(), {
   uppercase: true,
 });
 
-const hasFineHoverPointer = ref(ToolInput.hasFineHoverPointer());
+const hasFineHoverPointer = ref(ToolInput.hasFineHoverPointer().value);
 
 let unsubscribeFineHoverPointer: (() => void) | undefined;
 
@@ -97,11 +97,13 @@ const hintColor = computed(() => resolveColorValue(props.color));
 const hintFontSize = computed(() => resolveFontSizeValue(props.fontSize ?? BASE_SIZE_FONT_PRESET[props.size]));
 
 onMounted(() => {
-  hasFineHoverPointer.value = ToolInput.hasFineHoverPointer();
+  hasFineHoverPointer.value = ToolInput.hasFineHoverPointer().value;
 
-  unsubscribeFineHoverPointer = ToolInput.onFineHoverPointerChange((matches) => {
+  const subscription = ToolInput.onFineHoverPointerChange((matches) => {
     hasFineHoverPointer.value = matches;
   });
+
+  unsubscribeFineHoverPointer = subscription.unsubscribe;
 });
 
 onBeforeUnmount(() => {
