@@ -10,7 +10,6 @@ import type {
 } from './type';
 
 export type {
-  iAudioActionResult,
   iAudioAdapter,
   iAudioPlayOptions,
   iAudioPreloadResource,
