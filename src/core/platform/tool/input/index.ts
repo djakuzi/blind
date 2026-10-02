@@ -6,8 +6,6 @@ import { WebInputAdapter } from './adapters/web.adapter';
 
 export type {
   iInputAdapter,
-  iInputSubscription,
-  iInputValue,
   tInputMediaQueryChangeCallback,
 } from './type';
 
