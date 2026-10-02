@@ -1,3 +1,4 @@
+import { HelperMediaQuery } from '../../../runtime/shared/helpers/media-query.helper';
 import {
   FINE_HOVER_POINTER_MEDIA_QUERY,
   FINE_POINTER_MEDIA_QUERY,
@@ -11,22 +12,30 @@ export const MobileInputAdapter: iInputAdapter = {
   supportsPointerEvents: HelperBrowserInput.supportsPointerEvents,
 
   canHover() {
-    return HelperBrowserInput.matchesMediaQuery(HOVER_MEDIA_QUERY);
+    return {
+      value: HelperMediaQuery.matches(HOVER_MEDIA_QUERY),
+    };
   },
 
   hasFinePointer() {
-    return HelperBrowserInput.matchesMediaQuery(FINE_POINTER_MEDIA_QUERY);
+    return {
+      value: HelperMediaQuery.matches(FINE_POINTER_MEDIA_QUERY),
+    };
   },
 
   hasFineHoverPointer() {
-    return HelperBrowserInput.matchesMediaQuery(FINE_HOVER_POINTER_MEDIA_QUERY);
+    return {
+      value: HelperMediaQuery.matches(FINE_HOVER_POINTER_MEDIA_QUERY),
+    };
   },
 
   isPrimaryPointerFine() {
-    return HelperBrowserInput.matchesMediaQuery(PRIMARY_FINE_POINTER_MEDIA_QUERY);
+    return {
+      value: HelperMediaQuery.matches(PRIMARY_FINE_POINTER_MEDIA_QUERY),
+    };
   },
 
   onFineHoverPointerChange(callback) {
-    return HelperBrowserInput.onMediaQueryChange(FINE_HOVER_POINTER_MEDIA_QUERY, callback);
+    return HelperMediaQuery.subscribe(FINE_HOVER_POINTER_MEDIA_QUERY, callback);
   },
 };
