@@ -3,17 +3,17 @@ import type { iVibrationResult } from '../type';
 function vibrate(pattern: readonly number[]): iVibrationResult {
   if (typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') {
     return {
-      isPerformed: false,
+      isHandled: false,
     };
   }
 
   try {
     return {
-      isPerformed: navigator.vibrate([...pattern]),
+      isHandled: navigator.vibrate([...pattern]),
     };
   } catch {
     return {
-      isPerformed: false,
+      isHandled: false,
     };
   }
 }
