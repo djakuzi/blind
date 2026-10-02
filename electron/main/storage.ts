@@ -1,5 +1,5 @@
 import { app, ipcMain } from 'electron';
-import { readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ELECTRON_STORAGE_IPC } from '../ipc/storage.ipc';
 
@@ -39,6 +39,7 @@ async function readStorage(): Promise<tStorageData> {
 }
 
 async function writeStorage(value: tStorageData) {
+  await mkdir(app.getPath('userData'), { recursive: true });
   await writeFile(getStoragePath(), JSON.stringify(value), 'utf8');
 }
 
