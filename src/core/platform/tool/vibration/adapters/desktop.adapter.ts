@@ -1,6 +1,7 @@
-import type { iVibrationAdapter, iVibrationResult } from '../type';
+import type { iPlatformActionResult } from '../../../type';
+import type { iVibrationAdapter } from '../type';
 
-function createUnsupportedResult(): iVibrationResult {
+function createUnsupportedResult(): iPlatformActionResult {
   return {
     isHandled: false,
   };
