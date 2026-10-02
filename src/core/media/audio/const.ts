@@ -1,5 +1,5 @@
-import AudioAsset1 from '@/assets/audio/sfx/interaction/hold-complete.wav'
-import AudioAsset2 from '@/assets/audio/sfx/interaction/hold-start.wav'
+import AudioAsset1 from '@/assets/audio/sfx/interaction/hold-complete.wav?no-inline'
+import AudioAsset2 from '@/assets/audio/sfx/interaction/hold-start.wav?no-inline'
 
 export const AUDIO_ASSETS = {
   'sfx.interaction.hold-complete': {
