@@ -19,6 +19,7 @@ export interface iAudioPlayOptions {
 }
 
 export interface iAudioAdapter {
+  activate(): Promise<iAudioActionResult>;
   preload(resources: readonly iAudioPreloadResource[]): Promise<iAudioActionResult>;
   play(audio: iAudioResource, options: iAudioPlayOptions): Promise<iAudioActionResult>;
   loop(audio: iAudioResource): Promise<iAudioActionResult>;
