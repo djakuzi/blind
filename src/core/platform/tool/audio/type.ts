@@ -1,9 +1,5 @@
-export interface iAudioConfigureOptions {
-  focus?: boolean;
-  background?: boolean;
-  ignoreSilent?: boolean;
-  showNotification?: boolean;
-  backgroundPlayback?: boolean;
+export interface iAudioActionResult {
+  isHandled: boolean;
 }
 
 export interface iAudioResource {
@@ -22,11 +18,11 @@ export interface iAudioPlayOptions {
   delay?: number;
 }
 
-export interface iAudioPlayOnceOptions {
-  src: string;
-  volume?: number;
-}
-
-export interface iAudioVolumeOptions {
-  volume: number;
+export interface iAudioAdapter {
+  preload(resources: readonly iAudioPreloadResource[]): Promise<iAudioActionResult>;
+  play(audio: iAudioResource, options: iAudioPlayOptions): Promise<iAudioActionResult>;
+  loop(audio: iAudioResource): Promise<iAudioActionResult>;
+  stop(audio: iAudioResource): Promise<iAudioActionResult>;
+  setMuted(value: boolean): Promise<iAudioActionResult>;
+  destroy(): Promise<iAudioActionResult>;
 }
