@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -12,6 +12,8 @@ const audioChannelsByType = {
   sfx: 4,
   music: 1,
 };
+
+const existingAudioVolumes = readExistingAudioVolumes(outputConstPath);
 
 const audioFiles = collectAudioFiles(audioDir)
   .sort((left, right) => left.localeCompare(right))
@@ -29,6 +31,7 @@ const audioFiles = collectAudioFiles(audioDir)
       audioId,
       type,
       channels: audioChannelsByType[type],
+      volume: existingAudioVolumes.get(audioId) ?? 1,
       importName: `AudioAsset${index + 1}`,
     };
   });
@@ -43,11 +46,12 @@ const importsBlock = audioFiles
 
 const entriesBlock = audioFiles
   .map(
-    ({ audioId, importName, type, channels }) => `  '${audioId}': {
+    ({ audioId, importName, type, channels, volume }) => `  '${audioId}': {
     id: '${audioId}',
     src: ${importName},
     type: '${type}',
     channels: ${channels},
+    volume: ${volume},
   },`,
   )
   .join('\n');
@@ -81,6 +85,33 @@ writeFileSync(outputConstPath, constContent);
 writeFileSync(outputTypePath, typeContent);
 
 console.log(`audio generated: ${audioFiles.length}`);
+
+function readExistingAudioVolumes(filePath) {
+  if (!existsSync(filePath)) {
+    return new Map();
+  }
+
+  const content = readFileSync(filePath, 'utf8');
+  const volumes = new Map();
+  const entryPattern = /  '([^']+)': \\{([\\s\\S]*?)\\n  \\},/g;
+
+  for (const match of content.matchAll(entryPattern)) {
+    const [, audioId, entryContent] = match;
+    const volumeMatch = entryContent.match(/\\n    volume: (-?\\d+(?:\\.\\d+)?),/);
+
+    if (!volumeMatch) {
+      continue;
+    }
+
+    const volume = Number(volumeMatch[1]);
+
+    if (Number.isFinite(volume)) {
+      volumes.set(audioId, volume);
+    }
+  }
+
+  return volumes;
+}
 
 function collectAudioFiles(directoryPath) {
   if (!existsSync(directoryPath)) {

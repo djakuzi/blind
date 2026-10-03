@@ -11,36 +11,42 @@ export const AUDIO_ASSETS = {
     src: AudioAsset1,
     type: 'sfx',
     channels: 4,
+    volume: 1,
   },
   'sfx.interaction.hold-progress': {
     id: 'sfx.interaction.hold-progress',
     src: AudioAsset2,
     type: 'sfx',
     channels: 4,
+    volume: 1,
   },
   'sfx.interaction.hold-start': {
     id: 'sfx.interaction.hold-start',
     src: AudioAsset3,
     type: 'sfx',
     channels: 4,
+    volume: 1,
   },
   'sfx.navigation.back': {
     id: 'sfx.navigation.back',
     src: AudioAsset4,
     type: 'sfx',
     channels: 4,
+    volume: 1,
   },
   'sfx.selection.default': {
     id: 'sfx.selection.default',
     src: AudioAsset5,
     type: 'sfx',
     channels: 4,
+    volume: 1,
   },
   'sfx.selection.slider': {
     id: 'sfx.selection.slider',
     src: AudioAsset6,
     type: 'sfx',
     channels: 4,
+    volume: 1,
   },
 } as const
 
