@@ -13,7 +13,7 @@ Generated:
 2026-10-04
 
 Post-processing:
-Selected from the generated candidates and processed locally for more consistent playback across headphones, laptop speakers, and mobile speakers while preserving the original tactile character.
+Selected from the generated candidates and cleaned locally with a conservative noise-reduction pass. Residual background noise and the unnecessary tail were reduced while preserving the original attack, bass character, timing, and perceived loudness. Very short boundary fades were applied to avoid playback clicks.
 
 Generation plan:
 Not recorded.
