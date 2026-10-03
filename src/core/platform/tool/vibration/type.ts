@@ -16,6 +16,12 @@ export interface iVibrationNotificationOptions {
   type?: tVibrationNotificationType;
 }
 
+export interface iGamepadRumbleOptions {
+  duration: number;
+  weakMagnitude: number;
+  strongMagnitude: number;
+}
+
 export interface iVibrationAdapter {
   vibrate(duration: number): Promise<iPlatformActionResult>;
   impact(style: tVibrationImpactStyle): Promise<iPlatformActionResult>;

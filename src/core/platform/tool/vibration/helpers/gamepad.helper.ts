@@ -1,3 +1,5 @@
+import type { iGamepadRumbleOptions } from '../type';
+
 interface iGamepadHapticActuator {
   playEffect(
     type: 'dual-rumble',
@@ -12,12 +14,6 @@ interface iGamepadHapticActuator {
 
 interface iHapticGamepad {
   vibrationActuator?: iGamepadHapticActuator | null;
-}
-
-export interface iGamepadRumbleOptions {
-  duration: number;
-  weakMagnitude: number;
-  strongMagnitude: number;
 }
 
 async function rumble(options: iGamepadRumbleOptions) {

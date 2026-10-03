@@ -1,9 +1,9 @@
 import type {
+  iGamepadRumbleOptions,
   tVibrationImpactStyle,
   tVibrationNotificationType,
   tVibrationSelectionPhase,
 } from './type';
-import type { iGamepadRumbleOptions } from './helpers/gamepad.helper';
 
 export const DEFAULT_VIBRATION_DURATION = 45;
 export const DEFAULT_VIBRATION_IMPACT_STYLE: tVibrationImpactStyle = 'light';

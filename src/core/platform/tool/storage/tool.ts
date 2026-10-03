@@ -1,4 +1,4 @@
-import { HelperJson } from '../shared/helpers/json.helper';
+import { HelperJson } from '../../runtime/shared/helpers/json.helper';
 import { HelperCache } from './helpers/cache.helper';
 import type { iStorageAdapter, iTimedStorageEntry } from './type';
 

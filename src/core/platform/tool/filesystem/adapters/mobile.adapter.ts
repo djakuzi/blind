@@ -1,6 +1,17 @@
 import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import type { iFilesystemAdapter } from '../type';
 
+const FILE_NOT_FOUND_ERROR_CODE = 'OS-PLUG-FILE-0008';
+
+function isFileNotFoundError(error: unknown) {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'code' in error &&
+    error.code === FILE_NOT_FOUND_ERROR_CODE
+  );
+}
+
 export const MobileFilesystemAdapter: iFilesystemAdapter = {
   async writeFile(path, data) {
     await Filesystem.writeFile({
@@ -23,10 +34,14 @@ export const MobileFilesystemAdapter: iFilesystemAdapter = {
       return {
         value: typeof data === 'string' ? data : await data.text(),
       };
-    } catch {
-      return {
-        value: null,
-      };
+    } catch (error) {
+      if (isFileNotFoundError(error)) {
+        return {
+          value: null,
+        };
+      }
+
+      throw error;
     }
   },
 
@@ -36,8 +51,10 @@ export const MobileFilesystemAdapter: iFilesystemAdapter = {
         path,
         directory: Directory.Data,
       });
-    } catch {
-      return;
+    } catch (error) {
+      if (!isFileNotFoundError(error)) {
+        throw error;
+      }
     }
   },
 };

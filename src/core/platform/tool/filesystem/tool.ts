@@ -1,4 +1,4 @@
-import { HelperJson } from '../shared/helpers/json.helper';
+import { HelperJson } from '../../runtime/shared/helpers/json.helper';
 import { HelperPath } from './helpers/path.helper';
 import type { iFilesystemAdapter } from './type';
 
@@ -15,31 +15,21 @@ export function createFilesystemTool(adapter: iFilesystemAdapter) {
   }
 
   async function getJson<T>(path: string) {
-    try {
-      const { value } = await adapter.readFile(normalizePath(path));
+    const { value } = await adapter.readFile(normalizePath(path));
 
-      if (value === null) {
-        return {
-          value: null,
-        };
-      }
-
-      return {
-        value: HelperJson.parse<T>(value),
-      };
-    } catch {
+    if (value === null) {
       return {
         value: null,
       };
     }
+
+    return {
+      value: HelperJson.parse<T>(value),
+    };
   }
 
   async function remove(path: string) {
-    try {
-      await adapter.removeFile(normalizePath(path));
-    } catch {
-      return;
-    }
+    await adapter.removeFile(normalizePath(path));
   }
 
   return {
