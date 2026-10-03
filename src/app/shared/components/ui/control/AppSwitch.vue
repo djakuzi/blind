@@ -5,7 +5,7 @@ import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
-import { ToolVibration } from '@/core/platform/tool/vibration';
+import { ToolVibration } from '@/core/platform';
 
 export interface PropsAppSwitch {
   modelValue: boolean;
