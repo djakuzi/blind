@@ -1,9 +1,8 @@
-import { resolveAdapter } from '../../adapter';
-import { PlatformRuntime } from '../../runtime';
+import { resolveRuntimeAdapter } from '../../adapter';
 import { DesktopVibrationAdapter } from './adapters/desktop.adapter';
 import { MobileVibrationAdapter } from './adapters/mobile.adapter';
 import { WebVibrationAdapter } from './adapters/web.adapter';
-import { createVibrationService } from './service';
+import { createVibrationTool } from './tool';
 
 export type {
   iVibrationAdapter,
@@ -15,14 +14,11 @@ export type {
   tVibrationSelectionPhase,
 } from './type';
 
-const VibrationAdapter = resolveAdapter(
-  {
-    web: WebVibrationAdapter,
-    mobile: MobileVibrationAdapter,
-    desktop: DesktopVibrationAdapter,
-  },
-  PlatformRuntime.getRuntime(),
-);
+const VibrationAdapter = resolveRuntimeAdapter({
+  web: WebVibrationAdapter,
+  mobile: MobileVibrationAdapter,
+  desktop: DesktopVibrationAdapter,
+});
 
 export const {
   vibrate,
@@ -31,4 +27,4 @@ export const {
   selectionStart,
   selectionChanged,
   selectionEnd,
-} = createVibrationService(VibrationAdapter);
+} = createVibrationTool(VibrationAdapter);

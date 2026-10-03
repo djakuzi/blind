@@ -1,18 +1,11 @@
 import { HelperBridge } from '../../../runtime/desktop/helpers/bridge.helper';
+import { HelperBrowserStorage } from '../helpers/browser-storage.helper';
 import type { iStorageAdapter } from '../type';
-
-function getLegacyStorage() {
-  try {
-    return typeof localStorage === 'undefined' ? null : localStorage;
-  } catch {
-    return null;
-  }
-}
 
 export const DesktopStorageAdapter: iStorageAdapter = {
   async setItem(key, value) {
     await HelperBridge.getCapability('storage').setItem(key, value);
-    getLegacyStorage()?.removeItem(key);
+    HelperBrowserStorage.tryGet()?.removeItem(key);
   },
 
   async getItem(key) {
@@ -23,7 +16,7 @@ export const DesktopStorageAdapter: iStorageAdapter = {
       return result;
     }
 
-    const legacyStorage = getLegacyStorage();
+    const legacyStorage = HelperBrowserStorage.tryGet();
     const legacyValue = legacyStorage?.getItem(key) ?? null;
 
     if (legacyValue === null) {
@@ -40,6 +33,6 @@ export const DesktopStorageAdapter: iStorageAdapter = {
 
   async removeItem(key) {
     await HelperBridge.getCapability('storage').removeItem(key);
-    getLegacyStorage()?.removeItem(key);
+    HelperBrowserStorage.tryGet()?.removeItem(key);
   },
 };

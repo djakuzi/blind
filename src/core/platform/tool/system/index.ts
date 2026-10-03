@@ -1,23 +1,18 @@
-import { resolveAdapter } from '../../adapter';
-import { PlatformRuntime } from '../../runtime';
-import { DesktopSystemAdapter } from './adapters/desktop.adapter';
+import { resolveRuntimeAdapter } from '../../adapter';
+import { BrowserSystemAdapter } from './adapters/browser.adapter';
 import { MobileSystemAdapter } from './adapters/mobile.adapter';
-import { WebSystemAdapter } from './adapters/web.adapter';
-import { createSystemService } from './service';
+import { createSystemTool } from './tool';
 
 export type { iSystemAdapter, iSystemScale, tSystemThemeMode } from './type';
 
-const SystemAdapter = resolveAdapter(
-  {
-    web: WebSystemAdapter,
-    mobile: MobileSystemAdapter,
-    desktop: DesktopSystemAdapter,
-  },
-  PlatformRuntime.getRuntime(),
-);
+const SystemAdapter = resolveRuntimeAdapter({
+  web: BrowserSystemAdapter,
+  mobile: MobileSystemAdapter,
+  desktop: BrowserSystemAdapter,
+});
 
 export const {
   getSystemLanguage,
   getSystemScale,
   getPreferredThemeMode,
-} = createSystemService(SystemAdapter);
+} = createSystemTool(SystemAdapter);

@@ -1,4 +1,7 @@
-import type { iPlatformActionResult } from '../../type';
+import type {
+  iPlatformActionResult,
+  iPlatformSubscription,
+} from '../../type';
 
 export interface iAudioResource {
   id: string;
@@ -18,16 +21,14 @@ export interface iAudioPlayOptions {
 
 export type tAudioCompleteCallback = (assetId: string) => void;
 
-export interface iAudioSubscription {
-  unsubscribe(): Promise<void>;
-}
-
 export interface iAudioAdapter {
   activate(): Promise<iPlatformActionResult>;
   preloadResource(audio: iAudioPreloadResource): Promise<void>;
   playResource(audio: iAudioResource, options: iAudioPlayOptions): Promise<void>;
   startLoop(audio: iAudioResource): Promise<void>;
   stopResource(assetId: string): Promise<void>;
-  subscribeComplete(callback: tAudioCompleteCallback): Promise<iAudioSubscription>;
+  subscribeComplete(
+    callback: tAudioCompleteCallback,
+  ): Promise<iPlatformSubscription>;
   destroy(): Promise<void>;
 }

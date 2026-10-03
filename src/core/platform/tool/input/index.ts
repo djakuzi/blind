@@ -1,23 +1,17 @@
-import { resolveAdapter } from '../../adapter';
-import { PlatformRuntime } from '../../runtime';
-import { DesktopInputAdapter } from './adapters/desktop.adapter';
-import { MobileInputAdapter } from './adapters/mobile.adapter';
-import { WebInputAdapter } from './adapters/web.adapter';
-import { createInputService } from './service';
+import { resolveRuntimeAdapter } from '../../adapter';
+import { BrowserInputAdapter } from './adapters/browser.adapter';
+import { createInputTool } from './tool';
 
 export type {
   iInputAdapter,
   tInputMediaQueryChangeCallback,
 } from './type';
 
-const InputAdapter = resolveAdapter(
-  {
-    web: WebInputAdapter,
-    mobile: MobileInputAdapter,
-    desktop: DesktopInputAdapter,
-  },
-  PlatformRuntime.getRuntime(),
-);
+const InputAdapter = resolveRuntimeAdapter({
+  web: BrowserInputAdapter,
+  mobile: BrowserInputAdapter,
+  desktop: BrowserInputAdapter,
+});
 
 export const {
   supportsPointerEvents,
@@ -26,4 +20,4 @@ export const {
   hasFineHoverPointer,
   isPrimaryPointerFine,
   onFineHoverPointerChange,
-} = createInputService(InputAdapter);
+} = createInputTool(InputAdapter);

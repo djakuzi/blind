@@ -1,9 +1,8 @@
-import { resolveAdapter } from '../../adapter';
-import { PlatformRuntime } from '../../runtime';
+import { resolveRuntimeAdapter } from '../../adapter';
 import { DesktopAudioAdapter } from './adapters/desktop.adapter';
 import { MobileAudioAdapter } from './adapters/mobile.adapter';
 import { WebAudioAdapter } from './adapters/web.adapter';
-import { createAudioService } from './service';
+import { createAudioTool } from './tool';
 
 export type {
   iAudioAdapter,
@@ -12,14 +11,11 @@ export type {
   iAudioResource,
 } from './type';
 
-const AudioAdapter = resolveAdapter(
-  {
-    web: WebAudioAdapter,
-    mobile: MobileAudioAdapter,
-    desktop: DesktopAudioAdapter,
-  },
-  PlatformRuntime.getRuntime(),
-);
+const AudioAdapter = resolveRuntimeAdapter({
+  web: WebAudioAdapter,
+  mobile: MobileAudioAdapter,
+  desktop: DesktopAudioAdapter,
+});
 
 export const {
   activate,
@@ -29,4 +25,4 @@ export const {
   stop,
   setMuted,
   destroy,
-} = createAudioService(AudioAdapter);
+} = createAudioTool(AudioAdapter);

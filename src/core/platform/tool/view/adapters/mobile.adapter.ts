@@ -1,34 +1,15 @@
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { StatusBar } from '@capacitor/status-bar';
-import type {
-  iEnterViewFullscreenOptions,
-  iViewAdapter,
-  tViewOrientation,
-} from '../type';
-
-async function runSafe(action: () => Promise<void>) {
-  try {
-    await action();
-
-    return true;
-  } catch {
-    return false;
-  }
-}
+import { HelperViewAction } from '../helpers/action.helper';
+import { HelperBrowserView } from '../helpers/browser.helper';
+import type { iViewAdapter } from '../type';
 
 export const MobileViewAdapter: iViewAdapter = {
-  getViewportSize() {
-    return {
-      value: {
-        width: typeof window === 'undefined' ? 0 : window.innerWidth,
-        height: typeof window === 'undefined' ? 0 : window.innerHeight,
-      },
-    };
-  },
+  getViewportSize: HelperBrowserView.getViewportSize,
 
-  async setOrientation(orientation: tViewOrientation) {
+  async setOrientation(orientation) {
     return {
-      isHandled: await runSafe(async () => {
+      isHandled: await HelperViewAction.runSafe(async () => {
         if (orientation === 'any') {
           await ScreenOrientation.unlock();
           return;
@@ -43,7 +24,7 @@ export const MobileViewAdapter: iViewAdapter = {
 
   async setStatusBarVisible(value) {
     return {
-      isHandled: await runSafe(async () => {
+      isHandled: await HelperViewAction.runSafe(async () => {
         if (value) {
           await StatusBar.show();
           return;
@@ -56,7 +37,7 @@ export const MobileViewAdapter: iViewAdapter = {
 
   async setWebViewLimitedByStatusBar(value) {
     return {
-      isHandled: await runSafe(async () => {
+      isHandled: await HelperViewAction.runSafe(async () => {
         await StatusBar.setOverlaysWebView({
           overlay: !value,
         });
@@ -64,57 +45,7 @@ export const MobileViewAdapter: iViewAdapter = {
     };
   },
 
-  async isFullscreen() {
-    return {
-      value: typeof document !== 'undefined' && document.fullscreenElement !== null,
-    };
-  },
-
-  async enterFullscreen(options: iEnterViewFullscreenOptions) {
-    if (
-      typeof document === 'undefined' ||
-      typeof document.documentElement.requestFullscreen !== 'function'
-    ) {
-      return {
-        isHandled: false,
-      };
-    }
-
-    if (document.fullscreenElement !== null) {
-      return {
-        isHandled: true,
-      };
-    }
-
-    const target = options.target ?? document.documentElement;
-
-    return {
-      isHandled: await runSafe(async () => {
-        await target.requestFullscreen({
-          navigationUI: options.navigation,
-        });
-      }),
-    };
-  },
-
-  async exitFullscreen() {
-    if (
-      typeof document === 'undefined' ||
-      typeof document.exitFullscreen !== 'function'
-    ) {
-      return {
-        isHandled: false,
-      };
-    }
-
-    if (document.fullscreenElement === null) {
-      return {
-        isHandled: true,
-      };
-    }
-
-    return {
-      isHandled: await runSafe(() => document.exitFullscreen()),
-    };
-  },
+  isFullscreen: HelperBrowserView.isFullscreen,
+  enterFullscreen: HelperBrowserView.enterFullscreen,
+  exitFullscreen: HelperBrowserView.exitFullscreen,
 };

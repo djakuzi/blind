@@ -1,34 +1,10 @@
 import { NativeAudio } from '@capgo/capacitor-native-audio';
+import { HelperAudio } from '../helpers/audio.helper';
 import type {
   iAudioAdapter,
   iAudioPlayOptions,
   iAudioPreloadResource,
-  iAudioSubscription,
 } from '../type';
-
-function normalizeChannels(value: number | undefined) {
-  if (value === undefined || !Number.isFinite(value)) {
-    return 1;
-  }
-
-  return Math.max(1, Math.floor(value));
-}
-
-function normalizeVolume(value: number | undefined) {
-  if (value === undefined || !Number.isFinite(value)) {
-    return 1;
-  }
-
-  return Math.min(1, Math.max(0.1, value));
-}
-
-function normalizeTime(value: number | undefined) {
-  if (value === undefined || !Number.isFinite(value)) {
-    return 0;
-  }
-
-  return Math.max(0, value);
-}
 
 function createPlayOptions(
   assetId: string,
@@ -39,17 +15,17 @@ function createPlayOptions(
     ...(options.volume === undefined
       ? {}
       : {
-          volume: normalizeVolume(options.volume),
+          volume: HelperAudio.normalizeNativeVolume(options.volume),
         }),
     ...(options.time === undefined
       ? {}
       : {
-          time: normalizeTime(options.time),
+          time: HelperAudio.normalizeTime(options.time),
         }),
     ...(options.delay === undefined
       ? {}
       : {
-          delay: normalizeTime(options.delay),
+          delay: HelperAudio.normalizeTime(options.delay),
         }),
   };
 }
@@ -65,8 +41,8 @@ export const MobileAudioAdapter: iAudioAdapter = {
     const options = {
       assetId: audio.id,
       assetPath: audio.src,
-      audioChannelNum: normalizeChannels(audio.channels),
-      volume: normalizeVolume(audio.volume),
+      audioChannelNum: HelperAudio.normalizeChannels(audio.channels),
+      volume: HelperAudio.normalizeNativeVolume(audio.volume),
       isUrl: false,
     };
 
@@ -93,7 +69,7 @@ export const MobileAudioAdapter: iAudioAdapter = {
     });
   },
 
-  async subscribeComplete(callback): Promise<iAudioSubscription> {
+  async subscribeComplete(callback) {
     const listener = await NativeAudio.addListener(
       'complete',
       ({ assetId }) => {

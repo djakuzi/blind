@@ -1,21 +1,32 @@
+import { HelperJson } from '../shared/helpers/json.helper';
 import { HelperCache } from './helpers/cache.helper';
 import type { iStorageAdapter, iTimedStorageEntry } from './type';
 
-export function createStorageService(adapter: iStorageAdapter) {
-  const {
-    setItem,
-    getItem,
-    removeItem,
-  } = adapter;
+function validateKey(key: string) {
+  if (!key) {
+    throw new Error('Storage key is required');
+  }
+}
+
+export function createStorageTool(adapter: iStorageAdapter) {
+  async function setItem(key: string, value: string) {
+    validateKey(key);
+    await adapter.setItem(key, value);
+  }
+
+  async function getItem(key: string) {
+    validateKey(key);
+
+    return adapter.getItem(key);
+  }
+
+  async function removeItem(key: string) {
+    validateKey(key);
+    await adapter.removeItem(key);
+  }
 
   async function setJson<T>(key: string, value: T) {
-    const data = JSON.stringify(value);
-
-    if (data === undefined) {
-      throw new Error('Storage value is not JSON serializable');
-    }
-
-    await setItem(key, data);
+    await setItem(key, HelperJson.serialize(value));
   }
 
   async function getJson<T>(key: string) {
@@ -28,14 +39,17 @@ export function createStorageService(adapter: iStorageAdapter) {
     }
 
     return {
-      value: JSON.parse(value) as T,
+      value: HelperJson.parse<T>(value),
     };
   }
 
   async function loadTimedJsonCache<T>(key: string, ttlMs: number) {
     const { value } = await getJson<unknown>(key);
 
-    if (!HelperCache.isTimedStorageEntry<T>(value) || Date.now() - value.timestamp > ttlMs) {
+    if (
+      !HelperCache.isTimedStorageEntry<T>(value) ||
+      Date.now() - value.timestamp > ttlMs
+    ) {
       await removeItem(key);
 
       return {

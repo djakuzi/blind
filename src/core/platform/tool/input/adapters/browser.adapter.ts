@@ -1,7 +1,7 @@
 import { HelperMediaQuery } from '../../../runtime/shared/helpers/media-query.helper';
 import type { iInputAdapter } from '../type';
 
-export const DesktopInputAdapter: iInputAdapter = {
+export const BrowserInputAdapter: iInputAdapter = {
   supportsPointerEvents() {
     return {
       value: typeof globalThis.PointerEvent !== 'undefined',

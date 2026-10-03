@@ -7,5 +7,5 @@ export interface iPlatformActionResult {
 }
 
 export interface iPlatformSubscription {
-  unsubscribe: () => void;
+  unsubscribe: () => void | Promise<void>;
 }

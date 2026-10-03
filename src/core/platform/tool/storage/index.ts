@@ -1,20 +1,16 @@
-import { resolveAdapter } from '../../adapter';
-import { PlatformRuntime } from '../../runtime';
+import { resolveRuntimeAdapter } from '../../adapter';
 import { DesktopStorageAdapter } from './adapters/desktop.adapter';
 import { MobileStorageAdapter } from './adapters/mobile.adapter';
 import { WebStorageAdapter } from './adapters/web.adapter';
-import { createStorageService } from './service';
+import { createStorageTool } from './tool';
 
 export type { iStorageAdapter, iTimedStorageEntry } from './type';
 
-const StorageAdapter = resolveAdapter(
-  {
-    web: WebStorageAdapter,
-    mobile: MobileStorageAdapter,
-    desktop: DesktopStorageAdapter,
-  },
-  PlatformRuntime.getRuntime(),
-);
+const StorageAdapter = resolveRuntimeAdapter({
+  web: WebStorageAdapter,
+  mobile: MobileStorageAdapter,
+  desktop: DesktopStorageAdapter,
+});
 
 export const {
   setItem,
@@ -24,4 +20,4 @@ export const {
   getJson,
   loadTimedJsonCache,
   saveTimedJsonCache,
-} = createStorageService(StorageAdapter);
+} = createStorageTool(StorageAdapter);

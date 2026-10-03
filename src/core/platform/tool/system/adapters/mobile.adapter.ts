@@ -1,6 +1,6 @@
 import { Device } from '@capacitor/device';
 import { TextZoom } from '@capacitor/text-zoom';
-import { HelperMediaQuery } from '../../../runtime/shared/helpers/media-query.helper';
+import { HelperBrowserSystem } from '../helpers/browser.helper';
 import type { iSystemAdapter } from '../type';
 
 export const MobileSystemAdapter: iSystemAdapter = {
@@ -20,7 +20,5 @@ export const MobileSystemAdapter: iSystemAdapter = {
     }
   },
 
-  prefersDarkTheme() {
-    return HelperMediaQuery.matches('(prefers-color-scheme: dark)');
-  },
+  prefersDarkTheme: HelperBrowserSystem.prefersDarkTheme,
 };

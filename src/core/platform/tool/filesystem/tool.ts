@@ -1,19 +1,17 @@
+import { HelperJson } from '../shared/helpers/json.helper';
 import { HelperPath } from './helpers/path.helper';
 import type { iFilesystemAdapter } from './type';
 
-export function createFilesystemService(adapter: iFilesystemAdapter) {
+export function createFilesystemTool(adapter: iFilesystemAdapter) {
   function normalizePath(path: string) {
     return HelperPath.normalizePath(path).path;
   }
 
   async function setJson<T>(path: string, value: T) {
-    const data = JSON.stringify(value);
-
-    if (data === undefined) {
-      throw new Error('Filesystem value is not JSON serializable');
-    }
-
-    await adapter.writeFile(normalizePath(path), data);
+    await adapter.writeFile(
+      normalizePath(path),
+      HelperJson.serialize(value),
+    );
   }
 
   async function getJson<T>(path: string) {
@@ -21,12 +19,18 @@ export function createFilesystemService(adapter: iFilesystemAdapter) {
       const { value } = await adapter.readFile(normalizePath(path));
 
       if (value === null) {
-        return { value: null };
+        return {
+          value: null,
+        };
       }
 
-      return { value: JSON.parse(value) as T };
+      return {
+        value: HelperJson.parse<T>(value),
+      };
     } catch {
-      return { value: null };
+      return {
+        value: null,
+      };
     }
   }
 

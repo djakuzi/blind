@@ -3,7 +3,6 @@ import type {
   iAudioPlayOptions,
   iAudioPreloadResource,
   iAudioResource,
-  iAudioSubscription,
 } from './type';
 
 function createHandledResult() {
@@ -12,9 +11,11 @@ function createHandledResult() {
   };
 }
 
-export function createAudioService(adapter: iAudioAdapter) {
+export function createAudioTool(adapter: iAudioAdapter) {
   let muted = false;
-  let completeSubscription: iAudioSubscription | undefined;
+  let completeSubscription:
+    | Awaited<ReturnType<iAudioAdapter['subscribeComplete']>>
+    | undefined;
   let completeSubscriptionRequest: Promise<void> | undefined;
 
   const activePlayCounts = new Map<string, number>();
@@ -50,7 +51,8 @@ export function createAudioService(adapter: iAudioAdapter) {
     }
 
     const request = (async () => {
-      completeSubscription = await adapter.subscribeComplete(decrementActivePlay);
+      completeSubscription =
+        await adapter.subscribeComplete(decrementActivePlay);
     })();
 
     completeSubscriptionRequest = request;
@@ -225,7 +227,9 @@ export function createAudioService(adapter: iAudioAdapter) {
       return createHandledResult();
     }
 
-    await Promise.all([...activeLoops.values()].map((audio) => startLoop(audio)));
+    await Promise.all(
+      [...activeLoops.values()].map((audio) => startLoop(audio)),
+    );
 
     return createHandledResult();
   }
@@ -236,7 +240,9 @@ export function createAudioService(adapter: iAudioAdapter) {
     await Promise.allSettled([
       ...preloadRequests.values(),
       ...loopRequests.values(),
-      ...(completeSubscriptionRequest ? [completeSubscriptionRequest] : []),
+      ...(completeSubscriptionRequest
+        ? [completeSubscriptionRequest]
+        : []),
     ]);
 
     const subscription = completeSubscription;

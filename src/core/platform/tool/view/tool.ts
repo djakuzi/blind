@@ -4,7 +4,7 @@ import type {
   iViewAdapter,
 } from './type';
 
-export function createViewService(adapter: iViewAdapter) {
+export function createViewTool(adapter: iViewAdapter) {
   function getViewportRatio() {
     const { value } = adapter.getViewportSize();
 

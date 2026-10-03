@@ -1,23 +1,19 @@
-import { resolveAdapter } from '../../adapter';
-import { PlatformRuntime } from '../../runtime';
+import { resolveRuntimeAdapter } from '../../adapter';
 import { DesktopFilesystemAdapter } from './adapters/desktop.adapter';
 import { MobileFilesystemAdapter } from './adapters/mobile.adapter';
 import { WebFilesystemAdapter } from './adapters/web.adapter';
-import { createFilesystemService } from './service';
+import { createFilesystemTool } from './tool';
 
 export type { iFilesystemAdapter } from './type';
 
-const FilesystemAdapter = resolveAdapter(
-  {
-    web: WebFilesystemAdapter,
-    mobile: MobileFilesystemAdapter,
-    desktop: DesktopFilesystemAdapter,
-  },
-  PlatformRuntime.getRuntime(),
-);
+const FilesystemAdapter = resolveRuntimeAdapter({
+  web: WebFilesystemAdapter,
+  mobile: MobileFilesystemAdapter,
+  desktop: DesktopFilesystemAdapter,
+});
 
 export const {
   setJson,
   getJson,
   remove,
-} = createFilesystemService(FilesystemAdapter);
+} = createFilesystemTool(FilesystemAdapter);

@@ -1,7 +1,7 @@
 import { HelperScale } from './helpers/scale.helper';
 import type { iSystemAdapter, tSystemThemeMode } from './type';
 
-export function createSystemService(adapter: iSystemAdapter) {
+export function createSystemTool(adapter: iSystemAdapter) {
   async function getSystemLanguage() {
     return adapter.getLanguage();
   }

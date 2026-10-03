@@ -18,7 +18,7 @@ function normalizeDuration(value: number) {
   return Math.max(1, value);
 }
 
-export function createVibrationService(adapter: iVibrationAdapter) {
+export function createVibrationTool(adapter: iVibrationAdapter) {
   function vibrate({
     duration = DEFAULT_VIBRATION_DURATION,
   }: iVibrationOptions = {}) {

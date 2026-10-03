@@ -1,9 +1,8 @@
-import { resolveAdapter } from '../../adapter';
-import { PlatformRuntime } from '../../runtime';
+import { resolveRuntimeAdapter } from '../../adapter';
 import { DesktopViewAdapter } from './adapters/desktop.adapter';
 import { MobileViewAdapter } from './adapters/mobile.adapter';
 import { WebViewAdapter } from './adapters/web.adapter';
-import { createViewService } from './service';
+import { createViewTool } from './tool';
 
 export type {
   iEnterViewFullscreenOptions,
@@ -13,14 +12,11 @@ export type {
   tViewOrientation,
 } from './type';
 
-const ViewAdapter = resolveAdapter(
-  {
-    web: WebViewAdapter,
-    mobile: MobileViewAdapter,
-    desktop: DesktopViewAdapter,
-  },
-  PlatformRuntime.getRuntime(),
-);
+const ViewAdapter = resolveRuntimeAdapter({
+  web: WebViewAdapter,
+  mobile: MobileViewAdapter,
+  desktop: DesktopViewAdapter,
+});
 
 export const {
   getViewportRatio,
@@ -29,4 +25,4 @@ export const {
   enterFullscreen,
   exitFullscreen,
   toggleFullscreen,
-} = createViewService(ViewAdapter);
+} = createViewTool(ViewAdapter);

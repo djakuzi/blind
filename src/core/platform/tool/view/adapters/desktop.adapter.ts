@@ -1,26 +1,13 @@
 import { HelperBridge } from '../../../runtime/desktop/helpers/bridge.helper';
-import type { iPlatformActionResult } from '../../../type';
+import { HelperViewAction } from '../helpers/action.helper';
+import { HelperBrowserView } from '../helpers/browser.helper';
 import type { iViewAdapter } from '../type';
 
-function unsupported(): Promise<iPlatformActionResult> {
-  return Promise.resolve({
-    isHandled: false,
-  });
-}
-
 export const DesktopViewAdapter: iViewAdapter = {
-  getViewportSize() {
-    return {
-      value: {
-        width: typeof window === 'undefined' ? 0 : window.innerWidth,
-        height: typeof window === 'undefined' ? 0 : window.innerHeight,
-      },
-    };
-  },
-
-  setOrientation: unsupported,
-  setStatusBarVisible: unsupported,
-  setWebViewLimitedByStatusBar: unsupported,
+  getViewportSize: HelperBrowserView.getViewportSize,
+  setOrientation: HelperViewAction.unsupported,
+  setStatusBarVisible: HelperViewAction.unsupported,
+  setWebViewLimitedByStatusBar: HelperViewAction.unsupported,
 
   isFullscreen() {
     return HelperBridge.getCapability('view').isFullscreen();

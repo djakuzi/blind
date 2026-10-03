@@ -6,23 +6,31 @@ import {
 } from './const';
 import type { iInputAdapter, tInputMediaQueryChangeCallback } from './type';
 
-export function createInputService(adapter: iInputAdapter) {
+export function createInputTool(adapter: iInputAdapter) {
   return {
     supportsPointerEvents: adapter.supportsPointerEvents,
+
     canHover() {
       return adapter.matchesMediaQuery(HOVER_MEDIA_QUERY);
     },
+
     hasFinePointer() {
       return adapter.matchesMediaQuery(FINE_POINTER_MEDIA_QUERY);
     },
+
     hasFineHoverPointer() {
       return adapter.matchesMediaQuery(FINE_HOVER_POINTER_MEDIA_QUERY);
     },
+
     isPrimaryPointerFine() {
       return adapter.matchesMediaQuery(PRIMARY_FINE_POINTER_MEDIA_QUERY);
     },
+
     onFineHoverPointerChange(callback: tInputMediaQueryChangeCallback) {
-      return adapter.subscribeMediaQuery(FINE_HOVER_POINTER_MEDIA_QUERY, callback);
+      return adapter.subscribeMediaQuery(
+        FINE_HOVER_POINTER_MEDIA_QUERY,
+        callback,
+      );
     },
   };
 }
