@@ -75,13 +75,9 @@ function getMasterGain() {
 }
 
 async function loadAudioData(src: string) {
-  const response = await fetch(src);
+  const { data } = await HelperBridge.getCapability('audio').loadAsset(src);
 
-  if (!response.ok) {
-    throw new Error(`Failed to load audio resource: ${src}`);
-  }
-
-  return response.arrayBuffer();
+  return data;
 }
 
 function getResource(audio: iAudioResource) {
