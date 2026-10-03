@@ -18,6 +18,7 @@
     "preGame": {
       "index": {
         "ui": {
+          "title": "Game mode",
           "accessibilityLabel": "Game mode selection",
           "itemAccessibilityLabel": "{current} of {total}",
           "holdHint": "Hold button to select",

@@ -11,11 +11,25 @@ export const routePreGame: RouteRecordRaw = {
       path: '',
       name: KEY_ROUTE.preGame.index,
       component: ViewGameMode,
+      meta: {
+        layout: {
+          header: {
+            title: (locale) => locale.views.preGame.index.ui.title,
+          },
+        },
+      },
     },
     {
       path: 'type-connection',
       name: KEY_ROUTE.preGame.typeConnection,
       component: ViewGameTypeConnection,
+      meta: {
+        layout: {
+          header: {
+            title: (locale) => locale.views.preGame.typeConnection.ui.title,
+          },
+        },
+      },
     },
   ],
 };

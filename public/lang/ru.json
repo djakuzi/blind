@@ -18,6 +18,7 @@
     "preGame": {
       "index": {
         "ui": {
+          "title": "Режим игры",
           "accessibilityLabel": "Выбор режима игры",
           "itemAccessibilityLabel": "{current} из {total}",
           "holdHint": "Зажмите кнопку для выбора",

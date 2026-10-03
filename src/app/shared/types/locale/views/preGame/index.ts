@@ -1,6 +1,7 @@
 export interface LocaleViewPreGame {
   index: {
     ui: {
+      title: string;
       accessibilityLabel: string;
       itemAccessibilityLabel: string;
       holdHint: string;

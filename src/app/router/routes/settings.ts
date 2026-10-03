@@ -10,6 +10,13 @@ export const routeSettings: RouteRecordRaw = {
       path: '',
       name: KEY_ROUTE.settings.index,
       component: ViewSettings,
+      meta: {
+        layout: {
+          header: {
+            title: (locale) => locale.views.settings.index.ui.title,
+          },
+        },
+      },
     },
   ],
 };
