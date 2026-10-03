@@ -125,6 +125,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
         font-weight="bold"
         :uppercase="true"
         :play="isOptionMarqueePlaying(option)"
+        :speed="option.value === modelValue ? 40 : undefined"
       />
     </button>
   </div>
