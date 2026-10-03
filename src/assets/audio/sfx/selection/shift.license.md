@@ -1,7 +1,7 @@
-# selection/slider
+# selection/shift
 
 Asset:
-`slider.wav`
+`shift.wav`
 
 Source:
 [ElevenLabs](../../licenses/sources/elevenlabs.md)

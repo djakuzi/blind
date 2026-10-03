@@ -3,7 +3,7 @@ import AudioAsset2 from '@/assets/audio/sfx/interaction/hold-progress.wav?no-inl
 import AudioAsset3 from '@/assets/audio/sfx/interaction/hold-start.wav?no-inline'
 import AudioAsset4 from '@/assets/audio/sfx/navigation/back.wav?no-inline'
 import AudioAsset5 from '@/assets/audio/sfx/selection/default.wav?no-inline'
-import AudioAsset6 from '@/assets/audio/sfx/selection/slider.wav?no-inline'
+import AudioAsset6 from '@/assets/audio/sfx/selection/shift.wav?no-inline'
 
 export const AUDIO_ASSETS = {
   'sfx.interaction.hold-complete': {
@@ -41,8 +41,8 @@ export const AUDIO_ASSETS = {
     channels: 4,
     volume: 1,
   },
-  'sfx.selection.slider': {
-    id: 'sfx.selection.slider',
+  'sfx.selection.shift': {
+    id: 'sfx.selection.shift',
     src: AudioAsset6,
     type: 'sfx',
     channels: 4,
@@ -57,7 +57,7 @@ export const AUDIO_GROUPS = {
     'sfx.interaction.hold-start',
     'sfx.navigation.back',
     'sfx.selection.default',
-    'sfx.selection.slider',
+    'sfx.selection.shift',
   ],
   'sfx.interaction': [
     'sfx.interaction.hold-complete',
@@ -69,6 +69,6 @@ export const AUDIO_GROUPS = {
   ],
   'sfx.selection': [
     'sfx.selection.default',
-    'sfx.selection.slider',
+    'sfx.selection.shift',
   ],
 } as const
