@@ -13,7 +13,7 @@ Generated:
 2026-10-03
 
 Post-processing:
-Selected from the generated candidates and cleaned locally to reduce unwanted sub-rumble and upper roughness while preserving the original tactile character and envelope. The trailing silence was trimmed and very short boundary fades were applied to avoid playback clicks.
+Selected from the generated candidates and cleaned locally while preserving the original tactile character and envelope. A cross-device pass was applied to improve consistency between headphones, laptop speakers, and mobile speakers. No additional external audio source was introduced.
 
 Generation plan:
 Not recorded.
