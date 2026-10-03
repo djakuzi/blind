@@ -75,7 +75,7 @@ const fillClass = computed(() => ['app-blood-fill', { 'app-blood-fill--active': 
   height: var(--cp-blood-fill-wave-height);
   z-index: 1;
   background-repeat: repeat-x;
-  background-size: 50% 100%;
+  background-size: var(--cp-blood-fill-wave-pattern-width) 100%;
   will-change: transform;
 }
 
