@@ -103,7 +103,15 @@ async function updateItemLayout() {
     return;
   }
 
-  const itemStyle = getComputedStyle(items[0]);
+  const firstItem = items[0];
+
+  if (!firstItem) {
+    equalItemWidth.value = null;
+    return;
+  }
+
+  const itemStyle = getComputedStyle(firstItem);
+
   const dividerWidth = Number.parseFloat(itemStyle.borderRightWidth) || 0;
   const controlStyle = getComputedStyle(control);
   const controlBorderWidth =
