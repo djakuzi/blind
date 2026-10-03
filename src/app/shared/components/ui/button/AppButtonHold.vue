@@ -20,6 +20,7 @@ interface Props {
   bloodFlowFrontDuration?: number;
   duration?: number;
   fillDuration?: number;
+  holdStartDelay?: number;
   initialProgress?: number;
   releaseDuration?: number;
   sound?: tAudioId | null;
@@ -38,6 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
   bloodFlowFrontDuration: 1200,
   duration: 450,
   fillDuration: undefined,
+  holdStartDelay: 0,
   initialProgress: 15,
   releaseDuration: 140,
   sound: 'sfx.interaction.hold-complete',
@@ -70,6 +72,7 @@ function handleComplete() {
     :disabled="disabled"
     :duration="duration"
     :fill-duration="fillDuration"
+    :hold-start-delay="holdStartDelay"
     :initial-progress="initialProgress"
     :max-width="holdActionMaxWidth"
     :release-duration="releaseDuration"

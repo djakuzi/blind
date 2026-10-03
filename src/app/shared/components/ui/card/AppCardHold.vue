@@ -27,11 +27,11 @@ withDefaults(defineProps<PropsAppCardHold>(), {
   bloodFlowFrontDuration: 1200,
   duration: 650,
   fillDuration: undefined,
+  holdStartDelay: 40,
   initialProgress: 15,
   releaseDuration: 140,
   sound: 'sfx.interaction.hold-complete',
   startSound: 'sfx.interaction.hold-start',
-  startSoundDelay: 40,
   vibrationDuration: 45,
 });
 
@@ -56,7 +56,6 @@ function handleComplete() {
     :release-duration="releaseDuration"
     :sound="sound"
     :start-sound="startSound"
-    :start-sound-delay="startSoundDelay"
     :vibration-duration="vibrationDuration"
     :width="width"
     :max-width="maxWidth"

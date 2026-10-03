@@ -25,7 +25,6 @@ export interface PropsAppHoldAction {
   releaseDuration?: number;
   sound?: tAudioId | null;
   startSound?: tAudioId | null;
-  startSoundDelay?: number;
   vibrationDuration?: number;
   width?: tStyleSizeValue;
 }
@@ -35,14 +34,13 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   disabled: false,
   duration: 650,
   fillDuration: undefined,
-  holdStartDelay: 40,
+  holdStartDelay: 0,
   initialProgress: 15,
   maxWidth: '100%',
   moveCancelThreshold: 6,
   releaseDuration: 140,
   sound: 'sfx.interaction.hold-complete',
   startSound: 'sfx.interaction.hold-start',
-  startSoundDelay: 0,
   vibrationDuration: 45,
   width: '100%',
 });
@@ -63,7 +61,6 @@ let holdStartX = 0;
 let holdStartY = 0;
 const progressFrame = LibScheduler.createAnimationFrame();
 const holdStartTimer = LibScheduler.createTimeout();
-const startSoundTimer = LibScheduler.createTimeout();
 
 let activePointerId: number | undefined;
 let activePointerTarget: HTMLElement | undefined;
@@ -91,8 +88,6 @@ const normalizedFillDuration = computed(() => Math.max(1, props.fillDuration ?? 
 const normalizedHoldStartDelay = computed(() => Math.max(0, props.holdStartDelay));
 
 const normalizedReleaseDuration = computed(() => Math.max(0, props.releaseDuration));
-
-const normalizedStartSoundDelay = computed(() => Math.max(0, props.startSoundDelay));
 
 const normalizedProgress = computed(() => LibNumber.clampFinite(progress.value, 0, 100, 0));
 
@@ -172,33 +167,15 @@ function beginHold() {
   progress.value = normalizedInitialProgress.value;
   holdStartedAt = getCurrentTime();
 
-  progressFrame.request(updateHoldProgress);
-}
-
-function scheduleStartSound() {
-  startSoundTimer.cancel();
-
-  if (props.startSound === null) {
-    return;
-  }
-
-  const delay = normalizedStartSoundDelay.value;
-
-  if (delay === 0) {
+  if (props.startSound !== null) {
     play(props.startSound);
-    return;
   }
 
-  startSoundTimer.start(() => {
-    if (props.startSound !== null) {
-      play(props.startSound);
-    }
-  }, delay);
+  progressFrame.request(updateHoldProgress);
 }
 
 function scheduleHold() {
   holdStartTimer.cancel();
-  scheduleStartSound();
 
   const delay = normalizedHoldStartDelay.value;
 
@@ -266,7 +243,6 @@ function resetHoldState(isImmediate = false) {
   const shouldAnimateRelease = !isImmediate && progress.value > normalizedInitialProgress.value;
 
   holdStartTimer.cancel();
-  startSoundTimer.cancel();
   progressFrame.cancel();
 
   isHolding.value = false;
