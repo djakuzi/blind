@@ -71,6 +71,7 @@ const progressFrame = LibScheduler.createAnimationFrame();
 const holdStartTimer = LibScheduler.createTimeout();
 const holdCompleteTimer = LibScheduler.createTimeout();
 const progressSoundStartTimer = LibScheduler.createTimeout();
+const progressSoundFadeTimer = LibScheduler.createTimeout();
 const progressSoundStopTimer = LibScheduler.createTimeout();
 
 let progressSoundSession = 0;
@@ -159,19 +160,38 @@ async function startProgressSound() {
 
   activeProgressSoundId = soundId;
 
-  const remainingDuration = Math.max(
+  const rampDuration = Math.max(
     0,
-    holdDuration - PROGRESS_SOUND_START_DELAY,
+    holdDuration -
+      PROGRESS_SOUND_START_DELAY -
+      PROGRESS_SOUND_RELEASE_DURATION,
   );
 
   await setLoopVolume(soundId, {
     volume: PROGRESS_SOUND_END_VOLUME,
-    duration: remainingDuration / 1000,
+    duration: rampDuration / 1000,
   });
+}
+
+function fadeProgressSoundForComplete() {
+  const soundId = activeProgressSoundId;
+
+  if (soundId === undefined) {
+    return;
+  }
+
+  runAudioRequest(
+    setLoopVolume(soundId, {
+      volume: 0,
+      duration: PROGRESS_SOUND_RELEASE_DURATION / 1000,
+    }),
+    'fade before complete',
+  );
 }
 
 function scheduleProgressSound() {
   progressSoundStartTimer.cancel();
+  progressSoundFadeTimer.cancel();
   progressSoundStopTimer.cancel();
 
   if (props.progressSound === null) {
@@ -182,17 +202,27 @@ function scheduleProgressSound() {
 
   if (delay === 0) {
     runAudioRequest(startProgressSound(), 'start');
-    return;
+  } else {
+    progressSoundStartTimer.start(() => {
+      runAudioRequest(startProgressSound(), 'start');
+    }, delay);
   }
 
-  progressSoundStartTimer.start(() => {
-    runAudioRequest(startProgressSound(), 'start');
-  }, delay);
+  const fadeDelay = Math.max(
+    0,
+    holdDuration - PROGRESS_SOUND_RELEASE_DURATION,
+  );
+
+  progressSoundFadeTimer.start(
+    fadeProgressSoundForComplete,
+    fadeDelay,
+  );
 }
 
 function stopProgressSound(isImmediate = false) {
   progressSoundSession += 1;
   progressSoundStartTimer.cancel();
+  progressSoundFadeTimer.cancel();
   progressSoundStopTimer.cancel();
 
   const soundId = activeProgressSoundId ?? props.progressSound;
@@ -221,6 +251,23 @@ function stopProgressSound(isImmediate = false) {
   }, PROGRESS_SOUND_RELEASE_DURATION);
 }
 
+function stopProgressSoundForComplete() {
+  progressSoundSession += 1;
+  progressSoundStartTimer.cancel();
+  progressSoundFadeTimer.cancel();
+  progressSoundStopTimer.cancel();
+
+  const soundId = activeProgressSoundId ?? props.progressSound;
+
+  activeProgressSoundId = undefined;
+
+  if (soundId === null) {
+    return;
+  }
+
+  runAudioRequest(stop(soundId), 'stop before complete');
+}
+
 function completeHold() {
   if (hasCompleted.value || !isHolding.value) {
     return;
@@ -228,7 +275,7 @@ function completeHold() {
 
   holdCompleteTimer.cancel();
   progressFrame.cancel();
-  stopProgressSound();
+  stopProgressSoundForComplete();
 
   ToolVibration.vibrate({
     duration: props.vibrationDuration,
