@@ -6,7 +6,7 @@ import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppButtonIcon from '@/app/shared/components/ui/button/AppButtonIcon.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
-import AppDecoratedTitle from '@/app/shared/components/ui/title/AppDecoratedTitle.vue';
+import AppHeaderRailTitle from '@/app/shared/components/ui/title/AppHeaderRailTitle.vue';
 
 const router = useRouter();
 const { play } = useAudio();
@@ -33,7 +33,7 @@ function handleBack() {
         @click="handleBack"
       />
 
-      <AppDecoratedTitle
+      <AppHeaderRailTitle
         v-if="hasLayoutHeaderTitle"
         class="layout-header__title"
         :text="layoutHeaderTitle"
@@ -63,8 +63,8 @@ function handleBack() {
 .layout-header__title {
   flex: 1 1 auto;
   min-width: 0;
-  max-width: 72rem;
-  margin-inline: var(--app-space-8);
+  max-width: 96rem;
+  margin-inline: var(--app-space-6);
 }
 
 .layout-header__spacer {
