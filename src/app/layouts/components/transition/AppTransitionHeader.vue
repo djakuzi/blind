@@ -21,7 +21,9 @@ defineProps<Props>();
   display: grid;
   grid-template-rows: 1fr;
   flex: 0 0 auto;
-  width: 100%;
+  width: calc(100% + var(--cp-layout-padding-horizontal, 0px) * 2);
+  margin-top: calc(var(--cp-layout-padding-vertical, 0px) * -1);
+  margin-inline: calc(var(--cp-layout-padding-horizontal, 0px) * -1);
 }
 
 .app-transition-header__content {

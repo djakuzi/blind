@@ -58,7 +58,10 @@ function handleBack() {
   display: flex;
   align-items: center;
   width: 100%;
-  padding-block: var(--app-space-2);
+  padding:
+    calc(var(--cp-layout-padding-vertical, 0px) + var(--app-space-2))
+    var(--cp-layout-padding-horizontal, 0px)
+    var(--app-space-2);
   border-bottom: var(--app-border-width-thin) var(--app-border-style-solid) var(--app-color-border-strong);
   background: var(--app-color-surface-glass);
   -webkit-backdrop-filter: blur(1.2rem) saturate(115%);
