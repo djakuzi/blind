@@ -74,6 +74,10 @@
       "small": "Small",
       "default": "Default",
       "large": "Large"
+    },
+    "sound": {
+      "on": "On",
+      "off": "Off"
     }
   },
   "game": {

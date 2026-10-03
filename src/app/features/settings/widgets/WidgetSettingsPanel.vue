@@ -4,7 +4,6 @@ import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
-import AppSwitch from '@/app/shared/components/ui/control/AppSwitch.vue';
 import WidgetList from '@/app/shared/components/widgets/list/WidgetList.vue';
 import WidgetSearchPicker from '@/app/shared/components/widgets/picker/WidgetSearchPicker.vue';
 import type { iWidgetSearchPickerItem } from '@/app/shared/components/widgets/picker/WidgetSearchPicker.vue';
@@ -15,7 +14,7 @@ import { useAppLanguage } from '@/app/features/locale/composables/useAppLanguage
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import { useLoaderRegistry } from '@/app/overlay/loader/composables/useLoaderRegistry';
 import { LibText } from '@/app/shared/lib/text';
-import { SETTINGS_SCALE_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
+import { SETTINGS_SCALE_VALUES, SETTINGS_SOUND_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
 import { useSettings } from '../composables/useSettings';
 
 const LANGUAGE_CHANGE_SCOPE_KEY = 'app-language-change';
@@ -79,6 +78,13 @@ const scaleOptions = computed(() =>
   })),
 );
 
+const soundOptions = computed(() =>
+  SETTINGS_SOUND_VALUES.map((value) => ({
+    value,
+    label: locale.value.settings.sound[value],
+  })),
+);
+
 function getLanguageDisplayName(language: ModelLanguage) {
   return LibText.getLanguageDisplayName(language.key, currentLanguageCode.value) ?? language.name;
 }
@@ -115,8 +121,12 @@ async function handleScaleModeChange(value: string) {
   await setAppScaleMode(value);
 }
 
-function handleSoundEnabledChange(value: boolean) {
-  setSoundEnabled(value);
+function handleSoundEnabledChange(value: string) {
+  if (value !== 'on' && value !== 'off') {
+    return;
+  }
+
+  setSoundEnabled(value === 'on');
 }
 
 function cancelLanguageChange() {
@@ -200,7 +210,8 @@ async function handleLanguageChange(value: string) {
             :model-value="appThemeMode"
             :options="themeOptions"
             size="big"
-            width="100%"
+            width="fit-content"
+            max-width="100%"
             @update:model-value="handleThemeModeChange"
           />
 
@@ -209,14 +220,18 @@ async function handleLanguageChange(value: string) {
             :model-value="appScaleMode"
             :options="scaleOptions"
             size="big"
-            width="100%"
+            width="fit-content"
+            max-width="100%"
             @update:model-value="handleScaleModeChange"
           />
 
-          <AppSwitch
+          <AppSegmentedControl
             v-else-if="item.id === 'sound'"
-            :model-value="soundEnabled"
-            :accessibility-label="settingsLocale.sound"
+            :model-value="soundEnabled ? 'on' : 'off'"
+            :options="soundOptions"
+            size="big"
+            width="fit-content"
+            max-width="100%"
             @update:model-value="handleSoundEnabledChange"
           />
 
@@ -230,6 +245,9 @@ async function handleLanguageChange(value: string) {
             :title="changeLanguageModalLocale.title"
             :empty-text="changeLanguageModalLocale.emptyText"
             :trigger-aria-label="settingsLocale.changeLanguage"
+            :modal="{
+              maxWidth: '50rem',
+            }"
             :search="{
               placeholder: changeLanguageModalLocale.searchPlaceholder,
               ariaLabel: changeLanguageModalLocale.searchPlaceholder,

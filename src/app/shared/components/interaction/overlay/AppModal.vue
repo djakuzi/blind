@@ -277,6 +277,7 @@ onBeforeUnmount(() => {
   flex: 0 0 auto;
   min-width: 0;
   padding: var(--cp-modal-header-padding-y) var(--cp-modal-header-padding-x);
+  text-align: center;
 }
 
 .app-modal__body {
