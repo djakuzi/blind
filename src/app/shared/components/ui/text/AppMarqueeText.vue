@@ -13,6 +13,7 @@ export interface PropsAppMarqueeText extends Pick<
   speed?: number;
   minDuration?: number;
   paddingX?: tPaddingValue;
+  minPaddingX?: tPaddingValue;
 }
 
 const props = withDefaults(defineProps<PropsAppMarqueeText>(), {
@@ -24,19 +25,23 @@ const props = withDefaults(defineProps<PropsAppMarqueeText>(), {
   speed: 50,
   minDuration: 5000,
   paddingX: 0,
+  minPaddingX: 0,
 });
 
 const viewportRef = ref<HTMLElement | null>(null);
 const contentRef = ref<HTMLElement | null>(null);
 const textRef = ref<HTMLElement | null>(null);
 const cloneRef = ref<HTMLElement | null>(null);
+const paddingMeasureRef = ref<HTMLElement | null>(null);
 
 const isOverflowing = ref(false);
 const loopDistance = ref(0);
+const effectivePaddingX = ref('0px');
 
 const isMarqueeReady = computed(() => isOverflowing.value && loopDistance.value > 0);
 const isMarqueePlaying = computed(() => isMarqueeReady.value && props.play);
 const contentPaddingX = computed(() => resolvePaddingValue(props.paddingX));
+const minContentPaddingX = computed(() => resolvePaddingValue(props.minPaddingX));
 
 const marqueeDuration = computed(() => {
   const speed = Math.max(1, props.speed);
@@ -54,17 +59,27 @@ async function updateMarquee() {
   const viewport = viewportRef.value;
   const content = contentRef.value;
   const text = textRef.value;
+  const paddingMeasure = paddingMeasureRef.value;
 
-  if (!viewport || !content || !text) {
+  if (!viewport || !content || !text || !paddingMeasure) {
     isOverflowing.value = false;
     loopDistance.value = 0;
+    effectivePaddingX.value = '0px';
     return;
   }
 
-  const viewportRect = viewport.getBoundingClientRect();
-  const textRect = text.getBoundingClientRect();
-  const nextIsOverflowing = textRect.right - viewportRect.right > 1;
+  const textWidth = text.getBoundingClientRect().width;
+  const viewportWidth = viewport.clientWidth;
+  const paddingStyle = getComputedStyle(paddingMeasure);
 
+  const desiredPadding = Number.parseFloat(paddingStyle.paddingLeft) || 0;
+  const minPadding = Math.min(desiredPadding, Number.parseFloat(paddingStyle.paddingRight) || 0);
+  const availablePadding = Math.max(0, (viewportWidth - textWidth) / 2);
+
+  const nextIsOverflowing = textWidth + minPadding * 2 - viewportWidth > 1;
+  const nextPadding = nextIsOverflowing ? minPadding : Math.min(desiredPadding, availablePadding);
+
+  effectivePaddingX.value = `${nextPadding}px`;
   isOverflowing.value = nextIsOverflowing;
 
   if (!nextIsOverflowing) {
@@ -85,7 +100,7 @@ async function updateMarquee() {
 }
 
 watch(
-  () => [props.text, props.fontSize, props.fontWeight, props.uppercase, props.paddingX],
+  () => [props.text, props.fontSize, props.fontWeight, props.uppercase, props.paddingX, props.minPaddingX],
   async () => {
     await nextTick();
     updateMarquee();
@@ -112,6 +127,12 @@ onMounted(async () => {
     }"
     :style="marqueeStyle"
   >
+    <span
+      ref="paddingMeasureRef"
+      class="app-marquee-text__padding-measure"
+      aria-hidden="true"
+    />
+
     <span class="app-marquee-text__track">
       <span ref="contentRef" class="app-marquee-text__item">
         <span ref="textRef" class="app-marquee-text__content">
@@ -149,8 +170,19 @@ onMounted(async () => {
 .app-marquee-text {
   display: block;
   min-width: 0;
+  position: relative;
   max-width: 100%;
   overflow: hidden;
+}
+
+.app-marquee-text__padding-measure {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding-left: v-bind(contentPaddingX);
+  padding-right: v-bind(minContentPaddingX);
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .app-marquee-text__track {
@@ -164,7 +196,7 @@ onMounted(async () => {
 .app-marquee-text__item {
   display: inline-block;
   flex: 0 0 auto;
-  padding-inline: v-bind(contentPaddingX);
+  padding-inline: v-bind(effectivePaddingX);
   white-space: nowrap;
 }
 
