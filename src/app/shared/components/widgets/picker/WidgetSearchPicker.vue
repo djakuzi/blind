@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
+import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppModal from '@/app/shared/components/interaction/overlay/AppModal.vue';
@@ -10,6 +11,8 @@ import AppInputSearch from '@/app/shared/components/ui/input/AppInputSearch.vue'
 import type { PropsInputSearch } from '@/app/shared/components/ui/input/AppInputSearch.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import type { tAudioId } from '@/core/media/audio';
+import { ToolVibration } from '@/core/platform';
 
 export interface iWidgetSearchPickerItem {
   value: string;
@@ -28,6 +31,8 @@ export interface PropsWidgetSearchPicker {
   triggerAriaLabel?: string;
   width?: tStyleSizeValue;
   maxWidth?: tStyleSizeValue;
+  sound?: tAudioId | null;
+  vibration?: boolean;
   modal?: Omit<PropsAppModal, 'modelValue'>;
   search?: Omit<PropsInputSearch, 'modelValue'>;
   row?: Omit<PropsAppInfoRow, 'text' | 'image'>;
@@ -40,10 +45,14 @@ const props = withDefaults(defineProps<PropsWidgetSearchPicker>(), {
   triggerAriaLabel: undefined,
   width: '100%',
   maxWidth: '100%',
+  sound: 'sfx.ui.selection',
+  vibration: true,
   modal: undefined,
   search: undefined,
   row: undefined,
 });
+
+const { play } = useAudio();
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean];
@@ -113,6 +122,14 @@ function handleSelect(item: iWidgetSearchPickerItem) {
   }
 
   emit('select', item.value, item);
+
+  if (props.sound !== null) {
+    play(props.sound);
+  }
+
+  if (props.vibration) {
+    ToolVibration.selectionChanged();
+  }
 }
 
 function resolveItemImage(item: iWidgetSearchPickerItem) {

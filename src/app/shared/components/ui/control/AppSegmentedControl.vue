@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
+import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
+import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 
@@ -20,6 +22,7 @@ export interface PropsAppSegmentedControl {
   modelValue: string;
   options: readonly iAppSegmentedControlOption[];
   disabled?: boolean;
+  sound?: tAudioId | null;
   vibration?: boolean;
   size?: tBaseSizeVariant;
   width?: tStyleSizeValue;
@@ -31,6 +34,7 @@ export interface PropsAppSegmentedControl {
 
 const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
   disabled: false,
+  sound: 'sfx.ui.selection',
   vibration: true,
   size: 'middle',
   width: 'auto',
@@ -39,6 +43,8 @@ const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
   paddingY: undefined,
   borderRadius: 'lg',
 });
+
+const { play } = useAudio();
 
 const emit = defineEmits<{
   'update:modelValue': [value: string];
@@ -187,6 +193,10 @@ function handleSelect(option: iAppSegmentedControlOption) {
   }
 
   emit('update:modelValue', option.value);
+
+  if (props.sound !== null) {
+    play(props.sound);
+  }
 
   if (props.vibration) {
     ToolVibration.selectionChanged();

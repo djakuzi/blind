@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
+import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
@@ -8,6 +9,8 @@ import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/colo
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
+import type { tAudioId } from '@/core/media/audio';
+import { ToolVibration } from '@/core/platform';
 
 export interface PropsAppSlider {
   modelValue: number;
@@ -28,6 +31,8 @@ export interface PropsAppSlider {
   activeDotColor?: tColorValue;
   wheel?: boolean;
   disabled?: boolean;
+  sound?: tAudioId | null;
+  vibration?: boolean;
   accessibilityLabel: string;
   itemAccessibilityLabel: (index: number, count: number) => string;
 }
@@ -49,7 +54,11 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
   activeDotColor: 'primary',
   wheel: true,
   disabled: false,
+  sound: 'sfx.ui.selection',
+  vibration: true,
 });
+
+const { play } = useAudio();
 
 const emit = defineEmits<{
   'update:modelValue': [value: number];
@@ -141,6 +150,14 @@ function setActiveIndex(index: number) {
   }
 
   emit('update:modelValue', nextIndex);
+
+  if (props.sound !== null) {
+    play(props.sound);
+  }
+
+  if (props.vibration) {
+    ToolVibration.selectionChanged();
+  }
 }
 
 function getActiveItemElement() {

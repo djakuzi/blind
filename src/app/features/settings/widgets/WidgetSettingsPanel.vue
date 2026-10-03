@@ -229,6 +229,7 @@ async function handleLanguageChange(value: string) {
             v-else-if="item.id === 'sound'"
             :model-value="soundEnabled ? 'on' : 'off'"
             :options="soundOptions"
+            :sound="null"
             size="big"
             width="fit-content"
             max-width="100%"

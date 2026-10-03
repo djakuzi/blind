@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
+import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
 
 export interface PropsAppSwitch {
   modelValue: boolean;
   accessibilityLabel: string;
   disabled?: boolean;
+  sound?: tAudioId | null;
   vibration?: boolean;
   size?: tBaseSizeVariant;
   width?: tStyleSizeValue;
@@ -25,6 +28,7 @@ export interface PropsAppSwitch {
 
 const props = withDefaults(defineProps<PropsAppSwitch>(), {
   disabled: false,
+  sound: 'sfx.ui.selection',
   vibration: true,
   size: 'middle',
   width: undefined,
@@ -36,6 +40,8 @@ const props = withDefaults(defineProps<PropsAppSwitch>(), {
   thumbColor: 'on-primary',
   borderColor: 'border-strong',
 });
+
+const { play } = useAudio();
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean];
@@ -63,6 +69,10 @@ function handleToggle() {
   }
 
   emit('update:modelValue', !props.modelValue);
+
+  if (props.sound !== null) {
+    play(props.sound);
+  }
 
   if (props.vibration) {
     ToolVibration.selectionChanged();

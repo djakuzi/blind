@@ -1,6 +1,7 @@
 import AudioAsset1 from '@/assets/audio/sfx/interaction/hold-complete.wav?no-inline'
 import AudioAsset2 from '@/assets/audio/sfx/interaction/hold-progress.wav?no-inline'
 import AudioAsset3 from '@/assets/audio/sfx/interaction/hold-start.wav?no-inline'
+import AudioAsset4 from '@/assets/audio/sfx/ui/selection.wav?no-inline'
 
 export const AUDIO_ASSETS = {
   'sfx.interaction.hold-complete': {
@@ -21,6 +22,12 @@ export const AUDIO_ASSETS = {
     type: 'sfx',
     channels: 4,
   },
+  'sfx.ui.selection': {
+    id: 'sfx.ui.selection',
+    src: AudioAsset4,
+    type: 'sfx',
+    channels: 4,
+  },
 } as const
 
 export const AUDIO_GROUPS = {
@@ -28,10 +35,14 @@ export const AUDIO_GROUPS = {
     'sfx.interaction.hold-complete',
     'sfx.interaction.hold-progress',
     'sfx.interaction.hold-start',
+    'sfx.ui.selection',
   ],
   'sfx.interaction': [
     'sfx.interaction.hold-complete',
     'sfx.interaction.hold-progress',
     'sfx.interaction.hold-start',
+  ],
+  'sfx.ui': [
+    'sfx.ui.selection',
   ],
 } as const
