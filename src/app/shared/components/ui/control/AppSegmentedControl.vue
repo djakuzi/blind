@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
+import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
@@ -10,7 +11,8 @@ import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/
 import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
 import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
-import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
+
+type tSegmentedContentLayout = 'pending' | 'equal' | 'adaptive';
 
 export interface iAppSegmentedControlOption {
   label: string;
@@ -54,7 +56,9 @@ const controlRef = ref<HTMLElement | null>(null);
 const parentRef = ref<HTMLElement | null>(null);
 const hoveredOptionValue = ref<string | null>(null);
 const focusedOptionValue = ref<string | null>(null);
-const equalItemWidth = ref<number | null>(null);
+const contentLayout = ref<tSegmentedContentLayout>('pending');
+
+let canUpdateItemLayout = false;
 
 const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
 const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
@@ -67,24 +71,33 @@ const itemPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? sizeCo
 
 const itemFontSize = computed(() => sizeConfig.value.fontSize);
 const isContentWidth = computed(() => props.width === 'fit-content' || props.width === 'auto');
-const hasEqualItemWidth = computed(() => equalItemWidth.value !== null);
-const equalItemWidthValue = computed(() => (equalItemWidth.value === null ? undefined : `${equalItemWidth.value}px`));
+const isContentLayoutReady = computed(() => !isContentWidth.value || contentLayout.value !== 'pending');
+const hasEqualItems = computed(() => isContentWidth.value && contentLayout.value === 'equal');
 
 async function updateItemLayout() {
+  if (!canUpdateItemLayout) {
+    return;
+  }
+
+  if (!isContentWidth.value) {
+    contentLayout.value = 'adaptive';
+    return;
+  }
+
   await nextTick();
 
   const control = controlRef.value;
   const parent = parentRef.value;
 
-  if (!isContentWidth.value || !control || !parent || props.options.length === 0) {
-    equalItemWidth.value = null;
+  if (!control || !parent || props.options.length === 0) {
+    contentLayout.value = 'adaptive';
     return;
   }
 
   const items = Array.from(control.querySelectorAll<HTMLElement>('.app-segmented-control__item'));
 
   if (items.length !== props.options.length) {
-    equalItemWidth.value = null;
+    contentLayout.value = 'adaptive';
     return;
   }
 
@@ -103,21 +116,14 @@ async function updateItemLayout() {
   });
 
   const widestItemWidth = Math.max(...naturalWidths);
-
-  if (widestItemWidth <= 0) {
-    equalItemWidth.value = null;
-    return;
-  }
-
   const firstItem = items[0];
 
-  if (!firstItem) {
-    equalItemWidth.value = null;
+  if (widestItemWidth <= 0 || !firstItem) {
+    contentLayout.value = 'adaptive';
     return;
   }
 
   const itemStyle = getComputedStyle(firstItem);
-
   const dividerWidth = Number.parseFloat(itemStyle.borderRightWidth) || 0;
   const controlStyle = getComputedStyle(control);
   const controlBorderWidth =
@@ -133,7 +139,29 @@ async function updateItemLayout() {
     availableWidth = Math.min(availableWidth, Number.parseFloat(computedMaxWidth));
   }
 
-  equalItemWidth.value = equalControlWidth <= availableWidth + 1 ? widestItemWidth : null;
+  contentLayout.value = equalControlWidth <= availableWidth + 1 ? 'equal' : 'adaptive';
+}
+
+async function initializeItemLayout() {
+  parentRef.value = controlRef.value?.parentElement ?? null;
+
+  if (typeof document !== 'undefined' && 'fonts' in document) {
+    await document.fonts.ready;
+  }
+
+  canUpdateItemLayout = true;
+  await updateItemLayout();
+}
+
+function resetItemLayout() {
+  if (!isContentWidth.value) {
+    contentLayout.value = 'adaptive';
+    updateItemLayout();
+    return;
+  }
+
+  contentLayout.value = 'pending';
+  updateItemLayout();
 }
 
 function isOptionMarqueePlaying(option: iAppSegmentedControlOption) {
@@ -165,8 +193,7 @@ function handleBlur(option: iAppSegmentedControlOption) {
 }
 
 onMounted(() => {
-  parentRef.value = controlRef.value?.parentElement ?? null;
-  updateItemLayout();
+  initializeItemLayout();
 });
 
 useResizeObserver([controlRef, parentRef], () => {
@@ -182,7 +209,7 @@ watch(
     props.size,
   ],
   () => {
-    updateItemLayout();
+    resetItemLayout();
   },
   { flush: 'post' },
 );
@@ -211,7 +238,8 @@ function handleSelect(option: iAppSegmentedControlOption) {
     :class="{
       'app-segmented-control--disabled': disabled,
       'app-segmented-control--content-width': isContentWidth,
-      'app-segmented-control--equal-items': hasEqualItemWidth,
+      'app-segmented-control--layout-ready': isContentLayoutReady,
+      'app-segmented-control--equal-items': hasEqualItems,
     }"
     role="radiogroup"
   >
@@ -258,6 +286,10 @@ function handleSelect(option: iAppSegmentedControlOption) {
   overflow: hidden;
 }
 
+.app-segmented-control--content-width:not(.app-segmented-control--layout-ready) {
+  visibility: hidden;
+}
+
 .app-segmented-control__item {
   display: flex;
   flex: 1 1 0;
@@ -280,8 +312,14 @@ function handleSelect(option: iAppSegmentedControlOption) {
   flex: 0 1 auto;
 }
 
+.app-segmented-control--content-width.app-segmented-control--equal-items {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+
 .app-segmented-control--content-width.app-segmented-control--equal-items .app-segmented-control__item {
-  flex: 0 0 v-bind(equalItemWidthValue);
+  width: 100%;
 }
 
 .app-segmented-control__text {
@@ -291,7 +329,8 @@ function handleSelect(option: iAppSegmentedControlOption) {
   max-width: 100%;
 }
 
-.app-segmented-control--content-width .app-segmented-control__text {
+.app-segmented-control--content-width:not(.app-segmented-control--equal-items) .app-segmented-control__text {
   width: max-content;
+  max-width: 100%;
 }
 </style>
