@@ -119,8 +119,6 @@ export function createAudioTool(adapter: iAudioAdapter) {
       return createHandledResult();
     }
 
-    await ensureCompleteSubscription();
-
     activePlayCounts.set(
       audio.id,
       (activePlayCounts.get(audio.id) ?? 0) + 1,
