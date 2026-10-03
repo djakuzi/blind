@@ -57,10 +57,12 @@ const progress = ref(0);
 const rootElement = ref<HTMLElement | null>(null);
 
 let holdStartedAt = 0;
+let holdDuration = 0;
 let holdStartX = 0;
 let holdStartY = 0;
 const progressFrame = LibScheduler.createAnimationFrame();
 const holdStartTimer = LibScheduler.createTimeout();
+const holdCompleteTimer = LibScheduler.createTimeout();
 
 let activePointerId: number | undefined;
 let activePointerTarget: HTMLElement | undefined;
@@ -117,9 +119,12 @@ watch(normalizedInitialProgress, (initialProgress) => {
 });
 
 function completeHold() {
-  if (hasCompleted.value) {
+  if (hasCompleted.value || !isHolding.value) {
     return;
   }
+
+  holdCompleteTimer.cancel();
+  progressFrame.cancel();
 
   ToolVibration.vibrate({
     duration: props.vibrationDuration,
@@ -143,12 +148,12 @@ function updateHoldProgress() {
 
   const elapsed = getCurrentTime() - holdStartedAt;
   const initialProgress = normalizedInitialProgress.value;
-  const duration = normalizedFillDuration.value;
-
-  progress.value = initialProgress + (elapsed / duration) * (100 - initialProgress);
+  progress.value = Math.min(
+    100,
+    initialProgress + (elapsed / holdDuration) * (100 - initialProgress),
+  );
 
   if (progress.value >= 100) {
-    completeHold();
     return;
   }
 
@@ -166,11 +171,13 @@ function beginHold() {
   hasCompleted.value = false;
   progress.value = normalizedInitialProgress.value;
   holdStartedAt = getCurrentTime();
+  holdDuration = normalizedFillDuration.value;
 
   if (props.startSound !== null) {
     play(props.startSound);
   }
 
+  holdCompleteTimer.start(completeHold, holdDuration);
   progressFrame.request(updateHoldProgress);
 }
 
@@ -243,6 +250,7 @@ function resetHoldState(isImmediate = false) {
   const shouldAnimateRelease = !isImmediate && progress.value > normalizedInitialProgress.value;
 
   holdStartTimer.cancel();
+  holdCompleteTimer.cancel();
   progressFrame.cancel();
 
   isHolding.value = false;
