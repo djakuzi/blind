@@ -12,6 +12,6 @@
 
 @media (min-aspect-ratio: 21 / 9) {
   :root {
-    --app-root-font-size-base: 1vmin;
+    --app-root-font-size-base: 1.1vmin;
   }
 }
