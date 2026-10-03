@@ -3,7 +3,6 @@ import {
   DEFAULT_VIBRATION_IMPACT_STYLE,
   DEFAULT_VIBRATION_NOTIFICATION_TYPE,
 } from './const';
-import { HelperDuration } from './helpers/duration.helper';
 import type {
   iVibrationAdapter,
   iVibrationImpactOptions,
@@ -11,12 +10,20 @@ import type {
   iVibrationOptions,
 } from './type';
 
+function normalizeDuration(value: number) {
+  if (!Number.isFinite(value)) {
+    return DEFAULT_VIBRATION_DURATION;
+  }
+
+  return Math.max(1, value);
+}
+
 export function createVibrationService(adapter: iVibrationAdapter) {
   function vibrate({
     duration = DEFAULT_VIBRATION_DURATION,
   }: iVibrationOptions = {}) {
     return adapter.vibrate({
-      duration: HelperDuration.normalizeDuration(duration),
+      duration: normalizeDuration(duration),
     });
   }
 
