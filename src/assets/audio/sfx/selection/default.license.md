@@ -4,22 +4,22 @@ Asset:
 `default.wav`
 
 Source:
-[ElevenLabs](../../licenses/sources/elevenlabs.md)
+Derived from approved project HOLD interaction assets originally generated with [ElevenLabs](../../licenses/sources/elevenlabs.md).
 
 Source type:
-AI-generated sound effect
+Derived sound effect based on AI-generated project source assets.
 
 Generated:
-2026-10-03
+2026-10-04
 
 Post-processing:
-Selected from the generated candidates and cleaned locally while preserving the original tactile character and envelope. A cross-device pass was applied to improve consistency between headphones, laptop speakers, and mobile speakers. No additional external audio source was introduced.
+Rebuilt locally from the approved HOLD sound family using the same tactile attack-body-decay logic, then shortened and lightened for default selection feedback. The final asset is phase-coherent and tuned for consistent playback across headphones, laptop speakers, and mobile speakers. No additional external audio source was introduced.
 
 Generation plan:
 Not recorded.
 
 Commercial use:
-Depends on the ElevenLabs plan under which the asset was generated. See the provider terms linked above.
+Inherits the usage restrictions of the source assets and the applicable ElevenLabs terms linked above.
 
 Attribution:
-Depends on the ElevenLabs plan under which the asset was generated. See the provider terms linked above.
+Inherits the attribution requirements of the source assets and the applicable ElevenLabs plan under which they were generated.
