@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
@@ -8,6 +8,7 @@ import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
 import { ToolVibration } from '@/core/platform';
+import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 
 export interface iAppSegmentedControlOption {
   label: string;
@@ -43,8 +44,11 @@ const emit = defineEmits<{
   'update:modelValue': [value: string];
 }>();
 
+const controlRef = ref<HTMLElement | null>(null);
+const parentRef = ref<HTMLElement | null>(null);
 const hoveredOptionValue = ref<string | null>(null);
 const focusedOptionValue = ref<string | null>(null);
+const equalItemWidth = ref<number | null>(null);
 
 const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
 const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
@@ -57,6 +61,66 @@ const itemPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? sizeCo
 
 const itemFontSize = computed(() => sizeConfig.value.fontSize);
 const isContentWidth = computed(() => props.width === 'fit-content' || props.width === 'auto');
+const hasEqualItemWidth = computed(() => equalItemWidth.value !== null);
+const equalItemWidthValue = computed(() => (equalItemWidth.value === null ? undefined : `${equalItemWidth.value}px`));
+
+async function updateItemLayout() {
+  await nextTick();
+
+  const control = controlRef.value;
+  const parent = parentRef.value;
+
+  if (!isContentWidth.value || !control || !parent || props.options.length === 0) {
+    equalItemWidth.value = null;
+    return;
+  }
+
+  const items = Array.from(control.querySelectorAll<HTMLElement>('.app-segmented-control__item'));
+
+  if (items.length !== props.options.length) {
+    equalItemWidth.value = null;
+    return;
+  }
+
+  const naturalWidths = items.map((item) => {
+    const text = item.querySelector<HTMLElement>('.app-marquee-text__content');
+    const paddingMeasure = item.querySelector<HTMLElement>('.app-marquee-text__padding-measure');
+
+    if (!text || !paddingMeasure) {
+      return 0;
+    }
+
+    const paddingStyle = getComputedStyle(paddingMeasure);
+    const paddingX = Number.parseFloat(paddingStyle.paddingLeft) || 0;
+
+    return text.getBoundingClientRect().width + paddingX * 2;
+  });
+
+  const widestItemWidth = Math.max(...naturalWidths);
+
+  if (widestItemWidth <= 0) {
+    equalItemWidth.value = null;
+    return;
+  }
+
+  const itemStyle = getComputedStyle(items[0]);
+  const dividerWidth = Number.parseFloat(itemStyle.borderRightWidth) || 0;
+  const controlStyle = getComputedStyle(control);
+  const controlBorderWidth =
+    (Number.parseFloat(controlStyle.borderLeftWidth) || 0) + (Number.parseFloat(controlStyle.borderRightWidth) || 0);
+
+  const equalControlWidth =
+    widestItemWidth * items.length + dividerWidth * Math.max(0, items.length - 1) + controlBorderWidth;
+
+  let availableWidth = parent.getBoundingClientRect().width;
+  const computedMaxWidth = controlStyle.maxWidth;
+
+  if (computedMaxWidth.endsWith('px')) {
+    availableWidth = Math.min(availableWidth, Number.parseFloat(computedMaxWidth));
+  }
+
+  equalItemWidth.value = equalControlWidth <= availableWidth + 1 ? widestItemWidth : null;
+}
 
 function isOptionMarqueePlaying(option: iAppSegmentedControlOption) {
   return (
@@ -86,6 +150,29 @@ function handleBlur(option: iAppSegmentedControlOption) {
   }
 }
 
+onMounted(() => {
+  parentRef.value = controlRef.value?.parentElement ?? null;
+  updateItemLayout();
+});
+
+useResizeObserver([controlRef, parentRef], () => {
+  updateItemLayout();
+});
+
+watch(
+  () => [
+    props.options.map((option) => option.label).join('\u0000'),
+    props.width,
+    props.maxWidth,
+    props.paddingX,
+    props.size,
+  ],
+  () => {
+    updateItemLayout();
+  },
+  { flush: 'post' },
+);
+
 function handleSelect(option: iAppSegmentedControlOption) {
   if (props.disabled || option.disabled || option.value === props.modelValue) {
     return;
@@ -101,10 +188,12 @@ function handleSelect(option: iAppSegmentedControlOption) {
 
 <template>
   <div
+    ref="controlRef"
     class="app-segmented-control"
     :class="{
       'app-segmented-control--disabled': disabled,
       'app-segmented-control--content-width': isContentWidth,
+      'app-segmented-control--equal-items': hasEqualItemWidth,
     }"
     role="radiogroup"
   >
@@ -171,6 +260,10 @@ function handleSelect(option: iAppSegmentedControlOption) {
 
 .app-segmented-control--content-width .app-segmented-control__item {
   flex: 0 1 auto;
+}
+
+.app-segmented-control--content-width.app-segmented-control--equal-items .app-segmented-control__item {
+  flex: 0 0 v-bind(equalItemWidthValue);
 }
 
 .app-segmented-control__text {
