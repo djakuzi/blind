@@ -260,7 +260,6 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   24% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.06);
-    animation-timing-function: cubic-bezier(0.34, 1.3, 0.64, 1);
   }
 
   36% {
