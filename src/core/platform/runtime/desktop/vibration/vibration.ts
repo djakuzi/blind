@@ -1,8 +1,8 @@
-import type { iPlatformActionResult } from '../../../type';
 import type {
   iVibrationAdapter,
   tVibrationImpactStyle,
   tVibrationNotificationType,
+  tVibrationSelectionPhase,
 } from '../../../tool/vibration/type';
 
 interface iDesktopHapticActuator {
@@ -39,7 +39,13 @@ const NOTIFICATION_RUMBLE: Record<tVibrationNotificationType, iRumbleOptions> = 
   error: { duration: 140, weakMagnitude: 0.7, strongMagnitude: 1 },
 };
 
-async function rumble(options: iRumbleOptions): Promise<iPlatformActionResult> {
+const SELECTION_RUMBLE: Record<tVibrationSelectionPhase, iRumbleOptions> = {
+  start: { duration: 20, weakMagnitude: 0.25, strongMagnitude: 0.05 },
+  changed: { duration: 28, weakMagnitude: 0.35, strongMagnitude: 0.08 },
+  end: { duration: 16, weakMagnitude: 0.2, strongMagnitude: 0.04 },
+};
+
+async function rumble(options: iRumbleOptions) {
   if (typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') {
     return { isHandled: false };
   }
@@ -71,26 +77,23 @@ async function rumble(options: iRumbleOptions): Promise<iPlatformActionResult> {
 }
 
 export const RuntimeDesktopVibration: iVibrationAdapter = {
-  vibrate(options) {
+  vibrate(duration) {
     return rumble({
-      duration: options.duration,
+      duration,
       weakMagnitude: 0.7,
       strongMagnitude: 0.7,
     });
   },
-  impact(options) {
-    return rumble(IMPACT_RUMBLE[options.style]);
+
+  impact(style) {
+    return rumble(IMPACT_RUMBLE[style]);
   },
-  notification(options) {
-    return rumble(NOTIFICATION_RUMBLE[options.type]);
+
+  notification(type) {
+    return rumble(NOTIFICATION_RUMBLE[type]);
   },
-  selectionStart() {
-    return rumble({ duration: 20, weakMagnitude: 0.25, strongMagnitude: 0.05 });
-  },
-  selectionChanged() {
-    return rumble({ duration: 28, weakMagnitude: 0.35, strongMagnitude: 0.08 });
-  },
-  selectionEnd() {
-    return rumble({ duration: 16, weakMagnitude: 0.2, strongMagnitude: 0.04 });
+
+  selection(phase) {
+    return rumble(SELECTION_RUMBLE[phase]);
   },
 };

@@ -16,12 +16,18 @@ export interface iAudioPlayOptions {
   delay?: number;
 }
 
+export type tAudioCompleteCallback = (assetId: string) => void;
+
+export interface iAudioSubscription {
+  unsubscribe(): Promise<void>;
+}
+
 export interface iAudioAdapter {
   activate(): Promise<iPlatformActionResult>;
-  preload(resources: readonly iAudioPreloadResource[]): Promise<iPlatformActionResult>;
-  play(audio: iAudioResource, options: iAudioPlayOptions): Promise<iPlatformActionResult>;
-  loop(audio: iAudioResource): Promise<iPlatformActionResult>;
-  stop(audio: iAudioResource): Promise<iPlatformActionResult>;
-  setMuted(value: boolean): Promise<iPlatformActionResult>;
-  destroy(): Promise<iPlatformActionResult>;
+  preloadResource(audio: iAudioPreloadResource): Promise<void>;
+  playResource(audio: iAudioResource, options: iAudioPlayOptions): Promise<void>;
+  startLoop(audio: iAudioResource): Promise<void>;
+  stopResource(assetId: string): Promise<void>;
+  subscribeComplete(callback: tAudioCompleteCallback): Promise<iAudioSubscription>;
+  destroy(): Promise<void>;
 }

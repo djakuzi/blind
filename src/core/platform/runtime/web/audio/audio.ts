@@ -1,8 +1,11 @@
+import type { iPlatformActionResult } from '../../../type';
 import type {
   iAudioAdapter,
   iAudioPlayOptions,
   iAudioPreloadResource,
   iAudioResource,
+  iAudioSubscription,
+  tAudioCompleteCallback,
 } from '../../../tool/audio/type';
 
 interface iWebAudioResource {
@@ -10,9 +13,13 @@ interface iWebAudioResource {
   volume: number;
 }
 
-function handled() {
-  return { isHandled: true };
-}
+let audioContext: AudioContext | undefined;
+let masterGain: GainNode | undefined;
+
+const resources = new Map<string, iWebAudioResource>();
+const activeSources = new Map<string, Set<AudioBufferSourceNode>>();
+const loopSources = new Map<string, AudioBufferSourceNode>();
+const completeCallbacks = new Set<tAudioCompleteCallback>();
 
 function normalizeVolume(value: number | undefined) {
   if (value === undefined || !Number.isFinite(value)) {
@@ -30,17 +37,6 @@ function normalizeTime(value: number | undefined) {
   return Math.max(0, value);
 }
 
-let audioContext: AudioContext | undefined;
-let masterGain: GainNode | undefined;
-let muted = false;
-
-const resources = new Map<string, iWebAudioResource>();
-const preloadRequests = new Map<string, Promise<void>>();
-const activeSources = new Map<string, Set<AudioBufferSourceNode>>();
-const loopSources = new Map<string, AudioBufferSourceNode>();
-const activeLoops = new Map<string, iAudioResource>();
-const loopRequests = new Map<string, Promise<void>>();
-
 function getAudioContext() {
   if (audioContext && audioContext.state !== 'closed') {
     return audioContext;
@@ -51,13 +47,14 @@ function getAudioContext() {
   }
 
   try {
-    audioContext = new AudioContext({ latencyHint: 'interactive' });
+    audioContext = new AudioContext({
+      latencyHint: 'interactive',
+    });
   } catch {
     audioContext = new AudioContext();
   }
 
   masterGain = audioContext.createGain();
-  masterGain.gain.setValueAtTime(muted ? 0 : 1, audioContext.currentTime);
   masterGain.connect(audioContext.destination);
 
   return audioContext;
@@ -73,16 +70,6 @@ function getMasterGain() {
   return masterGain;
 }
 
-async function loadAudioData(src: string) {
-  const response = await fetch(src);
-
-  if (!response.ok) {
-    throw new Error(`Failed to load audio resource: ${src}`);
-  }
-
-  return response.arrayBuffer();
-}
-
 function getResource(audio: iAudioResource) {
   const resource = resources.get(audio.id);
 
@@ -93,45 +80,14 @@ function getResource(audio: iAudioResource) {
   return resource;
 }
 
-async function preloadResource(audio: iAudioPreloadResource) {
-  if (resources.has(audio.id)) {
-    return;
+async function loadAudioData(src: string) {
+  const response = await fetch(src);
+
+  if (!response.ok) {
+    throw new Error(`Failed to load audio resource: ${src}`);
   }
 
-  const activeRequest = preloadRequests.get(audio.id);
-
-  if (activeRequest) {
-    await activeRequest;
-    return;
-  }
-
-  const request = (async () => {
-    const context = getAudioContext();
-    const data = await loadAudioData(audio.src);
-    const buffer = await context.decodeAudioData(data);
-
-    resources.set(audio.id, {
-      buffer,
-      volume: normalizeVolume(audio.volume),
-    });
-  })();
-
-  preloadRequests.set(audio.id, request);
-
-  try {
-    await request;
-  } finally {
-    if (preloadRequests.get(audio.id) === request) {
-      preloadRequests.delete(audio.id);
-    }
-  }
-}
-
-function registerActiveSource(id: string, source: AudioBufferSourceNode) {
-  const sources = activeSources.get(id) ?? new Set<AudioBufferSourceNode>();
-
-  sources.add(source);
-  activeSources.set(id, sources);
+  return response.arrayBuffer();
 }
 
 function stopSource(source: AudioBufferSourceNode) {
@@ -206,10 +162,15 @@ async function createSource(
         }
       } else {
         const sources = activeSources.get(audio.id);
+
         sources?.delete(source);
 
         if (sources?.size === 0) {
           activeSources.delete(audio.id);
+        }
+
+        for (const callback of completeCallbacks) {
+          callback(audio.id);
         }
       }
 
@@ -222,135 +183,67 @@ async function createSource(
   if (isLoop) {
     loopSources.set(audio.id, source);
   } else {
-    registerActiveSource(audio.id, source);
+    const sources = activeSources.get(audio.id) ?? new Set<AudioBufferSourceNode>();
+
+    sources.add(source);
+    activeSources.set(audio.id, sources);
   }
 
   source.start(context.currentTime + delay, offset);
 }
 
-async function startLoop(audio: iAudioResource) {
-  if (muted || !activeLoops.has(audio.id) || loopSources.has(audio.id)) {
-    return;
-  }
-
-  const activeRequest = loopRequests.get(audio.id);
-
-  if (activeRequest) {
-    await activeRequest;
-    return;
-  }
-
-  const request = (async () => {
-    if (muted || !activeLoops.has(audio.id) || loopSources.has(audio.id)) {
-      return;
-    }
-
-    await createSource(audio, {}, true);
-
-    if (muted || !activeLoops.has(audio.id)) {
-      stopLoopSource(audio.id);
-    }
-  })();
-
-  loopRequests.set(audio.id, request);
-
-  try {
-    await request;
-  } finally {
-    if (loopRequests.get(audio.id) === request) {
-      loopRequests.delete(audio.id);
-    }
-  }
-}
-
 export const RuntimeWebAudio: iAudioAdapter = {
-  async activate() {
+  async activate(): Promise<iPlatformActionResult> {
     const context = getAudioContext();
 
     if (context.state === 'suspended') {
       await context.resume();
     }
 
-    return { isHandled: context.state === 'running' };
+    return {
+      isHandled: context.state === 'running',
+    };
   },
 
-  async preload(audioResources) {
-    await Promise.all(audioResources.map((audio) => preloadResource(audio)));
-    return handled();
+  async preloadResource(audio: iAudioPreloadResource) {
+    const context = getAudioContext();
+    const data = await loadAudioData(audio.src);
+    const buffer = await context.decodeAudioData(data);
+
+    resources.set(audio.id, {
+      buffer,
+      volume: normalizeVolume(audio.volume),
+    });
   },
 
-  async play(audio, options) {
-    if (muted) {
-      return handled();
-    }
-
-    await createSource(audio, options, false);
-
-    if (muted) {
-      stopActiveSources(audio.id);
-    }
-
-    return handled();
+  playResource(audio, options) {
+    return createSource(audio, options, false);
   },
 
-  async loop(audio) {
-    activeLoops.set(audio.id, audio);
-    await startLoop(audio);
-    return handled();
+  startLoop(audio) {
+    if (loopSources.has(audio.id)) {
+      return Promise.resolve();
+    }
+
+    return createSource(audio, {}, true);
   },
 
-  async stop(audio) {
-    activeLoops.delete(audio.id);
-
-    const activeLoopRequest = loopRequests.get(audio.id);
-
-    if (activeLoopRequest) {
-      await activeLoopRequest;
-    }
-
-    stopActiveSources(audio.id);
-    stopLoopSource(audio.id);
-
-    return handled();
+  async stopResource(assetId) {
+    stopActiveSources(assetId);
+    stopLoopSource(assetId);
   },
 
-  async setMuted(value) {
-    if (muted === value) {
-      return handled();
-    }
+  async subscribeComplete(callback): Promise<iAudioSubscription> {
+    completeCallbacks.add(callback);
 
-    muted = value;
-
-    if (masterGain && audioContext) {
-      masterGain.gain.setValueAtTime(muted ? 0 : 1, audioContext.currentTime);
-    }
-
-    if (muted) {
-      await Promise.allSettled([...loopRequests.values()]);
-
-      for (const id of [...activeSources.keys()]) {
-        stopActiveSources(id);
-      }
-
-      for (const id of [...loopSources.keys()]) {
-        stopLoopSource(id);
-      }
-
-      return handled();
-    }
-
-    await Promise.all([...activeLoops.values()].map((audio) => startLoop(audio)));
-    return handled();
+    return {
+      async unsubscribe() {
+        completeCallbacks.delete(callback);
+      },
+    };
   },
 
   async destroy() {
-    activeLoops.clear();
-
-    await Promise.allSettled([
-      ...preloadRequests.values(),
-      ...loopRequests.values(),
-    ]);
-
     for (const id of [...activeSources.keys()]) {
       stopActiveSources(id);
     }
@@ -360,18 +253,15 @@ export const RuntimeWebAudio: iAudioAdapter = {
     }
 
     resources.clear();
-    preloadRequests.clear();
-    loopRequests.clear();
+    completeCallbacks.clear();
 
     const context = audioContext;
+
     audioContext = undefined;
     masterGain = undefined;
-    muted = false;
 
     if (context && context.state !== 'closed') {
       await context.close();
     }
-
-    return handled();
   },
 };

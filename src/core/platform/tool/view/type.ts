@@ -14,9 +14,16 @@ export interface iSetupViewOptions {
   isWebViewLimitedByStatusBar?: boolean;
 }
 
+export interface iViewSize {
+  width: number;
+  height: number;
+}
+
 export interface iViewAdapter {
-  getViewportRatio(): iPlatformValue<number>;
-  setupView(options: iSetupViewOptions): Promise<iPlatformActionResult>;
+  getViewportSize(): iPlatformValue<iViewSize>;
+  setOrientation(orientation: tViewOrientation): Promise<iPlatformActionResult>;
+  setStatusBarVisible(value: boolean): Promise<iPlatformActionResult>;
+  setWebViewLimitedByStatusBar(value: boolean): Promise<iPlatformActionResult>;
   isFullscreen(): Promise<iPlatformValue<boolean>>;
   enterFullscreen(options: iEnterViewFullscreenOptions): Promise<iPlatformActionResult>;
   exitFullscreen(): Promise<iPlatformActionResult>;

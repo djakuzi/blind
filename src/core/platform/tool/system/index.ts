@@ -3,6 +3,7 @@ import { PlatformRuntime } from '../../runtime';
 import { DesktopSystemAdapter } from './adapters/desktop.adapter';
 import { MobileSystemAdapter } from './adapters/mobile.adapter';
 import { WebSystemAdapter } from './adapters/web.adapter';
+import { createSystemService } from './service';
 
 export type { iSystemAdapter, iSystemScale, tSystemThemeMode } from './type';
 
@@ -19,4 +20,4 @@ export const {
   getSystemLanguage,
   getSystemScale,
   getPreferredThemeMode,
-} = SystemAdapter;
+} = createSystemService(SystemAdapter);

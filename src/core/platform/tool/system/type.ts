@@ -5,7 +5,7 @@ export type tSystemThemeMode = 'light' | 'dark';
 export interface iSystemScale extends iPlatformValue<number> {}
 
 export interface iSystemAdapter {
-  getSystemLanguage(): Promise<string>;
-  getSystemScale(): Promise<iSystemScale>;
-  getPreferredThemeMode(): tSystemThemeMode;
+  getLanguage(): Promise<string>;
+  getScale(): Promise<number | null>;
+  prefersDarkTheme(): boolean;
 }

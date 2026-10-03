@@ -17,10 +17,8 @@ export interface iVibrationNotificationOptions {
 }
 
 export interface iVibrationAdapter {
-  vibrate(options: Required<iVibrationOptions>): Promise<iPlatformActionResult>;
-  impact(options: Required<iVibrationImpactOptions>): Promise<iPlatformActionResult>;
-  notification(options: Required<iVibrationNotificationOptions>): Promise<iPlatformActionResult>;
-  selectionStart(): Promise<iPlatformActionResult>;
-  selectionChanged(): Promise<iPlatformActionResult>;
-  selectionEnd(): Promise<iPlatformActionResult>;
+  vibrate(duration: number): Promise<iPlatformActionResult>;
+  impact(style: tVibrationImpactStyle): Promise<iPlatformActionResult>;
+  notification(type: tVibrationNotificationType): Promise<iPlatformActionResult>;
+  selection(phase: tVibrationSelectionPhase): Promise<iPlatformActionResult>;
 }

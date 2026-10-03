@@ -22,33 +22,33 @@ export function createVibrationService(adapter: iVibrationAdapter) {
   function vibrate({
     duration = DEFAULT_VIBRATION_DURATION,
   }: iVibrationOptions = {}) {
-    return adapter.vibrate({
-      duration: normalizeDuration(duration),
-    });
+    return adapter.vibrate(normalizeDuration(duration));
   }
 
   function impact({
     style = DEFAULT_VIBRATION_IMPACT_STYLE,
   }: iVibrationImpactOptions = {}) {
-    return adapter.impact({
-      style,
-    });
+    return adapter.impact(style);
   }
 
   function notification({
     type = DEFAULT_VIBRATION_NOTIFICATION_TYPE,
   }: iVibrationNotificationOptions = {}) {
-    return adapter.notification({
-      type,
-    });
+    return adapter.notification(type);
   }
 
   return {
     vibrate,
     impact,
     notification,
-    selectionStart: adapter.selectionStart,
-    selectionChanged: adapter.selectionChanged,
-    selectionEnd: adapter.selectionEnd,
+    selectionStart() {
+      return adapter.selection('start');
+    },
+    selectionChanged() {
+      return adapter.selection('changed');
+    },
+    selectionEnd() {
+      return adapter.selection('end');
+    },
   };
 }

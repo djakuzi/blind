@@ -3,6 +3,7 @@ import { PlatformRuntime } from '../../runtime';
 import { DesktopInputAdapter } from './adapters/desktop.adapter';
 import { MobileInputAdapter } from './adapters/mobile.adapter';
 import { WebInputAdapter } from './adapters/web.adapter';
+import { createInputService } from './service';
 
 export type {
   iInputAdapter,
@@ -25,4 +26,4 @@ export const {
   hasFineHoverPointer,
   isPrimaryPointerFine,
   onFineHoverPointerChange,
-} = InputAdapter;
+} = createInputService(InputAdapter);

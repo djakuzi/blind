@@ -1,8 +1,8 @@
-import { HelperMediaQuery } from '../../shared/helpers/media-query.helper';
 import type { iSystemAdapter } from '../../../tool/system/type';
+import { HelperMediaQuery } from '../../shared/helpers/media-query.helper';
 
 export const RuntimeWebSystem: iSystemAdapter = {
-  async getSystemLanguage() {
+  async getLanguage() {
     if (typeof navigator === 'undefined' || !navigator.language) {
       throw new Error('System language is not available');
     }
@@ -10,11 +10,11 @@ export const RuntimeWebSystem: iSystemAdapter = {
     return navigator.language;
   },
 
-  async getSystemScale() {
-    return { value: 1 };
+  async getScale() {
+    return null;
   },
 
-  getPreferredThemeMode() {
-    return HelperMediaQuery.matches('(prefers-color-scheme: dark)') ? 'dark' : 'light';
+  prefersDarkTheme() {
+    return HelperMediaQuery.matches('(prefers-color-scheme: dark)');
   },
 };

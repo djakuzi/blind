@@ -1,25 +1,26 @@
+import type { iPlatformActionResult } from '../../../type';
 import type { iViewAdapter } from '../../../tool/view/type';
 import { HelperBridge } from '../helpers/bridge.helper';
 
-function getViewportRatio() {
-  if (typeof window === 'undefined' || window.innerHeight === 0) {
-    return { value: 1 };
-  }
-
-  return { value: window.innerWidth / window.innerHeight };
+function unsupported(): Promise<iPlatformActionResult> {
+  return Promise.resolve({
+    isHandled: false,
+  });
 }
 
 export const RuntimeDesktopView: iViewAdapter = {
-  getViewportRatio,
-
-  async setupView(options) {
-    const hasUnsupportedOptions =
-      options.orientation !== undefined ||
-      options.isStatusBarVisible !== undefined ||
-      options.isWebViewLimitedByStatusBar !== undefined;
-
-    return { isHandled: !hasUnsupportedOptions };
+  getViewportSize() {
+    return {
+      value: {
+        width: typeof window === 'undefined' ? 0 : window.innerWidth,
+        height: typeof window === 'undefined' ? 0 : window.innerHeight,
+      },
+    };
   },
+
+  setOrientation: unsupported,
+  setStatusBarVisible: unsupported,
+  setWebViewLimitedByStatusBar: unsupported,
 
   isFullscreen() {
     return HelperBridge.getCapability('view').isFullscreen();

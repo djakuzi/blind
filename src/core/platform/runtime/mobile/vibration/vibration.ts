@@ -4,6 +4,7 @@ import type {
   iVibrationAdapter,
   tVibrationImpactStyle,
   tVibrationNotificationType,
+  tVibrationSelectionPhase,
 } from '../../../tool/vibration/type';
 import {
   MOBILE_VIBRATION_IMPACT_PATTERN,
@@ -41,6 +42,7 @@ async function performNative(
 ): Promise<iPlatformActionResult> {
   try {
     await action();
+
     return { isHandled: true };
   } catch {
     return vibrateBrowser(fallbackPattern);
@@ -48,28 +50,37 @@ async function performNative(
 }
 
 export const RuntimeMobileVibration: iVibrationAdapter = {
-  vibrate(options) {
-    return performNative(() => Haptics.vibrate({ duration: options.duration }), [options.duration]);
-  },
-  impact(options) {
+  vibrate(duration) {
     return performNative(
-      () => Haptics.impact({ style: IMPACT_STYLE_MAP[options.style] }),
-      MOBILE_VIBRATION_IMPACT_PATTERN[options.style],
+      () => Haptics.vibrate({ duration }),
+      [duration],
     );
   },
-  notification(options) {
+
+  impact(style) {
     return performNative(
-      () => Haptics.notification({ type: NOTIFICATION_TYPE_MAP[options.type] }),
-      MOBILE_VIBRATION_NOTIFICATION_PATTERN[options.type],
+      () => Haptics.impact({ style: IMPACT_STYLE_MAP[style] }),
+      MOBILE_VIBRATION_IMPACT_PATTERN[style],
     );
   },
-  selectionStart() {
-    return performNative(() => Haptics.selectionStart(), MOBILE_VIBRATION_SELECTION_PATTERN.start);
+
+  notification(type) {
+    return performNative(
+      () => Haptics.notification({ type: NOTIFICATION_TYPE_MAP[type] }),
+      MOBILE_VIBRATION_NOTIFICATION_PATTERN[type],
+    );
   },
-  selectionChanged() {
-    return performNative(() => Haptics.selectionChanged(), MOBILE_VIBRATION_SELECTION_PATTERN.changed);
-  },
-  selectionEnd() {
-    return performNative(() => Haptics.selectionEnd(), MOBILE_VIBRATION_SELECTION_PATTERN.end);
+
+  selection(phase: tVibrationSelectionPhase) {
+    const action = {
+      start: () => Haptics.selectionStart(),
+      changed: () => Haptics.selectionChanged(),
+      end: () => Haptics.selectionEnd(),
+    }[phase];
+
+    return performNative(
+      action,
+      MOBILE_VIBRATION_SELECTION_PATTERN[phase],
+    );
   },
 };
