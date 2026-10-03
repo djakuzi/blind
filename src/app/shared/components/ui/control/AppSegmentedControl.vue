@@ -126,6 +126,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
         :uppercase="true"
         :play="isOptionMarqueePlaying(option)"
         :speed="option.value === modelValue ? 40 : undefined"
+        :padding-x="itemPaddingX"
       />
     </button>
   </div>
@@ -148,7 +149,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
   align-items: center;
   justify-content: center;
   min-width: 0;
-  padding: v-bind(itemPaddingY) v-bind(itemPaddingX);
+  padding: v-bind(itemPaddingY) 0;
   border: 0;
   border-right: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-border-contrast);
   background: var(--app-color-surface-primary);

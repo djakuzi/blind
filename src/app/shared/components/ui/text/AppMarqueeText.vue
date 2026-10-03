@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import type { PropsAppText } from '@/app/shared/components/atoms/typography/AppText.vue';
+import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 
 export interface PropsAppMarqueeText extends Pick<
   PropsAppText,
@@ -11,6 +12,7 @@ export interface PropsAppMarqueeText extends Pick<
   play?: boolean;
   speed?: number;
   minDuration?: number;
+  paddingX?: tPaddingValue;
 }
 
 const props = withDefaults(defineProps<PropsAppMarqueeText>(), {
@@ -21,6 +23,7 @@ const props = withDefaults(defineProps<PropsAppMarqueeText>(), {
   play: true,
   speed: 50,
   minDuration: 5000,
+  paddingX: 0,
 });
 
 const viewportRef = ref<HTMLElement | null>(null);
@@ -32,6 +35,7 @@ const loopDistance = ref(0);
 
 const isMarqueeReady = computed(() => isOverflowing.value && loopDistance.value > 0);
 const isMarqueePlaying = computed(() => isMarqueeReady.value && props.play);
+const contentPaddingX = computed(() => resolvePaddingValue(props.paddingX));
 
 const marqueeDuration = computed(() => {
   const speed = Math.max(1, props.speed);
@@ -77,7 +81,7 @@ async function updateMarquee() {
 }
 
 watch(
-  () => [props.text, props.fontSize, props.fontWeight, props.uppercase],
+  () => [props.text, props.fontSize, props.fontWeight, props.uppercase, props.paddingX],
   async () => {
     await nextTick();
     updateMarquee();
@@ -154,6 +158,7 @@ onMounted(async () => {
 .app-marquee-text__item {
   display: inline-block;
   flex: 0 0 auto;
+  padding-inline: v-bind(contentPaddingX);
   white-space: nowrap;
 }
 
