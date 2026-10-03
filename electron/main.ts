@@ -1,50 +1,11 @@
 import { app, BrowserWindow } from 'electron';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { registerAudioIpc } from './main/audio';
-import { registerFilesystemIpc } from './main/filesystem';
-import { registerStorageIpc } from './main/storage';
-import { registerViewIpc } from './main/view';
-
-const CURRENT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
-
-async function createMainWindow() {
-  const window = new BrowserWindow({
-    width: 1280,
-    height: 720,
-    minWidth: 960,
-    minHeight: 540,
-    show: false,
-    webPreferences: {
-      preload: join(CURRENT_DIRECTORY, 'preload.mjs'),
-      nodeIntegration: false,
-      contextIsolation: true,
-      sandbox: true,
-    },
-  });
-
-  window.once('ready-to-show', () => {
-    window.show();
-  });
-
-  const devServerUrl = process.env.VITE_DEV_SERVER_URL;
-
-  if (devServerUrl) {
-    await window.loadURL(devServerUrl);
-    return;
-  }
-
-  await window.loadFile(join(CURRENT_DIRECTORY, '../dist/index.html'));
-}
+import { registerElectronPlugins } from './main/plugins';
+import { createMainWindow } from './main/window';
 
 app
   .whenReady()
   .then(async () => {
-    registerAudioIpc();
-    registerFilesystemIpc();
-    registerStorageIpc();
-    registerViewIpc();
-
+    registerElectronPlugins();
     await createMainWindow();
 
     app.on('activate', () => {
