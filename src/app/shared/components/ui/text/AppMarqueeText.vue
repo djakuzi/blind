@@ -36,12 +36,13 @@ const paddingMeasureRef = ref<HTMLElement | null>(null);
 
 const isOverflowing = ref(false);
 const loopDistance = ref(0);
-const effectivePaddingX = ref('0px');
+const effectivePaddingX = ref<string>();
 
 const isMarqueeReady = computed(() => isOverflowing.value && loopDistance.value > 0);
 const isMarqueePlaying = computed(() => isMarqueeReady.value && props.play);
 const contentPaddingX = computed(() => resolvePaddingValue(props.paddingX));
 const minContentPaddingX = computed(() => resolvePaddingValue(props.minPaddingX));
+const itemPaddingX = computed(() => effectivePaddingX.value ?? contentPaddingX.value);
 
 const marqueeDuration = computed(() => {
   const speed = Math.max(1, props.speed);
@@ -64,7 +65,7 @@ async function updateMarquee() {
   if (!viewport || !content || !text || !paddingMeasure) {
     isOverflowing.value = false;
     loopDistance.value = 0;
-    effectivePaddingX.value = '0px';
+    effectivePaddingX.value = undefined;
     return;
   }
 
@@ -196,7 +197,7 @@ onMounted(async () => {
 .app-marquee-text__item {
   display: inline-block;
   flex: 0 0 auto;
-  padding-inline: v-bind(effectivePaddingX);
+  padding-inline: v-bind(itemPaddingX);
   white-space: nowrap;
 }
 

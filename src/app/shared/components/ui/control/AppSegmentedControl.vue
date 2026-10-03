@@ -56,6 +56,7 @@ const itemPaddingX = computed(() => resolvePaddingValue(props.paddingX ?? sizeCo
 const itemPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? sizeConfig.value.paddingY));
 
 const itemFontSize = computed(() => sizeConfig.value.fontSize);
+const isContentWidth = computed(() => props.width === 'fit-content' || props.width === 'auto');
 
 function isOptionMarqueePlaying(option: iAppSegmentedControlOption) {
   return (
@@ -99,7 +100,14 @@ function handleSelect(option: iAppSegmentedControlOption) {
 </script>
 
 <template>
-  <div class="app-segmented-control" :class="{ 'app-segmented-control--disabled': disabled }" role="radiogroup">
+  <div
+    class="app-segmented-control"
+    :class="{
+      'app-segmented-control--disabled': disabled,
+      'app-segmented-control--content-width': isContentWidth,
+    }"
+    role="radiogroup"
+  >
     <button
       v-for="option in options"
       :key="option.value"
@@ -161,10 +169,18 @@ function handleSelect(option: iAppSegmentedControlOption) {
   }
 }
 
+.app-segmented-control--content-width .app-segmented-control__item {
+  flex: 0 1 auto;
+}
+
 .app-segmented-control__text {
   display: block;
   width: 100%;
   min-width: 0;
   max-width: 100%;
+}
+
+.app-segmented-control--content-width .app-segmented-control__text {
+  width: max-content;
 }
 </style>
