@@ -8,6 +8,8 @@ import AppInfoRow from '@/app/shared/components/ui/info/AppInfoRow.vue';
 import type { iAppInfoRowImage, PropsAppInfoRow } from '@/app/shared/components/ui/info/AppInfoRow.vue';
 import AppInputSearch from '@/app/shared/components/ui/input/AppInputSearch.vue';
 import type { PropsInputSearch } from '@/app/shared/components/ui/input/AppInputSearch.vue';
+import { LibStyle } from '@/app/shared/lib/style';
+import type { tStyleSizeValue } from '@/app/shared/lib/style';
 
 export interface iWidgetSearchPickerItem {
   value: string;
@@ -24,6 +26,8 @@ export interface PropsWidgetSearchPicker {
   title?: string;
   emptyText?: string;
   triggerAriaLabel?: string;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
   modal?: Omit<PropsAppModal, 'modelValue'>;
   search?: Omit<PropsInputSearch, 'modelValue'>;
   row?: Omit<PropsAppInfoRow, 'text' | 'image'>;
@@ -34,6 +38,8 @@ const props = withDefaults(defineProps<PropsWidgetSearchPicker>(), {
   title: undefined,
   emptyText: undefined,
   triggerAriaLabel: undefined,
+  width: '100%',
+  maxWidth: '100%',
   modal: undefined,
   search: undefined,
   row: undefined,
@@ -53,6 +59,11 @@ const searchQuery = ref('');
 const selectedItem = computed(() => props.items.find((item) => item.value === props.selectedValue));
 
 const triggerText = computed(() => selectedItem.value?.label ?? props.selectedValue ?? '');
+
+const triggerStyle = computed(() => ({
+  '--cp-widget-search-picker-width': LibStyle.toSizeValue(props.width),
+  '--cp-widget-search-picker-max-width': LibStyle.toSizeValue(props.maxWidth),
+}));
 
 const modalProps = computed<Omit<PropsAppModal, 'modelValue'>>(() => ({
   bodyPaddingX: 0,
@@ -126,8 +137,22 @@ watch(
 </script>
 
 <template>
-  <button class="widget-search-picker__trigger app-interactive" type="button" :aria-label="triggerAriaLabel" @click="handleTriggerClick">
-    <AppInfoRow :text="triggerText" :image="selectedItem?.image" size="big" :padding-x="5" :padding-y="3" />
+  <button
+    class="widget-search-picker__trigger app-interactive"
+    type="button"
+    :style="triggerStyle"
+    :aria-label="triggerAriaLabel"
+    @click="handleTriggerClick"
+  >
+    <AppInfoRow
+      :text="triggerText"
+      :image="selectedItem?.image"
+      size="big"
+      width="fit-content"
+      max-width="100%"
+      :padding-x="5"
+      :padding-y="3"
+    />
   </button>
 
   <AppModal v-bind="modalProps" :model-value="modelValue" @update:model-value="handleModelValueUpdate">
@@ -187,8 +212,10 @@ watch(
 <style scoped>
 .widget-search-picker__trigger {
   display: block;
-  width: 100%;
+  width: var(--cp-widget-search-picker-width);
+  max-width: var(--cp-widget-search-picker-max-width);
   min-width: 0;
+  box-sizing: border-box;
   padding: 0;
   border: var(--app-border-width-thick) var(--app-border-style-solid) var(--app-color-border-contrast);
   border-radius: var(--app-radius-lg);
@@ -215,10 +242,8 @@ watch(
   appearance: none;
 }
 
-
 .widget-search-picker__empty {
   display: block;
   padding: var(--app-padding-6);
 }
-
 </style>

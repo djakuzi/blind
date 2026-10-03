@@ -223,6 +223,8 @@ async function handleLanguageChange(value: string) {
           <WidgetSearchPicker
             v-else
             v-model="isLanguagePickerOpen"
+            width="fit-content"
+            max-width="100%"
             :items="languagePickerItems"
             :selected-value="currentLanguage?.key"
             :title="changeLanguageModalLocale.title"
