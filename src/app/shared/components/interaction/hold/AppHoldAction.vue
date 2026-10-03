@@ -172,6 +172,7 @@ async function startProgressSound() {
 
 function scheduleProgressSound() {
   progressSoundStartTimer.cancel();
+  progressSoundStopTimer.cancel();
 
   if (props.progressSound === null) {
     return;
