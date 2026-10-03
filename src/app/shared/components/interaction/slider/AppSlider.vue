@@ -54,7 +54,7 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
   activeDotColor: 'primary',
   wheel: true,
   disabled: false,
-  sound: 'sfx.ui.selection',
+  sound: 'sfx.ui.slider-selection',
   vibration: true,
 });
 
