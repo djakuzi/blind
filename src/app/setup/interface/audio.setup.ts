@@ -74,6 +74,7 @@ export function createAudioSetup(pinia: Pinia): iSetup {
     try {
       await ToolAudio.preload([
         ...MediaAudio.getAudioGroup('sfx.interaction'),
+        ...MediaAudio.getAudioGroup('sfx.ui'),
       ]);
 
       loaderStore.setResourceLoaded(resourcePayload);
