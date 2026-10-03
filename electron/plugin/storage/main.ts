@@ -2,6 +2,7 @@ import { app, ipcMain } from 'electron';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { ELECTRON_CONFIG } from '../../config';
+import { isFileNotFoundError } from '../../shared/helpers/file.helper';
 import { STORAGE_CHANNEL } from './channel';
 
 type tStorageData = Record<string, string>;
@@ -14,10 +15,6 @@ function getStoragePath() {
     ELECTRON_CONFIG.storage.directory,
     ELECTRON_CONFIG.storage.fileName,
   );
-}
-
-function isFileNotFoundError(error: unknown) {
-  return error instanceof Error && 'code' in error && error.code === 'ENOENT';
 }
 
 function isStorageData(value: unknown): value is tStorageData {
@@ -78,9 +75,7 @@ export function registerStoragePlugin() {
 
     await enqueueMutation(async () => {
       const storage = await readStorage();
-
       storage[key] = value;
-
       await writeStorage(storage);
     });
   });
@@ -90,10 +85,7 @@ export function registerStoragePlugin() {
     await mutationQueue;
 
     const storage = await readStorage();
-
-    return {
-      value: storage[key] ?? null,
-    };
+    return { value: storage[key] ?? null };
   });
 
   ipcMain.handle(STORAGE_CHANNEL.removeItem, async (_event, key: string) => {
@@ -101,9 +93,7 @@ export function registerStoragePlugin() {
 
     await enqueueMutation(async () => {
       const storage = await readStorage();
-
       delete storage[key];
-
       await writeStorage(storage);
     });
   });

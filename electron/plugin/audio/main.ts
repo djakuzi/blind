@@ -1,13 +1,8 @@
 import { ipcMain, net } from 'electron';
-import { dirname, isAbsolute, relative, sep } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { isPathOutsideRoot } from '../../shared/helpers/path.helper';
 import { AUDIO_CHANNEL } from './channel';
-
-function isOutsideRoot(root: string, target: string) {
-  const relativePath = relative(root, target);
-
-  return relativePath === '..' || relativePath.startsWith(`..${sep}`) || isAbsolute(relativePath);
-}
 
 function resolveFileAssetUrl(baseUrl: URL, src: string) {
   baseUrl.hash = '';
@@ -27,7 +22,7 @@ function resolveFileAssetUrl(baseUrl: URL, src: string) {
 
   const target = fileURLToPath(targetUrl);
 
-  if (isOutsideRoot(root, target)) {
+  if (isPathOutsideRoot(root, target)) {
     throw new Error('Audio asset is outside renderer directory');
   }
 
@@ -69,8 +64,6 @@ export function registerAudioPlugin() {
       throw new Error(`Failed to load audio asset: ${src}`);
     }
 
-    return {
-      data: await response.arrayBuffer(),
-    };
+    return { data: await response.arrayBuffer() };
   });
 }

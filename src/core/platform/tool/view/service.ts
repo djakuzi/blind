@@ -1,4 +1,3 @@
-import { HelperViewport } from '../../runtime/shared/helpers/viewport.helper';
 import type { iEnterViewFullscreenOptions, iViewAdapter } from './type';
 
 export function createViewService(adapter: iViewAdapter) {
@@ -17,7 +16,7 @@ export function createViewService(adapter: iViewAdapter) {
   }
 
   return {
-    getViewportRatio: HelperViewport.getViewportRatio,
+    getViewportRatio: adapter.getViewportRatio,
     setupView: adapter.setupView,
     isFullscreen: adapter.isFullscreen,
     enterFullscreen,

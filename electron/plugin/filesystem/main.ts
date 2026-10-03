@@ -1,7 +1,9 @@
 import { app, ipcMain } from 'electron';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
+import { dirname, isAbsolute, relative, resolve } from 'node:path';
 import { ELECTRON_CONFIG } from '../../config';
+import { isFileNotFoundError } from '../../shared/helpers/file.helper';
+import { isPathOutsideRoot } from '../../shared/helpers/path.helper';
 import { FILESYSTEM_CHANNEL } from './channel';
 
 function getFilesystemRoot() {
@@ -16,17 +18,12 @@ function resolveFilesystemPath(path: string) {
   const root = getFilesystemRoot();
   const target = resolve(root, path);
   const relativePath = relative(root, target);
-  const isOutsideRoot = relativePath === '..' || relativePath.startsWith(`..${sep}`);
 
-  if (!relativePath || isOutsideRoot || isAbsolute(relativePath)) {
+  if (!relativePath || isPathOutsideRoot(root, target)) {
     throw new Error('Filesystem path is outside application data directory');
   }
 
   return target;
-}
-
-function isFileNotFoundError(error: unknown) {
-  return error instanceof Error && 'code' in error && error.code === 'ENOENT';
 }
 
 export function registerFilesystemPlugin() {
@@ -49,14 +46,10 @@ export function registerFilesystemPlugin() {
     const target = resolveFilesystemPath(path);
 
     try {
-      return {
-        value: await readFile(target, 'utf8'),
-      };
+      return { value: await readFile(target, 'utf8') };
     } catch (error) {
       if (isFileNotFoundError(error)) {
-        return {
-          value: null,
-        };
+        return { value: null };
       }
 
       throw error;
