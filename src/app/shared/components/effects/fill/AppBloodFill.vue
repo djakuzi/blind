@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { LibStyle } from '@/app/shared/lib/style';
+import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { LibNumber } from '@/core/lib/number';
 
 interface Props {
   flowFrontDuration?: number;
   isActive?: boolean;
   progressRatio?: number;
+  waveHeight?: tStyleSizeValue;
+  waveLengthScale?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   flowFrontDuration: 1200,
   isActive: false,
   progressRatio: 0,
+  waveHeight: 'var(--app-space-8)',
+  waveLengthScale: 1,
 });
 
 function normalizeDuration(value: number) {
@@ -22,12 +28,22 @@ function normalizeDuration(value: number) {
   return Math.max(1, value);
 }
 
+function normalizeWaveLengthScale(value: number) {
+  if (!Number.isFinite(value)) {
+    return 1;
+  }
+
+  return Math.max(0.5, value);
+}
+
 const fillStyle = computed(() => {
   const progressRatio = LibNumber.clampFinite(props.progressRatio, 0, 1, 0);
 
   return {
     '--cp-blood-fill-offset': `${(1 - progressRatio) * 100}%`,
     '--cp-blood-fill-front-duration': `${normalizeDuration(props.flowFrontDuration)}ms`,
+    '--cp-blood-fill-wave-height': LibStyle.toSizeValue(props.waveHeight) ?? 'var(--app-space-8)',
+    '--cp-blood-fill-wave-width': `${normalizeWaveLengthScale(props.waveLengthScale) * 200}%`,
   };
 });
 
@@ -46,6 +62,7 @@ const fillClass = computed(() => ['app-blood-fill', { 'app-blood-fill--active': 
   --cp-blood-fill-color: var(--app-color-primary);
   --cp-blood-fill-front-duration: 1200ms;
   --cp-blood-fill-wave-height: var(--app-space-8);
+  --cp-blood-fill-wave-width: 200%;
   --cp-blood-fill-front-wave-y: calc(var(--cp-blood-fill-wave-height) * -0.62);
 
   position: absolute;
@@ -71,11 +88,11 @@ const fillClass = computed(() => ['app-blood-fill', { 'app-blood-fill--active': 
 .app-blood-fill__wave {
   top: 0;
   left: 0;
-  width: 200%;
+  width: var(--cp-blood-fill-wave-width);
   height: var(--cp-blood-fill-wave-height);
   z-index: 1;
   background-repeat: repeat-x;
-  background-size: var(--cp-blood-fill-wave-pattern-width) 100%;
+  background-size: 50% 100%;
   will-change: transform;
 }
 

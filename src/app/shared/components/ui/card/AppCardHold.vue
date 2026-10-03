@@ -4,9 +4,12 @@ import type { PropsAppCard } from '@/app/shared/components/atoms/card/AppCard.vu
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import type { PropsAppHoldAction } from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
+import type { tStyleSizeValue } from '@/app/shared/lib/style';
 
 export interface PropsAppCardHold extends PropsAppCard, PropsAppHoldAction {
   bloodFlowFrontDuration?: number;
+  bloodWaveHeight?: tStyleSizeValue;
+  bloodWaveLengthScale?: number;
 }
 
 withDefaults(defineProps<PropsAppCardHold>(), {
@@ -25,6 +28,8 @@ withDefaults(defineProps<PropsAppCardHold>(), {
   actions: undefined,
   disabled: false,
   bloodFlowFrontDuration: 1200,
+  bloodWaveHeight: 'clamp(3.5rem, 12%, 6rem)',
+  bloodWaveLengthScale: 1.3,
   duration: 650,
   fillDuration: undefined,
   holdStartDelay: 40,
@@ -82,7 +87,13 @@ function handleComplete() {
         :border-radius="borderRadius"
         :overflow="overflow"
       >
-        <AppBloodFill :flow-front-duration="bloodFlowFrontDuration" :is-active="isProgressActive" :progress-ratio="progressRatio" />
+        <AppBloodFill
+          :flow-front-duration="bloodFlowFrontDuration"
+          :is-active="isProgressActive"
+          :progress-ratio="progressRatio"
+          :wave-height="bloodWaveHeight"
+          :wave-length-scale="bloodWaveLengthScale"
+        />
 
         <div class="app-card-hold__content">
           <slot :is-holding="isHolding" :is-complete="isComplete" :progress-ratio="progressRatio" />
