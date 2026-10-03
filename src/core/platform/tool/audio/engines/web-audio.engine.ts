@@ -1,4 +1,4 @@
-import { HelperAudio } from './audio.helper';
+import { HelperAudio } from '../helpers/audio.helper';
 import type { iPlatformActionResult } from '../../../type';
 import type {
   iAudioAdapter,
