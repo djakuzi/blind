@@ -5,12 +5,12 @@ import type {
 
 export interface iAudioResource {
   id: string;
+  volume?: number;
 }
 
 export interface iAudioPreloadResource extends iAudioResource {
   src: string;
   channels?: number;
-  volume?: number;
 }
 
 export interface iAudioPlayOptions {
@@ -36,7 +36,7 @@ export interface iAudioAdapter {
   playResource(audio: iAudioResource, options: iAudioPlayOptions): Promise<void>;
   startLoop(audio: iAudioResource, options: iAudioLoopOptions): Promise<void>;
   setLoopVolume(
-    assetId: string,
+    audio: iAudioResource,
     options: iAudioLoopVolumeOptions,
   ): Promise<void>;
   stopResource(assetId: string): Promise<void>;

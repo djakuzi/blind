@@ -14,7 +14,6 @@ type tAudioDataLoader = (src: string) => Promise<ArrayBuffer>;
 
 interface iWebAudioResource {
   buffer: AudioBuffer;
-  volume: number;
 }
 
 interface iWebAudioLoopSource {
@@ -131,7 +130,9 @@ export function createWebAudioEngine(
     source.buffer = resource.buffer;
     source.loop = isLoop;
 
-    const volume = HelperAudio.normalizeVolume(options.volume ?? resource.volume);
+    const volume =
+      HelperAudio.normalizeVolume(audio.volume) *
+      HelperAudio.normalizeVolume(options.volume);
     const offset = Math.min(
       HelperAudio.normalizeTime(options.time),
       resource.buffer.duration,
@@ -205,7 +206,6 @@ export function createWebAudioEngine(
 
       resources.set(audio.id, {
         buffer,
-        volume: HelperAudio.normalizeVolume(audio.volume),
       });
     },
 
@@ -222,17 +222,19 @@ export function createWebAudioEngine(
     },
 
     async setLoopVolume(
-      assetId: string,
+      audio: iAudioResource,
       options: iAudioLoopVolumeOptions,
     ) {
-      const loop = loopSources.get(assetId);
+      const loop = loopSources.get(audio.id);
 
       if (!loop) {
         return;
       }
 
       const context = getAudioContext();
-      const volume = HelperAudio.normalizeVolume(options.volume);
+      const volume =
+        HelperAudio.normalizeVolume(audio.volume) *
+        HelperAudio.normalizeVolume(options.volume);
       const duration = HelperAudio.normalizeTime(options.duration);
       const now = context.currentTime;
 

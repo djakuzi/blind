@@ -66,7 +66,9 @@ function createPlayOptions(
   options: iAudioPlayOptions,
   defaultVolume?: number,
 ) {
-  const volume = options.volume ?? defaultVolume;
+  const volume =
+    HelperAudio.normalizeVolume(defaultVolume) *
+    HelperAudio.normalizeVolume(options.volume);
 
   return {
     assetId,
@@ -98,7 +100,7 @@ async function preloadNativeAsset(
     assetId,
     assetPath: audio.src,
     audioChannelNum: 1,
-    volume: HelperAudio.normalizeNativeVolume(audio.volume),
+    volume: 1,
     isUrl: false,
   };
 
@@ -193,7 +195,7 @@ export const MobileAudioAdapter: iAudioAdapter = {
     pool.nextPlayIndex = (pool.nextPlayIndex + 1) % pool.playAssetIds.length;
 
     await NativeAudio.play(
-      createPlayOptions(assetId, options, pool.audio.volume),
+      createPlayOptions(assetId, options, audio.volume),
     );
   },
 
@@ -202,12 +204,13 @@ export const MobileAudioAdapter: iAudioAdapter = {
 
     await ensureLoopPreloaded(pool);
 
-    if (options.volume !== undefined) {
-      await NativeAudio.setVolume({
-        assetId: pool.loopAssetId,
-        volume: HelperAudio.normalizeNativeVolume(options.volume),
-      });
-    }
+    await NativeAudio.setVolume({
+      assetId: pool.loopAssetId,
+      volume: HelperAudio.normalizeNativeVolume(
+        HelperAudio.normalizeVolume(audio.volume) *
+          HelperAudio.normalizeVolume(options.volume),
+      ),
+    });
 
     await NativeAudio.loop({
       assetId: pool.loopAssetId,
@@ -215,10 +218,10 @@ export const MobileAudioAdapter: iAudioAdapter = {
   },
 
   async setLoopVolume(
-    assetId: string,
+    audio,
     options: iAudioLoopVolumeOptions,
   ) {
-    const pool = getAudioPool(assetId);
+    const pool = getAudioPool(audio.id);
 
     if (!pool.isLoopPreloaded) {
       return;
@@ -226,7 +229,10 @@ export const MobileAudioAdapter: iAudioAdapter = {
 
     await NativeAudio.setVolume({
       assetId: pool.loopAssetId,
-      volume: HelperAudio.normalizeNativeVolume(options.volume),
+      volume: HelperAudio.normalizeNativeVolume(
+        HelperAudio.normalizeVolume(audio.volume) *
+          HelperAudio.normalizeVolume(options.volume),
+      ),
       duration: HelperAudio.normalizeTime(options.duration),
     });
   },

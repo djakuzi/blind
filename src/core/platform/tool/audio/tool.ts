@@ -201,7 +201,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
 
     if (runningLoopIds.has(audio.id)) {
       if (options.volume !== undefined) {
-        await adapter.setLoopVolume(audio.id, {
+        await adapter.setLoopVolume(audio, {
           volume: options.volume,
         });
       }
@@ -239,7 +239,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
       return createHandledResult();
     }
 
-    await adapter.setLoopVolume(audio.id, options);
+    await adapter.setLoopVolume(audio, options);
 
     return createHandledResult();
   }
