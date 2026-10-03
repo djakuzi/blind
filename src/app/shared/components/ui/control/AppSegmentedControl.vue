@@ -57,6 +57,7 @@ const parentRef = ref<HTMLElement | null>(null);
 const hoveredOptionValue = ref<string | null>(null);
 const focusedOptionValue = ref<string | null>(null);
 const contentLayout = ref<tSegmentedContentLayout>('pending');
+const equalItemWidth = ref<number | null>(null);
 
 let canUpdateItemLayout = false;
 
@@ -73,6 +74,7 @@ const itemFontSize = computed(() => sizeConfig.value.fontSize);
 const isContentWidth = computed(() => props.width === 'fit-content' || props.width === 'auto');
 const isContentLayoutReady = computed(() => !isContentWidth.value || contentLayout.value !== 'pending');
 const hasEqualItems = computed(() => isContentWidth.value && contentLayout.value === 'equal');
+const equalItemWidthValue = computed(() => (equalItemWidth.value === null ? undefined : `${equalItemWidth.value}px`));
 
 async function updateItemLayout() {
   if (!canUpdateItemLayout) {
@@ -80,6 +82,7 @@ async function updateItemLayout() {
   }
 
   if (!isContentWidth.value) {
+    equalItemWidth.value = null;
     contentLayout.value = 'adaptive';
     return;
   }
@@ -90,6 +93,7 @@ async function updateItemLayout() {
   const parent = parentRef.value;
 
   if (!control || !parent || props.options.length === 0) {
+    equalItemWidth.value = null;
     contentLayout.value = 'adaptive';
     return;
   }
@@ -97,6 +101,7 @@ async function updateItemLayout() {
   const items = Array.from(control.querySelectorAll<HTMLElement>('.app-segmented-control__item'));
 
   if (items.length !== props.options.length) {
+    equalItemWidth.value = null;
     contentLayout.value = 'adaptive';
     return;
   }
@@ -119,6 +124,7 @@ async function updateItemLayout() {
   const firstItem = items[0];
 
   if (widestItemWidth <= 0 || !firstItem) {
+    equalItemWidth.value = null;
     contentLayout.value = 'adaptive';
     return;
   }
@@ -129,8 +135,8 @@ async function updateItemLayout() {
   const controlBorderWidth =
     (Number.parseFloat(controlStyle.borderLeftWidth) || 0) + (Number.parseFloat(controlStyle.borderRightWidth) || 0);
 
-  const equalControlWidth =
-    widestItemWidth * items.length + dividerWidth * Math.max(0, items.length - 1) + controlBorderWidth;
+  const equalItemOuterWidth = widestItemWidth + dividerWidth;
+  const equalControlWidth = equalItemOuterWidth * items.length + controlBorderWidth;
 
   let availableWidth = parent.getBoundingClientRect().width;
   const computedMaxWidth = controlStyle.maxWidth;
@@ -139,7 +145,14 @@ async function updateItemLayout() {
     availableWidth = Math.min(availableWidth, Number.parseFloat(computedMaxWidth));
   }
 
-  contentLayout.value = equalControlWidth <= availableWidth + 1 ? 'equal' : 'adaptive';
+  if (equalControlWidth <= availableWidth + 1) {
+    equalItemWidth.value = equalItemOuterWidth;
+    contentLayout.value = 'equal';
+    return;
+  }
+
+  equalItemWidth.value = null;
+  contentLayout.value = 'adaptive';
 }
 
 async function initializeItemLayout() {
@@ -155,11 +168,13 @@ async function initializeItemLayout() {
 
 function resetItemLayout() {
   if (!isContentWidth.value) {
+    equalItemWidth.value = null;
     contentLayout.value = 'adaptive';
     updateItemLayout();
     return;
   }
 
+  equalItemWidth.value = null;
   contentLayout.value = 'pending';
   updateItemLayout();
 }
@@ -296,6 +311,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
   align-items: center;
   justify-content: center;
   min-width: 0;
+  box-sizing: border-box;
   padding: v-bind(itemPaddingY) 0;
   border: 0;
   border-right: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-border-contrast);
@@ -315,7 +331,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
 .app-segmented-control--content-width.app-segmented-control--equal-items {
   display: inline-grid;
   grid-auto-flow: column;
-  grid-auto-columns: 1fr;
+  grid-auto-columns: v-bind(equalItemWidthValue);
 }
 
 .app-segmented-control--content-width.app-segmented-control--equal-items .app-segmented-control__item {
