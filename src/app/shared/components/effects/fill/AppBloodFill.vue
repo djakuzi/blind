@@ -4,7 +4,7 @@ import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import { LibNumber } from '@/core/lib/number';
 
-interface Props {
+export interface PropsAppBloodFill {
   flowFrontDuration?: number;
   isActive?: boolean;
   progressRatio?: number;
@@ -12,7 +12,7 @@ interface Props {
   waveLengthScale?: number;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppBloodFill>(), {
   flowFrontDuration: 1200,
   isActive: false,
   progressRatio: 0,
