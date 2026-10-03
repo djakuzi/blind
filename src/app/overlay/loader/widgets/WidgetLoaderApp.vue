@@ -32,7 +32,7 @@ const emit = defineEmits<{
   hidden: [];
 }>();
 
-const LEAVE_DURATION = 1900;
+const LEAVE_DURATION = 2300;
 
 const isRendered = ref(props.isVisible);
 const isActionRunning = ref(false);
@@ -209,7 +209,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   overflow: hidden;
   padding: var(--app-safe-area-vertical) var(--app-safe-area-horizontal);
   background: var(--app-color-background);
-  --widget-loader-app-leave-duration: 1900ms;
+  --widget-loader-app-leave-duration: 2300ms;
 }
 
 .widget-loader-app--leaving {
@@ -229,18 +229,18 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   z-index: 1;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(0.72);
+  transform: translate(-50%, -50%) scale(0.82);
   will-change: transform, opacity;
 }
 
 .widget-loader-app--leaving .widget-loader-app__wordmark,
 .widget-loader-app--leaving .widget-loader-app__status,
 .widget-loader-app--leaving .widget-loader-app__version {
-  animation: widget-loader-app-content-leave 240ms ease-out forwards;
+  animation: widget-loader-app-content-leave 320ms ease-out forwards;
 }
 
 .widget-loader-app--leaving .widget-loader-app__exit-logo {
-  animation: widget-loader-app-logo-leave 1750ms 100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: widget-loader-app-logo-leave 2100ms 120ms forwards;
 }
 
 @keyframes widget-loader-app-content-leave {
@@ -253,33 +253,36 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 @keyframes widget-loader-app-logo-leave {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.72);
+    transform: translate(-50%, -50%) scale(0.82);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  20% {
+  24% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.02);
+    transform: translate(-50%, -50%) scale(1.06);
+    animation-timing-function: cubic-bezier(0.34, 1.3, 0.64, 1);
   }
 
-  26% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  60% {
+  36% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.8, 0.2);
   }
 
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.84);
+    transform: translate(-50%, -50%) scale(0.94);
   }
 }
 
 @keyframes widget-loader-app-background-leave {
   0%,
-  55% {
+  68% {
     opacity: 1;
   }
 
