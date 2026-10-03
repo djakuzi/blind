@@ -4,9 +4,9 @@ import { useLocale } from '@/app/features/locale/composables/useLocale';
 import { useLayoutHeader } from '@/app/layouts/composables/common/useLayoutHeader';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppButtonIcon from '@/app/shared/components/ui/button/AppButtonIcon.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
+import AppDecoratedTitle from '@/app/shared/components/ui/title/AppDecoratedTitle.vue';
 
 const router = useRouter();
 const { play } = useAudio();
@@ -33,10 +33,11 @@ function handleBack() {
         @click="handleBack"
       />
 
-      <AppTitle
+      <AppDecoratedTitle
         v-if="hasLayoutHeaderTitle"
         class="layout-header__title"
         :text="layoutHeaderTitle"
+        font-size="xl"
       />
 
       <AppLogo
@@ -60,8 +61,10 @@ function handleBack() {
 }
 
 .layout-header__title {
+  flex: 1 1 auto;
   min-width: 0;
-  text-align: center;
+  max-width: 72rem;
+  margin-inline: var(--app-space-8);
 }
 
 .layout-header__spacer {

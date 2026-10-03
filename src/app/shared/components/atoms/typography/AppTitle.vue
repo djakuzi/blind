@@ -4,9 +4,9 @@ import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/colo
 import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import { resolveFontWeightValue, type tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
 
-type tAppTitleTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+export type tAppTitleTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-interface Props {
+export interface PropsAppTitle {
   text: string;
   tag?: tAppTitleTag;
   color?: tColorValue;
@@ -15,7 +15,7 @@ interface Props {
   uppercase?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppTitle>(), {
   tag: 'h1',
   color: 'text-secondary',
   fontSize: '2xl',
