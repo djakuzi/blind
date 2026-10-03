@@ -19,13 +19,26 @@ export interface iAudioPlayOptions {
   delay?: number;
 }
 
+export interface iAudioLoopOptions {
+  volume?: number;
+}
+
+export interface iAudioLoopVolumeOptions {
+  volume: number;
+  duration?: number;
+}
+
 export type tAudioCompleteCallback = (assetId: string) => void;
 
 export interface iAudioAdapter {
   activate(): Promise<iPlatformActionResult>;
   preloadResource(audio: iAudioPreloadResource): Promise<void>;
   playResource(audio: iAudioResource, options: iAudioPlayOptions): Promise<void>;
-  startLoop(audio: iAudioResource): Promise<void>;
+  startLoop(audio: iAudioResource, options: iAudioLoopOptions): Promise<void>;
+  setLoopVolume(
+    assetId: string,
+    options: iAudioLoopVolumeOptions,
+  ): Promise<void>;
   stopResource(assetId: string): Promise<void>;
   subscribeComplete(
     callback: tAudioCompleteCallback,

@@ -6,6 +6,8 @@ import { createAudioTool } from './tool';
 
 export type {
   iAudioAdapter,
+  iAudioLoopOptions,
+  iAudioLoopVolumeOptions,
   iAudioPlayOptions,
   iAudioPreloadResource,
   iAudioResource,
@@ -22,6 +24,7 @@ export const {
   preload,
   play,
   loop,
+  setLoopVolume,
   stop,
   setMuted,
   destroy,

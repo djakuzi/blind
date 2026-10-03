@@ -2,6 +2,8 @@ import { NativeAudio } from '@capgo/capacitor-native-audio';
 import { HelperAudio } from '../helpers/audio.helper';
 import type {
   iAudioAdapter,
+  iAudioLoopOptions,
+  iAudioLoopVolumeOptions,
   iAudioPlayOptions,
   iAudioPreloadResource,
 } from '../type';
@@ -195,12 +197,37 @@ export const MobileAudioAdapter: iAudioAdapter = {
     );
   },
 
-  async startLoop(audio) {
+  async startLoop(audio, options: iAudioLoopOptions) {
     const pool = getAudioPool(audio.id);
 
     await ensureLoopPreloaded(pool);
+
+    if (options.volume !== undefined) {
+      await NativeAudio.setVolume({
+        assetId: pool.loopAssetId,
+        volume: HelperAudio.normalizeNativeVolume(options.volume),
+      });
+    }
+
     await NativeAudio.loop({
       assetId: pool.loopAssetId,
+    });
+  },
+
+  async setLoopVolume(
+    assetId: string,
+    options: iAudioLoopVolumeOptions,
+  ) {
+    const pool = getAudioPool(assetId);
+
+    if (!pool.isLoopPreloaded) {
+      return;
+    }
+
+    await NativeAudio.setVolume({
+      assetId: pool.loopAssetId,
+      volume: HelperAudio.normalizeNativeVolume(options.volume),
+      duration: HelperAudio.normalizeTime(options.duration),
     });
   },
 

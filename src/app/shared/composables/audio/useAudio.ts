@@ -17,8 +17,17 @@ export function useAudio() {
     });
   }
 
-  async function startLoop(id: tAudioId) {
+  async function startLoop(
+    id: tAudioId,
+    options: ToolAudio.iAudioLoopOptions,
+  ) {
     if (loops.has(id)) {
+      if (options.volume !== undefined) {
+        await setLoopVolume(id, {
+          volume: options.volume,
+        });
+      }
+
       return;
     }
 
@@ -26,13 +35,20 @@ export function useAudio() {
 
     if (activeRequest) {
       await activeRequest;
+
+      if (options.volume !== undefined) {
+        await setLoopVolume(id, {
+          volume: options.volume,
+        });
+      }
+
       return;
     }
 
     const audio = MediaAudio.getAudio(id);
 
     const request = (async () => {
-      await ToolAudio.loop(audio);
+      await ToolAudio.loop(audio, options);
       loops.set(id, audio);
     })();
 
@@ -47,10 +63,32 @@ export function useAudio() {
     }
   }
 
-  async function loop(input: tAudioInput) {
+  async function loop(
+    input: tAudioInput,
+    options: ToolAudio.iAudioLoopOptions = {},
+  ) {
     const ids = Array.isArray(input) ? input : [input];
 
-    await Promise.all(ids.map((id) => startLoop(id)));
+    await Promise.all(ids.map((id) => startLoop(id, options)));
+  }
+
+  async function setLoopVolume(
+    id: tAudioId,
+    options: ToolAudio.iAudioLoopVolumeOptions,
+  ) {
+    const activeRequest = loopRequests.get(id);
+
+    if (activeRequest) {
+      await activeRequest;
+    }
+
+    const audio = loops.get(id);
+
+    if (!audio) {
+      return;
+    }
+
+    await ToolAudio.setLoopVolume(audio, options);
   }
 
   async function stop(input: tAudioInput) {
@@ -88,6 +126,7 @@ export function useAudio() {
     loops,
     play,
     loop,
+    setLoopVolume,
     stop,
     clear,
   };

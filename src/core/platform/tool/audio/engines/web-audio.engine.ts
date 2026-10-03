@@ -2,6 +2,8 @@ import type { iPlatformSubscription } from '../../../type';
 import { HelperAudio } from '../helpers/audio.helper';
 import type {
   iAudioAdapter,
+  iAudioLoopOptions,
+  iAudioLoopVolumeOptions,
   iAudioPlayOptions,
   iAudioPreloadResource,
   iAudioResource,
@@ -15,6 +17,11 @@ interface iWebAudioResource {
   volume: number;
 }
 
+interface iWebAudioLoopSource {
+  source: AudioBufferSourceNode;
+  gain: GainNode;
+}
+
 export function createWebAudioEngine(
   loadAudioData: tAudioDataLoader,
 ): iAudioAdapter {
@@ -23,7 +30,7 @@ export function createWebAudioEngine(
 
   const resources = new Map<string, iWebAudioResource>();
   const activeSources = new Map<string, Set<AudioBufferSourceNode>>();
-  const loopSources = new Map<string, AudioBufferSourceNode>();
+  const loopSources = new Map<string, iWebAudioLoopSource>();
   const completeCallbacks = new Set<tAudioCompleteCallback>();
 
   function getAudioContext() {
@@ -92,14 +99,14 @@ export function createWebAudioEngine(
   }
 
   function stopLoopSource(id: string) {
-    const source = loopSources.get(id);
+    const loop = loopSources.get(id);
 
-    if (!source) {
+    if (!loop) {
       return;
     }
 
     loopSources.delete(id);
-    stopSource(source);
+    stopSource(loop.source);
   }
 
   async function createSource(
@@ -139,7 +146,7 @@ export function createWebAudioEngine(
       'ended',
       () => {
         if (isLoop) {
-          if (loopSources.get(audio.id) === source) {
+          if (loopSources.get(audio.id)?.source === source) {
             loopSources.delete(audio.id);
           }
         } else {
@@ -163,7 +170,10 @@ export function createWebAudioEngine(
     );
 
     if (isLoop) {
-      loopSources.set(audio.id, source);
+      loopSources.set(audio.id, {
+        source,
+        gain,
+      });
     } else {
       const sources =
         activeSources.get(audio.id) ?? new Set<AudioBufferSourceNode>();
@@ -203,12 +213,38 @@ export function createWebAudioEngine(
       return createSource(audio, options, false);
     },
 
-    startLoop(audio) {
+    startLoop(audio, options: iAudioLoopOptions) {
       if (loopSources.has(audio.id)) {
         return Promise.resolve();
       }
 
-      return createSource(audio, {}, true);
+      return createSource(audio, options, true);
+    },
+
+    async setLoopVolume(
+      assetId: string,
+      options: iAudioLoopVolumeOptions,
+    ) {
+      const loop = loopSources.get(assetId);
+
+      if (!loop) {
+        return;
+      }
+
+      const context = getAudioContext();
+      const volume = HelperAudio.normalizeVolume(options.volume);
+      const duration = HelperAudio.normalizeTime(options.duration);
+      const now = context.currentTime;
+
+      loop.gain.gain.cancelScheduledValues(now);
+      loop.gain.gain.setValueAtTime(loop.gain.gain.value, now);
+
+      if (duration > 0) {
+        loop.gain.gain.linearRampToValueAtTime(volume, now + duration);
+        return;
+      }
+
+      loop.gain.gain.setValueAtTime(volume, now);
     },
 
     async stopResource(assetId) {

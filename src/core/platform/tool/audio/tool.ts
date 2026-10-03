@@ -1,9 +1,16 @@
 import type {
   iAudioAdapter,
+  iAudioLoopOptions,
+  iAudioLoopVolumeOptions,
   iAudioPlayOptions,
   iAudioPreloadResource,
   iAudioResource,
 } from './type';
+
+interface iActiveLoop {
+  audio: iAudioResource;
+  options: iAudioLoopOptions;
+}
 
 function createHandledResult() {
   return {
@@ -19,7 +26,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
   let completeSubscriptionRequest: Promise<void> | undefined;
 
   const activePlayCounts = new Map<string, number>();
-  const activeLoops = new Map<string, iAudioResource>();
+  const activeLoops = new Map<string, iActiveLoop>();
   const runningLoopIds = new Set<string>();
   const preloadedAudioIds = new Set<string>();
   const preloadRequests = new Map<string, Promise<void>>();
@@ -139,7 +146,9 @@ export function createAudioTool(adapter: iAudioAdapter) {
     return createHandledResult();
   }
 
-  async function startLoop(audio: iAudioResource) {
+  async function startLoop(loopState: iActiveLoop) {
+    const { audio, options } = loopState;
+
     if (muted || !activeLoops.has(audio.id) || runningLoopIds.has(audio.id)) {
       return;
     }
@@ -156,7 +165,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
         return;
       }
 
-      await adapter.startLoop(audio);
+      await adapter.startLoop(audio, options);
 
       if (muted || !activeLoops.has(audio.id)) {
         await adapter.stopResource(audio.id);
@@ -177,10 +186,60 @@ export function createAudioTool(adapter: iAudioAdapter) {
     }
   }
 
-  async function loop(audio: iAudioResource) {
-    activeLoops.set(audio.id, audio);
+  async function loop(
+    audio: iAudioResource,
+    options: iAudioLoopOptions = {},
+  ) {
+    const loopState = {
+      audio,
+      options: {
+        ...options,
+      },
+    };
 
-    await startLoop(audio);
+    activeLoops.set(audio.id, loopState);
+
+    if (runningLoopIds.has(audio.id)) {
+      if (options.volume !== undefined) {
+        await adapter.setLoopVolume(audio.id, {
+          volume: options.volume,
+        });
+      }
+
+      return createHandledResult();
+    }
+
+    await startLoop(loopState);
+
+    return createHandledResult();
+  }
+
+  async function setLoopVolume(
+    audio: iAudioResource,
+    options: iAudioLoopVolumeOptions,
+  ) {
+    const loopState = activeLoops.get(audio.id);
+
+    if (!loopState) {
+      return createHandledResult();
+    }
+
+    loopState.options = {
+      ...loopState.options,
+      volume: options.volume,
+    };
+
+    const activeRequest = loopRequests.get(audio.id);
+
+    if (activeRequest) {
+      await activeRequest;
+    }
+
+    if (muted || !runningLoopIds.has(audio.id)) {
+      return createHandledResult();
+    }
+
+    await adapter.setLoopVolume(audio.id, options);
 
     return createHandledResult();
   }
@@ -227,7 +286,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
     }
 
     await Promise.all(
-      [...activeLoops.values()].map((audio) => startLoop(audio)),
+      [...activeLoops.values()].map((loopState) => startLoop(loopState)),
     );
 
     return createHandledResult();
@@ -270,6 +329,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
     preload,
     play,
     loop,
+    setLoopVolume,
     stop,
     setMuted,
     destroy,
