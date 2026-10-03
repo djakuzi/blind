@@ -13,7 +13,7 @@ Generated:
 2026-10-04
 
 Post-processing:
-Selected from the generated candidates and cleaned locally to remove trailing silence, reduce unwanted sub-rumble and upper roughness, and preserve the original low-frequency tactile character. Very short boundary fades were applied to avoid playback clicks.
+Selected from the generated candidates and processed locally for more consistent playback across headphones, laptop speakers, and mobile speakers while preserving the original tactile character.
 
 Generation plan:
 Not recorded.
