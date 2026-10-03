@@ -3,7 +3,7 @@ import { PlatformRuntime } from '../../runtime';
 import { DesktopViewAdapter } from './adapters/desktop.adapter';
 import { MobileViewAdapter } from './adapters/mobile.adapter';
 import { WebViewAdapter } from './adapters/web.adapter';
-import type { iEnterViewFullscreenOptions } from './type';
+import { createViewService } from './service';
 
 export type {
   iEnterViewFullscreenOptions,
@@ -22,34 +22,11 @@ const ViewAdapter = resolveAdapter(
   PlatformRuntime.getRuntime(),
 );
 
-export function getViewportRatio() {
-  if (typeof window === 'undefined' || window.innerHeight === 0) {
-    return {
-      value: 1,
-    };
-  }
-
-  return {
-    value: window.innerWidth / window.innerHeight,
-  };
-}
-
 export const {
+  getViewportRatio,
   setupView,
   isFullscreen,
+  enterFullscreen,
   exitFullscreen,
-} = ViewAdapter;
-
-export function enterFullscreen(options: iEnterViewFullscreenOptions = {}) {
-  return ViewAdapter.enterFullscreen(options);
-}
-
-export async function toggleFullscreen(options: iEnterViewFullscreenOptions = {}) {
-  const { value: fullscreen } = await isFullscreen();
-
-  if (fullscreen) {
-    return exitFullscreen();
-  }
-
-  return enterFullscreen(options);
-}
+  toggleFullscreen,
+} = createViewService(ViewAdapter);
