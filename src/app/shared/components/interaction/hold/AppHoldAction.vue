@@ -167,15 +167,15 @@ function beginHold() {
   progress.value = normalizedInitialProgress.value;
   holdStartedAt = getCurrentTime();
 
-  if (props.startSound !== null) {
-    play(props.startSound);
-  }
-
   progressFrame.request(updateHoldProgress);
 }
 
 function scheduleHold() {
   holdStartTimer.cancel();
+
+  if (props.startSound !== null) {
+    play(props.startSound);
+  }
 
   const delay = normalizedHoldStartDelay.value;
 

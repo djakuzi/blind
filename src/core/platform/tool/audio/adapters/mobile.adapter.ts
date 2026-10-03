@@ -6,16 +6,72 @@ import type {
   iAudioPreloadResource,
 } from '../type';
 
+interface iMobileAudioPool {
+  audio: iAudioPreloadResource;
+  playAssetIds: string[];
+  loopAssetId: string;
+  nextPlayIndex: number;
+  isLoopPreloaded: boolean;
+  loopPreloadRequest?: Promise<void>;
+}
+
+const audioPools = new Map<string, iMobileAudioPool>();
+const nativeAssetOwners = new Map<string, string>();
+
+let isConfigured = false;
+let configureRequest: Promise<void> | undefined;
+
+function createPlayAssetId(assetId: string, index: number) {
+  return `${assetId}::play-${index}`;
+}
+
+function createLoopAssetId(assetId: string) {
+  return `${assetId}::loop`;
+}
+
+async function ensureConfigured() {
+  if (isConfigured) {
+    return;
+  }
+
+  if (configureRequest) {
+    await configureRequest;
+    return;
+  }
+
+  const request = NativeAudio.configure({
+    focus: false,
+    background: false,
+    ignoreSilent: true,
+    showNotification: false,
+  }).then(() => {
+    isConfigured = true;
+  });
+
+  configureRequest = request;
+
+  try {
+    await request;
+  } finally {
+    if (configureRequest === request) {
+      configureRequest = undefined;
+    }
+  }
+}
+
 function createPlayOptions(
   assetId: string,
   options: iAudioPlayOptions,
+  defaultVolume?: number,
 ) {
+  const volume = options.volume ?? defaultVolume;
+
   return {
     assetId,
-    ...(options.volume === undefined
+    ...(volume === undefined
       ? {}
       : {
-          volume: HelperAudio.normalizeNativeVolume(options.volume),
+          volume: HelperAudio.normalizeNativeVolume(volume),
         }),
     ...(options.time === undefined
       ? {}
@@ -30,50 +86,157 @@ function createPlayOptions(
   };
 }
 
+async function preloadNativeAsset(
+  assetId: string,
+  ownerId: string,
+  audio: iAudioPreloadResource,
+  trackCompletion = true,
+) {
+  const options = {
+    assetId,
+    assetPath: audio.src,
+    audioChannelNum: 1,
+    volume: HelperAudio.normalizeNativeVolume(audio.volume),
+    isUrl: false,
+  };
+
+  const { found } = await NativeAudio.isPreloaded(options);
+
+  if (!found) {
+    await NativeAudio.preload(options);
+  }
+
+  if (trackCompletion) {
+    nativeAssetOwners.set(assetId, ownerId);
+  }
+}
+
+function getAudioPool(assetId: string) {
+  const pool = audioPools.get(assetId);
+
+  if (!pool) {
+    throw new Error(`Audio resource is not preloaded: ${assetId}`);
+  }
+
+  return pool;
+}
+
+async function ensureLoopPreloaded(pool: iMobileAudioPool) {
+  if (pool.isLoopPreloaded) {
+    return;
+  }
+
+  if (pool.loopPreloadRequest) {
+    await pool.loopPreloadRequest;
+    return;
+  }
+
+  const request = preloadNativeAsset(
+    pool.loopAssetId,
+    pool.audio.id,
+    pool.audio,
+    false,
+  ).then(() => {
+    pool.isLoopPreloaded = true;
+  });
+
+  pool.loopPreloadRequest = request;
+
+  try {
+    await request;
+  } finally {
+    if (pool.loopPreloadRequest === request) {
+      pool.loopPreloadRequest = undefined;
+    }
+  }
+}
+
 export const MobileAudioAdapter: iAudioAdapter = {
   async activate() {
+    await ensureConfigured();
+
     return {
       isHandled: true,
     };
   },
 
   async preloadResource(audio: iAudioPreloadResource) {
-    const options = {
-      assetId: audio.id,
-      assetPath: audio.src,
-      audioChannelNum: HelperAudio.normalizeChannels(audio.channels),
-      volume: HelperAudio.normalizeNativeVolume(audio.volume),
-      isUrl: false,
-    };
+    await ensureConfigured();
 
-    const { found } = await NativeAudio.isPreloaded(options);
+    const channels = HelperAudio.normalizeChannels(audio.channels);
+    const playAssetIds = Array.from(
+      { length: channels },
+      (_, index) => createPlayAssetId(audio.id, index),
+    );
 
-    if (!found) {
-      await NativeAudio.preload(options);
-    }
+    await Promise.all(
+      playAssetIds.map((assetId) =>
+        preloadNativeAsset(assetId, audio.id, audio),
+      ),
+    );
+
+    audioPools.set(audio.id, {
+      audio,
+      playAssetIds,
+      loopAssetId: createLoopAssetId(audio.id),
+      nextPlayIndex: 0,
+      isLoopPreloaded: false,
+    });
   },
 
   async playResource(audio, options) {
-    await NativeAudio.play(createPlayOptions(audio.id, options));
+    const pool = getAudioPool(audio.id);
+    const assetId = pool.playAssetIds[pool.nextPlayIndex];
+
+    pool.nextPlayIndex = (pool.nextPlayIndex + 1) % pool.playAssetIds.length;
+
+    await NativeAudio.play(
+      createPlayOptions(assetId, options, pool.audio.volume),
+    );
   },
 
   async startLoop(audio) {
+    const pool = getAudioPool(audio.id);
+
+    await ensureLoopPreloaded(pool);
     await NativeAudio.loop({
-      assetId: audio.id,
+      assetId: pool.loopAssetId,
     });
   },
 
   async stopResource(assetId) {
-    await NativeAudio.stop({
-      assetId,
-    });
+    const pool = audioPools.get(assetId);
+
+    if (!pool) {
+      await NativeAudio.stop({
+        assetId,
+      });
+      return;
+    }
+
+    const nativeAssetIds = [
+      ...pool.playAssetIds,
+      ...(pool.isLoopPreloaded ? [pool.loopAssetId] : []),
+    ];
+
+    await Promise.all(
+      nativeAssetIds.map((nativeAssetId) =>
+        NativeAudio.stop({
+          assetId: nativeAssetId,
+        }),
+      ),
+    );
   },
 
   async subscribeComplete(callback) {
     const listener = await NativeAudio.addListener(
       'complete',
       ({ assetId }) => {
-        callback(assetId);
+        const ownerId = nativeAssetOwners.get(assetId);
+
+        if (ownerId !== undefined) {
+          callback(ownerId);
+        }
       },
     );
 
@@ -85,6 +248,11 @@ export const MobileAudioAdapter: iAudioAdapter = {
   },
 
   async destroy() {
+    audioPools.clear();
+    nativeAssetOwners.clear();
+    configureRequest = undefined;
+    isConfigured = false;
+
     await NativeAudio.deinitPlugin();
   },
 };

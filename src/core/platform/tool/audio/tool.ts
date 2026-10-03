@@ -105,6 +105,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
   ) {
     const resources = Array.isArray(input) ? input : [input];
 
+    await ensureCompleteSubscription();
     await Promise.all(resources.map((audio) => preloadResource(audio)));
 
     return createHandledResult();
