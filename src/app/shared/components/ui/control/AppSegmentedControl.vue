@@ -7,7 +7,7 @@ import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
-import { ToolVibration } from '@/core/platform/tool/vibration';
+import { ToolVibration } from '@/core/platform';
 
 export interface iAppSegmentedControlOption {
   label: string;
