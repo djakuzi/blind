@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
@@ -54,6 +55,7 @@ const emit = defineEmits<{
 
 const controlRef = ref<HTMLElement | null>(null);
 const parentRef = ref<HTMLElement | null>(null);
+const measureRef = ref<HTMLElement | null>(null);
 const hoveredOptionValue = ref<string | null>(null);
 const focusedOptionValue = ref<string | null>(null);
 const contentLayout = ref<tSegmentedContentLayout>('pending');
@@ -76,6 +78,16 @@ const isContentLayoutReady = computed(() => !isContentWidth.value || contentLayo
 const hasEqualItems = computed(() => isContentWidth.value && contentLayout.value === 'equal');
 const equalItemWidthValue = computed(() => (equalItemWidth.value === null ? undefined : `${equalItemWidth.value}px`));
 
+function waitForLayoutFrame() {
+  if (typeof requestAnimationFrame === 'undefined') {
+    return Promise.resolve();
+  }
+
+  return new Promise<void>((resolve) => {
+    requestAnimationFrame(() => resolve());
+  });
+}
+
 async function updateItemLayout() {
   if (!canUpdateItemLayout) {
     return;
@@ -91,52 +103,45 @@ async function updateItemLayout() {
 
   const control = controlRef.value;
   const parent = parentRef.value;
+  const measure = measureRef.value;
 
-  if (!control || !parent || props.options.length === 0) {
+  if (!control || !parent || !measure || props.options.length === 0) {
     equalItemWidth.value = null;
     contentLayout.value = 'adaptive';
     return;
   }
 
-  const items = Array.from(control.querySelectorAll<HTMLElement>('.app-segmented-control__item'));
+  const measureItems = Array.from(
+    measure.querySelectorAll<HTMLElement>('.app-segmented-control__measure-item'),
+  );
 
-  if (items.length !== props.options.length) {
+  if (measureItems.length !== props.options.length) {
     equalItemWidth.value = null;
     contentLayout.value = 'adaptive';
     return;
   }
 
-  const naturalWidths = items.map((item) => {
-    const text = item.querySelector<HTMLElement>('.app-marquee-text__content');
-    const paddingMeasure = item.querySelector<HTMLElement>('.app-marquee-text__padding-measure');
+  const widestMeasuredItem = Math.max(
+    ...measureItems.map((item) => item.getBoundingClientRect().width),
+  );
 
-    if (!text || !paddingMeasure) {
-      return 0;
-    }
+  const firstVisibleItem = control.querySelector<HTMLElement>('.app-segmented-control__item');
 
-    const paddingStyle = getComputedStyle(paddingMeasure);
-    const paddingX = Number.parseFloat(paddingStyle.paddingLeft) || 0;
-
-    return text.getBoundingClientRect().width + paddingX * 2;
-  });
-
-  const widestItemWidth = Math.max(...naturalWidths);
-  const firstItem = items[0];
-
-  if (widestItemWidth <= 0 || !firstItem) {
+  if (widestMeasuredItem <= 0 || !firstVisibleItem) {
     equalItemWidth.value = null;
     contentLayout.value = 'adaptive';
     return;
   }
 
-  const itemStyle = getComputedStyle(firstItem);
+  const itemStyle = getComputedStyle(firstVisibleItem);
   const dividerWidth = Number.parseFloat(itemStyle.borderRightWidth) || 0;
   const controlStyle = getComputedStyle(control);
   const controlBorderWidth =
-    (Number.parseFloat(controlStyle.borderLeftWidth) || 0) + (Number.parseFloat(controlStyle.borderRightWidth) || 0);
+    (Number.parseFloat(controlStyle.borderLeftWidth) || 0) +
+    (Number.parseFloat(controlStyle.borderRightWidth) || 0);
 
-  const equalItemOuterWidth = widestItemWidth + dividerWidth;
-  const equalControlWidth = equalItemOuterWidth * items.length + controlBorderWidth;
+  const equalItemOuterWidth = Math.ceil(widestMeasuredItem + dividerWidth);
+  const equalControlWidth = equalItemOuterWidth * props.options.length + controlBorderWidth;
 
   let availableWidth = parent.getBoundingClientRect().width;
   const computedMaxWidth = controlStyle.maxWidth;
@@ -161,6 +166,10 @@ async function initializeItemLayout() {
   if (typeof document !== 'undefined' && 'fonts' in document) {
     await document.fonts.ready;
   }
+
+  await nextTick();
+  await waitForLayoutFrame();
+  await waitForLayoutFrame();
 
   canUpdateItemLayout = true;
   await updateItemLayout();
@@ -211,7 +220,7 @@ onMounted(() => {
   initializeItemLayout();
 });
 
-useResizeObserver([controlRef, parentRef], () => {
+useResizeObserver([parentRef], () => {
   updateItemLayout();
 });
 
@@ -258,6 +267,23 @@ function handleSelect(option: iAppSegmentedControlOption) {
     }"
     role="radiogroup"
   >
+    <div ref="measureRef" class="app-segmented-control__measure" aria-hidden="true">
+      <span
+        v-for="option in options"
+        :key="`measure-${option.value}`"
+        class="app-segmented-control__measure-item"
+      >
+        <AppText
+          :text="option.label"
+          tag="span"
+          color="inherit"
+          :font-size="itemFontSize"
+          font-weight="bold"
+          :uppercase="true"
+        />
+      </span>
+    </div>
+
     <button
       v-for="option in options"
       :key="option.value"
@@ -292,6 +318,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
 
 <style scoped>
 .app-segmented-control {
+  position: relative;
   display: inline-flex;
   width: v-bind(controlWidth);
   max-width: v-bind(controlMaxWidth);
@@ -303,6 +330,26 @@ function handleSelect(option: iAppSegmentedControlOption) {
 
 .app-segmented-control--content-width:not(.app-segmented-control--layout-ready) {
   visibility: hidden;
+}
+
+.app-segmented-control__measure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: max-content;
+  height: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.app-segmented-control__measure-item {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  box-sizing: border-box;
+  padding-inline: v-bind(itemPaddingX);
+  white-space: nowrap;
 }
 
 .app-segmented-control__item {
