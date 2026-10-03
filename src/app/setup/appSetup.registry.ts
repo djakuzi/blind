@@ -1,5 +1,6 @@
 import type { Pinia } from 'pinia';
 import { createAudioSetup } from './interface/audio.setup';
+import { createGameModesSetup } from './interface/gameModes.setup';
 import { createLanguageSetup } from './interface/language.setup';
 import { createScaleSetup } from './interface/scale.setup';
 import { createThemeSetup } from './interface/theme.setup';
@@ -12,5 +13,6 @@ export function createAppSetupRegistry(pinia: Pinia) {
     createScaleSetup(pinia),
     createLanguageSetup(pinia),
     createAudioSetup(pinia),
+    createGameModesSetup(pinia),
   ];
 }

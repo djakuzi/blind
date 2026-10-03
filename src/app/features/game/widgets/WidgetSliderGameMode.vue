@@ -1,20 +1,18 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { apiGame } from '@/app/domain/game/api/api';
-import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import UiCardGameMode from '@/app/features/game/ui/UiCardGameMode.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
 import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
+import { useGameStore } from '@/app/stores/game/game.store';
 
 const router = useRouter();
+const gameStore = useGameStore();
 
-const modes = ref<ModelGameMode[]>([]);
+const modes = computed(() => gameStore.modes);
 const activeIndex = ref(0);
-const isLoading = ref(false);
-const hasLoadError = ref(false);
 
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
 
@@ -22,31 +20,11 @@ function formatItemAccessibilityLabel(index: number, count: number) {
   return preGameLocale.value.itemAccessibilityLabel.replace('{current}', String(index + 1)).replace('{total}', String(count));
 }
 
-async function loadModes() {
-  isLoading.value = true;
-  hasLoadError.value = false;
-
-  try {
-    modes.value = await apiGame.getModes();
-    activeIndex.value = 0;
-  } catch (error) {
-    modes.value = [];
-    hasLoadError.value = true;
-    console.error('Failed to load game modes:', error);
-  } finally {
-    isLoading.value = false;
-  }
-}
-
 function handleModeComplete() {
   router.push({
     name: KEY_ROUTE.preGame.typeConnection,
   });
 }
-
-onMounted(() => {
-  loadModes();
-});
 </script>
 
 <template>
@@ -88,14 +66,6 @@ onMounted(() => {
         />
       </template>
     </AppSlider>
-
-    <div v-else-if="hasLoadError" class="widget-slider-game-mode__state">
-      {{ preGameLocale.loadError }}
-    </div>
-
-    <div v-else-if="isLoading" class="widget-slider-game-mode__state">
-      {{ preGameLocale.loading }}
-    </div>
   </div>
 </template>
 
@@ -103,16 +73,5 @@ onMounted(() => {
 .widget-slider-game-mode {
   width: 100%;
   min-width: 0;
-}
-
-.widget-slider-game-mode__state {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 20rem;
-  color: var(--app-color-text-secondary);
-  font-size: var(--app-font-size-xl);
-  text-align: center;
 }
 </style>
