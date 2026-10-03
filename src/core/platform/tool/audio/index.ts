@@ -3,11 +3,7 @@ import { PlatformRuntime } from '../../runtime';
 import { DesktopAudioAdapter } from './adapters/desktop.adapter';
 import { MobileAudioAdapter } from './adapters/mobile.adapter';
 import { WebAudioAdapter } from './adapters/web.adapter';
-import type {
-  iAudioPlayOptions,
-  iAudioPreloadResource,
-  iAudioResource,
-} from './type';
+import { createAudioService } from './service';
 
 export type {
   iAudioAdapter,
@@ -25,31 +21,12 @@ const AudioAdapter = resolveAdapter(
   PlatformRuntime.getRuntime(),
 );
 
-function isAudioResourceList(
-  input: iAudioPreloadResource | readonly iAudioPreloadResource[],
-): input is readonly iAudioPreloadResource[] {
-  return Array.isArray(input);
-}
-
 export const {
   activate,
+  preload,
+  play,
   loop,
   stop,
   setMuted,
   destroy,
-} = AudioAdapter;
-
-export function preload(
-  input: iAudioPreloadResource | readonly iAudioPreloadResource[],
-) {
-  const resources = isAudioResourceList(input) ? input : [input];
-
-  return AudioAdapter.preload(resources);
-}
-
-export function play(
-  audio: iAudioResource,
-  options: iAudioPlayOptions = {},
-) {
-  return AudioAdapter.play(audio, options);
-}
+} = createAudioService(AudioAdapter);
