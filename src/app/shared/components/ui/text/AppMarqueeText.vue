@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<PropsAppMarqueeText>(), {
   fontWeight: 'medium',
   uppercase: false,
   play: true,
-  speed: 32,
+  speed: 50,
   minDuration: 5000,
 });
 
