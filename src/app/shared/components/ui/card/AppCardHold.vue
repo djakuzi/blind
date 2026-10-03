@@ -31,6 +31,7 @@ withDefaults(defineProps<PropsAppCardHold>(), {
   releaseDuration: 140,
   sound: 'sfx.interaction.hold-complete',
   startSound: 'sfx.interaction.hold-start',
+  startSoundDelay: 40,
   vibrationDuration: 45,
 });
 
@@ -55,6 +56,7 @@ function handleComplete() {
     :release-duration="releaseDuration"
     :sound="sound"
     :start-sound="startSound"
+    :start-sound-delay="startSoundDelay"
     :vibration-duration="vibrationDuration"
     :width="width"
     :max-width="maxWidth"
