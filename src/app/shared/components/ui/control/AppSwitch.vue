@@ -28,7 +28,7 @@ export interface PropsAppSwitch {
 
 const props = withDefaults(defineProps<PropsAppSwitch>(), {
   disabled: false,
-  sound: 'sfx.ui.selection',
+  sound: 'sfx.selection.default',
   vibration: true,
   size: 'middle',
   width: undefined,

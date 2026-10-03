@@ -1,7 +1,7 @@
-# slider-selection
+# selection/default
 
 Asset:
-`slider-selection.wav`
+`default.wav`
 
 Source:
 [ElevenLabs](../../licenses/sources/elevenlabs.md)
@@ -10,10 +10,10 @@ Source type:
 AI-generated sound effect
 
 Generated:
-2026-10-04
+2026-10-03
 
 Post-processing:
-Selected from the generated candidates and cleaned locally to remove trailing silence, reduce unwanted sub-rumble and upper roughness, and preserve the original low-frequency tactile character. Very short boundary fades were applied to avoid playback clicks.
+Selected from the generated candidates and cleaned locally to reduce unwanted sub-rumble and upper roughness while preserving the original tactile character and envelope. The trailing silence was trimmed and very short boundary fades were applied to avoid playback clicks.
 
 Generation plan:
 Not recorded.

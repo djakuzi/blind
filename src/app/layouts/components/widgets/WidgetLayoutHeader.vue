@@ -2,17 +2,20 @@
 import { useRouter } from 'vue-router';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import { useLayoutHeader } from '@/app/layouts/composables/common/useLayoutHeader';
+import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppButtonIcon from '@/app/shared/components/ui/button/AppButtonIcon.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
 
 const router = useRouter();
+const { play } = useAudio();
 
 const commonLocale = useLocale((locale) => locale.common);
 const { hasLayoutHeaderTitle, layoutHeaderTitle, hasLayoutHeaderLogo } = useLayoutHeader();
 
 function handleBack() {
+  play('sfx.navigation.back');
   router.back();
 }
 </script>

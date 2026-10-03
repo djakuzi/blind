@@ -72,10 +72,7 @@ export function createAudioSetup(pinia: Pinia): iSetup {
     loaderStore.setResourcePending(resourcePayload);
 
     try {
-      await ToolAudio.preload([
-        ...MediaAudio.getAudioGroup('sfx.interaction'),
-        ...MediaAudio.getAudioGroup('sfx.ui'),
-      ]);
+      await ToolAudio.preload(MediaAudio.getAudioGroup('sfx'));
 
       loaderStore.setResourceLoaded(resourcePayload);
     } catch (error) {

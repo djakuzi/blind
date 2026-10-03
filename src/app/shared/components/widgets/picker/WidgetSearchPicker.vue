@@ -45,7 +45,7 @@ const props = withDefaults(defineProps<PropsWidgetSearchPicker>(), {
   triggerAriaLabel: undefined,
   width: '100%',
   maxWidth: '100%',
-  sound: 'sfx.ui.selection',
+  sound: 'sfx.selection.default',
   vibration: true,
   modal: undefined,
   search: undefined,

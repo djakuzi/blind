@@ -1,8 +1,9 @@
 import AudioAsset1 from '@/assets/audio/sfx/interaction/hold-complete.wav?no-inline'
 import AudioAsset2 from '@/assets/audio/sfx/interaction/hold-progress.wav?no-inline'
 import AudioAsset3 from '@/assets/audio/sfx/interaction/hold-start.wav?no-inline'
-import AudioAsset4 from '@/assets/audio/sfx/ui/selection.wav?no-inline'
-import AudioAsset5 from '@/assets/audio/sfx/ui/slider-selection.wav?no-inline'
+import AudioAsset4 from '@/assets/audio/sfx/navigation/back.wav?no-inline'
+import AudioAsset5 from '@/assets/audio/sfx/selection/default.wav?no-inline'
+import AudioAsset6 from '@/assets/audio/sfx/selection/slider.wav?no-inline'
 
 export const AUDIO_ASSETS = {
   'sfx.interaction.hold-complete': {
@@ -23,15 +24,21 @@ export const AUDIO_ASSETS = {
     type: 'sfx',
     channels: 4,
   },
-  'sfx.ui.selection': {
-    id: 'sfx.ui.selection',
+  'sfx.navigation.back': {
+    id: 'sfx.navigation.back',
     src: AudioAsset4,
     type: 'sfx',
     channels: 4,
   },
-  'sfx.ui.slider-selection': {
-    id: 'sfx.ui.slider-selection',
+  'sfx.selection.default': {
+    id: 'sfx.selection.default',
     src: AudioAsset5,
+    type: 'sfx',
+    channels: 4,
+  },
+  'sfx.selection.slider': {
+    id: 'sfx.selection.slider',
+    src: AudioAsset6,
     type: 'sfx',
     channels: 4,
   },
@@ -42,16 +49,20 @@ export const AUDIO_GROUPS = {
     'sfx.interaction.hold-complete',
     'sfx.interaction.hold-progress',
     'sfx.interaction.hold-start',
-    'sfx.ui.selection',
-    'sfx.ui.slider-selection',
+    'sfx.navigation.back',
+    'sfx.selection.default',
+    'sfx.selection.slider',
   ],
   'sfx.interaction': [
     'sfx.interaction.hold-complete',
     'sfx.interaction.hold-progress',
     'sfx.interaction.hold-start',
   ],
-  'sfx.ui': [
-    'sfx.ui.selection',
-    'sfx.ui.slider-selection',
+  'sfx.navigation': [
+    'sfx.navigation.back',
+  ],
+  'sfx.selection': [
+    'sfx.selection.default',
+    'sfx.selection.slider',
   ],
 } as const

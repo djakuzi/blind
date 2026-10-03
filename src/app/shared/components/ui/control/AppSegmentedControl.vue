@@ -38,7 +38,7 @@ export interface PropsAppSegmentedControl {
 
 const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
   disabled: false,
-  sound: 'sfx.ui.selection',
+  sound: 'sfx.selection.default',
   vibration: true,
   size: 'middle',
   width: 'auto',
