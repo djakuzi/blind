@@ -8,6 +8,7 @@ export interface PropsAppMarqueeText extends Pick<
   PropsAppText,
   'text' | 'color' | 'fontSize' | 'fontWeight' | 'uppercase'
 > {
+  play?: boolean;
   speed?: number;
   minDuration?: number;
 }
@@ -17,6 +18,7 @@ const props = withDefaults(defineProps<PropsAppMarqueeText>(), {
   fontSize: 'md',
   fontWeight: 'medium',
   uppercase: false,
+  play: true,
   speed: 32,
   minDuration: 5000,
 });
@@ -28,7 +30,8 @@ const cloneRef = ref<HTMLElement | null>(null);
 const isOverflowing = ref(false);
 const loopDistance = ref(0);
 
-const isMarqueeActive = computed(() => isOverflowing.value && loopDistance.value > 0);
+const isMarqueeReady = computed(() => isOverflowing.value && loopDistance.value > 0);
+const isMarqueePlaying = computed(() => isMarqueeReady.value && props.play);
 
 const marqueeDuration = computed(() => {
   const speed = Math.max(1, props.speed);
@@ -95,7 +98,10 @@ onMounted(async () => {
   <span
     ref="viewportRef"
     class="app-marquee-text"
-    :class="{ 'app-marquee-text--active': isMarqueeActive }"
+    :class="{
+      'app-marquee-text--overflowing': isMarqueeReady,
+      'app-marquee-text--playing': isMarqueePlaying,
+    }"
     :style="marqueeStyle"
   >
     <span class="app-marquee-text__track">
@@ -151,9 +157,24 @@ onMounted(async () => {
   white-space: nowrap;
 }
 
-.app-marquee-text--active {
+.app-marquee-text--overflowing {
   --cp-marquee-text-edge-fade: var(--app-space-5);
 
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(100% - var(--cp-marquee-text-edge-fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(100% - var(--cp-marquee-text-edge-fade)),
+    transparent 100%
+  );
+}
+
+.app-marquee-text--playing {
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0,
@@ -170,24 +191,24 @@ onMounted(async () => {
   );
 }
 
-.app-marquee-text--active .app-marquee-text__track {
+.app-marquee-text--playing .app-marquee-text__track {
   animation: app-marquee-text-scroll var(--cp-marquee-text-duration) linear infinite;
   will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .app-marquee-text--active {
+  .app-marquee-text--overflowing {
     -webkit-mask-image: none;
     mask-image: none;
   }
 
-  .app-marquee-text--active .app-marquee-text__track {
+  .app-marquee-text--overflowing .app-marquee-text__track {
     display: block;
     min-width: 0;
     animation: none;
   }
 
-  .app-marquee-text--active .app-marquee-text__item:first-child {
+  .app-marquee-text--overflowing .app-marquee-text__item:first-child {
     display: block;
     min-width: 0;
     overflow: hidden;

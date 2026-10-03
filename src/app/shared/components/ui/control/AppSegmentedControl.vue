@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import { computed, ref } from 'vue';
+import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
@@ -43,6 +43,9 @@ const emit = defineEmits<{
   'update:modelValue': [value: string];
 }>();
 
+const hoveredOptionValue = ref<string | null>(null);
+const focusedOptionValue = ref<string | null>(null);
+
 const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
 const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
 const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
@@ -53,6 +56,34 @@ const itemPaddingX = computed(() => resolvePaddingValue(props.paddingX ?? sizeCo
 const itemPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? sizeConfig.value.paddingY));
 
 const itemFontSize = computed(() => sizeConfig.value.fontSize);
+
+function isOptionMarqueePlaying(option: iAppSegmentedControlOption) {
+  return (
+    option.value === props.modelValue ||
+    option.value === hoveredOptionValue.value ||
+    option.value === focusedOptionValue.value
+  );
+}
+
+function handleMouseEnter(option: iAppSegmentedControlOption) {
+  hoveredOptionValue.value = option.value;
+}
+
+function handleMouseLeave(option: iAppSegmentedControlOption) {
+  if (hoveredOptionValue.value === option.value) {
+    hoveredOptionValue.value = null;
+  }
+}
+
+function handleFocus(option: iAppSegmentedControlOption) {
+  focusedOptionValue.value = option.value;
+}
+
+function handleBlur(option: iAppSegmentedControlOption) {
+  if (focusedOptionValue.value === option.value) {
+    focusedOptionValue.value = null;
+  }
+}
 
 function handleSelect(option: iAppSegmentedControlOption) {
   if (props.disabled || option.disabled || option.value === props.modelValue) {
@@ -80,18 +111,20 @@ function handleSelect(option: iAppSegmentedControlOption) {
       role="radio"
       :aria-checked="option.value === modelValue"
       :disabled="disabled || option.disabled"
+      @mouseenter="handleMouseEnter(option)"
+      @mouseleave="handleMouseLeave(option)"
+      @focus="handleFocus(option)"
+      @blur="handleBlur(option)"
       @click="handleSelect(option)"
     >
-      <AppText
+      <AppMarqueeText
         class="app-segmented-control__text"
         :text="option.label"
-        tag="span"
         color="inherit"
         :font-size="itemFontSize"
         font-weight="bold"
         :uppercase="true"
-        :ellipsis="true"
-        :max-lines="1"
+        :play="isOptionMarqueePlaying(option)"
       />
     </button>
   </div>
