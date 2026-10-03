@@ -1,18 +1,4 @@
-import { HelperStorage } from '../helpers/storage.helper';
+import { RuntimeWebStorage } from '../../../runtime/web/storage/storage';
 import type { iStorageAdapter } from '../type';
 
-export const WebStorageAdapter: iStorageAdapter = {
-  async setItem(key, value) {
-    HelperStorage.getBrowserStorage().setItem(key, value);
-  },
-
-  async getItem(key) {
-    return {
-      value: HelperStorage.getBrowserStorage().getItem(key),
-    };
-  },
-
-  async removeItem(key) {
-    HelperStorage.getBrowserStorage().removeItem(key);
-  },
-};
+export const WebStorageAdapter: iStorageAdapter = RuntimeWebStorage;

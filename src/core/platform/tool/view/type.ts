@@ -15,6 +15,7 @@ export interface iSetupViewOptions {
 }
 
 export interface iViewAdapter {
+  getViewportRatio(): iPlatformValue<number>;
   setupView(options: iSetupViewOptions): Promise<iPlatformActionResult>;
   isFullscreen(): Promise<iPlatformValue<boolean>>;
   enterFullscreen(options: iEnterViewFullscreenOptions): Promise<iPlatformActionResult>;

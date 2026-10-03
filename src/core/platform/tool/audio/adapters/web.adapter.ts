@@ -1,3 +1,4 @@
-import { WebAudioEngine } from '../engines/web-audio.engine';
+import { RuntimeWebAudio } from '../../../runtime/web/audio/audio';
+import type { iAudioAdapter } from '../type';
 
-export const WebAudioAdapter = WebAudioEngine.createAdapter(WebAudioEngine.loadWithFetch);
+export const WebAudioAdapter: iAudioAdapter = RuntimeWebAudio;

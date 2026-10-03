@@ -1,8 +1,4 @@
-import { HelperOpfs } from '../helpers/opfs.helper';
+import { RuntimeWebFilesystem } from '../../../runtime/web/filesystem/filesystem';
 import type { iFilesystemAdapter } from '../type';
 
-export const WebFilesystemAdapter: iFilesystemAdapter = {
-  writeFile: HelperOpfs.writeFile,
-  readFile: HelperOpfs.readFile,
-  removeFile: HelperOpfs.removeFile,
-};
+export const WebFilesystemAdapter: iFilesystemAdapter = RuntimeWebFilesystem;
