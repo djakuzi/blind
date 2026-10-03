@@ -53,8 +53,8 @@ const emit = defineEmits<{
 
 const { play, loop, setLoopVolume, stop } = useAudio();
 
-const PROGRESS_SOUND_START_DELAY = 55;
-const PROGRESS_SOUND_START_VOLUME = 0.18;
+const PROGRESS_SOUND_START_DELAY = 0;
+const PROGRESS_SOUND_START_VOLUME = 0.1;
 const PROGRESS_SOUND_END_VOLUME = 0.48;
 const PROGRESS_SOUND_RELEASE_DURATION = 22;
 
@@ -178,9 +178,16 @@ function scheduleProgressSound() {
     return;
   }
 
+  const delay = Math.min(PROGRESS_SOUND_START_DELAY, holdDuration);
+
+  if (delay === 0) {
+    runAudioRequest(startProgressSound(), 'start');
+    return;
+  }
+
   progressSoundStartTimer.start(() => {
     runAudioRequest(startProgressSound(), 'start');
-  }, Math.min(PROGRESS_SOUND_START_DELAY, holdDuration));
+  }, delay);
 }
 
 function stopProgressSound(isImmediate = false) {
