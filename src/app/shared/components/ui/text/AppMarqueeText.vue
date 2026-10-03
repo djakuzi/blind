@@ -28,6 +28,7 @@ const props = withDefaults(defineProps<PropsAppMarqueeText>(), {
 
 const viewportRef = ref<HTMLElement | null>(null);
 const contentRef = ref<HTMLElement | null>(null);
+const textRef = ref<HTMLElement | null>(null);
 const cloneRef = ref<HTMLElement | null>(null);
 
 const isOverflowing = ref(false);
@@ -52,14 +53,17 @@ const marqueeStyle = computed(() => ({
 async function updateMarquee() {
   const viewport = viewportRef.value;
   const content = contentRef.value;
+  const text = textRef.value;
 
-  if (!viewport || !content) {
+  if (!viewport || !content || !text) {
     isOverflowing.value = false;
     loopDistance.value = 0;
     return;
   }
 
-  const nextIsOverflowing = content.scrollWidth - viewport.clientWidth > 1;
+  const viewportRect = viewport.getBoundingClientRect();
+  const textRect = text.getBoundingClientRect();
+  const nextIsOverflowing = textRect.right - viewportRect.right > 1;
 
   isOverflowing.value = nextIsOverflowing;
 
@@ -88,7 +92,7 @@ watch(
   },
 );
 
-useResizeObserver([viewportRef, contentRef], () => {
+useResizeObserver([viewportRef, textRef], () => {
   updateMarquee();
 });
 
@@ -110,14 +114,16 @@ onMounted(async () => {
   >
     <span class="app-marquee-text__track">
       <span ref="contentRef" class="app-marquee-text__item">
-        <AppText
-          :text="text"
-          tag="span"
-          :color="color"
-          :font-size="fontSize"
-          :font-weight="fontWeight"
-          :uppercase="uppercase"
-        />
+        <span ref="textRef" class="app-marquee-text__content">
+          <AppText
+            :text="text"
+            tag="span"
+            :color="color"
+            :font-size="fontSize"
+            :font-weight="fontWeight"
+            :uppercase="uppercase"
+          />
+        </span>
       </span>
 
       <span
@@ -160,6 +166,10 @@ onMounted(async () => {
   flex: 0 0 auto;
   padding-inline: v-bind(contentPaddingX);
   white-space: nowrap;
+}
+
+.app-marquee-text__content {
+  display: inline-block;
 }
 
 .app-marquee-text--overflowing {
