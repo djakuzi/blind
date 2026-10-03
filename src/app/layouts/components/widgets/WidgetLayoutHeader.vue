@@ -77,8 +77,8 @@ function handleBack() {
     var(--app-color-surface-glass-top) 0%,
     var(--app-color-surface-glass-bottom) 100%
   );
-  -webkit-backdrop-filter: blur(2px) brightness(1);
-  backdrop-filter: blur(2px) brightness(1);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
 }
 
 .layout-header::after {
