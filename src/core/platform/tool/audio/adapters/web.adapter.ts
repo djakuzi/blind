@@ -1,3 +1,3 @@
-import { HelperWebAudio } from '../helpers/web-audio.helper';
+import { WebAudioEngine } from '../engines/web-audio.engine';
 
-export const WebAudioAdapter = HelperWebAudio.createAdapter(HelperWebAudio.loadWithFetch);
+export const WebAudioAdapter = WebAudioEngine.createAdapter(WebAudioEngine.loadWithFetch);
