@@ -1,5 +1,5 @@
 import { HelperBridge } from '../../../runtime/desktop/helpers/bridge.helper';
-import { HelperWebAudio } from '../helpers/web-audio.helper';
+import { WebAudioEngine } from '../engines/web-audio.engine';
 
 async function loadDesktopAudioData(src: string) {
   const { data } = await HelperBridge.getCapability('audio').loadAsset(src);
@@ -7,4 +7,4 @@ async function loadDesktopAudioData(src: string) {
   return data;
 }
 
-export const DesktopAudioAdapter = HelperWebAudio.createAdapter(loadDesktopAudioData);
+export const DesktopAudioAdapter = WebAudioEngine.createAdapter(loadDesktopAudioData);
