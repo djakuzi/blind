@@ -61,7 +61,7 @@ function handleBack() {
   align-items: center;
   width: 100%;
   padding:
-    calc(var(--cp-layout-padding-vertical, 0px) + var(--app-space-2))
+    var(--cp-layout-padding-vertical, 0px)
     var(--cp-layout-padding-horizontal, 0px)
     var(--app-space-2);
 }
