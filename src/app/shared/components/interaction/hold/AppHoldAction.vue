@@ -23,6 +23,7 @@ export interface PropsAppHoldAction {
   maxWidth?: tStyleSizeValue;
   moveCancelThreshold?: number;
   releaseDuration?: number;
+  progressSound?: tAudioId | null;
   sound?: tAudioId | null;
   startSound?: tAudioId | null;
   vibrationDuration?: number;
@@ -39,6 +40,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   maxWidth: '100%',
   moveCancelThreshold: 6,
   releaseDuration: 140,
+  progressSound: 'sfx.interaction.hold-progress',
   sound: 'sfx.interaction.hold-complete',
   startSound: 'sfx.interaction.hold-start',
   vibrationDuration: 45,
@@ -49,7 +51,12 @@ const emit = defineEmits<{
   complete: [];
 }>();
 
-const { play } = useAudio();
+const { play, loop, setLoopVolume, stop } = useAudio();
+
+const PROGRESS_SOUND_START_DELAY = 55;
+const PROGRESS_SOUND_START_VOLUME = 0.18;
+const PROGRESS_SOUND_END_VOLUME = 0.48;
+const PROGRESS_SOUND_RELEASE_DURATION = 22;
 
 const isHolding = ref(false);
 const hasCompleted = ref(false);
@@ -63,6 +70,11 @@ let holdStartY = 0;
 const progressFrame = LibScheduler.createAnimationFrame();
 const holdStartTimer = LibScheduler.createTimeout();
 const holdCompleteTimer = LibScheduler.createTimeout();
+const progressSoundStartTimer = LibScheduler.createTimeout();
+const progressSoundStopTimer = LibScheduler.createTimeout();
+
+let progressSoundSession = 0;
+let activeProgressSoundId: tAudioId | undefined;
 
 let activePointerId: number | undefined;
 let activePointerTarget: HTMLElement | undefined;
@@ -118,6 +130,89 @@ watch(normalizedInitialProgress, (initialProgress) => {
   progress.value = initialProgress;
 });
 
+function runAudioRequest(request: Promise<void>, action: string) {
+  request.catch((error) => {
+    console.error(`Failed to ${action} hold progress audio:`, error);
+  });
+}
+
+async function startProgressSound() {
+  const soundId = props.progressSound;
+
+  if (soundId === null || !isHolding.value) {
+    return;
+  }
+
+  const session = ++progressSoundSession;
+
+  await loop(soundId, {
+    volume: PROGRESS_SOUND_START_VOLUME,
+  });
+
+  if (
+    session !== progressSoundSession ||
+    !isHolding.value ||
+    props.progressSound !== soundId
+  ) {
+    return;
+  }
+
+  activeProgressSoundId = soundId;
+
+  const remainingDuration = Math.max(
+    0,
+    holdDuration - PROGRESS_SOUND_START_DELAY,
+  );
+
+  await setLoopVolume(soundId, {
+    volume: PROGRESS_SOUND_END_VOLUME,
+    duration: remainingDuration / 1000,
+  });
+}
+
+function scheduleProgressSound() {
+  progressSoundStartTimer.cancel();
+
+  if (props.progressSound === null) {
+    return;
+  }
+
+  progressSoundStartTimer.start(() => {
+    runAudioRequest(startProgressSound(), 'start');
+  }, Math.min(PROGRESS_SOUND_START_DELAY, holdDuration));
+}
+
+function stopProgressSound(isImmediate = false) {
+  progressSoundSession += 1;
+  progressSoundStartTimer.cancel();
+  progressSoundStopTimer.cancel();
+
+  const soundId = activeProgressSoundId ?? props.progressSound;
+
+  activeProgressSoundId = undefined;
+
+  if (soundId === null) {
+    return;
+  }
+
+  if (isImmediate || PROGRESS_SOUND_RELEASE_DURATION <= 0) {
+    runAudioRequest(stop(soundId), 'stop');
+    return;
+  }
+
+  runAudioRequest(
+    setLoopVolume(soundId, {
+      volume: 0,
+      duration: PROGRESS_SOUND_RELEASE_DURATION / 1000,
+    }),
+    'fade',
+  );
+
+  progressSoundStopTimer.start(() => {
+    runAudioRequest(stop(soundId), 'stop');
+  }, PROGRESS_SOUND_RELEASE_DURATION);
+}
+
 function completeHold() {
   if (hasCompleted.value || !isHolding.value) {
     return;
@@ -125,6 +220,7 @@ function completeHold() {
 
   holdCompleteTimer.cancel();
   progressFrame.cancel();
+  stopProgressSound();
 
   ToolVibration.vibrate({
     duration: props.vibrationDuration,
@@ -177,6 +273,7 @@ function beginHold() {
     play(props.startSound);
   }
 
+  scheduleProgressSound();
   holdCompleteTimer.start(completeHold, holdDuration);
   progressFrame.request(updateHoldProgress);
 }
@@ -252,6 +349,7 @@ function resetHoldState(isImmediate = false) {
   holdStartTimer.cancel();
   holdCompleteTimer.cancel();
   progressFrame.cancel();
+  stopProgressSound(isImmediate);
 
   isHolding.value = false;
   hasCompleted.value = false;

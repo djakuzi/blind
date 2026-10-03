@@ -33,6 +33,7 @@ withDefaults(defineProps<PropsAppCardHold>(), {
   holdStartDelay: 40,
   initialProgress: 15,
   releaseDuration: 140,
+  progressSound: 'sfx.interaction.hold-progress',
   sound: 'sfx.interaction.hold-complete',
   startSound: 'sfx.interaction.hold-start',
   vibrationDuration: 45,
@@ -57,6 +58,7 @@ function handleComplete() {
     :initial-progress="initialProgress"
     :move-cancel-threshold="moveCancelThreshold"
     :release-duration="releaseDuration"
+    :progress-sound="progressSound"
     :sound="sound"
     :start-sound="startSound"
     :vibration-duration="vibrationDuration"

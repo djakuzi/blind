@@ -23,6 +23,7 @@ interface Props {
   holdStartDelay?: number;
   initialProgress?: number;
   releaseDuration?: number;
+  progressSound?: tAudioId | null;
   sound?: tAudioId | null;
   startSound?: tAudioId | null;
   vibrationDuration?: number;
@@ -42,6 +43,7 @@ const props = withDefaults(defineProps<Props>(), {
   holdStartDelay: 0,
   initialProgress: 15,
   releaseDuration: 140,
+  progressSound: 'sfx.interaction.hold-progress',
   sound: 'sfx.interaction.hold-complete',
   startSound: 'sfx.interaction.hold-start',
   vibrationDuration: 45,
@@ -76,6 +78,7 @@ function handleComplete() {
     :initial-progress="initialProgress"
     :max-width="holdActionMaxWidth"
     :release-duration="releaseDuration"
+    :progress-sound="progressSound"
     :sound="sound"
     :start-sound="startSound"
     :vibration-duration="vibrationDuration"
