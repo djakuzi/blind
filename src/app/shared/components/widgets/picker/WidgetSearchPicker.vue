@@ -259,9 +259,11 @@ watch(
   appearance: none;
 }
 
-.widget-search-picker__item.app-interactive--selected :deep(.app-info-row__media) {
-  border-radius: var(--app-radius-xs);
-  box-shadow: 0 0 0 var(--app-border-width-medium) var(--app-color-on-primary);
+.widget-search-picker__trigger :deep(.app-info-row__media),
+.widget-search-picker__item :deep(.app-info-row__media) {
+  /* border-radius: var(--app-radius-xs); */
+  box-shadow: 0 0 0 var(--app-border-width-medium) var(--app-color-blind-black);
+  overflow: hidden;
 }
 
 .widget-search-picker__empty {
