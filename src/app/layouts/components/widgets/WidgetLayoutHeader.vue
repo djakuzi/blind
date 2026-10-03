@@ -77,11 +77,8 @@ function handleBack() {
     var(--app-color-surface-glass-top) 0%,
     var(--app-color-surface-glass-bottom) 100%
   );
-  -webkit-backdrop-filter: blur(2rem) saturate(155%) brightness(1.03);
-  backdrop-filter: blur(2rem) saturate(155%) brightness(1.03);
-  box-shadow:
-    inset 0 1px 0 var(--app-color-surface-glass-highlight),
-    inset 0 -1px 0 var(--app-color-surface-glass-shadow);
+  -webkit-backdrop-filter: blur(2px) brightness(1);
+  backdrop-filter: blur(2px) brightness(1);
 }
 
 .layout-header::after {
