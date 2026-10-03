@@ -21,6 +21,7 @@
   --app-color-surface-elevated: light-dark(#ffffff, #202024);
   --app-color-surface-interactive: light-dark(#eaeaed, #252529);
   --app-color-surface-overlay: light-dark(rgba(11, 11, 12, 0.58), rgba(0, 0, 0, 0.72));
+  --app-color-surface-glass: light-dark(rgba(255, 255, 255, 0.68), rgba(20, 20, 22, 0.68));
 
   --app-color-border-subtle: light-dark(#ececef, #242428);
   --app-color-border-default: light-dark(#dadadf, #303036);
