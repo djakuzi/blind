@@ -6,10 +6,7 @@ const CURRENT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 
 export async function createMainWindow() {
   const window = new BrowserWindow({
-    width: 1280,
-    height: 720,
-    minWidth: 960,
-    minHeight: 540,
+    fullscreen: true,
     show: false,
     webPreferences: {
       preload: join(CURRENT_DIRECTORY, 'preload.mjs'),
