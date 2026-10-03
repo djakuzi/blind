@@ -69,7 +69,7 @@ async function updateMarquee() {
     return;
   }
 
-  const textWidth = text.getBoundingClientRect().width;
+  const textWidth = text.offsetWidth;
   const viewportWidth = viewport.clientWidth;
   const paddingStyle = getComputedStyle(paddingMeasure);
 

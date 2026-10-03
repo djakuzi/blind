@@ -15,7 +15,6 @@ import { ToolVibration } from '@/core/platform';
 
 type tSegmentedContentLayout = 'pending' | 'equal' | 'adaptive';
 
-const EQUAL_ITEM_WIDTH_TOLERANCE = 4;
 
 export interface iAppSegmentedControlOption {
   label: string;
@@ -124,7 +123,7 @@ async function updateItemLayout() {
   }
 
   const widestMeasuredItem = Math.max(
-    ...measureItems.map((item) => item.getBoundingClientRect().width),
+    ...measureItems.map((item) => item.offsetWidth),
   );
 
   const firstVisibleItem = control.querySelector<HTMLElement>('.app-segmented-control__item');
@@ -142,12 +141,10 @@ async function updateItemLayout() {
     (Number.parseFloat(controlStyle.borderLeftWidth) || 0) +
     (Number.parseFloat(controlStyle.borderRightWidth) || 0);
 
-  const equalItemOuterWidth = Math.ceil(
-    widestMeasuredItem + dividerWidth + EQUAL_ITEM_WIDTH_TOLERANCE,
-  );
+  const equalItemOuterWidth = Math.ceil(widestMeasuredItem + dividerWidth);
   const equalControlWidth = equalItemOuterWidth * props.options.length + controlBorderWidth;
 
-  let availableWidth = parent.getBoundingClientRect().width;
+  let availableWidth = parent.clientWidth;
   const computedMaxWidth = controlStyle.maxWidth;
 
   if (computedMaxWidth.endsWith('px')) {
