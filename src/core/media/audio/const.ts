@@ -11,7 +11,7 @@ export const AUDIO_ASSETS = {
     src: AudioAsset1,
     type: 'sfx',
     channels: 4,
-    volume: 1,
+    volume: 0.7,
   },
   'sfx.interaction.hold-progress': {
     id: 'sfx.interaction.hold-progress',
@@ -32,7 +32,7 @@ export const AUDIO_ASSETS = {
     src: AudioAsset4,
     type: 'sfx',
     channels: 4,
-    volume: 1,
+    volume: 0.34,
   },
   'sfx.selection.default': {
     id: 'sfx.selection.default',
@@ -46,7 +46,7 @@ export const AUDIO_ASSETS = {
     src: AudioAsset6,
     type: 'sfx',
     channels: 4,
-    volume: 1,
+    volume: 0.37,
   },
 } as const
 
