@@ -12,7 +12,7 @@ export async function createMainWindow() {
     minHeight: 540,
     show: false,
     webPreferences: {
-      preload: join(CURRENT_DIRECTORY, '../preload.mjs'),
+      preload: join(CURRENT_DIRECTORY, 'preload.mjs'),
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: true,
@@ -30,7 +30,7 @@ export async function createMainWindow() {
     return window;
   }
 
-  await window.loadFile(join(CURRENT_DIRECTORY, '../../dist/index.html'));
+  await window.loadFile(join(CURRENT_DIRECTORY, '../dist/index.html'));
 
   return window;
 }
