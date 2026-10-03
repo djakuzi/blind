@@ -88,19 +88,23 @@ export const RuntimeMobileView: iViewAdapter = {
       isHandled = orientationHandled && isHandled;
     }
 
-    if (typeof options.isWebViewLimitedByStatusBar === 'boolean') {
+    const isWebViewLimitedByStatusBar = options.isWebViewLimitedByStatusBar;
+
+    if (typeof isWebViewLimitedByStatusBar === 'boolean') {
       const overlayHandled = await runSafe(async () => {
         await StatusBar.setOverlaysWebView({
-          overlay: !options.isWebViewLimitedByStatusBar,
+          overlay: !isWebViewLimitedByStatusBar,
         });
       });
 
       isHandled = overlayHandled && isHandled;
     }
 
-    if (typeof options.isStatusBarVisible === 'boolean') {
+    const isStatusBarVisible = options.isStatusBarVisible;
+
+    if (typeof isStatusBarVisible === 'boolean') {
       const visibilityHandled = await runSafe(async () => {
-        if (options.isStatusBarVisible) {
+        if (isStatusBarVisible) {
           await StatusBar.show();
           return;
         }

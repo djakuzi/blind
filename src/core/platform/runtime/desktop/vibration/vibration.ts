@@ -17,8 +17,8 @@ interface iDesktopHapticActuator {
   ): Promise<string>;
 }
 
-interface iDesktopHapticGamepad extends Gamepad {
-  vibrationActuator?: iDesktopHapticActuator;
+interface iDesktopHapticGamepad {
+  vibrationActuator?: iDesktopHapticActuator | null;
 }
 
 interface iRumbleOptions {
@@ -44,7 +44,7 @@ async function rumble(options: iRumbleOptions): Promise<iPlatformActionResult> {
     return { isHandled: false };
   }
 
-  const gamepads = navigator.getGamepads() as ArrayLike<iDesktopHapticGamepad | null>;
+  const gamepads = navigator.getGamepads() as unknown as ArrayLike<iDesktopHapticGamepad | null>;
 
   for (const gamepad of Array.from(gamepads)) {
     const actuator = gamepad?.vibrationActuator;
