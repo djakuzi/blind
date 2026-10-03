@@ -38,9 +38,9 @@
 - генерация icons registry - `docs/generators/sections/generate-icons.md`
 - игровой контур и game-логика - `docs/architecture/sections/game-flow.md`
 - setup, запуск, Web, Android, iOS, Desktop, Capacitor, Electron и CLI - `docs/projectSetup/index.md`
-- Capacitor plugins - `docs/plugins/sections/capacitor.md`
-- Electron plugins - `docs/plugins/sections/electron.md`
-- общие plugin rules - `docs/contributing/sections/pluginRule.md`
+- правила Capacitor plugins - `docs/contributing/sections/capacitorPluginRule.md`
+- правила Electron plugins - `docs/contributing/sections/electronPluginRule.md`
+- описания конкретных plugins - `docs/plugins`
 - генераторы и auto-generated файлы - `docs/generators` и `docs/contributing/sections/generateRule.md`
 - env, property и настройки проекта - `docs/settingsProject`
 - именование и общий code style - `docs/contributing/sections/codeStyle.md`
@@ -60,11 +60,12 @@
 7. Если задача меняет audio assets или icons assets, читать соответствующий раздел в `docs/generators/sections/` до изменения generated registry.
 8. Если задача связана с игровыми правилами, игровым состоянием, игровыми моделями или render/game контуром, читать game-flow.
 9. Если задача связана с запуском проекта, платформами, Capacitor, Electron или CLI-командами, читать projectSetup.
-10. Если задача связана с Capacitor plugin, читать `docs/plugins/sections/capacitor.md` и plugin rules.
-11. Если задача связана с Electron plugin, preload, IPC или bridge capability, читать `docs/plugins/sections/electron.md`, plugin rules и при необходимости core-flow.
-12. Если задача затрагивает generated files, scripts или генераторы, читать generateRule и docs/generators до изменения generated-файлов.
-13. Если задача связана с env/property, читать docs/settingsProject.
-14. Если задача меняет правила работы агентов или сам `AGENTS.md`, читать `docs/contributing/sections/agentRule.md` и при необходимости обновлять его тоже.
+10. Если задача связана с Capacitor plugin, читать `docs/contributing/sections/capacitorPluginRule.md`.
+11. Если задача связана с Electron plugin, preload, IPC или bridge capability, читать `docs/contributing/sections/electronPluginRule.md` и при необходимости core-flow.
+12. Если задача связана с конкретным plugin и для него есть отдельное описание, читать соответствующий документ в `docs/plugins`.
+13. Если задача затрагивает generated files, scripts или генераторы, читать generateRule и docs/generators до изменения generated-файлов.
+14. Если задача связана с env/property, читать docs/settingsProject.
+15. Если задача меняет правила работы агентов или сам `AGENTS.md`, читать `docs/contributing/sections/agentRule.md` и при необходимости обновлять его тоже.
 
 ## Базовые правила
 

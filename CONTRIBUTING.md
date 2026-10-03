@@ -10,4 +10,5 @@
 - [Форматирование кода](./docs/contributing/sections/codeFormatting.md)
 - [Правила AGENTS](./docs/contributing/sections/agentRule.md)
 - [Правила Generate](./docs/contributing/sections/generateRule.md)
-- [Правила Native plugin](./docs/contributing/sections/pluginRule.md)
+- [Правила Capacitor plugins](./docs/contributing/sections/capacitorPluginRule.md)
+- [Правила Electron plugins](./docs/contributing/sections/electronPluginRule.md)

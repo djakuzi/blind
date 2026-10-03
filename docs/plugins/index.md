@@ -1,10 +1,8 @@
 # Плагины
 
-Раздел описывает platform plugins и правила их использования в проекте.
+Раздел предназначен для описания конкретных plugins, которые используются или реализованы в проекте.
 
-## Разделы
+Правила разработки platform plugins находятся в contributing:
 
-- [Capacitor plugins](./sections/capacitor.md)
-- [Electron plugins](./sections/electron.md)
-
-Общие правила находятся в [правилах plugins](../contributing/sections/pluginRule.md).
+- [Правила Capacitor plugins](../contributing/sections/capacitorPluginRule.md)
+- [Правила Electron plugins](../contributing/sections/electronPluginRule.md)
