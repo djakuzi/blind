@@ -1,6 +1,6 @@
 import type { Pinia } from 'pinia';
 import { useAppScaleSetup } from '@/app/features/settings/composables/useAppScaleSetup';
-import type { iSetup } from '@/core/app/setup/setup.type';
+import type { iSetup } from '@/core/app/setup/lifecycle/setupLifecycle.type';
 
 export function createScaleSetup(pinia: Pinia): iSetup {
   const { setupAppScale } = useAppScaleSetup(pinia);
