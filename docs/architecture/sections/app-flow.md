@@ -289,11 +289,17 @@ setup.run()
 - route names и metadata;
 - guards;
 - redirects;
-- lazy loading route views.
+- declaration lazy route views и их preload dependencies.
+
+Общий runtime-механизм lazy route loading находится в `core/app/route/lazy`. Конкретный route регистрирует свой view через `createLazyRoute`, а следующие вероятные маршруты может объявлять декларативно через `meta.lazy.preload`.
+
+После успешной навигации lazy runner читает metadata активного route и запускает preload только перечисленных непосредственных маршрутов. Preload не выполняется рекурсивно по цепочке зависимостей.
+
+Preload является только оптимизацией: корректность навигации от него не зависит. Если route не был предварительно загружен, его обычный lazy loader загружает view при переходе. Ручной `preloadRoute` может дополнительно использоваться по сигналу UI или app-state, но route UI не должен зависеть от обязательного вызова такого события.
 
 Router не должен содержать feature business logic.
 
-Route может выбирать view и передавать metadata, но сценарий экрана должен жить ниже — во view/features.
+Route может выбирать view, объявлять preload следующего шага и передавать metadata, но сценарий экрана должен жить ниже — во view/features.
 
 ## Layouts
 
