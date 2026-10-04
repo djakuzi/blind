@@ -12,5 +12,6 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 <style scoped>
 .view-settings {
   position: relative;
+  scrollbar-gutter: stable;
 }
 </style>
