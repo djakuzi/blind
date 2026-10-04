@@ -2,9 +2,9 @@
 import { RouterView } from 'vue-router';
 import ProviderLoaderApp from '@/app/providers/ProviderLoaderApp.vue';
 import '@/app/styles/index.css';
-import { useSetup } from '@/core/app/setup/useSetup';
+import { useSetupLifecycle } from '@/core/app/setup/lifecycle/useSetupLifecycle';
 
-const setup = useSetup();
+const setup = useSetupLifecycle();
 </script>
 
 <template>
