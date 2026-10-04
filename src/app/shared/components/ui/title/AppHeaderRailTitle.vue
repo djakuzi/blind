@@ -9,10 +9,7 @@ const props = defineProps<PropsAppHeaderRailTitle>();
 
 <template>
   <div class="app-header-rail-title">
-    <span
-      class="app-header-rail-title__line app-header-rail-title__line--left"
-      aria-hidden="true"
-    />
+    <span class="app-header-rail-title__line" aria-hidden="true" />
 
     <span
       class="app-header-rail-title__connector app-header-rail-title__connector--left"
@@ -37,10 +34,7 @@ const props = defineProps<PropsAppHeaderRailTitle>();
       <span class="app-header-rail-title__dot" />
     </span>
 
-    <span
-      class="app-header-rail-title__line app-header-rail-title__line--right"
-      aria-hidden="true"
-    />
+    <span class="app-header-rail-title__line" aria-hidden="true" />
   </div>
 </template>
 
@@ -53,8 +47,6 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   --cp-header-rail-title-diagonal-length: 3.875rem;
   --cp-header-rail-title-diagonal-angle: 49.75deg;
   --cp-header-rail-title-dot-size: 0.5rem;
-  --cp-header-rail-title-tip-width: 0.75rem;
-  --cp-header-rail-title-tip-height: 0.25rem;
 
   display: flex;
   align-items: stretch;
@@ -63,58 +55,11 @@ const props = defineProps<PropsAppHeaderRailTitle>();
 }
 
 .app-header-rail-title__line {
-  position: relative;
   align-self: center;
   flex: 1 1 0;
   min-width: 0;
-  height: var(--cp-header-rail-title-tip-height);
-}
-
-.app-header-rail-title__line::before {
-  content: '';
-  position: absolute;
-  top: 50%;
   height: var(--cp-header-rail-title-line-width);
   background: var(--cp-header-rail-title-line-color);
-  transform: translateY(-50%);
-}
-
-.app-header-rail-title__line::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: var(--cp-header-rail-title-tip-width);
-  height: var(--cp-header-rail-title-tip-height);
-  background: var(--cp-header-rail-title-line-color);
-  transform: translateY(-50%);
-}
-
-.app-header-rail-title__line--left::before {
-  right: 0;
-  left: calc(var(--cp-header-rail-title-tip-width) - var(--cp-header-rail-title-line-width));
-}
-
-.app-header-rail-title__line--left::after {
-  left: 0;
-  clip-path: polygon(
-    0 50%,
-    100% 0,
-    100% 100%
-  );
-}
-
-.app-header-rail-title__line--right::before {
-  right: calc(var(--cp-header-rail-title-tip-width) - var(--cp-header-rail-title-line-width));
-  left: 0;
-}
-
-.app-header-rail-title__line--right::after {
-  right: 0;
-  clip-path: polygon(
-    0 0,
-    100% 50%,
-    0 100%
-  );
 }
 
 .app-header-rail-title__connector {
