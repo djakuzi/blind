@@ -2,8 +2,8 @@ import type { Pinia } from 'pinia';
 import { useStaticLocale } from '@/app/features/locale/composables/useStaticLocale';
 import { useGameStore } from '@/app/stores/game/game.store';
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
-import { retryPostMountSetup } from '@/core/app/setup/setup.runner';
-import type { iSetup } from '@/core/app/setup/setup.type';
+import { retryPostMountSetup } from '@/core/app/setup/lifecycle/setupLifecycle.runner';
+import type { iSetup } from '@/core/app/setup/lifecycle/setupLifecycle.type';
 
 const APP_SETUP_GAME_MODES_SCOPE_KEY = 'app-setup-game-modes';
 const APP_SETUP_GAME_MODES_RESOURCE_KEY = 'game-modes';
