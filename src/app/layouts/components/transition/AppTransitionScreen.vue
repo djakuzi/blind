@@ -1,6 +1,6 @@
 <template>
   <div class="app-transition-screen">
-    <Transition name="app-transition-screen-view" mode="out-in">
+    <Transition name="app-transition-screen-view">
       <slot />
     </Transition>
   </div>
@@ -8,12 +8,14 @@
 
 <style>
 .app-transition-screen {
+  position: relative;
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
   width: 100%;
   min-width: 0;
   min-height: 0;
+  overflow: hidden;
   perspective: 1000px;
   perspective-origin: center;
 }
@@ -27,12 +29,14 @@
 
 .app-transition-screen-view-enter-active,
 .app-transition-screen-view-leave-active {
+  position: absolute;
+  inset: 0;
   transform-origin: center;
   backface-visibility: hidden;
-  transition:
-    opacity 230ms var(--app-motion-ease-default),
-    transform 230ms var(--app-motion-ease-enter);
   will-change: opacity, transform;
+  transition:
+    opacity var(--app-motion-duration-slow) var(--app-motion-ease-default),
+    transform var(--app-motion-duration-slow) var(--app-motion-ease-enter);
 }
 
 .app-transition-screen-view-enter-from {
