@@ -202,6 +202,7 @@ async function handleLanguageChange(value: string) {
           font-size="xl"
           font-weight="medium"
           :uppercase="true"
+          :play="false"
         />
 
         <AppFlex class="widget-settings-panel__control" align="center" justify="end" width="100%" max-width="60rem">
