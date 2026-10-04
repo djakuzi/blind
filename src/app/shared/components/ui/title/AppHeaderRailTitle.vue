@@ -54,8 +54,8 @@ const props = defineProps<PropsAppHeaderRailTitle>();
 
 <style scoped>
 .app-header-rail-title {
-  --cp-header-rail-title-line-opacity: 0.55;
-  --cp-header-rail-title-top-offset: 0.75rem;
+  --cp-header-rail-title-line-color: var(--app-color-text-tertiary);
+  --cp-header-rail-title-junction-y: 50%;
   --cp-header-rail-title-connector-width: 2.5rem;
   --cp-header-rail-title-dot-size: 0.5rem;
 
@@ -66,13 +66,11 @@ const props = defineProps<PropsAppHeaderRailTitle>();
 }
 
 .app-header-rail-title__line {
-  align-self: flex-start;
+  align-self: center;
   flex: 1 1 0;
   min-width: 0;
   height: var(--app-border-width-thin);
-  margin-top: var(--cp-header-rail-title-top-offset);
-  background: var(--app-color-border-contrast);
-  opacity: var(--cp-header-rail-title-line-opacity);
+  background: var(--cp-header-rail-title-line-color);
 }
 
 .app-header-rail-title__connector {
@@ -84,26 +82,25 @@ const props = defineProps<PropsAppHeaderRailTitle>();
 
 .app-header-rail-title__connector-svg {
   position: absolute;
-  top: var(--cp-header-rail-title-top-offset);
+  top: var(--cp-header-rail-title-junction-y);
   right: 0;
   bottom: 0;
   left: 0;
   display: block;
   width: 100%;
-  height: calc(100% - var(--cp-header-rail-title-top-offset));
+  height: calc(100% - var(--cp-header-rail-title-junction-y));
   overflow: visible;
-  opacity: var(--cp-header-rail-title-line-opacity);
 }
 
 .app-header-rail-title__connector-svg line {
-  stroke: var(--app-color-border-contrast);
+  stroke: var(--cp-header-rail-title-line-color);
   stroke-width: var(--app-border-width-thin);
   vector-effect: non-scaling-stroke;
 }
 
 .app-header-rail-title__dot {
   position: absolute;
-  top: var(--cp-header-rail-title-top-offset);
+  top: var(--cp-header-rail-title-junction-y);
   z-index: 1;
   width: var(--cp-header-rail-title-dot-size);
   height: var(--cp-header-rail-title-dot-size);
@@ -129,7 +126,7 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   min-width: 0;
   max-width: 100%;
   padding: 0 var(--app-space-5) var(--app-space-2);
-  border-bottom: var(--app-border-width-thin) var(--app-border-style-solid) var(--app-color-border-contrast);
+  border-bottom: var(--app-border-width-thin) var(--app-border-style-solid) var(--cp-header-rail-title-line-color);
 }
 
 .app-header-rail-title__title {
