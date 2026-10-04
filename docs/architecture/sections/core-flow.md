@@ -129,10 +129,10 @@ Media-слой не отвечает за playback или UI-поведение.
 
 Текущие механизмы:
 
-- `core/app/setup` — общий setup lifecycle;
+- `core/app/setup/lifecycle` — общий setup lifecycle;
 - `core/app/route/lazy` — общий механизм lazy route loading и preload.
 
-`core/app/setup` предоставляет инфраструктуру setup, но не знает состав конкретных setup-модулей Blind.
+`core/app/setup/lifecycle` предоставляет инфраструктуру setup, но не знает состав конкретных setup-модулей Blind.
 
 `core/app/route/lazy` отвечает за регистрацию lazy route loader, повторное использование одного loading promise, ручной preload и выполнение декларативного preload после успешной навигации. Механизм не знает о конкретных views Blind и не определяет app-flow сам.
 
