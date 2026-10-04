@@ -59,3 +59,31 @@ release/desktop
 Для стабильной сборки рекомендуется создавать дистрибутив на соответствующей операционной системе или использовать CI.
 
 На macOS и Windows неподписанные сборки могут показывать системное предупреждение. Подписание и notarization настраиваются отдельно перед публичным релизом.
+
+
+## GitHub Actions
+
+Desktop-сборки также создаются через workflow `.github/workflows/desktop.yml`.
+
+После того как workflow находится в default-ветке, его можно запустить вручную:
+
+```text
+GitHub → Actions → Desktop → Run workflow
+```
+
+Ручной запуск создает три artifacts:
+
+- `blind-macos`;
+- `blind-windows`;
+- `blind-linux`.
+
+Artifacts хранятся 14 дней.
+
+При push тега формата `v*.*.*`, например:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+GitHub собирает все три платформы и автоматически создает GitHub Release. Версия приложения для такой сборки берется из имени тега.

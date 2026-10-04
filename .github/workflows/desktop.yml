@@ -1,0 +1,105 @@
+name: Desktop
+
+on:
+  workflow_dispatch:
+
+  push:
+    tags:
+      - 'v*.*.*'
+
+concurrency:
+  group: desktop-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS
+            os: macos-latest
+            command: npm run desktop:package:mac
+            artifact_name: blind-macos
+            artifact_path: |
+              release/desktop/*.dmg
+
+          - name: Windows
+            os: windows-latest
+            command: npm run desktop:package:win
+            artifact_name: blind-windows
+            artifact_path: |
+              release/desktop/*.exe
+
+          - name: Linux
+            os: ubuntu-latest
+            command: npm run desktop:package:linux
+            artifact_name: blind-linux
+            artifact_path: |
+              release/desktop/*.AppImage
+              release/desktop/*.deb
+
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Use tag as application version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: npm version "${{ github.ref_name }}" --no-git-tag-version
+
+      - name: Build package
+        run: ${{ matrix.command }}
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Create GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: blind-*
+          path: release
+          merge-multiple: true
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          mapfile -t files < <(find release -type f -print)
+
+          gh release create "${GITHUB_REF_NAME}" "${files[@]}" \
+            --title "Blind ${GITHUB_REF_NAME}" \
+            --generate-notes
