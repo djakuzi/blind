@@ -62,9 +62,19 @@ jobs:
       - name: Push optimized image branch
         shell: bash
         run: |
+          mkdir -p /tmp/optimized-game-images
+          cp public/game/gameModes.json /tmp/optimized-game-images/gameModes.json
+          cp public/game/images/gameMode/*.webp /tmp/optimized-game-images/
+
+          git fetch origin main
+          git checkout -B automation/optimized-game-images origin/main
+
+          mkdir -p public/game/images/gameMode
+          cp /tmp/optimized-game-images/gameModes.json public/game/gameModes.json
+          cp /tmp/optimized-game-images/*.webp public/game/images/gameMode/
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B automation/optimized-game-images
           git add public/game/gameModes.json public/game/images/gameMode/*.webp
           git commit -m "chore: stage optimized game images"
           git push --force origin automation/optimized-game-images
