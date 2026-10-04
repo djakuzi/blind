@@ -25,10 +25,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
-    "desktop:package": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml",
-    "desktop:package:mac": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --mac",
-    "desktop:package:win": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --win",
-    "desktop:package:linux": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --linux"
+    "desktop:package": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --publish never",
+    "desktop:package:mac": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --mac --publish never",
+    "desktop:package:win": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --win --publish never",
+    "desktop:package:linux": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --linux --publish never"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",
@@ -66,5 +66,11 @@
     "electron": "^44.5.1",
     "vite-plugin-electron": "^1.1.2"
   },
-  "main": "dist-electron/main.js"
+  "main": "dist-electron/main.js",
+  "description": "Cross-platform 2D PvP arcade game.",
+  "author": {
+    "name": "djakuzi",
+    "email": "145272981+djakuzi@users.noreply.github.com"
+  },
+  "desktopName": "com.djakuzi.blind"
 }

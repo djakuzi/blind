@@ -31,6 +31,8 @@ nsis:
 
 linux:
   category: Game
+  maintainer: "djakuzi <145272981+djakuzi@users.noreply.github.com>"
+  syncDesktopName: true
   target:
     - target: AppImage
       arch:
