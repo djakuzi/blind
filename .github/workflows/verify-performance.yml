@@ -1,0 +1,32 @@
+name: Verify performance changes
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  verify:
+    if: contains(github.event.head_commit.message, '[verify-performance]')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: development
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Build production
+        run: npm run build:prod
