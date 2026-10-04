@@ -49,6 +49,8 @@ function handleModeComplete() {
           v-if="modes[index]"
           :mode="modes[index]"
           :disabled="!active"
+          :image-loading="active ? 'eager' : 'lazy'"
+          :image-fetch-priority="active ? 'high' : 'low'"
           :options-accessibility-label="preGameLocale.modeOptionsAccessibilityLabel"
           :connection-types-accessibility-label="preGameLocale.connectionTypesAccessibilityLabel"
           @complete="handleModeComplete"
