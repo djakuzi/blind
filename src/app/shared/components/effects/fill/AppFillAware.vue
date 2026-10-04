@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 
@@ -34,7 +34,7 @@ const topRatio = ref(0);
 const bottomRatio = ref(1);
 const isMeasured = ref(false);
 
-let resizeObserver: ResizeObserver | null = null;
+let resizeObserver: ResizeObserver | undefined;
 
 const normalizedThreshold = computed(() => Math.min(1, Math.max(0, props.threshold)));
 
@@ -87,61 +87,69 @@ function updatePosition() {
   }
 
   topRatio.value = Math.min(1, Math.max(0, (targetRect.top - rootRect.top) / rootRect.height));
-
   bottomRatio.value = Math.min(1, Math.max(0, (targetRect.bottom - rootRect.top) / rootRect.height));
-
   isMeasured.value = true;
 }
 
-function observeElements() {
+function stopObserving() {
   resizeObserver?.disconnect();
+  resizeObserver = undefined;
+}
+
+function startObserving() {
+  stopObserving();
+
+  if (typeof ResizeObserver === 'undefined') {
+    return;
+  }
 
   const root = context?.rootElement.value;
   const target = element.value;
 
+  resizeObserver = new ResizeObserver(updatePosition);
+
   if (root) {
-    resizeObserver?.observe(root);
+    resizeObserver.observe(root);
   }
 
   if (target) {
-    resizeObserver?.observe(target);
+    resizeObserver.observe(target);
   }
+}
+
+async function activateMeasurement() {
+  await nextTick();
+
+  startObserving();
+  updatePosition();
 }
 
 watch(
   () => context?.rootElement.value,
-  async () => {
-    isMeasured.value = false;
-
-    await nextTick();
-
-    observeElements();
-    updatePosition();
+  () => {
+    if (context?.isActive.value) {
+      activateMeasurement();
+    }
   },
 );
 
 watch(
-  () => context?.isActive.value,
-  async (isActive) => {
+  () => context?.isActive.value ?? false,
+  (isActive) => {
     if (!isActive) {
+      stopObserving();
+      isMeasured.value = false;
       return;
     }
 
-    await nextTick();
-    updatePosition();
+    activateMeasurement();
+  },
+  {
+    immediate: true,
   },
 );
 
-onMounted(() => {
-  resizeObserver = new ResizeObserver(updatePosition);
-
-  observeElements();
-  updatePosition();
-});
-
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect();
-});
+onBeforeUnmount(stopObserving);
 </script>
 
 <template>
