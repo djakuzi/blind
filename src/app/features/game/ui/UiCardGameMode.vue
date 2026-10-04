@@ -120,6 +120,7 @@ function handleComplete() {
           max-width="30%"
           height="auto"
           object-fit="contain"
+          aspect-ratio="1 / 1"
           :loading="imageLoading"
           :fetch-priority="imageFetchPriority"
         />
