@@ -4,6 +4,7 @@ import {
   createWebHistory,
   type RouteRecordRaw,
 } from 'vue-router';
+import { setupRouteLazyRunner } from '@/core/app/route/lazy/routeLazy.runner';
 import { PlatformRuntime } from '@/core/platform';
 import { KEY_ROUTE } from './constants/route.const';
 import { routeGame } from './routes/game';
@@ -34,5 +35,7 @@ const router = createRouter({
     : createWebHistory(import.meta.env.BASE_URL),
   routes: [rootRoute],
 });
+
+setupRouteLazyRunner(router);
 
 export default router;
