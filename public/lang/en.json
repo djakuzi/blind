@@ -1,0 +1,131 @@
+{
+  "common": {
+    "navigation": {
+      "back": "Back"
+    }
+  },
+  "views": {
+    "menu": {
+      "index": {
+        "ui": {
+          "play": "Play",
+          "settings": "Settings",
+          "holdHint": "Hold button to select"
+        },
+        "modals": {}
+      }
+    },
+    "preGame": {
+      "index": {
+        "ui": {
+          "title": "Game mode",
+          "accessibilityLabel": "Game mode selection",
+          "itemAccessibilityLabel": "{current} of {total}",
+          "holdHint": "Hold button to select",
+          "desktopWheelHint": "Mouse wheel — change mode",
+          "desktopSelectHint": "Hold button to select",
+          "loadError": "Failed to load game modes",
+          "loading": "Loading...",
+          "modeOptionsAccessibilityLabel": "Game mode parameters",
+          "connectionTypesAccessibilityLabel": "Available connection methods"
+        },
+        "modals": {}
+      },
+      "typeConnection": {
+        "ui": {
+          "title": "Connection type"
+        },
+        "modals": {}
+      }
+    },
+    "settings": {
+      "index": {
+        "ui": {
+          "title": "Settings",
+          "theme": "Theme",
+          "scale": "Interface size",
+          "sound": "Sound",
+          "language": "Language",
+          "accessibilityLabel": "Settings",
+          "changeTheme": "Change theme",
+          "changeLanguage": "Change language"
+        },
+        "modals": {
+          "changeLanguage": {
+            "title": "Change language",
+            "searchPlaceholder": "Search language",
+            "emptyText": "No languages found",
+            "loading": "Loading language",
+            "loadError": "Failed to load language",
+            "retry": "Retry",
+            "cancel": "Cancel"
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "theme": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "scale": {
+      "small": "Small",
+      "default": "Default",
+      "large": "Large"
+    },
+    "sound": {
+      "on": "On",
+      "off": "Off"
+    }
+  },
+  "game": {
+    "modes": {
+      "DUEL": {
+        "title": "DUEL",
+        "description": "One hit — one life"
+      },
+      "COMBAT": {
+        "title": "COMBAT",
+        "description": "Fight until your health runs out"
+      },
+      "CLASH": {
+        "title": "CLASH",
+        "description": "One life. One team."
+      },
+      "BATTLE": {
+        "title": "BATTLE",
+        "description": "Team battle to the last survivor"
+      }
+    },
+    "format": {
+      "players": {
+        "one": "{count} player",
+        "few": "{count} players",
+        "many": "{count} players",
+        "other": "{count} players"
+      },
+      "rounds": {
+        "one": "{count} round",
+        "few": "{count} rounds",
+        "many": "{count} rounds",
+        "other": "{count} rounds"
+      }
+    }
+  },
+  "connectionTypes": {
+    "BLUETOOTH": {
+      "title": "Bluetooth",
+      "description": "Nearby player"
+    },
+    "LAN": {
+      "title": "Local network",
+      "description": "Same Wi-Fi network"
+    },
+    "ONLINE": {
+      "title": "Online",
+      "description": "Play online"
+    }
+  }
+}

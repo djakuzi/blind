@@ -5,4 +5,5 @@
   --app-layer-overlay: 900;
   --app-layer-modal: 1000;
   --app-layer-toast: 1100;
+  --app-layer-loader: 1200;
 }

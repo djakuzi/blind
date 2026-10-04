@@ -1,8 +1,4 @@
-export const APP_THEME_MODE_LIST = [
-  'system',
-  'light',
-  'dark',
-] as const;
+export const APP_THEME_MODE_LIST = ['system', 'light', 'dark'] as const;
 
 export const APP_THEME_ATTRIBUTE_NAME = 'data-theme';
 export const APP_THEME_SYSTEM_MODE = 'system' as const;

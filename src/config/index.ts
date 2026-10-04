@@ -7,12 +7,10 @@ export class Config implements AppConfigShape {
   readonly api;
 
   constructor() {
-    const resolvedMode = import.meta.env.APP_MODE === 'prod'
-      ? 'prod'
-      : 'dev';
+    const resolvedMode = import.meta.env.APP_MODE === 'prod' ? 'prod' : 'debug';
 
     this.app = createAppConfig(resolvedMode);
-    this.api = createApiConfig(resolvedMode);
+    this.api = createApiConfig();
   }
 }
 

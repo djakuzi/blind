@@ -1,25 +1,41 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
-import { routeSettings } from './sections/settings';
-import { routeMenu } from './sections/menu';
-import { routeGame } from './sections/game';
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+  type RouteRecordRaw,
+} from 'vue-router';
+import { setupRouteLazyRunner } from '@/core/app/route/lazy/routeLazy.runner';
+import { PlatformRuntime } from '@/core/platform';
 import { KEY_ROUTE } from './constants/route.const';
-
-const LayotRoot = () => import('@/app/layouts/LayoutRoot.vue');
+import { routeGame } from './routes/game';
+import { routeMenu } from './routes/menu';
+import { routeSettings } from './routes/settings';
+import { routePreGame } from './routes/preGame';
+import LayoutRoot from '@/app/layouts/LayoutRoot.vue';
+import LayoutBase from '@/app/layouts/LayoutBase.vue';
 
 export const rootRoute: RouteRecordRaw = {
   path: '/',
-  component: LayotRoot,
-  redirect: KEY_ROUTE.menu.index,
+  component: LayoutRoot,
   children: [
-    routeMenu,
-    routeGame,
-    routeSettings,
+    {
+      path: '',
+      redirect: {
+        name: KEY_ROUTE.menu.index,
+      },
+      component: LayoutBase,
+      children: [routeMenu, routePreGame, routeGame, routeSettings],
+    },
   ],
 };
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: PlatformRuntime.isDesktop()
+    ? createWebHashHistory()
+    : createWebHistory(import.meta.env.BASE_URL),
   routes: [rootRoute],
 });
+
+setupRouteLazyRunner(router);
 
 export default router;

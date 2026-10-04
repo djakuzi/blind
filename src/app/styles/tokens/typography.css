@@ -1,7 +1,4 @@
 :root {
-  /* Font family */
-  --app-font-family-base: 'Inter', sans-serif;
-
   /* Font weight */
   --app-font-weight-regular: 400;
   --app-font-weight-medium: 500;
@@ -9,15 +6,16 @@
   --app-font-weight-bold: 700;
 
   /* Font size */
-  --app-font-size-xs: calc(0.75rem * var(--app-scale));   /* 12px */
-  --app-font-size-sm: calc(0.875rem * var(--app-scale));  /* 14px */
-  --app-font-size-md: calc(1rem * var(--app-scale));      /* 16px */
-  --app-font-size-lg: calc(1.125rem * var(--app-scale));  /* 18px */
-  --app-font-size-xl: calc(1.25rem * var(--app-scale));   /* 20px */
-  --app-font-size-2xl: calc(1.5rem * var(--app-scale));   /* 24px */
-  --app-font-size-3xl: calc(2rem * var(--app-scale));     /* 32px */
-  --app-font-size-4xl: calc(2.5rem * var(--app-scale));   /* 40px */
-  --app-font-size-5xl: calc(3rem * var(--app-scale));     /* 48px */
+  --app-font-size-xs: 1.25rem;
+  --app-font-size-sm: 1.5rem;
+  --app-font-size-md: 2rem;
+  --app-font-size-lg: 2.5rem;
+  --app-font-size-xl: 4.5rem;
+  --app-font-size-2xl: 5.5rem;
+  --app-font-size-3xl: 6.5rem;
+  --app-font-size-xxl: 8.5rem;
+  --app-font-size-2xxl: 10.5rem;
+  --app-font-size-3xxl: 12.5rem;
 
   /* Line height */
   --app-line-height-tight: 1;
@@ -31,6 +29,6 @@
   --app-letter-spacing-tight: -0.02em;
   --app-letter-spacing-slight-tight: -0.01em;
   --app-letter-spacing-normal: 0;
-  --app-letter-spacing-wide: 0.02em;
-  --app-letter-spacing-wider: 0.06em;
+  --app-letter-spacing-wide: 0.08em;
+  --app-letter-spacing-wider: 0.15em;
 }

@@ -1,0 +1,99 @@
+import { apiLanguage } from '@/app/domain/lang/api/api';
+import { ModelLanguage } from '@/app/domain/lang/models/Language.model';
+import { LibLocale } from '@/core/lib/locale';
+import { ToolFilesystem, ToolStorage } from '@/core/platform';
+import { LANGUAGE_FILE_DIR, LANGUAGE_LIST_STORAGE_KEY } from '../language.const';
+import type { Locale } from '@/app/shared/types/locale';
+import type { iLanguageFile } from '../language.type';
+
+type tStoredLanguage = ConstructorParameters<typeof ModelLanguage>[0];
+
+function getLanguageFilePath(code: string) {
+  return `${LANGUAGE_FILE_DIR}/${code}.json`;
+}
+
+export const normalizeLanguageCodes = LibLocale.normalizeCode;
+
+export function findLanguageByCode(languages: ModelLanguage[], code: string | null) {
+  if (!code) {
+    return null;
+  }
+
+  const normalizedCodes = normalizeLanguageCodes(code);
+
+  return (
+    languages.find((language) => language.key.toLowerCase() === normalizedCodes.exact) ??
+    languages.find((language) => language.key.toLowerCase() === normalizedCodes.base) ??
+    null
+  );
+}
+
+export function findDefaultLanguage(languages: ModelLanguage[]) {
+  return languages.find((language) => language.isDefault) ?? languages[0] ?? null;
+}
+
+export async function getFallbackLanguages() {
+  const { value: cachedLanguages } = await ToolStorage.getJson<tStoredLanguage[]>(LANGUAGE_LIST_STORAGE_KEY);
+
+  if (!cachedLanguages?.length) {
+    return [await apiLanguage.getDefaultLanguage()];
+  }
+
+  return cachedLanguages.map((language) => new ModelLanguage(language));
+}
+
+export async function loadLanguages() {
+  try {
+    const languages = await apiLanguage.getLanguages();
+
+    await ToolStorage.setJson<tStoredLanguage[]>(LANGUAGE_LIST_STORAGE_KEY, languages);
+
+    return languages;
+  } catch {
+    return getFallbackLanguages();
+  }
+}
+
+export async function resolveInitialLanguage(languages: ModelLanguage[], preferredLanguageCode: string | null) {
+  const preferredLanguage = findLanguageByCode(languages, preferredLanguageCode);
+
+  if (preferredLanguage) {
+    return preferredLanguage;
+  }
+
+  return findDefaultLanguage(languages);
+}
+
+export async function loadDefaultLanguageFallback() {
+  const language = await apiLanguage.getDefaultLanguage();
+
+  const locale = await apiLanguage.getDefaultLanguageInterface();
+
+  return {
+    language,
+    locale,
+  };
+}
+
+export async function loadLanguageLocale(language: ModelLanguage): Promise<Locale> {
+  const path = getLanguageFilePath(language.key);
+
+  const { value: languageFile } = await ToolFilesystem.getJson<iLanguageFile>(path);
+
+  if (languageFile && languageFile.version === language.version) {
+    return languageFile.locale;
+  }
+
+  const locale = await apiLanguage.getLanguageInterface(language.key);
+
+  try {
+    await ToolFilesystem.setJson<iLanguageFile>(path, {
+      version: language.version,
+      locale,
+    });
+  } catch {
+    // Cache is optional once the locale has been loaded.
+  }
+
+  return locale;
+}

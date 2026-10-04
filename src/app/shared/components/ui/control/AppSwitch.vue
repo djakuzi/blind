@@ -1,0 +1,180 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useAudio } from '@/app/shared/composables/audio/useAudio';
+import { LibStyle } from '@/app/shared/lib/style';
+import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
+import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
+import type { tAudioId } from '@/core/media/audio';
+import { ToolVibration } from '@/core/platform';
+
+export interface PropsAppSwitch {
+  modelValue: boolean;
+  accessibilityLabel: string;
+  disabled?: boolean;
+  sound?: tAudioId | null;
+  vibration?: boolean;
+  size?: tBaseSizeVariant;
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  borderRadius?: tRadiusValue;
+  thumbBorderRadius?: tRadiusValue;
+  activeColor?: tColorValue;
+  inactiveColor?: tColorValue;
+  thumbColor?: tColorValue;
+  borderColor?: tColorValue;
+}
+
+const props = withDefaults(defineProps<PropsAppSwitch>(), {
+  disabled: false,
+  sound: 'sfx.selection.default',
+  vibration: true,
+  size: 'middle',
+  width: undefined,
+  maxWidth: '100%',
+  borderRadius: 'full',
+  thumbBorderRadius: 'full',
+  activeColor: 'primary',
+  inactiveColor: 'surface-interactive',
+  thumbColor: 'on-primary',
+  borderColor: 'border-strong',
+});
+
+const { play } = useAudio();
+
+const emit = defineEmits<{
+  'update:modelValue': [value: boolean];
+}>();
+
+const SWITCH_WIDTH_MAP: Record<tBaseSizeVariant, string> = {
+  small: '10rem',
+  middle: '12rem',
+  big: '14rem',
+};
+
+const switchWidth = computed(() => LibStyle.toSizeValue(props.width ?? SWITCH_WIDTH_MAP[props.size]));
+
+const switchMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
+const switchBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
+const switchThumbBorderRadius = computed(() => resolveRadiusValue(props.thumbBorderRadius));
+const switchActiveColor = computed(() => resolveColorValue(props.activeColor));
+const switchInactiveColor = computed(() => resolveColorValue(props.inactiveColor));
+const switchThumbColor = computed(() => resolveColorValue(props.thumbColor));
+const switchBorderColor = computed(() => resolveColorValue(props.borderColor));
+
+function handleToggle() {
+  if (props.disabled) {
+    return;
+  }
+
+  emit('update:modelValue', !props.modelValue);
+
+  if (props.sound !== null) {
+    play(props.sound);
+  }
+
+  if (props.vibration) {
+    ToolVibration.selectionChanged();
+  }
+}
+</script>
+
+<template>
+  <button
+    class="app-switch"
+    :class="{
+      'app-switch--active': modelValue,
+      'app-switch--disabled': disabled,
+    }"
+    type="button"
+    role="switch"
+    :aria-label="accessibilityLabel"
+    :aria-checked="modelValue"
+    :disabled="disabled"
+    @click="handleToggle"
+  >
+    <span class="app-switch__thumb-track" aria-hidden="true">
+      <span class="app-switch__thumb" />
+    </span>
+  </button>
+</template>
+
+<style scoped>
+.app-switch {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: v-bind(switchWidth);
+  max-width: v-bind(switchMaxWidth);
+  min-width: 0;
+  aspect-ratio: 2 / 1;
+  padding: 0;
+  border: var(--app-border-width-medium) var(--app-border-style-solid) v-bind(switchBorderColor);
+  border-radius: v-bind(switchBorderRadius);
+  background: v-bind(switchInactiveColor);
+  overflow: hidden;
+  cursor: pointer;
+  appearance: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--app-motion-duration-base) var(--app-motion-ease-default),
+    border-color var(--app-motion-duration-base) var(--app-motion-ease-default),
+    box-shadow var(--app-motion-duration-base) var(--app-motion-ease-default),
+    opacity var(--app-motion-duration-base) var(--app-motion-ease-default);
+
+  &.app-switch--active {
+    background: v-bind(switchActiveColor);
+  }
+
+  &.app-switch--disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.app-switch__thumb-track {
+  position: absolute;
+  inset: 0;
+  transform: translateX(0);
+  pointer-events: none;
+  transition: transform var(--app-motion-duration-medium) var(--app-motion-ease-default);
+  will-change: transform;
+}
+
+.app-switch__thumb {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 40%;
+  aspect-ratio: 1;
+  border-radius: v-bind(switchThumbBorderRadius);
+  background: v-bind(switchThumbColor);
+  transition: background-color var(--app-motion-duration-base) var(--app-motion-ease-default);
+}
+
+.app-switch--active .app-switch__thumb-track {
+  transform: translateX(50%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-switch:not(.app-switch--disabled):hover {
+    border-color: var(--app-color-primary);
+    box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 20%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-switch,
+  .app-switch__thumb-track,
+  .app-switch__thumb {
+    transition: none;
+  }
+}
+</style>

@@ -1,0 +1,131 @@
+{
+  "common": {
+    "navigation": {
+      "back": "Назад"
+    }
+  },
+  "views": {
+    "menu": {
+      "index": {
+        "ui": {
+          "play": "Играть",
+          "settings": "Настройки",
+          "holdHint": "Зажмите кнопку для выбора"
+        },
+        "modals": {}
+      }
+    },
+    "preGame": {
+      "index": {
+        "ui": {
+          "title": "Режим игры",
+          "accessibilityLabel": "Выбор режима игры",
+          "itemAccessibilityLabel": "{current} из {total}",
+          "holdHint": "Зажмите кнопку для выбора",
+          "desktopWheelHint": "Колесо мыши — смена режима",
+          "desktopSelectHint": "Зажмите кнопку для выбора",
+          "loadError": "Не удалось загрузить режимы игры",
+          "loading": "Загрузка...",
+          "modeOptionsAccessibilityLabel": "Параметры режима",
+          "connectionTypesAccessibilityLabel": "Доступные способы подключения"
+        },
+        "modals": {}
+      },
+      "typeConnection": {
+        "ui": {
+          "title": "Способ подключения"
+        },
+        "modals": {}
+      }
+    },
+    "settings": {
+      "index": {
+        "ui": {
+          "title": "Настройки",
+          "theme": "Тема",
+          "scale": "Размер интерфейса",
+          "sound": "Звук",
+          "language": "Язык",
+          "accessibilityLabel": "Настройки",
+          "changeTheme": "Сменить тему",
+          "changeLanguage": "Сменить язык"
+        },
+        "modals": {
+          "changeLanguage": {
+            "title": "Сменить язык",
+            "searchPlaceholder": "Поиск языка",
+            "emptyText": "Языки не найдены",
+            "loading": "Загружаем язык",
+            "loadError": "Не удалось загрузить язык",
+            "retry": "Повторить",
+            "cancel": "Отмена"
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "theme": {
+      "system": "Система",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    },
+    "scale": {
+      "small": "Мелкий",
+      "default": "Обычный",
+      "large": "Большой"
+    },
+    "sound": {
+      "on": "Вкл",
+      "off": "Выкл"
+    }
+  },
+  "game": {
+    "modes": {
+      "DUEL": {
+        "title": "DUEL",
+        "description": "Одно попадание — одна жизнь"
+      },
+      "COMBAT": {
+        "title": "COMBAT",
+        "description": "Сражайся, пока здоровье не закончится"
+      },
+      "CLASH": {
+        "title": "CLASH",
+        "description": "Одна жизнь. Одна команда."
+      },
+      "BATTLE": {
+        "title": "BATTLE",
+        "description": "Командный бой до последнего выжившего"
+      }
+    },
+    "format": {
+      "players": {
+        "one": "{count} игрок",
+        "few": "{count} игрока",
+        "many": "{count} игроков",
+        "other": "{count} игроков"
+      },
+      "rounds": {
+        "one": "{count} раунд",
+        "few": "{count} раунда",
+        "many": "{count} раундов",
+        "other": "{count} раундов"
+      }
+    }
+  },
+  "connectionTypes": {
+    "BLUETOOTH": {
+      "title": "Bluetooth",
+      "description": "Игрок поблизости"
+    },
+    "LAN": {
+      "title": "Локальная сеть",
+      "description": "Одна сеть Wi-Fi"
+    },
+    "ONLINE": {
+      "title": "Онлайн",
+      "description": "Играй по сети"
+    }
+  }
+}

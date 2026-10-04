@@ -1,0 +1,164 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
+import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
+import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
+import { LibStyle } from '@/app/shared/lib/style';
+import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import type { tAudioId } from '@/core/media/audio';
+
+type tAppButtonHoldVariant = 'primary';
+
+interface iAppButtonHoldActions {
+  complete?: () => void;
+}
+
+interface Props {
+  actions?: iAppButtonHoldActions;
+  disabled?: boolean;
+  bloodFlowFrontDuration?: number;
+  duration?: number;
+  fillDuration?: number;
+  holdStartDelay?: number;
+  initialProgress?: number;
+  releaseDuration?: number;
+  progressSound?: tAudioId | null;
+  sound?: tAudioId | null;
+  startSound?: tAudioId | null;
+  vibrationDuration?: number;
+  size?: tBaseSizeVariant;
+  maxWidth?: tStyleSizeValue;
+  width?: tStyleSizeValue;
+  variant?: tAppButtonHoldVariant;
+  text?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  actions: undefined,
+  disabled: false,
+  bloodFlowFrontDuration: 1200,
+  duration: 450,
+  fillDuration: undefined,
+  holdStartDelay: 0,
+  initialProgress: 15,
+  releaseDuration: 140,
+  progressSound: 'sfx.interaction.hold-progress',
+  sound: 'sfx.interaction.hold-complete',
+  startSound: 'sfx.interaction.hold-start',
+  vibrationDuration: 45,
+  size: 'middle',
+  maxWidth: '100%',
+  width: '100%',
+  variant: 'primary',
+  text: undefined,
+});
+
+const emit = defineEmits<{
+  complete: [];
+}>();
+
+const buttonClass = computed(() => ['app-button-hold', `app-button-hold--${props.variant}`, `app-button-hold--size-${props.size}`]);
+
+const holdActionWidth = computed(() => LibStyle.toSizeValue(props.width));
+const holdActionMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
+
+function handleComplete() {
+  emit('complete');
+}
+</script>
+
+<template>
+  <AppHoldAction
+    :actions="actions"
+    :disabled="disabled"
+    :duration="duration"
+    :fill-duration="fillDuration"
+    :hold-start-delay="holdStartDelay"
+    :initial-progress="initialProgress"
+    :max-width="holdActionMaxWidth"
+    :release-duration="releaseDuration"
+    :progress-sound="progressSound"
+    :sound="sound"
+    :start-sound="startSound"
+    :vibration-duration="vibrationDuration"
+    :width="holdActionWidth"
+    @complete="handleComplete"
+  >
+    <template #default="{ progressRatio, isProgressActive }">
+      <button :class="buttonClass" :disabled="disabled" type="button">
+        <AppBloodFill :flow-front-duration="bloodFlowFrontDuration" :is-active="isProgressActive" :progress-ratio="progressRatio" />
+
+        <AppFillAware class="app-button-hold__content" tag="span" color="inherit" filled-color="on-primary">
+          <slot>{{ text }}</slot>
+        </AppFillAware>
+      </button>
+    </template>
+  </AppHoldAction>
+</template>
+
+<style scoped>
+.app-button-hold {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  border: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-text-primary);
+  border-radius: var(--app-radius-md);
+  background: var(--app-color-surface-primary);
+  color: var(--app-color-text-primary);
+  line-height: var(--app-line-height-control);
+  letter-spacing: var(--app-letter-spacing-wider);
+  text-align: center;
+  text-transform: uppercase;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  appearance: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-button-hold:not(:disabled):hover {
+    background: color-mix(in srgb, var(--app-color-surface-primary) 94%, var(--app-color-primary));
+    border-color: var(--app-color-primary);
+    box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 16%, transparent);
+  }
+}
+
+.app-button-hold:disabled {
+  color: var(--app-color-text-disabled);
+  cursor: default;
+}
+
+.app-button-hold__content {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-button-hold--size-small {
+  padding: var(--app-space-3) var(--app-space-8);
+  font-size: var(--app-font-size-xl);
+}
+
+.app-button-hold--size-middle {
+  padding: var(--app-space-4) var(--app-space-10);
+  font-size: var(--app-font-size-2xl);
+}
+
+.app-button-hold--size-big {
+  padding: var(--app-space-5) var(--app-space-12);
+  font-size: var(--app-font-size-3xl);
+}
+</style>

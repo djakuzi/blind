@@ -1,6 +1,7 @@
 # Генератор версий документации
 
 ## Описание
+
 [Генератор версий документации](../../../scripts/generators/generateDocsVersions.js) является скриптом `npm run app:generate:docs-versions`, при запуске которого в документации обновляются актуальные версии из `package.json`.
 
 ## Источник данных
@@ -70,16 +71,6 @@
 ```bash
 npm run app:generate:docs-versions
 ```
-
-## Обратная совместимость
-
-Дополнительно в `package.json` сохранен алиас:
-
-```bash
-npm run app:generate:node-docs
-```
-
-Он проксирует вызов в основную команду `npm run app:generate:docs-versions`.
 
 ## Когда использовать
 

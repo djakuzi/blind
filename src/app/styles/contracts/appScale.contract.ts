@@ -1,18 +1,15 @@
-export const APP_SCALE_MODE_LIST = [
-  'system',
-  'small',
-  'default',
-  'large',
-  'xlarge',
-] as const;
+export const APP_SCALE_MODE_LIST = ['system', 'small', 'default', 'large'] as const;
 
 export const APP_SCALE_CSS_VARIABLE_NAME = '--app-scale';
+
+export const APP_ROOT_FONT_SIZE_BASE_CSS_VARIABLE_NAME = '--app-root-font-size-base';
+
+export const APP_ROOT_FONT_SIZE_CSS_VARIABLE_NAME = '--app-root-font-size';
 
 export const APP_SCALE_MODE = {
   small: 0.9,
   default: 1,
   large: 1.1,
-  xlarge: 1.2,
 } as const;
 
 export const APP_SCALE_SYSTEM_MODE = 'system' as const;
@@ -23,4 +20,16 @@ export type tAppScaleMode = (typeof APP_SCALE_MODE_LIST)[number];
 
 export function isAppScaleMode(value: string): value is tAppScaleMode {
   return APP_SCALE_MODE_LIST.includes(value as tAppScaleMode);
+}
+
+export function resolveNearestAppScalePresetMode(scaleValue: number): tAppScalePresetMode {
+  const scaleEntries = Object.entries(APP_SCALE_MODE) as [tAppScalePresetMode, number][];
+
+  return scaleEntries.reduce((nearestEntry, currentEntry) => {
+    const nearestDistance = Math.abs(nearestEntry[1] - scaleValue);
+
+    const currentDistance = Math.abs(currentEntry[1] - scaleValue);
+
+    return currentDistance < nearestDistance ? currentEntry : nearestEntry;
+  })[0];
 }

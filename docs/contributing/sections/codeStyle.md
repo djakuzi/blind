@@ -64,9 +64,9 @@
 export const TAB_KEYS = {
   home: 'home',
   catalog: 'catalog',
-} as const
+} as const;
 
-export type TabKey = (typeof TAB_KEYS)[keyof typeof TAB_KEYS]
+export type TabKey = (typeof TAB_KEYS)[keyof typeof TAB_KEYS];
 ```
 
 ## 4. Переменные и функции
@@ -137,55 +137,23 @@ export type TabKey = (typeof TAB_KEYS)[keyof typeof TAB_KEYS]
 ```vue
 <script setup lang="ts">
 interface iUserActions {
-  openProfile: () => void
+  openProfile: () => void;
 }
 
 interface Props {
-  actions: iUserActions
-  visible?: boolean
+  actions: iUserActions;
+  visible?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
-})
+});
 </script>
 ```
 
 ## 7. CSS
 
-1. CSS-классы пишутся в `kebab-case`.
-2. Для компонентов используется BEM-подход.
-3. Для токенов и переиспользуемых значений применяются CSS variables.
-4. Префикс переменных проекта - `--app-`.
-5. Если CSS-класс является общим для проекта, он начинается с префикса `app-`.
-6. Если CSS variable является локальной переменной конкретного компонента, она начинается с префикса `--cp-`.
-7. Для написания вложенных селекторов в проекте используется CSS Nesting.
-
-Примеры:
-
-- `.app-header`
-- `.app-flex`
-- `.app-header__top-row`
-- `.app-header--with-bottom`
-- `--app-icon-size`
-- `--cp-card-offset`
-
-Пример CSS Nesting:
-
-```css
-.app-card {
-  display: flex;
-  gap: var(--app-spacing-8);
-
-  &__title {
-    color: var(--app-color-text-primary);
-  }
-
-  &--active {
-    background: var(--app-color-surface-interactive);
-  }
-}
-```
+Правила CSS, style tokens, contracts, component styles и устройство `src/app/styles` вынесены в отдельный раздел [CSS Style](./cssStyle.md).
 
 ## Импорты
 

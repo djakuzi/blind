@@ -1,223 +1,608 @@
 # Архитектура и app-flow
 
-Раздел описывает устройство `src/app`: bootstrap приложения, структуру app-слоев, правила зависимостей между ними и поток рендера от точки входа до экрана.
+Раздел описывает назначение основных слоёв внутри `src/app`, общий lifecycle приложения и правила зависимостей между app-level системами.
 
-## Назначение папок в `src/app`
+Документация фиксирует архитектурные принципы, а не конкретную последовательность импортов или текущий набор файлов. Внутренняя реализация может меняться, если сохраняются границы ответственности и инварианты lifecycle.
 
-### `setup`
+## Setup
 
-Слой инициализации приложения.
+`setup` — единый app-level lifecycle для подготовки и запуска систем приложения.
 
-Здесь должна находиться логика, которая запускается один раз при старте приложения:
+Он объединяет startup-логику в один lifecycle вместо нескольких независимых startup-слоёв. Конкретная система может участвовать в одной или нескольких фазах lifecycle.
 
-- регистрация глобальных интеграций;
-- инициализация app-level окружения;
-- подготовка инфраструктуры до первого рендера.
+Базовые фазы:
 
-В `setup` не должна жить логика конкретного экрана, feature или предметного сценария.
+```text
+preMount
+↓
+app.mount()
+↓
+postMount
+```
 
-### `router`
+### preMount
 
-Слой маршрутизации приложения.
+`preMount` используется для работы, которая должна завершиться до mount корневого приложения.
 
-Краткий обзор:
+Типичные задачи:
 
-- `index.ts` - создание корневого router instance;
-- `sections/*` - отдельные секции маршрутов (`menu`, `game`, `settings`);
-- `guard/*` - route guards и связанная инфраструктура навигации;
-- `constants/route.const.ts` - имена и ключи маршрутов;
-- `types/vue-router.d.ts` - расширения типов `vue-router`.
+- чтение пользовательских предпочтений;
+- чтение системных настроек;
+- подготовка platform-specific окружения;
+- применение визуальных параметров, которые не должны мигать после первого рендера;
+- подготовка состояния, необходимого для post-mount initialization.
 
-`router` отвечает только за навигацию, структуру маршрутов и правила переходов. В нем не должно быть логики конкретной feature или тяжелой предметной логики.
+### postMount
 
-### `layouts`
+`postMount` используется для работы, которая должна или может выполняться после mount.
 
-Слой app-layout'ов и общей каркасной разметки.
+Post-mount задачи разделяются по execution mode:
 
-- `LayoutRoot.vue` - корневая layout-обертка для дерева маршрутов.
-- `LayoutBase.vue` - базовая layout-обертка для экранов приложения.
-- `layouts/components/*` - локальные layout-компоненты и контейнеры.
-- `layouts/composables/*` - composable-логика, относящаяся именно к layout-слою.
-- `layouts/constants/*` и `layouts/types/*` - служебные константы и типы layout-уровня.
+```text
+blocking
+background
+```
 
-`layouts` управляет каркасом экрана, обертками, контейнерами и общей структурой рендера. Этот слой не должен знать детали предметного сценария конкретной feature.
+`blocking` означает, что основной route UI не считается готовым до завершения задачи.
 
-### `providers`
+`background` означает, что задача запускается после mount, но не влияет на app readiness.
 
-Глобальные app-level провайдеры интерфейса.
+Таким образом две независимые характеристики не смешиваются:
 
-Если провайдер лежит в `app/providers`, это означает, что он создается для уровня всего приложения, а не для отдельного экрана или feature.
+```text
+lifecycle phase
+→ когда запускать
 
-Такие провайдеры:
+execution mode
+→ влияет ли задача на готовность приложения
+```
 
-- могут использоваться из любой точки приложения;
-- предоставляют глобальный UI-механизм;
-- не должны содержать предметную бизнес-логику;
-- не должны становиться местом для сценариев конкретной feature.
+Асинхронность сама по себе не является отдельной lifecycle-фазой.
 
-### `overlays`
+## Setup Structure
 
-Слой глобальных overlay-механизмов приложения.
+Setup разделён на универсальный lifecycle-механизм и composition конкретного приложения:
 
-К примеру:
+```text
+src
+├── core
+│   └── app
+│       └── setup
+│           ├── setupLifecycle.runner.ts
+│           ├── setupLifecycle.state.ts
+│           ├── setupLifecycle.type.ts
+│           └── useSetupLifecycle.ts
+│
+└── app
+    └── setup
+        ├── appSetup.registry.ts
+        ├── interface
+        │   ├── language.setup.ts
+        │   ├── scale.setup.ts
+        │   └── theme.setup.ts
+        └── platform
+            └── view.setup.ts
+```
 
-- `bottomSheet`
-- `modal`
-- `toast`
+### `core/app/setup/lifecycle`
 
-Каждый overlay-контур может содержать:
+Содержит общий контракт lifecycle, runner, внутреннее состояние setup и reactive API состояния.
 
-- `composables` - API для вызова overlay;
-- `widget` - UI-часть overlay.
+Механизм не должен знать о конкретных app-системах, Pinia stores, loader, языке, теме или platform setup Blind.
 
-`overlays` описывает глобальные механизмы отображения поверх основного интерфейса. Это app-level инфраструктура, а не слой бизнес-логики.
+### `app/setup/registry`
 
-### `view`
+Определяет, какие setup-модули конкретного приложения участвуют в lifecycle.
 
-Роутовые экраны верхнего уровня.
+Registry является composition point и может меняться по мере появления или удаления app-систем.
 
-К примеру:
+### `app/setup/interface`
 
-- `ViewMenu.vue`
-- `ViewGame.vue`
-- `ViewSettings.vue`
+Содержит setup интерфейсных систем приложения, например языка, темы и UI scale.
 
-`view` - это точка входа в экран, которую открывает роутер.
+### `app/setup/platform`
 
-Экран может:
+Содержит setup platform presentation и окружения, например orientation, status bar и WebView.
 
-- собирать layout;
-- подключать `features`;
-- связывать экран с app-level состоянием;
-- передавать данные дальше в UI.
+Конкретный setup-модуль может реализовывать:
 
-Экран не должен разрастаться в слой глобальной бизнес-логики и не должен дублировать ответственность feature-модулей.
+- только `preMount`;
+- только `postMount`;
+- обе фазы.
 
-### `features`
+Setup-модуль должен координировать систему через её публичный API, а не дублировать внутреннюю business/domain логику.
 
-Слой пользовательских сценариев и составных экранных блоков.
+UI получает reactive состояние lifecycle через `useSetupLifecycle` и не зависит от внутренней реализации runner.
 
-Feature-модуль объединяет:
+## App Readiness
+
+Готовность приложения определяется runtime-состоянием обязательных blocking post-mount задач.
+
+Для каждой blocking-задачи runner хранит статус:
+
+```text
+pending
+loaded
+error
+```
+
+Инвариант:
+
+```text
+app isReady
+→ postMount lifecycle уже начался
+→ все blocking postMount setup имеют status = loaded
+```
+
+Если хотя бы один blocking setup имеет `pending`, приложение ещё запускается.
+
+Если хотя бы один blocking setup имеет `error`, основной route UI остаётся закрытым до восстановления этой задачи.
+
+Если blocking setup отсутствуют, после старта post-mount lifecycle приложение считается готовым сразу.
+
+Background-задачи не входят в карту blocking-состояний и не удерживают основной UI.
+
+App readiness не равен состоянию глобального loader:
+
+```text
+setup readiness
+≠
+global loader activity
+```
+
+Loader может использоваться в любой момент жизни приложения и не должен повторно переводить уже запущенный route UI в состояние "not ready".
+
+## Loader И Setup
+
+Setup-модуль может регистрировать loader resource, если его initialization должен быть визуально представлен пользователю.
+
+Loader resource имеет собственное состояние:
+
+```text
+pending
+├── success → loaded
+└── failure → error
+                 │
+                 └── retry → pending
+```
+
+Resource является единственным источником истины для своего loading-состояния. Ошибка хранится непосредственно внутри resource и может содержать action для восстановления.
+
+Scope группирует связанные resources и может содержать presentation-title. Отдельный `scope.isLoaded` не хранится: завершённость scope вычисляется по его resources.
+
+Глобальный loader поддерживает два режима progress:
+
+```text
+determinate
+→ progress вычисляется как loaded resources / all resources
+→ при завершении visual loader ждёт, пока полоса фактически дойдёт до 100%
+
+indeterminate
+→ процент неизвестен, показывается бесконечное движение сегмента
+```
+
+Если в одной visual-session хотя бы один активный scope использует `indeterminate`, вся session остаётся `indeterminate` до полного скрытия loader. Это предотвращает визуальные скачки между неизвестным и процентным progress.
+
+Visual loader показывается сразу при появлении первого `pending` или `error` resource.
+
+После появления loader действует только minimum visible duration:
+
+```text
+операция завершилась раньше minimum visible duration
+→ дождаться остатка minimum visible duration
+→ начать leave-animation
+
+операция длится дольше minimum visible duration
+→ после завершения сразу начать leave-animation
+```
+
+Minimum visible duration отсчитывается от момента фактического появления loader, а не от момента завершения операции. Это предотвращает короткое мерцание даже для очень быстрых операций.
+
+Startup языка использует `determinate`, чтобы перед открытием route UI полоса визуально дошла до 100%. Ручная смена языка использует `indeterminate`, поскольку реальный процент загрузки locale неизвестен.
+
+Error-state удерживает presentation до завершения leave-animation. Explicit cancel runtime-операции может убрать scope и запустить уход loader без возврата к loading-state.
+
+Presentation выбирается provider-слоем:
+
+```text
+есть error resource
+→ показать error state
+
+иначе есть pending resource
+→ показать progress state
+
+все resources loaded
+→ завершить visual lifecycle и скрыть overlay
+```
+
+Если ошибок несколько, provider показывает первую доступную ошибку. После её успешного retry следующая ошибка, если она существует, становится текущей.
+
+При этом:
+
+- setup lifecycle определяет готовность приложения;
+- loader отвечает только за визуальное отображение loading/error процесса;
+- конкретный setup-модуль связывает свою задачу с loader resource;
+- завершённые loader scopes сохраняются до окончания визуального ухода глобального loader;
+- после leave-анимации provider очищает завершённые scopes.
+
+Runner не зависит от loader implementation.
+
+Widget глобального loader остаётся presentation-компонентом: он получает `progress`, `progressMode`, `text`, `error` и actions через provider, отображает `AppLineLoader` или `AppStatusBlock`, но напрямую store не использует.
+
+`AppLineLoader` различает:
+
+```text
+determinate
+→ имеет aria-valuenow/min/max
+→ может завершать собственную progress-анимацию
+
+indeterminate
+→ aria-valuenow отсутствует
+→ бесконечная animation не участвует в completion lifecycle
+→ при prefers-reduced-motion остаётся статичный сегмент
+```
+
+Provider также владеет input-blocking lifecycle. Пока loader-session активна, underlying UI недоступен. Когда visual loader показан, focus переводится в loader и keyboard navigation остаётся внутри него до завершения session.
+
+### Blocking Setup Retry
+
+Recoverable blocking setup может быть повторно запущен через generic runner API:
+
+```text
+retryPostMountSetup(setupKey)
+```
+
+Retry допустим только для blocking setup со статусом `error`.
+
+Поток восстановления:
+
+```text
+blocking setup = error
+loader resource = error
+↓
+user action
+↓
+retryPostMountSetup(setupKey)
+↓
+blocking setup = pending
+loader resource = pending
+↓
+setup.run()
+├── success
+│   ├── loader resource = loaded
+│   └── blocking setup = loaded
+│
+└── failure
+    ├── loader resource = error
+    └── blocking setup = error
+```
+
+Когда после retry все blocking setup становятся `loaded`, `useSetupLifecycle().isReady` автоматически становится `true`.
+
+## Router
+
+`router` отвечает за навигацию и структуру route tree.
+
+Его ответственность:
+
+- route definitions;
+- route names и metadata;
+- guards;
+- redirects;
+- declaration lazy route views и их preload dependencies.
+
+Общий runtime-механизм lazy route loading находится в `core/app/route/lazy`. Конкретный route регистрирует свой view через `createLazyRoute`, а следующие вероятные маршруты может объявлять декларативно через `meta.lazy.preload`.
+
+После успешной навигации lazy runner читает metadata активного route и запускает preload только перечисленных непосредственных маршрутов. Preload не выполняется рекурсивно по цепочке зависимостей.
+
+Preload является только оптимизацией: корректность навигации от него не зависит. Если route не был предварительно загружен, его обычный lazy loader загружает view при переходе. Ручной `preloadRoute` может дополнительно использоваться по сигналу UI или app-state, но route UI не должен зависеть от обязательного вызова такого события.
+
+Router не должен содержать feature business logic.
+
+Route может выбирать view, объявлять preload следующего шага и передавать metadata, но сценарий экрана должен жить ниже — во view/features.
+
+## Layouts
+
+`layouts` отвечают за общий каркас интерфейса.
+
+Сюда относятся:
+
+- общая структура экрана;
+- header/footer/background;
+- safe-area composition;
+- общие transitions;
+- placement route content.
+
+Layout должен быть максимально нейтрален к предметному сценарию.
+
+Он может использовать общие app-state или shared UI, но не должен знать детали конкретной feature.
+
+## Providers
+
+`providers` — глобальные точки подключения app-level UI или context mechanisms.
+
+Provider нужен, когда механизм должен существовать независимо от текущего route.
+
+Типичные примеры:
+
+- global loader;
+- toast;
+- dialog;
+- bottom sheet;
+- global context bridge.
+
+Provider не должен становиться контейнером feature-specific логики.
+
+## Overlay
+
+`overlay` содержит глобальные механизмы отображения поверх основного интерфейса.
+
+Overlay-система может включать:
+
+- store/state;
+- composable API;
+- provider;
+- widget/presentation.
+
+Overlay описывает механизм, а не конкретный business-сценарий его использования.
+
+## Views
+
+`view` — route-level точка сборки экрана.
+
+View может:
+
+- подключать layout;
+- подключать одну или несколько features;
+- связывать route params/meta с feature API;
+- выполнять тонкую composition-логику.
+
+View не должен содержать основную business-логику сценария или дублировать ответственность feature/store.
+
+## Features
+
+`features` — слой законченных переиспользуемых app-сценариев и композиций.
+
+Feature может содержать:
 
 - UI конкретного сценария;
-- composable-логику сценария;
-- связь между экраном и store;
-- локальную orchestration-логику.
+- composables;
+- связку между store и shared/core;
+- локальную orchestration;
+- подготовку presentation data;
+- переиспользуемый API без собственного route.
 
-Feature должна быть изолированной по ответственности и не должна напрямую зависеть от другой feature.
+Feature не обязана быть только экранным блоком.
 
-### `stores`
+Переиспользуемый feature API допустимо использовать из setup, provider, view или другого app-level orchestration, если это не создаёт циклическую или узкосценарную связанность.
 
-App-level состояние, доступное на уровне экранов и общего интерфейса.
+## Stores
 
-К примеру в `app/stores` лежат store-модули:
+`stores` отвечают за app-level состояние и операции над ним.
 
-- `settings`
-- `user`
-- `game`
-
-Внутри store-модулей допускаются:
+Store может содержать:
 
 - state;
-- getters/computed state;
+- getters;
 - actions;
-- локальные типы состояния;
-- вспомогательная store-логика.
+- state-related helpers;
+- persistence, если она относится к состоянию;
+- связь с domain/API.
 
-Store хранит состояние и операции над ним, но не должен становиться заменой feature-слою.
+Store не должен владеть side effects конкретного UI-окружения, если они не являются частью самого состояния.
 
-Store желательно использовать через `features`, а не дергать напрямую из любых точек приложения. Прямое использование store допустимо для app-level задач, bootstrap-логики и тонких экранных связок, где отдельная feature не нужна.
+Например, изменение DOM, platform presentation или component behavior обычно должно применяться feature/app-level orchestration поверх store.
 
-### `domain`
+## Domain
 
-Слой предметных моделей, API и доменной логики.
+`domain` описывает предметные сущности и операции с данными.
 
-Доменные модули должны быть сгруппированы по областям:
+Сюда относятся:
 
-- `domain/game`
-- `domain/settings`
-- `domain/user`
+- models;
+- API abstractions;
+- domain-specific data types;
+- mapping raw data в предметные сущности.
 
-Внутри них могут лежать:
+Domain не должен зависеть от UI-слоёв.
 
-- `api`
-- `models`
+## Shared
 
-`domain` должен описывать предметные сущности и работу с данными, а не рендер интерфейса.
+`shared` — слой независимых переиспользуемых примитивов.
 
-### `shared`
+Сюда могут входить:
 
-Слой общих переиспользуемых примитивов.
+- UI atoms/primitives;
+- generic widgets;
+- utilities;
+- helpers;
+- contracts;
+- generic composables;
+- infrastructure primitives.
 
-Здесь могут лежать:
+Главное правило:
 
-- общие компоненты;
-- composables;
-- constants;
-- lib и вспомогательные утилиты.
+```text
+shared
+→ не знает о конкретном feature/view/route
+```
 
-`shared` используется как общий набор независимых примитивов. В нем не должна появляться логика конкретной feature, view или layout-сценария.
+## Styles
 
-### `styles`
+`styles` содержит глобальную визуальную систему:
 
-Глобальные стили приложения.
+- tokens;
+- contracts;
+- base styles;
+- utilities;
+- typography;
+- spacing;
+- colors;
+- responsive primitives.
 
-Здесь находятся:
+Styles описывают визуальные правила и не должны зависеть от feature logic.
 
-- `index.css` - точка входа для app-стилей;
-- `core/*` - reset, base и fonts;
-- `tokens/*` - глобальные дизайн-токены приложения;
-- `contracts/*` - контрактные стилевые сущности;
-- `utilities/*` - утилитарные стилевые правила.
+## Допустимые Зависимости
 
-`styles` - глобальный слой визуальной системы. Здесь не должна жить логика экранов или feature-модулей.
+Общий принцип: более прикладной слой может зависеть от более базового или от переиспользуемого API app-слоя, если это не создаёт циклическую или узкосценарную связанность.
 
-## Правила импортов и зависимостей
+Типичные направления:
 
-### Общий принцип
+```text
+main
+→ app setup / core app setup / router
 
-Импорт должен идти из более прикладного слоя в более базовый или инфраструктурный. Слой не должен зависеть от соседа того же уровня, если это создает прямую связанность между сценариями.
+setup
+→ feature / store / overlay / shared / core
 
-### Допустимые зависимости
+router
+→ view
 
-1. `main.ts` может подключать `app/router`, `app/providers`, `app/styles`, `Pinia` и app-level setup.
-2. `router` может подключать route sections, route constants, guards и роутовые `view`.
-3. `view` может подключать `features`, `layouts`, `shared` и при необходимости `stores`.
-4. `features` могут подключать `stores`, `domain`, `shared` и app-level UI-примитивы.
-5. `stores` могут подключать `domain`, собственные `actions`, типы и вспомогательные утилиты.
-6. `layouts` могут подключать свои локальные компоненты, composables, types и общие UI-примитивы.
-7. `providers` и `overlays` могут использовать shared/app-level/features инфраструктуру для реализации глобального UI-механизма.
+view
+→ feature / layout / shared / store
 
-### Запрещенные и нежелательные связи
+feature
+→ store / domain / shared / core
 
-1. `features` нельзя импортировать в другие `features`.
-2. `layouts` не должны импортировать feature-модули.
-3. `router` не должен импортировать feature-модули напрямую.
-4. `shared` не должен импортировать `features`, `view`, `router` или `layouts`.
-5. `domain` не должен зависеть от UI-слоев. Может только делать импорт из shared.
-6. `stores` нежелательно использовать хаотично напрямую из любых мест, если та же связка может быть оформлена через feature.
+store
+→ domain / shared / core
 
-## App-flow
+provider
+→ overlay / feature / store / shared
 
-Поток управления в `app`-слое обычно такой:
+layout
+→ shared / store / app-level composables
 
-1. `src/main.ts` создает Vue-приложение.
-2. В `main.ts` подключаются app-level плагины и инфраструктура, например `Pinia`.
-3. `main.ts` подключает router из `src/app/router`.
-4. `App.vue` подключает глобальные стили и отдает управление `RouterView`.
-5. Router определяет текущий маршрут и выбирает нужную route section.
-6. Route section подключает соответствующий `layout` и роутовый `view`.
-7. `LayoutRoot.vue` и `LayoutBase.vue` собирают каркас приложения и экрана.
-8. `view` подключает нужные `features` и связывает экран с app-level инфраструктурой.
-9. `features` используют `stores`, `domain`, `shared` и локальные composables для реализации сценария.
-10. `providers` и `overlays` обслуживают глобальные UI-механизмы поверх основного дерева интерфейса.
+shared
+→ core
+```
 
-## Базовые правила
+Это ориентир ответственности, а не строгая compile-time матрица.
 
-1. Все, что относится к запуску и каркасу приложения, должно жить в `app`.
-2. `view` остается точкой сборки экрана, а не местом для всей логики сценария.
-3. Feature не импортирует другую feature.
-4. Store предпочтительно используется через feature-слой, а не напрямую из произвольных мест.
-5. Глобальные UI-механизмы должны жить в `app/providers` и `app/overlays`.
-6. `router` и `layouts` не должны содержать тяжелую предметную логику.
-7. `shared` должен оставаться независимым переиспользуемым слоем.
+## Нежелательные Зависимости
+
+Следует избегать:
+
+- feature → feature, если один сценарий начинает напрямую владеть другим;
+- shared → feature/view/router/layout;
+- domain → UI;
+- router → business feature logic;
+- layout → узкосценарная feature logic;
+- store → конкретный component/view;
+- setup → screen-specific presentation;
+- core app setup → конкретный feature/store/overlay.
+
+Если связь нужна только одному экрану, её место обычно во view или feature, а не в app lifecycle.
+
+## App Lifecycle
+
+Общий поток запуска:
+
+```text
+create application
+↓
+install Pinia
+↓
+create app setup registry
+↓
+run preMount setup sequentially
+↓
+install/prepare router
+↓
+mount root UI
+↓
+run postMount setup
+├── blocking → tracked by pending / loaded / error
+└── background → fire-and-handle-error, readiness не блокирует
+↓
+all blocking = loaded
+↓
+app isReady
+↓
+normal route UI
+```
+
+`App.vue` всегда держит глобальные providers смонтированными, но `RouterView` показывает только при `isReady = true`.
+
+Если blocking setup падает, приложение остаётся смонтированным, providers продолжают работать, а route UI остаётся закрытым. Это позволяет loader показать recoverable error и выполнить retry без перезагрузки приложения.
+
+Конкретный набор setup-модулей и их внутренний порядок может меняться.
+
+## Error Handling
+
+Setup-системы должны различать:
+
+- recoverable blocking failure;
+- fallback;
+- fatal pre-mount failure;
+- background failure.
+
+Recoverable blocking failure должен оставить setup в `error`, не открывать route UI и предоставить app-level способ восстановления, например loader action с `retryPostMountSetup`.
+
+Если существует безопасный fallback, особенно в `preMount`, его предпочтительно применить локально и продолжить startup.
+
+`preMount` выполняется до `app.mount()`, поэтому глобальный loader в этой фазе ещё недоступен. Ошибка, вышедшая наружу из `runPreMountSetup`, считается fatal startup error. Верхний `setupApp().catch(...)` обязан как минимум явно её зафиксировать; конкретные pre-mount системы должны по возможности иметь собственные fallback.
+
+Ошибка background-задачи логируется, но не блокирует основной UI.
+
+Critical blocking failure не должен тихо переводить приложение в состояние ready.
+
+## Setup Module Design
+
+Setup-модуль должен описывать lifecycle конкретной системы, а не становиться местом её внутренней реализации.
+
+Предпочтительно:
+
+```text
+setup module
+↓
+feature/system API
+↓
+store/domain/core
+```
+
+Вместо:
+
+```text
+setup module
+↓
+ручная сборка внутренних шагов системы
+```
+
+Это позволяет менять реализацию системы без переписывания общего lifecycle.
+
+## Базовые Правила
+
+1. Универсальный setup lifecycle живёт в `core/app/setup/lifecycle`, а setup конкретных систем приложения — в `app/setup`.
+2. `preMount` используется для работы, обязательной до mount.
+3. Blocking `postMount` определяет app readiness.
+4. Background `postMount` не блокирует основной UI.
+5. `core/app/setup/lifecycle` не знает о конкретных системах приложения.
+6. Registry является composition point setup-модулей.
+7. View остаётся точкой сборки route screen.
+8. Feature инкапсулирует сценарии и переиспользуемые app-композиции.
+9. Shared остаётся независимым от app-specific сценариев.
+10. Domain не зависит от UI.
+11. Store хранит состояние, а application side effects применяются на подходящем orchestration-уровне.
+12. Setup readiness отделён от обычной loader activity.
+
+## Ориентиры В Проекте
+
+Основные app-области:
+
+```text
+src/core/app/setup/lifecycle
+src/app/setup
+src/app/router
+src/app/layouts
+src/app/providers
+src/app/overlay
+src/app/view
+src/app/features
+src/app/stores
+src/app/domain
+src/app/shared
+src/app/styles
+```
+
+Пути являются навигационными ориентирами, а не обязательной внутренней реализацией.

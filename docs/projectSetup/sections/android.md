@@ -18,6 +18,12 @@ npm install
 npm run build
 ```
 
+Для debug-сборки можно использовать:
+
+```bash
+npm run build:debug
+```
+
 ## Шаг 3. Синхронизация Capacitor
 
 ```bash

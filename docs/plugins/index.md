@@ -1,6 +1,8 @@
 # Плагины
 
-Раздел посвящен собственным плагинам проекта или плагинами над другими SDK. 
-Правила работ с генераторами находится [здесь](../contributing/pluginRule.md)
+Раздел предназначен для описания конкретных plugins, которые используются или реализованы в проекте.
 
-## Разделы
+Правила разработки platform plugins находятся в contributing:
+
+- [Правила Capacitor plugins](../contributing/sections/capacitorPluginRule.md)
+- [Правила Electron plugins](../contributing/sections/electronPluginRule.md)

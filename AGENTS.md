@@ -5,26 +5,67 @@
 ## Перед началом работы
 
 1. Сначала изучить задачу и затронутые файлы.
-2. Перед изменениями проверить связанные разделы документации.
-3. Не придумывать новую архитектуру, если она уже зафиксирована в коде или в `docs`.
-4. Вносить минимально достаточные изменения без лишних переписываний.
+2. Определить, какие слои проекта затронуты: app, core, game, docs, generators, plugins, setup, styles или stores.
+3. Перед изменениями прочитать только те разделы документации, которые относятся к задаче.
+4. Перед изменением кода посмотреть смежные реализации в том же слое или с похожей задачей, чтобы понять реальные паттерны проекта.
+5. Если в процессе работы появляется новая непонятная область, добрать связанную документацию и смежные примеры кода до продолжения реализации.
+6. Не придумывать новую архитектуру, если она уже зафиксирована в коде или в `docs`.
+7. Вносить минимально достаточные изменения без лишних переписываний.
 
-## Что читать обязательно
+## Минимум контекста
 
-- `docs/contributing/sections/codeStyle.md`
-- `docs/contributing/sections/gitRule.md`
-- `docs/contributing/sections/generateRule.md`
-- `docs/contributing/sections/pluginRule.md`
-- `docs/architecture/index.md`
+Перед любой задачей агент должен понять:
+
+1. Что именно просит пользователь.
+2. Какие файлы и слои проекта затронуты.
+3. Какие локальные паттерны уже используются рядом с изменяемым кодом.
+4. Какие смежные файлы показывают правильный пример реализации для этой задачи.
+5. Есть ли в `docs` правила, которые относятся к этой задаче.
+6. Нужно ли после изменения обновить документацию.
+
+Не нужно перечитывать всю документацию проекта для каждой маленькой правки. Документация читается по релевантности задачи.
 
 ## Где брать информацию
 
-- по `src/app` и app-архитектуре - `docs/architecture/sections/app-flow.md`
-- по `src/core`, platform/browser/native integration и SDK-оберткам - `docs/architecture/sections/core-flow.md`
-- по игровому контуру - `docs/architecture/sections/game-flow.md`
-- по setup, платформам и запуску - `docs/projectSetup/index.md`
-- по генераторам - `docs/generators` и `docs/contributing/sections/generateRule.md`
-- по env и property-настройкам - `docs/settingsProject`
+- общий обзор архитектуры - `docs/architecture/index.md`
+- структура `src/app`, app-flow, views, layouts, features, stores, providers и overlays - `docs/architecture/sections/app-flow.md`
+- CSS, scoped styles, tokens, contracts, responsive и правила написания стилей - `docs/contributing/sections/cssStyle.md`
+- UI scale, единицы измерения интерфейса и построение размеров UI - `docs/interface/index.md`
+- локализация, языки интерфейса, Locale, Static Locale, переводы, pluralization и language switch - `docs/interface/sections/localization.md`
+- `src/core`, platform/runtime/tool, `core/media`, `MediaAudio`, `MediaIcons` и SDK-обертки - `docs/architecture/sections/core-flow.md`
+- audio UI-flow, `useAudio`, sound props и правила playback в app-слое - `docs/interface/index.md`
+- генерация audio registry - `docs/generators/sections/generate-audio.md`
+- генерация icons registry - `docs/generators/sections/generate-icons.md`
+- игровой контур и game-логика - `docs/architecture/sections/game-flow.md`
+- setup, запуск, Web, Android, iOS, Desktop, Capacitor, Electron и CLI - `docs/projectSetup/index.md`
+- правила Capacitor plugins - `docs/contributing/sections/capacitorPluginRule.md`
+- правила Electron plugins - `docs/contributing/sections/electronPluginRule.md`
+- описания конкретных plugins - `docs/plugins`
+- генераторы и auto-generated файлы - `docs/generators` и `docs/contributing/sections/generateRule.md`
+- env, property и настройки проекта - `docs/settingsProject`
+- именование и общий code style - `docs/contributing/sections/codeStyle.md`
+- форматирование - `docs/contributing/sections/codeFormatting.md`
+- git-процесс - `docs/contributing/sections/gitRule.md`
+- правила для задач и коммуникации - `docs/contributing/sections/requestRule.md`
+- правила самого `AGENTS.md` - `docs/contributing/sections/agentRule.md`
+
+## Как выбирать документацию
+
+1. Если задача связана с UI, Vue-компонентами, layout, widget, view или app-level UI, читать app-flow и связанные UI/CSS разделы.
+2. Если задача связана с CSS, tokens, responsive, safe area, fonts, scoped styles или style contracts, читать `cssStyle.md`; если затронут scale интерфейса, дополнительно читать `docs/interface`.
+3. Если задача связана одновременно с UI и JS-логикой, читать UI/CSS разделы и документацию по тому слою, где живет логика: app-flow, core-flow, game-flow или setup.
+4. Если задача касается UI text, translation, language, Locale, Static Locale, `public/lang`, accessibility labels, pluralization, `Intl.DisplayNames` или `Intl.PluralRules`, сначала читать `docs/interface/sections/localization.md`.
+5. Если задача связана с `src/core`, public API wrappers, platform/runtime/tool, browser/native логикой, `core/media`, `MediaAudio` или `MediaIcons`, читать core-flow.
+6. Если задача связана с playback из Vue, `useAudio`, sound props или UI-звуками, дополнительно читать audio-правила в `docs/interface/index.md`.
+7. Если задача меняет audio assets или icons assets, читать соответствующий раздел в `docs/generators/sections/` до изменения generated registry.
+8. Если задача связана с игровыми правилами, игровым состоянием, игровыми моделями или render/game контуром, читать game-flow.
+9. Если задача связана с запуском проекта, платформами, Capacitor, Electron или CLI-командами, читать projectSetup.
+10. Если задача связана с Capacitor plugin, читать `docs/contributing/sections/capacitorPluginRule.md`.
+11. Если задача связана с Electron plugin, preload, IPC или bridge capability, читать `docs/contributing/sections/electronPluginRule.md` и при необходимости core-flow.
+12. Если задача связана с конкретным plugin и для него есть отдельное описание, читать соответствующий документ в `docs/plugins`.
+13. Если задача затрагивает generated files, scripts или генераторы, читать generateRule и docs/generators до изменения generated-файлов.
+14. Если задача связана с env/property, читать docs/settingsProject.
+15. Если задача меняет правила работы агентов или сам `AGENTS.md`, читать `docs/contributing/sections/agentRule.md` и при необходимости обновлять его тоже.
 
 ## Базовые правила
 
@@ -32,17 +73,39 @@
 2. Не делать крупные рефакторы без прямого запроса.
 3. Не менять публичные соглашения проекта молча.
 4. Если правило неочевидно, сначала смотреть `docs`.
-5. Если изменение затрагивает архитектуру, процесс или соглашения, проверить, нужно ли обновить документацию.
+5. `src/core/platform/runtime` не должен зависеть от `src/core/platform/tool`.
+6. Реализация конкретного platform-инструмента должна оставаться в соответствующем Tool; runtime используется только как инфраструктура среды.
+7. Если изменение затрагивает архитектуру, процесс, публичный API или соглашения, проверить, нужно ли обновить документацию.
+8. Если после выполнения задачи нужно обновить документацию, сначала сообщить об этом пользователю и запросить разрешение на документационное изменение.
+9. Если изменение касается правил для агентов, проверить `docs/contributing/sections/agentRule.md` и при необходимости предложить или внести синхронную правку.
+10. Если код и документация расходятся, не выбирать молча. Нужно отметить расхождение и предложить безопасный способ привести проект к одному правилу.
+11. Если рядом с изменяемым кодом есть локальный стиль или паттерн, использовать его, а не вводить новый.
+12. Реальный соседний код является важным источником контекста: документация задает правила, а смежные реализации показывают, как эти правила применяются в проекте.
 
 ## Если есть расхождение
 
 1. Не переписывать проект целиком под документ без явного запроса.
 2. Отметить расхождение.
-3. Предложить точечное и безопасное изменение.
+3. Проверить, какой источник ближе к текущей задаче: документация, фактический код или прямое указание пользователя.
+4. Предложить точечное и безопасное изменение.
+5. Если решение меняет соглашение проекта, сначала спросить пользователя.
 
 ## Если есть вопросы
 
 Если перед реализацией не хватает информации, агент должен:
 
 1. Сначала сформировать короткий список вопросов или неясностей.
-2. Потом либо задать их пользователю, либо найти ответ в документации, если это можно сделать надежно без догадок.
+2. Попробовать найти ответ в релевантной документации, если это можно сделать надежно без догадок.
+3. Если после этого остается неоднозначность, задать вопрос пользователю до изменения кода.
+4. Если есть несколько нормальных решений и выбор повлияет на архитектуру, публичный API, структуру папок или будущий стиль проекта, описать варианты и спросить подтверждение.
+5. Не делать молча изменения, которые удаляют существующий механизм, переносят ответственность между слоями или вводят новое проектное соглашение.
+
+## Как работать с задачей
+
+1. Двигаться как второй разработчик проекта: понимать контекст, читать соседний код, сверяться с правилами и держать архитектуру в голове.
+2. Сначала разобраться в текущем устройстве, потом менять.
+3. Для простых задач действовать точечно и самостоятельно.
+4. Для неоднозначных задач сначала согласовать направление.
+5. При выборе реализации опираться на похожие файлы, компоненты, stores, setup-модули, wrappers или tests, если они есть рядом.
+6. После изменения проверить результат подходящим способом: тестом, сборкой, линтером, просмотром diff или другой релевантной проверкой.
+7. В финальном ответе кратко описать, что изменено, где изменено и какие проверки выполнены.

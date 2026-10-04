@@ -12,8 +12,15 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", exact: "8.5.0"),
+        .package(name: "CapacitorDevice", path: "../../../node_modules/@capacitor/device"),
+        .package(name: "CapacitorFilesystem", path: "../../../node_modules/@capacitor/filesystem"),
+        .package(name: "CapacitorHaptics", path: "../../../node_modules/@capacitor/haptics"),
         .package(name: "CapacitorPreferences", path: "../../../node_modules/@capacitor/preferences"),
-        .package(name: "CapacitorTextZoom", path: "../../../node_modules/@capacitor/text-zoom")
+        .package(name: "CapacitorScreenOrientation", path: "../../../node_modules/@capacitor/screen-orientation"),
+        .package(name: "CapacitorStatusBar", path: "../../../node_modules/@capacitor/status-bar"),
+        .package(name: "CapacitorTextZoom", path: "../../../node_modules/@capacitor/text-zoom"),
+        .package(name: "CapawesomeCapacitorKeepAwake", path: "../../../node_modules/@capawesome/capacitor-keep-awake"),
+        .package(name: "CapgoCapacitorNativeAudio", path: "../../../node_modules/@capgo/capacitor-native-audio")
     ],
     targets: [
         .target(
@@ -21,8 +28,15 @@ let package = Package(
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
+                .product(name: "CapacitorDevice", package: "CapacitorDevice"),
+                .product(name: "CapacitorFilesystem", package: "CapacitorFilesystem"),
+                .product(name: "CapacitorHaptics", package: "CapacitorHaptics"),
                 .product(name: "CapacitorPreferences", package: "CapacitorPreferences"),
-                .product(name: "CapacitorTextZoom", package: "CapacitorTextZoom")
+                .product(name: "CapacitorScreenOrientation", package: "CapacitorScreenOrientation"),
+                .product(name: "CapacitorStatusBar", package: "CapacitorStatusBar"),
+                .product(name: "CapacitorTextZoom", package: "CapacitorTextZoom"),
+                .product(name: "CapawesomeCapacitorKeepAwake", package: "CapawesomeCapacitorKeepAwake"),
+                .product(name: "CapgoCapacitorNativeAudio", package: "CapgoCapacitorNativeAudio")
             ]
         )
     ]

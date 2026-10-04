@@ -10,12 +10,7 @@ function toValue(value: unknown): boolean {
   if (typeof value === 'string') {
     const normalizedValue = value.trim();
 
-    return (
-      normalizedValue === 'y'
-            || normalizedValue === 'yes'
-            || normalizedValue === 'true'
-            || normalizedValue === '1'
-    );
+    return normalizedValue === 'y' || normalizedValue === 'yes' || normalizedValue === 'true' || normalizedValue === '1';
   }
 
   return false;

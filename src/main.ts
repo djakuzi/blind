@@ -2,20 +2,27 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './app/router';
-import { setupScale } from './app/setup/scale.setup';
-import { setupTheme } from './app/setup/theme.setup';
+import { createAppSetupRegistry } from './app/setup/appSetup.registry.ts';
+import { runPostMountSetup, runPreMountSetup } from './core/app/setup/lifecycle/setupLifecycle.runner';
 
 const app = createApp(App);
 const pinia = createPinia();
 
 app.use(pinia);
 
-async function bootstrap() {
-  await setupScale(pinia);
-  await setupTheme(pinia);
+async function setupApp() {
+  const setups = createAppSetupRegistry(pinia);
+
+  await runPreMountSetup(setups);
+
   app.use(router);
   await router.isReady();
+
   app.mount('#app');
+
+  await runPostMountSetup(setups);
 }
 
-bootstrap();
+setupApp().catch((error) => {
+  console.error('Application setup failed:', error);
+});
