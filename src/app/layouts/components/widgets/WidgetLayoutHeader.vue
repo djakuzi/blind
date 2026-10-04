@@ -72,18 +72,18 @@ function handleBack() {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  -webkit-backdrop-filter: blur(1.5rem) saturate(145%);
-  backdrop-filter: blur(1.5rem) saturate(145%);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   -webkit-mask-image: linear-gradient(
     180deg,
     #000 0%,
-    rgba(0, 0, 0, 0.78) 42%,
+    rgba(0, 0, 0, 0.78) 90%,
     transparent 100%
   );
   mask-image: linear-gradient(
     180deg,
     #000 0%,
-    rgba(0, 0, 0, 0.78) 42%,
+    rgba(0, 0, 0, 0.78) 90%,
     transparent 100%
   );
 }
@@ -96,10 +96,9 @@ function handleBack() {
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    var(--app-color-surface-glass-top) 0%,
+    var(--app-color-surface-glass-top) 0,
     var(--app-color-surface-glass-bottom) 100%
   );
-  box-shadow: inset 0 1px 0 var(--app-color-surface-glass-highlight);
 }
 
 .layout-header__content {
