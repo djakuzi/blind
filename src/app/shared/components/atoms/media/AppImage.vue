@@ -18,6 +18,7 @@ export interface PropsAppImage {
   loading?: 'eager' | 'lazy';
   decoding?: 'async' | 'sync' | 'auto';
   fetchPriority?: tAppImageFetchPriority;
+  shouldLoad?: boolean;
 }
 
 const props = withDefaults(defineProps<PropsAppImage>(), {
@@ -31,6 +32,7 @@ const props = withDefaults(defineProps<PropsAppImage>(), {
   loading: 'eager',
   decoding: 'async',
   fetchPriority: 'auto',
+  shouldLoad: true,
 });
 
 const emit = defineEmits<{
@@ -71,6 +73,7 @@ function handleLoad(event: Event) {
     :style="imageStyle"
   >
     <img
+      v-if="shouldLoad"
       class="app-image__media"
       :src="src"
       :alt="alt"
