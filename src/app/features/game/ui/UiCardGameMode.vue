@@ -20,12 +20,14 @@ export interface PropsUiCardGameMode {
   disabled?: boolean;
   imageLoading?: 'eager' | 'lazy';
   imageFetchPriority?: 'high' | 'low' | 'auto';
+  imageShouldLoad?: boolean;
 }
 
 const props = withDefaults(defineProps<PropsUiCardGameMode>(), {
   disabled: false,
   imageLoading: 'lazy',
   imageFetchPriority: 'low',
+  imageShouldLoad: true,
 });
 
 const emit = defineEmits<{
@@ -123,6 +125,7 @@ function handleComplete() {
           aspect-ratio="1 / 1"
           :loading="imageLoading"
           :fetch-priority="imageFetchPriority"
+          :should-load="imageShouldLoad"
         />
       </div>
 
