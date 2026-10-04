@@ -1,27 +1,17 @@
-interface iWakeLockSentinel extends EventTarget {
-  readonly released: boolean;
-  release(): Promise<void>;
-}
-
-interface iWakeLock {
-  request(type: 'screen'): Promise<iWakeLockSentinel>;
-}
-
-interface iWakeLockNavigator extends Navigator {
-  wakeLock?: iWakeLock;
-}
-
-let sentinel: iWakeLockSentinel | undefined;
+let sentinel: WakeLockSentinel | undefined;
 let acquireRequest: Promise<boolean> | undefined;
 let shouldKeepAwake = false;
 let isVisibilitySubscribed = false;
 
-function getWakeLock() {
-  if (typeof navigator === 'undefined') {
+function getWakeLock(): WakeLock | undefined {
+  if (
+    typeof navigator === 'undefined' ||
+    !('wakeLock' in navigator)
+  ) {
     return undefined;
   }
 
-  return (navigator as iWakeLockNavigator).wakeLock;
+  return navigator.wakeLock;
 }
 
 async function acquire() {

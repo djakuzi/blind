@@ -192,6 +192,10 @@ export const MobileAudioAdapter: iAudioAdapter = {
     const pool = getAudioPool(audio.id);
     const assetId = pool.playAssetIds[pool.nextPlayIndex];
 
+    if (assetId === undefined) {
+      throw new Error(`Audio play channel is not available: ${audio.id}`);
+    }
+
     pool.nextPlayIndex = (pool.nextPlayIndex + 1) % pool.playAssetIds.length;
 
     await NativeAudio.play(

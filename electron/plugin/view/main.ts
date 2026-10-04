@@ -19,8 +19,6 @@ async function setFullscreen(window: BrowserWindow, value: boolean) {
     };
   }
 
-  const eventName = value ? 'enter-full-screen' : 'leave-full-screen';
-
   await new Promise<void>((resolve) => {
     let isResolved = false;
 
@@ -31,13 +29,24 @@ async function setFullscreen(window: BrowserWindow, value: boolean) {
 
       isResolved = true;
       clearTimeout(timeout);
-      window.removeListener(eventName, finish);
+
+      if (value) {
+        window.removeListener('enter-full-screen', finish);
+      } else {
+        window.removeListener('leave-full-screen', finish);
+      }
+
       resolve();
     };
 
     const timeout = setTimeout(finish, 1500);
 
-    window.once(eventName, finish);
+    if (value) {
+      window.once('enter-full-screen', finish);
+    } else {
+      window.once('leave-full-screen', finish);
+    }
+
     window.setFullScreen(value);
   });
 

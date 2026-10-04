@@ -14,7 +14,7 @@ import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
 import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
-import type { tIconGroup, tIconName } from '@/core/media/assets';
+import type { tIconGroup, tIconName } from '@/core/media/icons';
 
 export type tAppInfoRowListItemIcon = {
   [TGroup in tIconGroup]: {
