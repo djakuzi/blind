@@ -15,7 +15,7 @@ export interface PropsAppBloodFill {
 const props = withDefaults(defineProps<PropsAppBloodFill>(), {
   flowFrontDuration: 1200,
   isActive: false,
-  progressRatio: 0,
+  progressRatio: undefined,
   waveHeight: 'var(--app-space-8)',
   waveLengthScale: 1,
 });
@@ -37,10 +37,13 @@ function normalizeWaveLengthScale(value: number) {
 }
 
 const fillStyle = computed(() => {
-  const progressRatio = LibNumber.clampFinite(props.progressRatio, 0, 1, 0);
+  const progressOffset =
+    props.progressRatio === undefined
+      ? 'var(--cp-hold-progress-offset, 100%)'
+      : `${(1 - LibNumber.clampFinite(props.progressRatio, 0, 1, 0)) * 100}%`;
 
   return {
-    '--cp-blood-fill-offset': `${(1 - progressRatio) * 100}%`,
+    '--cp-blood-fill-offset': progressOffset,
     '--cp-blood-fill-front-duration': `${normalizeDuration(props.flowFrontDuration)}ms`,
     '--cp-blood-fill-wave-height': LibStyle.toSizeValue(props.waveHeight) ?? 'var(--app-space-8)',
     '--cp-blood-fill-wave-width': `${normalizeWaveLengthScale(props.waveLengthScale) * 200}%`,
@@ -69,7 +72,6 @@ const fillClass = computed(() => ['app-blood-fill', { 'app-blood-fill--active': 
   inset: 0;
   pointer-events: none;
   transform: translate3d(0, var(--cp-blood-fill-offset), 0);
-  will-change: transform;
 }
 
 .app-blood-fill__body,
@@ -93,7 +95,6 @@ const fillClass = computed(() => ['app-blood-fill', { 'app-blood-fill--active': 
   z-index: 1;
   background-repeat: repeat-x;
   background-size: 50% 100%;
-  will-change: transform;
 }
 
 .app-blood-fill__wave--front {
@@ -103,8 +104,11 @@ const fillClass = computed(() => ['app-blood-fill', { 'app-blood-fill--active': 
 }
 
 .app-blood-fill--active {
+  will-change: transform;
+
   .app-blood-fill__wave {
     animation-play-state: running;
+    will-change: transform;
   }
 }
 
