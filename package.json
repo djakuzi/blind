@@ -24,7 +24,11 @@
     "format:check": "prettier \"{scripts,src,public}/**/*.{js,ts,vue,css,json,html}\" --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "desktop:package": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml",
+    "desktop:package:mac": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --mac",
+    "desktop:package:win": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --win",
+    "desktop:package:linux": "npm run desktop:build && npx --yes electron-builder@26.15.3 --config electron-builder.yml --linux"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",
