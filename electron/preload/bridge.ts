@@ -1,6 +1,7 @@
 import type { iElectronBridge } from '../type';
 import { AudioPreloadPlugin } from '../plugin/audio/preload';
 import { FilesystemPreloadPlugin } from '../plugin/filesystem/preload';
+import { PowerPreloadPlugin } from '../plugin/power/preload';
 import { StoragePreloadPlugin } from '../plugin/storage/preload';
 import { SystemPreloadPlugin } from '../plugin/system/preload';
 import { ViewPreloadPlugin } from '../plugin/view/preload';
@@ -11,6 +12,7 @@ export function createElectronBridge(): iElectronBridge {
     runtime: createRuntimeBridge(),
     audio: AudioPreloadPlugin,
     filesystem: FilesystemPreloadPlugin,
+    power: PowerPreloadPlugin,
     storage: StoragePreloadPlugin,
     system: SystemPreloadPlugin,
     view: ViewPreloadPlugin,

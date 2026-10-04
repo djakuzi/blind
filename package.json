@@ -37,6 +37,7 @@
     "@capacitor/screen-orientation": "^8.0.1",
     "@capacitor/status-bar": "^8.0.3",
     "@capacitor/text-zoom": "^8.0.1",
+    "@capawesome/capacitor-keep-awake": "^0.1.2",
     "@capgo/capacitor-native-audio": "^8.4.30",
     "pinia": "^4.0.3",
     "vue": "^3.5.39",

@@ -19,6 +19,7 @@ let package = Package(
         .package(name: "CapacitorScreenOrientation", path: "../../../node_modules/@capacitor/screen-orientation"),
         .package(name: "CapacitorStatusBar", path: "../../../node_modules/@capacitor/status-bar"),
         .package(name: "CapacitorTextZoom", path: "../../../node_modules/@capacitor/text-zoom"),
+        .package(name: "CapawesomeCapacitorKeepAwake", path: "../../../node_modules/@capawesome/capacitor-keep-awake"),
         .package(name: "CapgoCapacitorNativeAudio", path: "../../../node_modules/@capgo/capacitor-native-audio")
     ],
     targets: [
@@ -34,6 +35,7 @@ let package = Package(
                 .product(name: "CapacitorScreenOrientation", package: "CapacitorScreenOrientation"),
                 .product(name: "CapacitorStatusBar", package: "CapacitorStatusBar"),
                 .product(name: "CapacitorTextZoom", package: "CapacitorTextZoom"),
+                .product(name: "CapawesomeCapacitorKeepAwake", package: "CapawesomeCapacitorKeepAwake"),
                 .product(name: "CapgoCapacitorNativeAudio", package: "CapgoCapacitorNativeAudio")
             ]
         )
