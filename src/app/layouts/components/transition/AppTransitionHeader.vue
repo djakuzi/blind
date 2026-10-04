@@ -21,11 +21,12 @@ defineProps<Props>();
 <style scoped>
 .app-transition-header {
   position: relative;
+  display: grid;
+  grid-template-rows: 1fr;
   flex: 0 0 auto;
   width: calc(100% + var(--cp-layout-padding-horizontal, 0px) * 2);
   margin-top: calc(var(--cp-layout-padding-vertical, 0px) * -1);
   margin-inline: calc(var(--cp-layout-padding-horizontal, 0px) * -1);
-  transform-origin: top center;
 }
 
 .app-transition-header__surface {
@@ -72,40 +73,75 @@ defineProps<Props>();
   position: relative;
   z-index: 1;
   min-height: 0;
+  overflow: hidden;
+  transform-origin: top center;
 }
 
-.app-transition-header-enter-active,
-.app-transition-header-leave-active {
-  will-change: opacity, transform;
-}
+/* Enter */
 
 .app-transition-header-enter-active {
-  transition:
-    opacity var(--app-motion-duration-medium) var(--app-motion-ease-default),
-    transform var(--app-motion-duration-slow) var(--app-motion-ease-enter);
+  transition: grid-template-rows var(--app-motion-duration-slow) var(--app-motion-ease-enter);
 }
+
+.app-transition-header-enter-active .app-transition-header__content {
+  transition:
+    opacity var(--app-motion-duration-medium) var(--app-motion-ease-default) 40ms,
+    transform var(--app-motion-duration-slow) var(--app-motion-ease-enter) 40ms;
+}
+
+.app-transition-header-enter-from {
+  grid-template-rows: 0fr;
+}
+
+.app-transition-header-enter-from .app-transition-header__content {
+  opacity: 0;
+  transform: translateY(-0.75rem) scale(0.96);
+}
+
+.app-transition-header-enter-to {
+  grid-template-rows: 1fr;
+}
+
+.app-transition-header-enter-to .app-transition-header__content {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Leave */
 
 .app-transition-header-leave-active {
+  transition: grid-template-rows var(--app-motion-duration-medium) var(--app-motion-ease-exit) 70ms;
+}
+
+.app-transition-header-leave-active .app-transition-header__content {
   transition:
     opacity var(--app-motion-duration-fast) var(--app-motion-ease-default),
-    transform var(--app-motion-duration-medium) var(--app-motion-ease-exit);
+    transform 170ms var(--app-motion-ease-exit);
 }
 
-.app-transition-header-enter-from,
-.app-transition-header-leave-to {
-  opacity: 0;
-  transform: translate3d(0, -0.75rem, 0) scale(0.98);
-}
-
-.app-transition-header-enter-to,
 .app-transition-header-leave-from {
+  grid-template-rows: 1fr;
+}
+
+.app-transition-header-leave-from .app-transition-header__content {
   opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
+  transform: translateY(0) scale(1);
+}
+
+.app-transition-header-leave-to {
+  grid-template-rows: 0fr;
+}
+
+.app-transition-header-leave-to .app-transition-header__content {
+  opacity: 0;
+  transform: translateY(-0.75rem) scale(0.96);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .app-transition-header-enter-active,
-  .app-transition-header-leave-active {
+  .app-transition-header-leave-active,
+  .app-transition-header-enter-active .app-transition-header__content,
+  .app-transition-header-leave-active .app-transition-header__content {
     transition: none;
   }
 
@@ -113,6 +149,13 @@ defineProps<Props>();
   .app-transition-header-enter-to,
   .app-transition-header-leave-from,
   .app-transition-header-leave-to {
+    grid-template-rows: 1fr;
+  }
+
+  .app-transition-header-enter-from .app-transition-header__content,
+  .app-transition-header-enter-to .app-transition-header__content,
+  .app-transition-header-leave-from .app-transition-header__content,
+  .app-transition-header-leave-to .app-transition-header__content {
     opacity: 1;
     transform: none;
   }
