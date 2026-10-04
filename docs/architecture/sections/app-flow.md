@@ -68,10 +68,10 @@ src
 ├── core
 │   └── app
 │       └── setup
-│           ├── setup.runner.ts
-│           ├── setup.state.ts
-│           ├── setup.type.ts
-│           └── useSetup.ts
+│           ├── setupLifecycle.runner.ts
+│           ├── setupLifecycle.state.ts
+│           ├── setupLifecycle.type.ts
+│           └── useSetupLifecycle.ts
 │
 └── app
     └── setup
@@ -84,7 +84,7 @@ src
             └── view.setup.ts
 ```
 
-### `core/app/setup`
+### `core/app/setup/lifecycle`
 
 Содержит общий контракт lifecycle, runner, внутреннее состояние setup и reactive API состояния.
 
@@ -112,7 +112,7 @@ Registry является composition point и может меняться по 
 
 Setup-модуль должен координировать систему через её публичный API, а не дублировать внутреннюю business/domain логику.
 
-UI получает reactive состояние lifecycle через `useSetup` и не зависит от внутренней реализации runner.
+UI получает reactive состояние lifecycle через `useSetupLifecycle` и не зависит от внутренней реализации runner.
 
 ## App Readiness
 
@@ -277,7 +277,7 @@ setup.run()
     └── blocking setup = error
 ```
 
-Когда после retry все blocking setup становятся `loaded`, `useSetup().isReady` автоматически становится `true`.
+Когда после retry все blocking setup становятся `loaded`, `useSetupLifecycle().isReady` автоматически становится `true`.
 
 ## Router
 
@@ -573,11 +573,11 @@ setup module
 
 ## Базовые Правила
 
-1. Универсальный setup lifecycle живёт в `core/app/setup`, а setup конкретных систем приложения — в `app/setup`.
+1. Универсальный setup lifecycle живёт в `core/app/setup/lifecycle`, а setup конкретных систем приложения — в `app/setup`.
 2. `preMount` используется для работы, обязательной до mount.
 3. Blocking `postMount` определяет app readiness.
 4. Background `postMount` не блокирует основной UI.
-5. `core/app/setup` не знает о конкретных системах приложения.
+5. `core/app/setup/lifecycle` не знает о конкретных системах приложения.
 6. Registry является composition point setup-модулей.
 7. View остаётся точкой сборки route screen.
 8. Feature инкапсулирует сценарии и переиспользуемые app-композиции.
@@ -591,7 +591,7 @@ setup module
 Основные app-области:
 
 ```text
-src/core/app/setup
+src/core/app/setup/lifecycle
 src/app/setup
 src/app/router
 src/app/layouts
