@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue';
-import backgroundLight from '@/assets/images/background/bgLight.png';
-import backgroundDark from '@/assets/images/background/bgDark.png';
+import backgroundLight from '@/assets/images/background/bgLight.webp';
+import backgroundDark from '@/assets/images/background/bgDark.webp';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
 import { LibScheduler } from '@/core/lib/scheduler';
 import { ToolSystem } from '@/core/platform';
