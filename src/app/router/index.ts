@@ -10,9 +10,8 @@ import { routeGame } from './routes/game';
 import { routeMenu } from './routes/menu';
 import { routeSettings } from './routes/settings';
 import { routePreGame } from './routes/preGame';
-
-const LayoutRoot = () => import('@/app/layouts/LayoutRoot.vue');
-const LayoutBase = () => import('@/app/layouts/LayoutBase.vue');
+import LayoutRoot from '@/app/layouts/LayoutRoot.vue';
+import LayoutBase from '@/app/layouts/LayoutBase.vue';
 
 export const rootRoute: RouteRecordRaw = {
   path: '/',
