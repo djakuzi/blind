@@ -15,14 +15,7 @@ const props = defineProps<PropsAppHeaderRailTitle>();
       class="app-header-rail-title__connector app-header-rail-title__connector--left"
       aria-hidden="true"
     >
-      <svg
-        class="app-header-rail-title__connector-svg"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-      >
-        <line x1="0" y1="0" x2="100" y2="100" />
-      </svg>
-
+      <span class="app-header-rail-title__diagonal" />
       <span class="app-header-rail-title__dot" />
     </span>
 
@@ -37,14 +30,7 @@ const props = defineProps<PropsAppHeaderRailTitle>();
       class="app-header-rail-title__connector app-header-rail-title__connector--right"
       aria-hidden="true"
     >
-      <svg
-        class="app-header-rail-title__connector-svg"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-      >
-        <line x1="100" y1="0" x2="0" y2="100" />
-      </svg>
-
+      <span class="app-header-rail-title__diagonal" />
       <span class="app-header-rail-title__dot" />
     </span>
 
@@ -58,6 +44,8 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   --cp-header-rail-title-line-width: var(--app-border-width-thin);
   --cp-header-rail-title-junction-y: 50%;
   --cp-header-rail-title-connector-width: 2.5rem;
+  --cp-header-rail-title-diagonal-length: 3.875rem;
+  --cp-header-rail-title-diagonal-angle: 49.75deg;
   --cp-header-rail-title-dot-size: 0.5rem;
 
   display: flex;
@@ -80,24 +68,25 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   width: var(--cp-header-rail-title-connector-width);
 }
 
-.app-header-rail-title__connector-svg {
+.app-header-rail-title__diagonal {
   position: absolute;
   top: var(--cp-header-rail-title-junction-y);
-  right: 0;
-  bottom: calc(var(--cp-header-rail-title-line-width) / 2);
-  left: 0;
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-  shape-rendering: geometricPrecision;
+  z-index: 0;
+  width: var(--cp-header-rail-title-diagonal-length);
+  height: var(--cp-header-rail-title-line-width);
+  background: var(--cp-header-rail-title-line-color);
 }
 
-.app-header-rail-title__connector-svg line {
-  stroke: var(--cp-header-rail-title-line-color);
-  stroke-width: var(--cp-header-rail-title-line-width);
-  stroke-linecap: butt;
-  vector-effect: non-scaling-stroke;
+.app-header-rail-title__connector--left .app-header-rail-title__diagonal {
+  left: 0;
+  transform: translateY(-50%) rotate(var(--cp-header-rail-title-diagonal-angle));
+  transform-origin: left center;
+}
+
+.app-header-rail-title__connector--right .app-header-rail-title__diagonal {
+  right: 0;
+  transform: translateY(-50%) rotate(calc(var(--cp-header-rail-title-diagonal-angle) * -1));
+  transform-origin: right center;
 }
 
 .app-header-rail-title__dot {
