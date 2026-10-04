@@ -66,7 +66,7 @@ function handleComplete() {
     :max-width="maxWidth"
     @complete="handleComplete"
   >
-    <template #default="{ progressRatio, isProgressActive, isHolding, isComplete }">
+    <template #default="{ isProgressActive, isHolding, isComplete }">
       <AppCard
         class="app-card-hold"
         :class="{
@@ -90,13 +90,12 @@ function handleComplete() {
         <AppBloodFill
           :flow-front-duration="flowFrontDuration"
           :is-active="isProgressActive"
-          :progress-ratio="progressRatio"
           :wave-height="waveHeight"
           :wave-length-scale="waveLengthScale"
         />
 
         <div class="app-card-hold__content">
-          <slot :is-holding="isHolding" :is-complete="isComplete" :progress-ratio="progressRatio" />
+          <slot :is-holding="isHolding" :is-complete="isComplete" />
         </div>
       </AppCard>
     </template>
