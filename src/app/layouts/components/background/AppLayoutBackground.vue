@@ -3,6 +3,7 @@ import { computed, reactive, ref, watch } from 'vue';
 import backgroundLight from '@/assets/images/background/bgLight.png';
 import backgroundDark from '@/assets/images/background/bgDark.png';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
+import { LibScheduler } from '@/core/lib/scheduler';
 import { ToolSystem } from '@/core/platform';
 
 type tThemeMode = ToolSystem.tSystemThemeMode;
@@ -32,6 +33,7 @@ const isLoaded = reactive<Record<tThemeMode, boolean>>({
   dark: false,
 });
 
+const scheduledThemeLoads = new Set<tThemeMode>();
 const displayedThemeMode = ref<tThemeMode>(resolvedThemeMode.value);
 
 const backgroundSize = computed(() => `${Math.max(1, props.tileWidth)}px auto`);
@@ -44,14 +46,32 @@ function loadTheme(themeMode: tThemeMode) {
   shouldLoad[themeMode] = true;
 }
 
+async function scheduleThemeLoad(themeMode: tThemeMode) {
+  if (shouldLoad[themeMode] || scheduledThemeLoads.has(themeMode)) {
+    return;
+  }
+
+  scheduledThemeLoads.add(themeMode);
+
+  await LibScheduler.waitForIdle({
+    delay: 320,
+    timeout: 1500,
+  });
+
+  scheduledThemeLoads.delete(themeMode);
+
+  if (!shouldLoad[themeMode]) {
+    loadTheme(themeMode);
+  }
+}
+
 function handleLoad(themeMode: tThemeMode) {
   isLoaded[themeMode] = true;
 
   if (resolvedThemeMode.value === themeMode) {
     displayedThemeMode.value = themeMode;
+    scheduleThemeLoad(getOppositeThemeMode(themeMode));
   }
-
-  loadTheme(getOppositeThemeMode(themeMode));
 }
 
 function isThemeVisible(themeMode: tThemeMode) {
@@ -65,6 +85,7 @@ watch(
 
     if (isLoaded[themeMode]) {
       displayedThemeMode.value = themeMode;
+      scheduleThemeLoad(getOppositeThemeMode(themeMode));
     }
   },
   {
@@ -115,7 +136,7 @@ watch(
   background-size: v-bind(backgroundSize);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 320ms ease;
+  transition: opacity var(--app-motion-duration-slower) var(--app-motion-ease-default);
 }
 
 .app-layout-background__layer--visible {
