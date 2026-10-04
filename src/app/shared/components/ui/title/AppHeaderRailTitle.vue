@@ -15,6 +15,14 @@ const props = defineProps<PropsAppHeaderRailTitle>();
       class="app-header-rail-title__connector app-header-rail-title__connector--left"
       aria-hidden="true"
     >
+      <svg
+        class="app-header-rail-title__connector-svg"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <line x1="0" y1="0" x2="100" y2="100" />
+      </svg>
+
       <span class="app-header-rail-title__dot" />
     </span>
 
@@ -29,6 +37,14 @@ const props = defineProps<PropsAppHeaderRailTitle>();
       class="app-header-rail-title__connector app-header-rail-title__connector--right"
       aria-hidden="true"
     >
+      <svg
+        class="app-header-rail-title__connector-svg"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <line x1="100" y1="0" x2="0" y2="100" />
+      </svg>
+
       <span class="app-header-rail-title__dot" />
     </span>
 
@@ -39,6 +55,7 @@ const props = defineProps<PropsAppHeaderRailTitle>();
 <style scoped>
 .app-header-rail-title {
   --cp-header-rail-title-line-color: var(--app-color-text-tertiary);
+  --cp-header-rail-title-line-width: var(--app-border-width-thin);
   --cp-header-rail-title-junction-y: 50%;
   --cp-header-rail-title-connector-width: 2.5rem;
   --cp-header-rail-title-dot-size: 0.5rem;
@@ -53,7 +70,7 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   align-self: center;
   flex: 1 1 0;
   min-width: 0;
-  height: var(--app-border-width-thin);
+  height: var(--cp-header-rail-title-line-width);
   background: var(--cp-header-rail-title-line-color);
 }
 
@@ -63,32 +80,24 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   width: var(--cp-header-rail-title-connector-width);
 }
 
-.app-header-rail-title__connector::after {
-  content: '';
+.app-header-rail-title__connector-svg {
   position: absolute;
   top: var(--cp-header-rail-title-junction-y);
   right: 0;
-  bottom: 0;
+  bottom: calc(var(--cp-header-rail-title-line-width) / 2);
   left: 0;
-  background: var(--cp-header-rail-title-line-color);
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  shape-rendering: geometricPrecision;
 }
 
-.app-header-rail-title__connector--left::after {
-  clip-path: polygon(
-    0 0,
-    var(--app-border-width-thin) 0,
-    100% calc(100% - var(--app-border-width-thin)),
-    100% 100%
-  );
-}
-
-.app-header-rail-title__connector--right::after {
-  clip-path: polygon(
-    calc(100% - var(--app-border-width-thin)) 0,
-    100% 0,
-    0 100%,
-    0 calc(100% - var(--app-border-width-thin))
-  );
+.app-header-rail-title__connector-svg line {
+  stroke: var(--cp-header-rail-title-line-color);
+  stroke-width: var(--cp-header-rail-title-line-width);
+  stroke-linecap: butt;
+  vector-effect: non-scaling-stroke;
 }
 
 .app-header-rail-title__dot {
@@ -119,7 +128,9 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   min-width: 0;
   max-width: 100%;
   padding: 0 var(--app-space-5) var(--app-space-2);
-  border-bottom: var(--app-border-width-thin) var(--app-border-style-solid) var(--cp-header-rail-title-line-color);
+  border-bottom: var(--cp-header-rail-title-line-width)
+    var(--app-border-style-solid)
+    var(--cp-header-rail-title-line-color);
 }
 
 .app-header-rail-title__title {
