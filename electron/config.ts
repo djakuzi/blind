@@ -2,6 +2,15 @@ export const ELECTRON_CONFIG = {
   bridgeKey: 'blind',
   ipcPrefix: 'blind',
 
+  renderer: {
+    directory: 'dist',
+    entryFile: 'index.html',
+    protocol: {
+      scheme: 'blind',
+      host: 'app',
+    },
+  },
+
   filesystem: {
     directory: 'data',
   },

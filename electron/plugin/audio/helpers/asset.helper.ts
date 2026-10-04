@@ -1,5 +1,6 @@
 import { dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { HelperRenderer } from '../../../shared/helpers/renderer.helper';
 import { isPathOutsideRoot } from '../../../shared/helpers/path.helper';
 
 function resolveFileAssetUrl(baseUrl: URL, src: string) {
@@ -33,6 +34,10 @@ function resolveAssetUrl(rendererUrl: string, src: string) {
   }
 
   const baseUrl = new URL(rendererUrl);
+
+  if (HelperRenderer.isRendererUrl(baseUrl)) {
+    return new URL(src, baseUrl).toString();
+  }
 
   if (baseUrl.protocol === 'file:') {
     return resolveFileAssetUrl(baseUrl, src);
