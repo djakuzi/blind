@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import type { PropsAppText } from '@/app/shared/components/atoms/typography/AppText.vue';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 
@@ -37,8 +38,6 @@ const isOverflowing = ref(false);
 const loopDistance = ref(0);
 const effectivePaddingX = ref<string>();
 
-let resizeObserver: ResizeObserver | undefined;
-
 const isMarqueeReady = computed(() => isOverflowing.value && loopDistance.value > 0);
 const isMarqueePlaying = computed(() => isMarqueeReady.value && props.play);
 const contentPaddingX = computed(() => resolvePaddingValue(props.paddingX));
@@ -57,50 +56,16 @@ const marqueeStyle = computed(() => ({
   '--cp-marquee-text-duration': marqueeDuration.value,
 }));
 
-function resetMeasurement() {
-  isOverflowing.value = false;
-  loopDistance.value = 0;
-  effectivePaddingX.value = undefined;
-}
-
-function stopObserving() {
-  resizeObserver?.disconnect();
-  resizeObserver = undefined;
-}
-
-function startObserving() {
-  stopObserving();
-
-  if (typeof ResizeObserver === 'undefined') {
-    return;
-  }
-
-  resizeObserver = new ResizeObserver(() => {
-    updateMarquee();
-  });
-
-  if (viewportRef.value) {
-    resizeObserver.observe(viewportRef.value);
-  }
-
-  if (textRef.value) {
-    resizeObserver.observe(textRef.value);
-  }
-}
-
 async function updateMarquee() {
-  if (!props.play) {
-    resetMeasurement();
-    return;
-  }
-
   const viewport = viewportRef.value;
   const content = contentRef.value;
   const text = textRef.value;
   const paddingMeasure = paddingMeasureRef.value;
 
   if (!viewport || !content || !text || !paddingMeasure) {
-    resetMeasurement();
+    isOverflowing.value = false;
+    loopDistance.value = 0;
+    effectivePaddingX.value = undefined;
     return;
   }
 
@@ -136,34 +101,21 @@ async function updateMarquee() {
 }
 
 watch(
-  () => [
-    props.play,
-    props.text,
-    props.fontSize,
-    props.fontWeight,
-    props.uppercase,
-    props.paddingX,
-    props.minPaddingX,
-  ],
+  () => [props.text, props.fontSize, props.fontWeight, props.uppercase, props.paddingX, props.minPaddingX],
   async () => {
-    if (!props.play) {
-      stopObserving();
-      resetMeasurement();
-      return;
-    }
-
     await nextTick();
-
-    startObserving();
     updateMarquee();
-  },
-  {
-    immediate: true,
-    flush: 'post',
   },
 );
 
-onBeforeUnmount(stopObserving);
+useResizeObserver([viewportRef, textRef], () => {
+  updateMarquee();
+});
+
+onMounted(async () => {
+  await nextTick();
+  updateMarquee();
+});
 </script>
 
 <template>
@@ -171,14 +123,12 @@ onBeforeUnmount(stopObserving);
     ref="viewportRef"
     class="app-marquee-text"
     :class="{
-      'app-marquee-text--static': !play,
       'app-marquee-text--overflowing': isMarqueeReady,
       'app-marquee-text--playing': isMarqueePlaying,
     }"
     :style="marqueeStyle"
   >
     <span
-      v-if="play"
       ref="paddingMeasureRef"
       class="app-marquee-text__padding-measure"
       aria-hidden="true"
@@ -219,10 +169,10 @@ onBeforeUnmount(stopObserving);
 
 <style scoped>
 .app-marquee-text {
-  position: relative;
   display: block;
-  max-width: 100%;
   min-width: 0;
+  position: relative;
+  max-width: 100%;
   overflow: hidden;
 }
 
@@ -253,18 +203,6 @@ onBeforeUnmount(stopObserving);
 
 .app-marquee-text__content {
   display: inline-block;
-}
-
-.app-marquee-text--static .app-marquee-text__track,
-.app-marquee-text--static .app-marquee-text__item,
-.app-marquee-text--static .app-marquee-text__content {
-  display: block;
-  min-width: 0;
-}
-
-.app-marquee-text--static .app-marquee-text__item {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .app-marquee-text--overflowing {
