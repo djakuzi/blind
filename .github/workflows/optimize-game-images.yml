@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: development
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -55,12 +56,12 @@ jobs:
           )
           PY
 
-      - name: Upload optimized images
-        uses: actions/upload-artifact@v4
-        with:
-          name: optimized-game-images
-          path: |
-            public/game/gameModes.json
-            public/game/images/gameMode/*.webp
-          if-no-files-found: error
-          retention-days: 1
+      - name: Push optimized image branch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B automation/optimized-game-images
+          git add public/game/gameModes.json public/game/images/gameMode/*.webp
+          git commit -m "chore: stage optimized game images"
+          git push --force origin automation/optimized-game-images
