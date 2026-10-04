@@ -51,6 +51,7 @@ function handleModeComplete() {
           :disabled="!active"
           :image-loading="active ? 'eager' : 'lazy'"
           :image-fetch-priority="active ? 'high' : 'low'"
+          :image-should-load="Math.abs(index - activeIndex) <= 1"
           :options-accessibility-label="preGameLocale.modeOptionsAccessibilityLabel"
           :connection-types-accessibility-label="preGameLocale.connectionTypesAccessibilityLabel"
           @complete="handleModeComplete"
