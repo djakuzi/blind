@@ -3,15 +3,6 @@ interface iWaitForIdleOptions {
   timeout?: number;
 }
 
-interface iIdleWindow extends Window {
-  requestIdleCallback?: (
-    callback: () => void,
-    options?: {
-      timeout?: number;
-    },
-  ) => number;
-}
-
 function waitForIdle(options: iWaitForIdleOptions = {}) {
   const delay = Math.max(0, options.delay ?? 0);
   const timeout = Math.max(0, options.timeout ?? 1000);
@@ -22,12 +13,15 @@ function waitForIdle(options: iWaitForIdleOptions = {}) {
 
   return new Promise<void>((resolve) => {
     function requestIdle() {
-      const idleWindow = window as iIdleWindow;
-
-      if (typeof idleWindow.requestIdleCallback === 'function') {
-        idleWindow.requestIdleCallback(resolve, {
-          timeout,
-        });
+      if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(
+          () => {
+            resolve();
+          },
+          {
+            timeout,
+          },
+        );
         return;
       }
 
