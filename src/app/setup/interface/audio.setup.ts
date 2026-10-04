@@ -3,8 +3,8 @@ import type { Pinia } from 'pinia';
 import { useStaticLocale } from '@/app/features/locale/composables/useStaticLocale';
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import { useSettingsStore } from '@/app/stores/settings/settings.store';
-import { retryPostMountSetup } from '@/core/app/setup/setup.runner';
-import type { iSetup } from '@/core/app/setup/setup.type';
+import { retryPostMountSetup } from '@/core/app/setup/lifecycle/setupLifecycle.runner';
+import type { iSetup } from '@/core/app/setup/lifecycle/setupLifecycle.type';
 import { MediaAudio } from '@/core/media/audio';
 import { ToolAudio } from '@/core/platform';
 
