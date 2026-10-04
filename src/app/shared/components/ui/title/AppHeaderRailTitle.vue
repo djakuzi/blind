@@ -15,14 +15,6 @@ const props = defineProps<PropsAppHeaderRailTitle>();
       class="app-header-rail-title__connector app-header-rail-title__connector--left"
       aria-hidden="true"
     >
-      <svg
-        class="app-header-rail-title__connector-svg"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-      >
-        <line x1="0" y1="0" x2="100" y2="100" />
-      </svg>
-
       <span class="app-header-rail-title__dot" />
     </span>
 
@@ -37,14 +29,6 @@ const props = defineProps<PropsAppHeaderRailTitle>();
       class="app-header-rail-title__connector app-header-rail-title__connector--right"
       aria-hidden="true"
     >
-      <svg
-        class="app-header-rail-title__connector-svg"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-      >
-        <line x1="0" y1="100" x2="100" y2="0" />
-      </svg>
-
       <span class="app-header-rail-title__dot" />
     </span>
 
@@ -77,25 +61,34 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   position: relative;
   flex: 0 0 var(--cp-header-rail-title-connector-width);
   width: var(--cp-header-rail-title-connector-width);
-  min-height: 100%;
 }
 
-.app-header-rail-title__connector-svg {
+.app-header-rail-title__connector::after {
+  content: '';
   position: absolute;
   top: var(--cp-header-rail-title-junction-y);
   right: 0;
   bottom: 0;
   left: 0;
-  display: block;
-  width: 100%;
-  height: calc(100% - var(--cp-header-rail-title-junction-y));
-  overflow: visible;
+  background: var(--cp-header-rail-title-line-color);
 }
 
-.app-header-rail-title__connector-svg line {
-  stroke: var(--cp-header-rail-title-line-color);
-  stroke-width: var(--app-border-width-thin);
-  vector-effect: non-scaling-stroke;
+.app-header-rail-title__connector--left::after {
+  clip-path: polygon(
+    0 0,
+    var(--app-border-width-thin) 0,
+    100% calc(100% - var(--app-border-width-thin)),
+    100% 100%
+  );
+}
+
+.app-header-rail-title__connector--right::after {
+  clip-path: polygon(
+    calc(100% - var(--app-border-width-thin)) 0,
+    100% 0,
+    0 100%,
+    0 calc(100% - var(--app-border-width-thin))
+  );
 }
 
 .app-header-rail-title__dot {
