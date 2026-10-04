@@ -1,6 +1,7 @@
 import type { iElectronAudioPlugin } from '../plugin/audio/type';
 import type { iElectronFilesystemPlugin } from '../plugin/filesystem/type';
 import type { iElectronStoragePlugin } from '../plugin/storage/type';
+import type { iElectronSystemPlugin } from '../plugin/system/type';
 import type { iElectronViewPlugin } from '../plugin/view/type';
 import type { tElectronPlatform } from './platform.type';
 
@@ -14,5 +15,6 @@ export interface iElectronBridge {
   audio: iElectronAudioPlugin;
   filesystem: iElectronFilesystemPlugin;
   storage: iElectronStoragePlugin;
+  system: iElectronSystemPlugin;
   view: iElectronViewPlugin;
 }
