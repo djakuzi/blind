@@ -22,7 +22,7 @@ function handleBack() {
 
 <template>
   <header class="layout-header">
-    <AppFlex class="layout-header__content" align="center" justify="between" width="100%">
+    <AppFlex align="center" justify="between" width="100%">
       <AppButtonIcon
         class="layout-header__back"
         group="back"
@@ -55,8 +55,6 @@ function handleBack() {
 .layout-header {
   --cp-layout-header-control-size: 7.5rem;
 
-  position: relative;
-  isolation: isolate;
   display: flex;
   align-items: center;
   width: 100%;
@@ -64,46 +62,6 @@ function handleBack() {
     var(--cp-layout-padding-vertical, 0px)
     var(--cp-layout-padding-horizontal, 0px)
     var(--app-space-2);
-}
-
-.layout-header::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    #000 0%,
-    rgba(0, 0, 0, 0.78) 90%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg,
-    #000 0%,
-    rgba(0, 0, 0, 0.78) 90%,
-    transparent 100%
-  );
-}
-
-.layout-header::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    var(--app-color-surface-glass-top) 0,
-    var(--app-color-surface-glass-bottom) 100%
-  );
-}
-
-.layout-header__content {
-  position: relative;
-  z-index: 2;
 }
 
 .layout-header__title {

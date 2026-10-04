@@ -9,6 +9,8 @@ defineProps<Props>();
 <template>
   <Transition name="app-transition-header">
     <div v-if="show" class="app-transition-header">
+      <div class="app-transition-header__surface" aria-hidden="true" />
+
       <div class="app-transition-header__content">
         <slot />
       </div>
@@ -18,6 +20,7 @@ defineProps<Props>();
 
 <style scoped>
 .app-transition-header {
+  position: relative;
   display: grid;
   grid-template-rows: 1fr;
   flex: 0 0 auto;
@@ -26,7 +29,49 @@ defineProps<Props>();
   margin-inline: calc(var(--cp-layout-padding-horizontal, 0px) * -1);
 }
 
+.app-transition-header__surface {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.app-transition-header__surface::before,
+.app-transition-header__surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.app-transition-header__surface::before {
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    rgba(0, 0, 0, 0.78) 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    rgba(0, 0, 0, 0.78) 90%,
+    transparent 100%
+  );
+}
+
+.app-transition-header__surface::after {
+  background: linear-gradient(
+    180deg,
+    var(--app-color-surface-glass-top) 0,
+    var(--app-color-surface-glass-bottom) 100%
+  );
+}
+
 .app-transition-header__content {
+  position: relative;
+  z-index: 1;
   min-height: 0;
   overflow: hidden;
   transform-origin: top center;
