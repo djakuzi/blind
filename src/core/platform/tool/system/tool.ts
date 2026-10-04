@@ -1,5 +1,9 @@
 import { HelperScale } from './helpers/scale.helper';
-import type { iSystemAdapter, tSystemThemeMode } from './type';
+import type {
+  iSystemAdapter,
+  tSystemThemeMode,
+  tSystemThemeSource,
+} from './type';
 
 export function createSystemTool(adapter: iSystemAdapter) {
   async function getSystemLanguage() {
@@ -22,9 +26,14 @@ export function createSystemTool(adapter: iSystemAdapter) {
     return adapter.prefersDarkTheme() ? 'dark' : 'light';
   }
 
+  async function setThemeSource(themeSource: tSystemThemeSource) {
+    return adapter.setThemeSource(themeSource);
+  }
+
   return {
     getSystemLanguage,
     getSystemScale,
     getPreferredThemeMode,
+    setThemeSource,
   };
 }

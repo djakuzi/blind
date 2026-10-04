@@ -16,4 +16,12 @@ export const DesktopSystemAdapter: iSystemAdapter = {
   },
 
   prefersDarkTheme: HelperBrowserSystem.prefersDarkTheme,
+
+  async setThemeSource(themeSource) {
+    await HelperBridge.getCapability('system').setThemeSource(themeSource);
+
+    return {
+      isHandled: true,
+    };
+  },
 };

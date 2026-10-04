@@ -11,4 +11,10 @@ export const BrowserSystemAdapter: iSystemAdapter = {
   },
 
   prefersDarkTheme: HelperBrowserSystem.prefersDarkTheme,
+
+  async setThemeSource() {
+    return {
+      isHandled: false,
+    };
+  },
 };

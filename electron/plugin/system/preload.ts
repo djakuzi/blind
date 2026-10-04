@@ -10,4 +10,8 @@ export const SystemPreloadPlugin: iElectronSystemPlugin = {
   getScale() {
     return ipcRenderer.invoke(SYSTEM_CHANNEL.getScale);
   },
+
+  setThemeSource(themeSource) {
+    return ipcRenderer.invoke(SYSTEM_CHANNEL.setThemeSource, themeSource);
+  },
 };
