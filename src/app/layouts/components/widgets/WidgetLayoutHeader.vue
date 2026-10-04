@@ -72,25 +72,34 @@ function handleBack() {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(
+  -webkit-backdrop-filter: blur(1.5rem) saturate(145%);
+  backdrop-filter: blur(1.5rem) saturate(145%);
+  -webkit-mask-image: linear-gradient(
     180deg,
-    var(--app-color-surface-glass-top) 0%,
-    var(--app-color-surface-glass-bottom) 100%
+    #000 0%,
+    rgba(0, 0, 0, 0.78) 42%,
+    transparent 100%
   );
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
+  mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    rgba(0, 0, 0, 0.78) 42%,
+    transparent 100%
+  );
 }
 
 .layout-header::after {
   content: '';
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   z-index: 1;
-  height: var(--app-border-width-thin);
   pointer-events: none;
-  background: var(--app-color-surface-glass-divider);
+  background: linear-gradient(
+    180deg,
+    var(--app-color-surface-glass-top) 0%,
+    var(--app-color-surface-glass-bottom) 100%
+  );
+  box-shadow: inset 0 1px 0 var(--app-color-surface-glass-highlight);
 }
 
 .layout-header__content {
