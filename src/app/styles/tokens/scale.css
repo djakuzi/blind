@@ -1,17 +1,30 @@
 :root {
   --app-scale: 1;
-  --app-root-font-size-base: 1vmin;
+
+  /*
+   * Design reference viewport: 2560 × 1318.
+   * At the reference viewport the base root font size is 13.839px,
+   * which matches the previous 1.05vmin scale.
+   */
+  --app-ui-reference-width: 2560;
+  --app-ui-reference-height: 1318;
+  --app-ui-reference-root-font-size-base: 13.839px;
+
+  /*
+   * Keep the UI viewport at the reference aspect ratio and fit it
+   * completely inside the physical viewport.
+   *
+   * 2560 / 1318 = 1.942336874...
+   * 1318 / 2560 = 0.51484375
+   */
+  --app-ui-viewport-width: min(100vw, 194.2336874dvh);
+  --app-ui-viewport-height: min(100dvh, 51.484375vw);
+
+  /*
+   * One uniform scale for the whole UI.
+   * Width limits the scale on narrower viewports, height on wider ones.
+   * At 2560 × 1318 both expressions resolve to 13.839px.
+   */
+  --app-root-font-size-base: min(0.5405859375vw, 1.05dvh);
   --app-root-font-size: calc(var(--app-root-font-size-base) * var(--app-scale));
-}
-
-@media (min-aspect-ratio: 16 / 9) {
-  :root {
-    --app-root-font-size-base: 1.05vmin;
-  }
-}
-
-@media (min-aspect-ratio: 21 / 9) {
-  :root {
-    --app-root-font-size-base: 1.1vmin;
-  }
 }
