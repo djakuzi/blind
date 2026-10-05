@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
-import UiCardGameMode from '@/app/features/game/ui/UiCardGameMode.vue';
+import UiCardGameMode from '@/app/features/gameMode/ui/UiCardGameMode.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
 import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';

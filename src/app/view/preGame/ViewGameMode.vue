@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import WidgetSliderGameMode from '@/app/features/game/widgets/WidgetSliderGameMode.vue';
+import WidgetSliderGameMode from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 </script>
 
