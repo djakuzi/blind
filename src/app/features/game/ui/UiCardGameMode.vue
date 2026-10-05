@@ -18,10 +18,16 @@ export interface PropsUiCardGameMode {
   optionsAccessibilityLabel: string;
   connectionTypesAccessibilityLabel: string;
   disabled?: boolean;
+  imageLoading?: 'eager' | 'lazy';
+  imageFetchPriority?: 'high' | 'low' | 'auto';
+  imageShouldLoad?: boolean;
 }
 
 const props = withDefaults(defineProps<PropsUiCardGameMode>(), {
   disabled: false,
+  imageLoading: 'lazy',
+  imageFetchPriority: 'low',
+  imageShouldLoad: true,
 });
 
 const emit = defineEmits<{
@@ -116,7 +122,10 @@ function handleComplete() {
           max-width="30%"
           height="auto"
           object-fit="contain"
-          loading="eager"
+          aspect-ratio="1 / 1"
+          :loading="imageLoading"
+          :fetch-priority="imageFetchPriority"
+          :should-load="imageShouldLoad"
         />
       </div>
 

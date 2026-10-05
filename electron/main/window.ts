@@ -1,6 +1,7 @@
 import { BrowserWindow, screen } from 'electron';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { HelperRenderer } from '../shared/helpers/renderer.helper';
 
 const CURRENT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 const WINDOWED_SCALE = 0.9;
@@ -47,7 +48,7 @@ export async function createMainWindow() {
     return window;
   }
 
-  await window.loadFile(join(CURRENT_DIRECTORY, '../dist/index.html'));
+  await window.loadURL(HelperRenderer.getRendererEntryUrl());
 
   return window;
 }

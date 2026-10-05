@@ -2,8 +2,8 @@
   {
     "key": "DUEL",
     "img": {
-      "dark": "/game/images/gameMode/duel-dark.png",
-      "light": "/game/images/gameMode/duel-light.png"
+      "dark": "/game/images/gameMode/duel-dark.webp",
+      "light": "/game/images/gameMode/duel-light.webp"
     },
     "options": {
       "teamSize": 1,
@@ -11,13 +11,17 @@
       "rounds": 3,
       "winCondition": "single-hit"
     },
-    "typeConnection": ["BLUETOOTH", "LAN", "ONLINE"]
+    "typeConnection": [
+      "BLUETOOTH",
+      "LAN",
+      "ONLINE"
+    ]
   },
   {
     "key": "COMBAT",
     "img": {
-      "dark": "/game/images/gameMode/combat-dark.png",
-      "light": "/game/images/gameMode/combat-light.png"
+      "dark": "/game/images/gameMode/combat-dark.webp",
+      "light": "/game/images/gameMode/combat-light.webp"
     },
     "options": {
       "teamSize": 1,
@@ -25,13 +29,17 @@
       "rounds": 3,
       "winCondition": "health"
     },
-    "typeConnection": ["BLUETOOTH", "LAN", "ONLINE"]
+    "typeConnection": [
+      "BLUETOOTH",
+      "LAN",
+      "ONLINE"
+    ]
   },
   {
     "key": "CLASH",
     "img": {
-      "dark": "/game/images/gameMode/clash-dark.png",
-      "light": "/game/images/gameMode/clash-light.png"
+      "dark": "/game/images/gameMode/clash-dark.webp",
+      "light": "/game/images/gameMode/clash-light.webp"
     },
     "options": {
       "teamSize": 2,
@@ -39,13 +47,16 @@
       "rounds": 3,
       "winCondition": "single-hit"
     },
-    "typeConnection": ["LAN", "ONLINE"]
+    "typeConnection": [
+      "LAN",
+      "ONLINE"
+    ]
   },
   {
     "key": "BATTLE",
     "img": {
-      "dark": "/game/images/gameMode/battle-dark.png",
-      "light": "/game/images/gameMode/battle-light.png"
+      "dark": "/game/images/gameMode/battle-dark.webp",
+      "light": "/game/images/gameMode/battle-light.webp"
     },
     "options": {
       "teamSize": 2,
@@ -53,6 +64,9 @@
       "rounds": 3,
       "winCondition": "health"
     },
-    "typeConnection": ["LAN", "ONLINE"]
+    "typeConnection": [
+      "LAN",
+      "ONLINE"
+    ]
   }
 ]

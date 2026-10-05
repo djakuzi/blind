@@ -1,17 +1,15 @@
 :root {
   --app-scale: 1;
-  --app-root-font-size-base: 1vmin;
+
+  /*
+   * Design reference: 2560 × 1318.
+   *
+   * At the reference viewport both scale candidates resolve to 13.839px,
+   * which preserves the previous 1.05vmin base size.
+   *
+   * Narrower / more square viewports are limited by width.
+   * Wider viewports are limited by height.
+   */
+  --app-root-font-size-base: min(0.5405859375vw, 1.05dvh);
   --app-root-font-size: calc(var(--app-root-font-size-base) * var(--app-scale));
-}
-
-@media (min-aspect-ratio: 16 / 9) {
-  :root {
-    --app-root-font-size-base: 1.05vmin;
-  }
-}
-
-@media (min-aspect-ratio: 21 / 9) {
-  :root {
-    --app-root-font-size-base: 1.1vmin;
-  }
 }

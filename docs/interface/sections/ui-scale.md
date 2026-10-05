@@ -1,116 +1,128 @@
 # Масштабирование интерфейса
 
-Раздел описывает базовую модель размеров UI в `blind`.
+Раздел описывает модель размеров UI в `blind`.
 
-Главный принцип: интерфейс адаптируется под доступное пространство экрана, а не под конкретные устройства. Масштабирование строится на `rem`, CSS variables и пользовательском `UI scale`.
+Главный принцип: интерфейс использует один общий масштаб размеров. Масштаб зависит одновременно от ширины и высоты viewport, но итоговое значение всегда одно — без независимых `scaleX` и `scaleY`.
 
-## Базовая модель
+Layout при этом продолжает занимать реальный viewport. Scale-система не создаёт отдельный виртуальный canvas и не меняет позиционирование layout-компонентов.
 
-Основная точка масштабирования:
+## Design reference
+
+Текущий интерфейс был визуально настроен в браузерном viewport:
+
+```text
+2560 × 1318
+```
+
+Этот viewport используется как design reference, чтобы новая scale-система не изменила существующие размеры UI.
+
+На reference прежняя логика давала:
+
+```text
+--app-root-font-size-base = 13.839px
+```
+
+Новая формула сохраняет то же значение.
+
+## Базовый масштаб
+
+В `src/app/styles/tokens/scale.css`:
 
 ```css
 :root {
   --app-scale: 1;
-  --app-root-font-size-base: 1vmin;
-  --app-root-font-size: calc(var(--app-root-font-size-base) * var(--app-scale));
+  --app-root-font-size-base: min(0.5405859375vw, 1.05dvh);
+  --app-root-font-size: calc(
+    var(--app-root-font-size-base) * var(--app-scale)
+  );
 }
 ```
 
-В `src/app/styles/core/root.css`:
-
-```css
-:root {
-  font-size: var(--app-root-font-size);
-}
-```
-
-После этого все размеры в `rem` автоматически зависят от viewport и пользовательского масштаба.
+Формула содержит два кандидата масштаба:
 
 ```text
-viewport
-↓
---app-root-font-size-base
-↓
---app-scale
-↓
---app-root-font-size
-↓
-rem
-↓
-design tokens
-↓
-components
+по ширине  → 0.5405859375vw
+по высоте  → 1.05dvh
 ```
 
-## Базовый размер UI
+Используется меньшее значение:
 
-`--app-root-font-size-base` задаёт базовую UI-единицу и зависит от viewport.
-
-При необходимости она меняется через media queries:
-
-```css
-@media (min-aspect-ratio: 16 / 9) {
-  :root {
-    --app-root-font-size-base: 1vmin;
-  }
-}
+```text
+width candidate ─┐
+                  ├── min() → один UI scale
+height candidate ┘
 ```
 
-Так как игра рассчитана на горизонтальную ориентацию, responsive-логика должна учитывать:
+Поэтому UI не растягивается отдельно по горизонтали и вертикали.
 
-- ширину и высоту viewport;
-- aspect ratio;
-- landscape-сценарии;
-- safe area;
-- способ ввода, если он влияет на hit area.
+На reference `2560 × 1318`:
 
-Не следует строить систему вокруг `phone / tablet / desktop`. Лучше использовать режимы доступного пространства:
+```text
+0.5405859375vw = 13.839px
+1.05dvh        = 13.839px
+```
 
-- compact landscape;
-- regular landscape;
-- wide;
-- ultrawide.
+То есть существующие размеры интерфейса сохраняются.
+
+## Поведение на разных aspect ratio
+
+На более узком или квадратном viewport ограничивающей становится ширина:
+
+```text
+4:3
+5:4
+часть tablet / foldable landscape
+→ scale определяется шириной
+```
+
+На широком viewport ограничивающей становится высота:
+
+```text
+16:9
+21:9
+32:9
+→ scale определяется высотой
+```
+
+Переход между этими режимами происходит непрерывно и не требует отдельных media queries для конкретных устройств или aspect ratio.
+
+Важно: масштаб размеров и layout — разные системы.
+
+`rem`-размеры масштабируются общей формулой, но сам layout продолжает использовать реальный viewport. Поэтому значения вроде `width: 90%`, `height: 100dvh`, flex-распределение и позиционирование относительно краёв используют фактическое доступное пространство экрана.
+
+Это намеренное поведение.
 
 ## UI Scale
 
-`--app-scale` — пользовательская настройка масштаба интерфейса:
+`--app-scale` — пользовательская настройка размера интерфейса:
 
 ```text
-Interface scale: 90% / 100% / 110% / 120%
+small   = 0.9
+default = 1
+large   = 1.1
 ```
 
-Она не должна использоваться для определения типа устройства.
+Она применяется один раз поверх базового viewport scale:
+
+```css
+--app-root-font-size: calc(
+  var(--app-root-font-size-base) * var(--app-scale)
+);
+```
+
+Например при `small = 0.9` на reference viewport:
 
 ```text
-mobile = 0.8
-tablet = 1
-desktop = 1.3
+13.839px × 0.9 = 12.4551px
 ```
 
-Размер viewport и пользовательский UI scale — разные задачи.
+Это совпадает с прежним значением root font size.
 
-`--app-scale` применяется только внутри:
+`--app-scale` не используется для определения типа устройства и не должен повторно применяться внутри токенов или компонентов.
 
-```css
---app-root-font-size: calc(var(--app-root-font-size-base) * var(--app-scale));
-```
+## Design tokens
 
-В остальных токенах повторно умножать значения на `--app-scale` нельзя, иначе масштаб применится дважды.
-
-## Design Tokens
-
-Размеры UI задаются через `rem`:
-
-```css
-:root {
-  --app-space-4: 1rem;
-  --app-padding-4: 1rem;
-  --app-font-size-md: 1rem;
-  --app-radius-md: 0.5rem;
-}
-```
-
-Компоненты используют токены вместо произвольных размеров:
+Размеры UI по возможности задаются через `rem` и project tokens:
 
 ```css
 .component {
@@ -120,92 +132,67 @@ desktop = 1.3
 }
 ```
 
-Для повторяемых UI-сущностей поверх primitive tokens добавляются semantic tokens:
+Через root font size синхронно масштабируются текст, controls, spacing, radius и другие rem-based значения.
 
-```css
-:root {
-  --app-layout-screen-padding: var(--app-space-6);
-  --app-control-height-md: var(--app-space-14);
-  --app-panel-width-md: 30rem;
-}
+Отдельные коэффициенты масштаба внутри компонентов добавлять не следует без конкретной причины.
+
+## Responsive layout
+
+Не нужно создавать отдельную scale-логику для:
+
+```text
+mobile
+tablet
+desktop
+4:3
+16:10
+16:9
+21:9
 ```
 
-Primitive tokens задают шкалу значений, semantic tokens — их роль в интерфейсе.
+Базовый размер UI уже адаптируется математически.
 
-## Responsive Layout
+Если конкретный компонент не помещается или плохо использует доступное пространство, это решается на уровне его layout, а не изменением глобальной scale-формулы.
 
-Визуальная адаптация должна выполняться в CSS:
-
-- `clamp()`;
-- `min()`;
-- `max()`;
-- media queries;
-- container queries.
-
-Не следует использовать JS только для изменения раскладки:
-
-```ts
-const isMobile = window.innerWidth < 768;
-```
-
-JS нужен только тогда, когда размер экрана меняет поведение приложения, а не только внешний вид.
-
-Breakpoints выбираются по моменту, когда ломается композиция, а не по названию устройства.
+Responsive-правила должны появляться только там, где действительно ломается композиция.
 
 ## Safe Area
 
-Safe area защищает UI от notch, скруглений экрана, home indicator и других системных зон.
-
-```css
-:root {
-  --app-safe-area-top: calc(env(safe-area-inset-top, 0px) + 1rem);
-  --app-safe-area-right: calc(env(safe-area-inset-right, 0px) + 1rem);
-  --app-safe-area-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
-  --app-safe-area-left: calc(env(safe-area-inset-left, 0px) + 1rem);
-}
-```
-
-`env(safe-area-inset-*)` уже содержит готовую CSS-длину и не масштабируется через `--app-scale`. Дополнительный `rem` задаёт внутренний отступ интерфейса.
+Safe area остаётся отдельной системой и защищает UI от notch, скруглений экрана, home indicator и других системных зон.
 
 Компоненты должны использовать project tokens:
 
 ```css
-.screen {
-  padding: var(--app-safe-area-vertical) var(--app-safe-area-horizontal);
-}
+var(--app-safe-area-top)
+var(--app-safe-area-right)
+var(--app-safe-area-bottom)
+var(--app-safe-area-left)
 ```
 
 Прямое использование `env(safe-area-inset-*)` внутри компонентов нежелательно.
 
 ## UI Scale и Render Scale
 
-Масштаб UI и качество рендера игры — независимые системы.
+UI scale и качество рендера игры — независимые системы.
 
-`--app-scale` влияет только на интерфейс:
+UI scale влияет на CSS-интерфейс:
 
 - меню;
 - настройки;
 - HUD;
 - кнопки;
 - текст;
-- overlay.
+- overlays.
 
-Он не должен влиять на canvas или Three.js renderer.
-
-Настройка качества рендера должна существовать отдельно:
-
-```text
-Render scale: 50% / 75% / 100%
-```
-
-Она управляет renderer/canvas, а не CSS UI tokens.
+Render scale управляет canvas / Three.js renderer и не должен влиять на CSS UI tokens.
 
 ## Базовые правила
 
-1. Размеры UI по возможности задаются через `rem` и CSS variables.
-2. `--app-scale` применяется один раз — внутри `--app-root-font-size`.
-3. UI scale не смешивается с responsive-логикой и render scale.
-4. Визуальная адаптация выполняется через CSS, а не через `isMobile` в JS.
-5. Breakpoints определяются по композиции интерфейса.
-6. Safe area используется через project tokens.
-7. Основные layout-режимы игры проектируются вокруг landscape viewport.
+1. Design reference текущего UI — `2560 × 1318`.
+2. Базовый размер UI определяется одновременно шириной и высотой viewport через `min()`.
+3. Для всего UI используется один общий scale; независимые `scaleX` и `scaleY` не используются.
+4. Layout продолжает занимать реальный viewport и не ограничивается reference aspect ratio.
+5. Пользовательский `--app-scale` применяется один раз поверх viewport scale.
+6. Размеры компонентов по возможности задаются через `rem` и project tokens.
+7. Отдельные responsive-правила добавляются только для конкретных проблем layout.
+8. Safe area и render scale остаются отдельными системами.

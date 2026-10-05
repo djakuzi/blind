@@ -474,7 +474,6 @@ onBeforeUnmount(() => {
   align-items: center;
   width: 100%;
   gap: v-bind(sliderItemGap);
-  will-change: transform;
   transition: transform var(--app-motion-duration-slower) var(--app-motion-ease-enter);
 }
 
@@ -487,7 +486,6 @@ onBeforeUnmount(() => {
   transform: scale(v-bind(sliderInactiveScale));
   transform-origin: center;
   pointer-events: none;
-  will-change: transform, opacity;
   transition:
     transform var(--app-motion-duration-slower) var(--app-motion-ease-enter),
     opacity var(--app-motion-duration-slow) var(--app-motion-ease-default);
@@ -549,6 +547,7 @@ onBeforeUnmount(() => {
   }
 
   .app-slider__track {
+    will-change: transform;
     transition: none;
   }
 }

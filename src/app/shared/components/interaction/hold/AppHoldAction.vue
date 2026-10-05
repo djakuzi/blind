@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch, provide } from 'vue';
+import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue';
 import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
 import type { tAudioId } from '@/core/media/audio';
 import { ToolInput, ToolVibration } from '@/core/platform';
-import { useAudio } from '@/app/shared/composables/audio/useAudio';
 
 interface iAppHoldActionActions {
   complete?: () => void;
@@ -59,6 +59,7 @@ const PROGRESS_SOUND_END_VOLUME = 0.48;
 const PROGRESS_SOUND_RELEASE_DURATION = 22;
 
 const isHolding = ref(false);
+const isProgressActive = ref(false);
 const hasCompleted = ref(false);
 const progress = ref(0);
 const rootElement = ref<HTMLElement | null>(null);
@@ -97,18 +98,11 @@ function hasExceededMoveThreshold(x: number, y: number): boolean {
 }
 
 const normalizedInitialProgress = computed(() => LibNumber.clampFinite(props.initialProgress, 0, 100, 0));
-
 const normalizedFillDuration = computed(() => Math.max(1, props.fillDuration ?? props.duration));
-
 const normalizedHoldStartDelay = computed(() => Math.max(0, props.holdStartDelay));
-
 const normalizedReleaseDuration = computed(() => Math.max(0, props.releaseDuration));
-
 const normalizedProgress = computed(() => LibNumber.clampFinite(progress.value, 0, 100, 0));
-
 const progressRatio = computed(() => normalizedProgress.value / 100);
-
-const isProgressActive = computed(() => isHolding.value || normalizedProgress.value > normalizedInitialProgress.value);
 
 provide(FILL_CONTEXT, {
   rootElement,
@@ -119,16 +113,24 @@ provide(FILL_CONTEXT, {
 const holdActionStyle = computed(() => ({
   '--cp-hold-action-width': LibStyle.toSizeValue(props.width) ?? 'auto',
   '--cp-hold-action-max-width': LibStyle.toSizeValue(props.maxWidth) ?? 'none',
+  '--cp-hold-initial-progress-offset': `${100 - normalizedInitialProgress.value}%`,
 }));
 
-progress.value = normalizedInitialProgress.value;
+function setProgress(value: number) {
+  const nextProgress = LibNumber.clampFinite(value, 0, 100, 0);
+
+  progress.value = nextProgress;
+  rootElement.value?.style.setProperty('--cp-hold-progress-offset', `${100 - nextProgress}%`);
+}
+
+setProgress(normalizedInitialProgress.value);
 
 watch(normalizedInitialProgress, (initialProgress) => {
   if (isHolding.value) {
     return;
   }
 
-  progress.value = initialProgress;
+  setProgress(initialProgress);
 });
 
 function runAudioRequest(request: Promise<void>, action: string) {
@@ -286,7 +288,7 @@ function completeHold() {
   }
 
   hasCompleted.value = true;
-  progress.value = 100;
+  setProgress(100);
 
   props.actions?.complete?.();
   emit('complete');
@@ -299,12 +301,14 @@ function updateHoldProgress() {
 
   const elapsed = getCurrentTime() - holdStartedAt;
   const initialProgress = normalizedInitialProgress.value;
-  progress.value = Math.min(
+  const nextProgress = Math.min(
     100,
     initialProgress + (elapsed / holdDuration) * (100 - initialProgress),
   );
 
-  if (progress.value >= 100) {
+  setProgress(nextProgress);
+
+  if (nextProgress >= 100) {
     return;
   }
 
@@ -319,8 +323,9 @@ function beginHold() {
   progressFrame.cancel();
 
   isHolding.value = true;
+  isProgressActive.value = true;
   hasCompleted.value = false;
-  progress.value = normalizedInitialProgress.value;
+  setProgress(normalizedInitialProgress.value);
   holdStartedAt = getCurrentTime();
   holdDuration = normalizedFillDuration.value;
 
@@ -352,7 +357,8 @@ function animateReleaseProgress() {
   const duration = normalizedReleaseDuration.value;
 
   if (startProgress <= finishProgress || duration <= 0) {
-    progress.value = finishProgress;
+    setProgress(finishProgress);
+    isProgressActive.value = false;
     return;
   }
 
@@ -361,11 +367,13 @@ function animateReleaseProgress() {
   function updateReleaseProgress() {
     const elapsed = getCurrentTime() - releaseStartedAt;
     const releaseProgress = Math.min(1, elapsed / duration);
+    const nextProgress = finishProgress + (startProgress - finishProgress) * (1 - releaseProgress);
 
-    progress.value = finishProgress + (startProgress - finishProgress) * (1 - releaseProgress);
+    setProgress(nextProgress);
 
     if (releaseProgress >= 1) {
-      progress.value = finishProgress;
+      setProgress(finishProgress);
+      isProgressActive.value = false;
       return;
     }
 
@@ -417,7 +425,8 @@ function resetHoldState(isImmediate = false) {
     return;
   }
 
-  progress.value = normalizedInitialProgress.value;
+  setProgress(normalizedInitialProgress.value);
+  isProgressActive.value = false;
 }
 
 function isHoldPointer(event: PointerEvent): boolean {
@@ -565,6 +574,10 @@ function resetMouseHold() {
   resetHoldState();
 }
 
+onMounted(() => {
+  setProgress(progress.value);
+});
+
 onBeforeUnmount(() => {
   resetHoldState(true);
 });
@@ -591,8 +604,6 @@ onBeforeUnmount(() => {
     @contextmenu.prevent
   >
     <slot
-      :progress="normalizedProgress"
-      :progress-ratio="progressRatio"
       :is-holding="isHolding"
       :is-progress-active="isProgressActive"
       :is-complete="hasCompleted"
@@ -602,6 +613,8 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .app-hold-action {
+  --cp-hold-progress-offset: var(--cp-hold-initial-progress-offset, 100%);
+
   display: inline-flex;
   width: var(--cp-hold-action-width);
   max-width: var(--cp-hold-action-max-width);

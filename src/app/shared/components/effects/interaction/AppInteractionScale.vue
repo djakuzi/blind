@@ -25,7 +25,6 @@ withDefaults(defineProps<Props>(), {
   transform: translate3d(0, 0, 0) scale(1);
   transform-origin: center;
   backface-visibility: hidden;
-  will-change: transform;
   transition: transform var(--app-motion-duration-fast) var(--app-motion-ease-enter);
 }
 

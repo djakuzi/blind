@@ -58,13 +58,8 @@ const blurClass = computed(() => ['app-logo', props.blur ? 'app-logo--blur' : ''
 </template>
 
 <style scoped lang="css">
-.app-logo {
-  transform: scale(1);
-  will-change: transform;
-
-  &.app-logo--blur {
-    filter: blur(1px);
-    --webkit-filter: blur(1px);
-  }
+.app-logo--blur {
+  filter: blur(1px);
+  -webkit-filter: blur(1px);
 }
 </style>

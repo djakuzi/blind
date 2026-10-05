@@ -230,7 +230,6 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   opacity: 0;
   pointer-events: none;
   transform: translate(-50%, -50%) scale(0.82);
-  will-change: transform, opacity;
 }
 
 .widget-loader-app--leaving .widget-loader-app__wordmark,
@@ -240,6 +239,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 }
 
 .widget-loader-app--leaving .widget-loader-app__exit-logo {
+  will-change: transform, opacity;
   animation: widget-loader-app-logo-leave 2100ms 120ms forwards;
 }
 
