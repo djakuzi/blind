@@ -17,6 +17,7 @@ export const routeMenu: RouteRecordRaw = {
         },
         layout: {
           header: false,
+          version: true,
         },
       },
     },
