@@ -84,21 +84,33 @@ function handleComplete() {
     width="100%"
     max-width="100%"
     size="big"
-    :padding-x="0"
-    :padding-y="8"
     background-color="surface-primary"
     border-color="border-contrast"
     border-width="thick"
     border-radius="2xl"
     overflow="hidden"
-    :initial-progress="20"
+    :initial-progress="15"
     @complete="handleComplete"
   >
     <div class="ui-card-game-mode__layout">
       <div class="ui-card-game-mode__main">
-        <div class="ui-card-game-mode__header">
+        <AppImage
+          class="ui-card-game-mode__image"
+          :src="imageSource"
+          :alt="modeTitle"
+          width="15rem"
+          max-width="30%"
+          height="auto"
+          object-fit="contain"
+          aspect-ratio="1 / 1"
+          :loading="imageLoading"
+          :fetch-priority="imageFetchPriority"
+          :should-load="imageShouldLoad"
+        />
+
+        <div class="ui-card-game-mode__body">
           <AppFillAware color="text-primary" filled-color="on-primary">
-            <AppTitle :text="modeTitle" tag="h2" color="inherit" font-size="2xxl" font-weight="bold" />
+            <AppTitle :text="modeTitle" tag="h2" color="inherit" font-size="2xl" font-weight="bold" />
           </AppFillAware>
 
           <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">
@@ -113,20 +125,6 @@ function handleComplete() {
             />
           </AppFillAware>
         </div>
-
-        <AppImage
-          class="ui-card-game-mode__image"
-          :src="imageSource"
-          :alt="modeTitle"
-          width="20rem"
-          max-width="30%"
-          height="auto"
-          object-fit="contain"
-          aspect-ratio="1 / 1"
-          :loading="imageLoading"
-          :fetch-priority="imageFetchPriority"
-          :should-load="imageShouldLoad"
-        />
       </div>
 
       <div class="ui-card-game-mode__footer">
@@ -141,21 +139,6 @@ function handleComplete() {
             font-weight="bold"
             :accessibility-label="optionsAccessibilityLabel"
             :center-even="true"
-          />
-        </AppFillAware>
-
-        <AppFillAware class="ui-card-game-mode__info" tag="div" color="text-primary" filled-color="on-primary" :initial-filled="true">
-          <AppInfoRowList
-            :items="connectionItems"
-            width="auto"
-            max-width="100%"
-            size="big"
-            text-color="inherit"
-            divider-color="currentColor"
-            font-weight="medium"
-            :center-even="false"
-            :center-odd="false"
-            :accessibility-label="connectionTypesAccessibilityLabel"
           />
         </AppFillAware>
       </div>
@@ -200,16 +183,15 @@ function handleComplete() {
   justify-content: space-evenly;
   min-width: 0;
   min-height: 0;
-  gap: var(--app-space-8);
 }
 
-.ui-card-game-mode__header {
+.ui-card-game-mode__body {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   min-width: 0;
-  gap: var(--app-space-12);
+  /* gap: var(--app-space-6); */
   text-align: center;
 }
 
