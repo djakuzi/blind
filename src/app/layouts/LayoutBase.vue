@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { RouterView } from 'vue-router';
+import AppLayoutBackground from '@/app/layouts/components/background/AppLayoutBackground.vue';
 import AppTransitionHeader from '@/app/layouts/components/transition/AppTransitionHeader.vue';
 import AppTransitionScreen from '@/app/layouts/components/transition/AppTransitionScreen.vue';
 import WidgetLayoutHeader from '@/app/layouts/components/widgets/WidgetLayoutHeader.vue';
@@ -23,6 +24,8 @@ const layoutStyle = computed(() => ({
 
 <template>
   <main class="layout" :style="layoutStyle">
+    <AppLayoutBackground />
+
     <AppTransitionHeader :show="hasLayoutHeader">
       <WidgetLayoutHeader />
     </AppTransitionHeader>
@@ -51,13 +54,13 @@ const layoutStyle = computed(() => ({
   position: relative;
   isolation: isolate;
   display: flex;
-  flex: 0 0 auto;
+  flex: 1;
   flex-direction: column;
-  width: var(--app-ui-viewport-width);
-  height: var(--app-ui-viewport-height);
-  min-height: var(--app-ui-viewport-height);
-  max-height: var(--app-ui-viewport-height);
+  width: 100%;
+  min-height: 100dvh;
+  max-height: 100dvh;
   padding: var(--cp-layout-padding);
+  background: var(--app-color-background);
   overflow: hidden;
 }
 </style>
