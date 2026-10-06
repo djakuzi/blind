@@ -39,6 +39,7 @@ export interface PropsAppSegmentedCard {
   maxWidth?: tStyleSizeValue;
   equalWidth?: boolean;
   gap?: tSpaceValue;
+  imageTextGap?: tSpaceValue;
   paddingX?: tPaddingValue;
   paddingY?: tPaddingValue;
   borderRadius?: tRadiusValue;
@@ -54,6 +55,7 @@ const props = withDefaults(defineProps<PropsAppSegmentedCard>(), {
   maxWidth: '100%',
   equalWidth: true,
   gap: 2,
+  imageTextGap: 3,
   paddingX: undefined,
   paddingY: undefined,
   borderRadius: 'md',
@@ -77,6 +79,7 @@ const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
 const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
 const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 const controlGap = computed(() => resolveSpaceValue(props.gap));
+const itemImageTextGap = computed(() => resolveSpaceValue(props.imageTextGap));
 const itemPaddingX = computed(() => resolvePaddingValue(props.paddingX ?? sizeConfig.value.paddingX));
 const itemPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? sizeConfig.value.paddingY));
 const itemBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
@@ -186,7 +189,7 @@ function handleSelect(option: iAppSegmentedCardOption) {
   justify-content: center;
   min-width: 0;
   box-sizing: border-box;
-  gap: var(--app-space-3);
+  gap: v-bind(itemImageTextGap);
   padding: v-bind(itemPaddingY) v-bind(itemPaddingX);
   border:
     var(--app-border-width-medium)
