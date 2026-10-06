@@ -6,37 +6,32 @@ export interface iApiThemeMedia {
   light: string;
 }
 
-export interface iApiGameModePlayerOption {
-  key: string;
-  players: number;
-  teamSize: number;
-  connections: tKeyTypeConnection[];
-}
-
 export interface iApiGameModeData {
   key: tGameModeKey;
   name: string;
-  description: string;
   rounds: number;
-  playerOptions: iApiGameModePlayerOption[];
+  options: string[];
   locked: boolean;
   lockedText: string | null;
 }
 
-export interface iApiGameModeMedia {
+export interface iApiGameModeResourceData {
   image: iApiThemeMedia;
 }
 
-export interface iApiGameModePlayerMedia {
+export interface iApiGameModePlayerData {
+  players: number;
+  teamSize: number;
+  connections: tKeyTypeConnection[];
   icon: iApiThemeMedia;
 }
 
-export interface iApiGameModeLockedMedia {
+export interface iApiGameModeLockedData {
   icon: iApiThemeMedia;
 }
 
-export interface iApiGameModesMedia {
-  modes: Record<tGameModeKey, iApiGameModeMedia>;
-  players: Record<string, iApiGameModePlayerMedia>;
-  locked: iApiGameModeLockedMedia;
+export interface iApiGameModesResourceData {
+  modes: Record<tGameModeKey, iApiGameModeResourceData>;
+  players: Record<string, iApiGameModePlayerData>;
+  locked: iApiGameModeLockedData;
 }

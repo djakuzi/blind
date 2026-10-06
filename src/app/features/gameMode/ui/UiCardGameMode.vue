@@ -7,11 +7,7 @@ import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
 import AppCardHold from '@/app/shared/components/ui/card/AppCardHold.vue';
-import AppInfoRowList from '@/app/shared/components/ui/info/AppInfoRowList.vue';
-import type { iAppInfoRowListItem } from '@/app/shared/components/ui/info/AppInfoRowList.vue';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
-import { useLanguageStore } from '@/app/stores/language/language.store';
-import { formatGameModePlayers, formatGameModeRounds } from '../helpers/formatGameMode.helper';
 
 export interface PropsUiCardGameMode {
   mode: iGameMode;
@@ -37,42 +33,10 @@ const emit = defineEmits<{
 }>();
 
 const { resolvedThemeMode } = useAppThemeMode();
-const languageStore = useLanguageStore();
-const locale = useLocale();
+const modeLocale = useLocale((locale) => locale.game.modes[props.mode.key]);
 
 const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
-
-const currentLanguageCode = computed(() => {
-  if (!languageStore.currentLanguage) {
-    throw new Error('Current language is not initialized');
-  }
-
-  return languageStore.currentLanguage.key;
-});
-
-const modeLocale = computed(() => locale.value.game.modes[props.mode.key]);
-
-const modeTitle = computed(() => modeLocale.value?.title ?? props.mode.key);
-
 const modeDescription = computed(() => modeLocale.value?.description ?? '');
-
-const optionItems = computed<iAppInfoRowListItem[]>(() => [
-  {
-    id: 'players',
-    text: formatGameModePlayers(props.mode, currentLanguageCode.value, locale.value),
-  },
-  {
-    id: 'rounds',
-    text: formatGameModeRounds(props.mode, currentLanguageCode.value, locale.value),
-  },
-]);
-
-const connectionItems = computed<iAppInfoRowListItem[]>(() =>
-  props.mode.typeConnection.map((connectionType) => ({
-    id: connectionType,
-    text: locale.value.connectionTypes[connectionType].title,
-  })),
-);
 
 function handleComplete() {
   emit('complete');
@@ -100,7 +64,7 @@ function handleComplete() {
         <AppImage
           class="ui-card-game-mode__image"
           :src="imageSource"
-          :alt="modeTitle"
+          :alt="mode.name"
           width="15rem"
           max-width="30%"
           height="auto"
@@ -113,7 +77,7 @@ function handleComplete() {
 
         <div class="ui-card-game-mode__body">
           <AppFillAware color="text-primary" filled-color="on-primary">
-            <AppTitle :text="modeTitle" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
+            <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
           </AppFillAware>
 
           <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">

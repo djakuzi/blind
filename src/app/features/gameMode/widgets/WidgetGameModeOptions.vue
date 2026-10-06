@@ -7,7 +7,7 @@ import LanLight from '@/assets/icons/connectionType/lan-light.svg?url';
 import OnlineDark from '@/assets/icons/connectionType/online-dark.svg?url';
 import OnlineLight from '@/assets/icons/connectionType/online-light.svg?url';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
-import type { iApiGameModePlayerOption } from '@/app/domain/game/type/api/common';
+import type { iApiGameModePlayerData } from '@/app/domain/game/type/api/common';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
@@ -29,6 +29,10 @@ export interface iWidgetGameModeOptionsSelection {
   parameter: tWidgetGameModeOptionParameter;
   playerOptionKey: string;
   connectionType: tKeyTypeConnection | null;
+}
+
+interface iResolvedPlayerOption extends iApiGameModePlayerData {
+  key: string;
 }
 
 const CONNECTION_IMAGES: Record<tKeyTypeConnection, iAppSegmentedCardOptionImage> = {
@@ -59,35 +63,49 @@ const connectionLocale = useLocale((locale) => locale.connectionTypes);
 const selectedPlayerOptionKey = ref('');
 const selectedConnectionType = ref<tKeyTypeConnection | ''>('');
 
-function findPlayerOption(key: string) {
-  return props.mode.playerOptions.find((option) => option.key === key);
+function resolvePlayerOption(key: string): iResolvedPlayerOption | null {
+  if (!props.mode.options.includes(key)) {
+    return null;
+  }
+
+  const option = gameStore.data?.players[key];
+
+  return option
+    ? {
+        key,
+        ...option,
+      }
+    : null;
 }
 
+const resolvedPlayerOptions = computed(() =>
+  props.mode.options
+    .map(resolvePlayerOption)
+    .filter((option): option is iResolvedPlayerOption => option !== null),
+);
+
 const selectedPlayerOption = computed(
-  () => findPlayerOption(selectedPlayerOptionKey.value) ?? props.mode.playerOptions[0] ?? null,
+  () =>
+    resolvePlayerOption(selectedPlayerOptionKey.value) ??
+    resolvedPlayerOptions.value[0] ??
+    null,
 );
 
 const availableConnections = computed(() => selectedPlayerOption.value?.connections ?? []);
 
 const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
-  props.mode.playerOptions.map((option) => {
-    const icon = gameStore.media?.players[option.key]?.icon;
-
-    return {
-      value: option.key,
-      label: formatPlayerOption(option),
-      image: icon
-        ? {
-            light: icon.light,
-            dark: icon.dark,
-          }
-        : undefined,
-    };
-  }),
+  resolvedPlayerOptions.value.map((option) => ({
+    value: option.key,
+    label: formatPlayerOption(option),
+    image: {
+      light: option.icon.light,
+      dark: option.icon.dark,
+    },
+  })),
 );
 
 const connectionTypes = computed(() => [
-  ...new Set(props.mode.playerOptions.flatMap((option) => option.connections)),
+  ...new Set(resolvedPlayerOptions.value.flatMap((option) => option.connections)),
 ]);
 
 const connectionOptions = computed<iAppSegmentedCardOption[]>(() =>
@@ -99,7 +117,7 @@ const connectionOptions = computed<iAppSegmentedCardOption[]>(() =>
   })),
 );
 
-function formatPlayerOption({ players, teamSize }: iApiGameModePlayerOption) {
+function formatPlayerOption({ players, teamSize }: iApiGameModePlayerData) {
   if (players <= 0 || teamSize <= 0) {
     return String(players);
   }
@@ -128,8 +146,8 @@ function syncConnectionSelection(playerOption = selectedPlayerOption.value) {
 
 function syncSelections() {
   const playerOption =
-    findPlayerOption(selectedPlayerOptionKey.value) ??
-    props.mode.playerOptions[0] ??
+    resolvePlayerOption(selectedPlayerOptionKey.value) ??
+    resolvedPlayerOptions.value[0] ??
     null;
 
   selectedPlayerOptionKey.value = playerOption?.key ?? '';
@@ -145,7 +163,7 @@ function emitSelection(parameter: tWidgetGameModeOptionParameter) {
 }
 
 function handlePlayerOptionChange(value: string) {
-  const playerOption = findPlayerOption(value);
+  const playerOption = resolvePlayerOption(value);
 
   if (!playerOption) {
     return;

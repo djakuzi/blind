@@ -1,11 +1,11 @@
 import { apiClient } from '@/app/shared/api';
 import { ModelGameMode } from '../models/GameMode.model';
-import type { iApiGameModesMedia } from '../type/api/common';
+import type { iApiGameModesResourceData } from '../type/api/common';
 import type { iResponseGameModes } from '../type/api/res';
 
 export interface iGameModesData {
   modes: ModelGameMode[];
-  media: iApiGameModesMedia;
+  data: iApiGameModesResourceData;
 }
 
 export class ApiGame {
@@ -13,17 +13,17 @@ export class ApiGame {
     const response = await apiClient.get<iResponseGameModes>('/game/gameModes.json');
 
     const modes = response.modes.map((mode) => {
-      const modeMedia = response.media.modes[mode.key];
+      const modeData = response.data.modes[mode.key];
 
       return new ModelGameMode({
         ...mode,
-        image: modeMedia.image,
+        image: modeData.image,
       });
     });
 
     return {
       modes,
-      media: response.media,
+      data: response.data,
     };
   }
 }

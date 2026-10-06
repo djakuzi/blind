@@ -1,11 +1,11 @@
-import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
+import type { iApiGameModePlayerData } from '@/app/domain/game/type/api/common';
 import type { Locale } from '@/app/shared/types/locale';
 import { LibText } from '@/app/shared/lib/text';
 
-export function formatGameModePlayers(mode: iGameMode, languageCode: string, locale: Locale) {
-  const { players, teamSize } = mode.options;
+export function formatGameModePlayers(option: iApiGameModePlayerData, languageCode: string, locale: Locale) {
+  const { players, teamSize } = option;
 
-  if (teamSize === undefined || teamSize <= 0 || players <= 0 || players % teamSize !== 0) {
+  if (teamSize <= 0 || players <= 0 || players % teamSize !== 0) {
     return LibText.formatPluralCount(players, languageCode, locale.game.format.players);
   }
 
@@ -15,14 +15,9 @@ export function formatGameModePlayers(mode: iGameMode, languageCode: string, loc
     return LibText.formatPluralCount(players, languageCode, locale.game.format.players);
   }
 
-  return Array.from(
-    {
-      length: teamCount,
-    },
-    () => teamSize,
-  ).join(' VS ');
+  return Array.from({ length: teamCount }, () => teamSize).join(' VS ');
 }
 
-export function formatGameModeRounds(mode: iGameMode, languageCode: string, locale: Locale) {
-  return LibText.formatPluralCount(mode.options.rounds, languageCode, locale.game.format.rounds);
+export function formatGameModeRounds(rounds: number, languageCode: string, locale: Locale) {
+  return LibText.formatPluralCount(rounds, languageCode, locale.game.format.rounds);
 }

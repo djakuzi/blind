@@ -3,28 +3,10 @@
     {
       "key": "single-hit",
       "name": "DUEL",
-      "description": "One hit — one life",
       "rounds": 3,
-      "playerOptions": [
-        {
-          "key": "1v1",
-          "players": 2,
-          "teamSize": 1,
-          "connections": [
-            "BLUETOOTH",
-            "LAN",
-            "ONLINE"
-          ]
-        },
-        {
-          "key": "2v2",
-          "players": 4,
-          "teamSize": 2,
-          "connections": [
-            "LAN",
-            "ONLINE"
-          ]
-        }
+      "options": [
+        "1v1",
+        "2v2"
       ],
       "locked": false,
       "lockedText": null
@@ -32,34 +14,16 @@
     {
       "key": "health",
       "name": "COMBAT",
-      "description": "Fight until your health runs out",
       "rounds": 3,
-      "playerOptions": [
-        {
-          "key": "1v1",
-          "players": 2,
-          "teamSize": 1,
-          "connections": [
-            "BLUETOOTH",
-            "LAN",
-            "ONLINE"
-          ]
-        },
-        {
-          "key": "2v2",
-          "players": 4,
-          "teamSize": 2,
-          "connections": [
-            "LAN",
-            "ONLINE"
-          ]
-        }
+      "options": [
+        "1v1",
+        "2v2"
       ],
       "locked": false,
       "lockedText": null
     }
   ],
-  "media": {
+  "data": {
     "modes": {
       "single-hit": {
         "image": {
@@ -76,12 +40,25 @@
     },
     "players": {
       "1v1": {
+        "players": 2,
+        "teamSize": 1,
+        "connections": [
+          "BLUETOOTH",
+          "LAN",
+          "ONLINE"
+        ],
         "icon": {
           "dark": "/game/icons/playerOption/1v1-dark.svg",
           "light": "/game/icons/playerOption/1v1-light.svg"
         }
       },
       "2v2": {
+        "players": 4,
+        "teamSize": 2,
+        "connections": [
+          "LAN",
+          "ONLINE"
+        ],
         "icon": {
           "dark": "/game/icons/playerOption/2v2-dark.svg",
           "light": "/game/icons/playerOption/2v2-light.svg"

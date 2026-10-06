@@ -3,11 +3,11 @@ import type { iGameState } from '../game.type';
 
 export function createLoadGameModes() {
   return async function loadGameModes(this: iGameState) {
-    const data = await apiGame.getModes();
+    const result = await apiGame.getModes();
 
-    this.modes = data.modes;
-    this.media = data.media;
+    this.modes = result.modes;
+    this.data = result.data;
 
-    return data;
+    return result;
   };
 }
