@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import type { iApiGameModePlayerOption } from '@/app/domain/game/type/api/common';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
 import type { iAppSegmentedControlOption } from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
@@ -142,8 +143,16 @@ watch(
 </script>
 
 <template>
-  <div class="widget-game-mode-options">
-    <div class="widget-game-mode-options__group">
+  <AppFlex class="widget-game-mode-options" direction="column" align="center" width="100%" :gap="8">
+    <AppFlex
+      class="widget-game-mode-options__group"
+      direction="column"
+      align="center"
+      width="100%"
+      :gap="3"
+      role="group"
+      :aria-label="preGameLocale.players"
+    >
       <AppMarqueeText
         :text="preGameLocale.players"
         font-size="lg"
@@ -151,20 +160,26 @@ watch(
         :uppercase="true"
       />
 
-      <div role="group" :aria-label="preGameLocale.players">
-        <AppSegmentedControl
-          :model-value="selectedPlayerOptionKey"
-          :options="playerOptions"
-          :disabled="mode.locked"
-          size="big"
-          width="60rem"
-          max-width="100%"
-          @update:model-value="handlePlayerOptionChange"
-        />
-      </div>
-    </div>
+      <AppSegmentedControl
+        :model-value="selectedPlayerOptionKey"
+        :options="playerOptions"
+        :disabled="mode.locked"
+        size="big"
+        width="60rem"
+        max-width="100%"
+        @update:model-value="handlePlayerOptionChange"
+      />
+    </AppFlex>
 
-    <div class="widget-game-mode-options__group">
+    <AppFlex
+      class="widget-game-mode-options__group"
+      direction="column"
+      align="center"
+      width="100%"
+      :gap="3"
+      role="group"
+      :aria-label="preGameLocale.connection"
+    >
       <AppMarqueeText
         :text="preGameLocale.connection"
         font-size="lg"
@@ -172,37 +187,22 @@ watch(
         :uppercase="true"
       />
 
-      <div role="group" :aria-label="preGameLocale.connection">
-        <AppSegmentedControl
-          :model-value="selectedConnectionType"
-          :options="connectionOptions"
-          :disabled="mode.locked"
-          size="big"
-          width="80rem"
-          max-width="100%"
-          @update:model-value="handleConnectionChange"
-        />
-      </div>
-    </div>
-  </div>
+      <AppSegmentedControl
+        :model-value="selectedConnectionType"
+        :options="connectionOptions"
+        :disabled="mode.locked"
+        size="big"
+        width="80rem"
+        max-width="100%"
+        @update:model-value="handleConnectionChange"
+      />
+    </AppFlex>
+  </AppFlex>
 </template>
 
 <style scoped>
-.widget-game-mode-options {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  min-width: 0;
-  gap: var(--app-space-8);
-}
-
+.widget-game-mode-options,
 .widget-game-mode-options__group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
   min-width: 0;
-  gap: var(--app-space-3);
 }
 </style>
