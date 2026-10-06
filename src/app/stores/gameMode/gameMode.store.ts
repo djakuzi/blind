@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import { createLoadGameModes } from './actions/createLoadGameModes';
-import type { iGameState } from './game.type';
+import type { iGameModeState } from './gameMode.type';
 
-export const useGameStore = defineStore('game', {
-  state: (): iGameState => ({
+export const useGameModeStore = defineStore('gameMode', {
+  state: (): iGameModeState => ({
     modes: [],
     data: null,
   }),

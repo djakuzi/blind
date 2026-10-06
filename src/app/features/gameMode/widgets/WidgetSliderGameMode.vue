@@ -5,14 +5,14 @@ import { useLocale } from '@/app/features/locale/composables/useLocale';
 import UiCardGameMode from '@/app/features/gameMode/ui/UiCardGameMode.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
-import { useGameStore } from '@/app/stores/game/game.store';
+import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 const router = useRouter();
-const gameStore = useGameStore();
+const gameModeStore = useGameModeStore();
 
 const activeIndex = defineModel<number>({ default: 0 });
 
-const modes = computed(() => gameStore.modes);
+const modes = computed(() => gameModeStore.modes);
 
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
 

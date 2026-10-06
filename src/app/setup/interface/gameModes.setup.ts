@@ -1,6 +1,6 @@
 import type { Pinia } from 'pinia';
 import { useStaticLocale } from '@/app/features/locale/composables/useStaticLocale';
-import { useGameStore } from '@/app/stores/game/game.store';
+import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
 import { retryPostMountSetup } from '@/core/app/setup/lifecycle/setupLifecycle.runner';
 import type { iSetup } from '@/core/app/setup/lifecycle/setupLifecycle.type';
@@ -9,7 +9,7 @@ const APP_SETUP_GAME_MODES_SCOPE_KEY = 'app-setup-game-modes';
 const APP_SETUP_GAME_MODES_RESOURCE_KEY = 'game-modes';
 
 export function createGameModesSetup(pinia: Pinia): iSetup {
-  const gameStore = useGameStore(pinia);
+  const gameModeStore = useGameModeStore(pinia);
   const loaderStore = useLoaderStore(pinia);
   const staticLocale = useStaticLocale(['loading'], pinia);
 
@@ -22,7 +22,7 @@ export function createGameModesSetup(pinia: Pinia): iSetup {
     loaderStore.setResourcePending(resourcePayload);
 
     try {
-      await gameStore.loadGameModes();
+      await gameModeStore.loadGameModes();
 
       loaderStore.setResourceLoaded(resourcePayload);
     } catch (error) {

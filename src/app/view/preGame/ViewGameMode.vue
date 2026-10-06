@@ -3,13 +3,13 @@ import { computed, ref } from 'vue';
 import WidgetGameModeOptions from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
 import WidgetSliderGameMode from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
-import { useGameStore } from '@/app/stores/game/game.store';
+import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
-const gameStore = useGameStore();
+const gameModeStore = useGameModeStore();
 
 const activeModeIndex = ref(0);
 
-const activeMode = computed(() => gameStore.modes[activeModeIndex.value] ?? null);
+const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? null);
 </script>
 
 <template>

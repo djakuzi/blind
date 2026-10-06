@@ -17,7 +17,7 @@ import type {
   iAppSegmentedCardOption,
   iAppSegmentedCardOptionImage,
 } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
-import { useGameStore } from '@/app/stores/game/game.store';
+import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
@@ -56,7 +56,7 @@ const emit = defineEmits<{
   select: [selection: iWidgetGameModeOptionsSelection];
 }>();
 
-const gameStore = useGameStore();
+const gameModeStore = useGameModeStore();
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
 const connectionLocale = useLocale((locale) => locale.connectionTypes);
 
@@ -68,7 +68,7 @@ function resolvePlayerOption(key: string): iResolvedPlayerOption | null {
     return null;
   }
 
-  const option = gameStore.data?.players[key];
+  const option = gameModeStore.data?.players[key];
 
   return option
     ? {

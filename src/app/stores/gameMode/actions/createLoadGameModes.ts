@@ -1,8 +1,8 @@
 import { apiGame } from '@/app/domain/game/api/api';
-import type { iGameState } from '../game.type';
+import type { iGameModeState } from '../gameMode.type';
 
 export function createLoadGameModes() {
-  return async function loadGameModes(this: iGameState) {
+  return async function loadGameModes(this: iGameModeState) {
     const result = await apiGame.getModes();
 
     this.modes = result.modes;
