@@ -57,35 +57,6 @@
       ],
       "locked": false,
       "lockedText": null
-    },
-    {
-      "key": "survival",
-      "name": "SURVIVAL",
-      "description": "Survival mode",
-      "rounds": 3,
-      "playerOptions": [
-        {
-          "key": "1v1",
-          "players": 2,
-          "teamSize": 1,
-          "connections": [
-            "BLUETOOTH",
-            "LAN",
-            "ONLINE"
-          ]
-        },
-        {
-          "key": "2v2",
-          "players": 4,
-          "teamSize": 2,
-          "connections": [
-            "LAN",
-            "ONLINE"
-          ]
-        }
-      ],
-      "locked": true,
-      "lockedText": "СКОРО"
     }
   ],
   "media": {
@@ -101,12 +72,6 @@
           "dark": "/game/images/gameMode/combat-dark.webp",
           "light": "/game/images/gameMode/combat-light.webp"
         }
-      },
-      "survival": {
-        "image": {
-          "dark": "/game/images/gameMode/clash-dark.webp",
-          "light": "/game/images/gameMode/clash-light.webp"
-        }
       }
     },
     "players": {
@@ -121,6 +86,12 @@
           "dark": "/game/icons/playerOption/2v2-dark.svg",
           "light": "/game/icons/playerOption/2v2-light.svg"
         }
+      }
+    },
+    "locked": {
+      "icon": {
+        "dark": "/game/icons/locked/lock-dark.svg",
+        "light": "/game/icons/locked/lock-light.svg"
       }
     }
   }
