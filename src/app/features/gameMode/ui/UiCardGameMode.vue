@@ -67,6 +67,10 @@ function handleComplete() {
       justify="space-evenly"
       width="100%"
     >
+      <AppFillAware color="text-primary" filled-color="on-primary">
+        <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
+      </AppFillAware>
+
       <AppImage
         class="ui-card-game-mode__image"
         :src="imageSource"
@@ -81,28 +85,17 @@ function handleComplete() {
         :should-load="imageShouldLoad"
       />
 
-      <AppFlex
-        class="ui-card-game-mode__body"
-        direction="column"
-        align="center"
-        width="100%"
-      >
-        <AppFillAware color="text-primary" filled-color="on-primary">
-          <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
-        </AppFillAware>
-
-        <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">
-          <AppText
-            :text="modeDescription"
-            color="inherit"
-            font-size="lg"
-            font-weight="medium"
-            :uppercase="true"
-            :ellipsis="true"
-            :max-lines="1"
-          />
-        </AppFillAware>
-      </AppFlex>
+      <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">
+        <AppText
+          :text="modeDescription"
+          color="inherit"
+          font-size="lg"
+          font-weight="medium"
+          :uppercase="true"
+          :ellipsis="true"
+          :max-lines="1"
+        />
+      </AppFillAware>
     </AppFlex>
   </AppCardHold>
 </template>
@@ -140,10 +133,6 @@ function handleComplete() {
   height: 100%;
   min-width: 0;
   min-height: 0;
-}
-
-.ui-card-game-mode__body {
-  min-width: 0;
   text-align: center;
 }
 
