@@ -41,6 +41,7 @@ function handleModeComplete() {
       size="big"
       :inactive-scale="0.88"
       :inactive-opacity="0.42"
+      pagination-type="numeric"
       :accessibility-label="preGameLocale.accessibilityLabel"
       :item-accessibility-label="formatItemAccessibilityLabel"
     >

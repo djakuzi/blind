@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
@@ -12,6 +13,8 @@ import { LibScheduler } from '@/core/lib/scheduler';
 import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
 
+export type tAppSliderPaginationType = 'dots' | 'numeric';
+
 export interface PropsAppSlider {
   modelValue: number;
   count: number;
@@ -23,6 +26,7 @@ export interface PropsAppSlider {
   itemGap?: tSpaceValue;
   inactiveScale?: number;
   inactiveOpacity?: number;
+  paginationType?: tAppSliderPaginationType;
   contentDotsGap?: tSpaceValue;
   dotsHintGap?: tSpaceValue;
   dotsGap?: tSpaceValue;
@@ -46,6 +50,7 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
   itemGap: 6,
   inactiveScale: 0.88,
   inactiveOpacity: 0.45,
+  paginationType: 'dots',
   contentDotsGap: undefined,
   dotsHintGap: 12,
   dotsGap: 6,
@@ -131,6 +136,16 @@ const sliderDotColor = computed(() => resolveColorValue(props.dotColor));
 const sliderActiveDotColor = computed(() => resolveColorValue(props.activeDotColor));
 const sliderInactiveScale = computed(() => LibNumber.clamp(props.inactiveScale, 0, 1));
 const sliderInactiveOpacity = computed(() => LibNumber.clamp(props.inactiveOpacity, 0, 1));
+
+const paginationDigits = computed(() => Math.max(2, String(Math.max(0, props.count)).length));
+const numericPaginationText = computed(() => {
+  const digits = paginationDigits.value;
+  const current = props.count > 0 ? activeIndex.value + 1 : 0;
+
+  return `${String(current).padStart(digits, '0')} / ${String(Math.max(0, props.count)).padStart(digits, '0')}`;
+});
+const canGoPrevious = computed(() => !props.disabled && activeIndex.value > 0);
+const canGoNext = computed(() => !props.disabled && activeIndex.value < maxIndex.value);
 
 const trackTransform = computed(() => `translate3d(${trackTranslate.value + dragOffset.value}px, 0, 0)`);
 
@@ -431,8 +446,43 @@ onBeforeUnmount(() => {
     </div>
 
     <div class="app-slider__footer">
-      <div class="app-slider__dots" aria-hidden="true">
+      <div v-if="paginationType === 'dots'" class="app-slider__dots" aria-hidden="true">
         <span v-for="index in indexes" :key="index" class="app-slider__dot" :class="{ 'app-slider__dot--active': isItemActive(index) }" />
+      </div>
+
+      <div
+        v-else-if="count > 0"
+        class="app-slider__numeric-pagination"
+        :aria-label="itemAccessibilityLabel(activeIndex, count)"
+      >
+        <button
+          class="app-slider__numeric-arrow app-slider__numeric-arrow--previous"
+          type="button"
+          :disabled="!canGoPrevious"
+          :aria-label="itemAccessibilityLabel(Math.max(0, activeIndex - 1), count)"
+          @click="setActiveIndex(activeIndex - 1)"
+        >
+          <span aria-hidden="true" />
+        </button>
+
+        <AppText
+          :text="numericPaginationText"
+          tag="span"
+          color="text-secondary"
+          font-size="lg"
+          font-weight="medium"
+          aria-hidden="true"
+        />
+
+        <button
+          class="app-slider__numeric-arrow app-slider__numeric-arrow--next"
+          type="button"
+          :disabled="!canGoNext"
+          :aria-label="itemAccessibilityLabel(Math.min(maxIndex, activeIndex + 1), count)"
+          @click="setActiveIndex(activeIndex + 1)"
+        >
+          <span aria-hidden="true" />
+        </button>
       </div>
 
       <div v-if="$slots.hint" class="app-slider__hint">
@@ -534,6 +584,62 @@ onBeforeUnmount(() => {
   background: v-bind(sliderActiveDotColor);
 }
 
+.app-slider__numeric-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--app-space-6);
+}
+
+.app-slider__numeric-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--app-color-text-secondary);
+  cursor: pointer;
+  appearance: none;
+  transition:
+    color var(--app-motion-duration-medium) var(--app-motion-ease-default),
+    opacity var(--app-motion-duration-medium) var(--app-motion-ease-default);
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-primary);
+    outline-offset: 2px;
+  }
+
+  span {
+    display: block;
+    width: 1.2rem;
+    height: 1.2rem;
+    border-top: var(--app-border-width-medium) var(--app-border-style-solid) currentColor;
+    border-right: var(--app-border-width-medium) var(--app-border-style-solid) currentColor;
+  }
+}
+
+.app-slider__numeric-arrow--previous span {
+  transform: rotate(-135deg);
+}
+
+.app-slider__numeric-arrow--next span {
+  transform: rotate(45deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-slider__numeric-arrow:not(:disabled):hover {
+    color: var(--app-color-primary);
+  }
+}
+
 .app-slider__hint {
   display: flex;
   justify-content: center;
@@ -561,7 +667,8 @@ onBeforeUnmount(() => {
 @media (prefers-reduced-motion: reduce) {
   .app-slider__track,
   .app-slider__item,
-  .app-slider__dot {
+  .app-slider__dot,
+  .app-slider__numeric-arrow {
     transition: none;
   }
 }
