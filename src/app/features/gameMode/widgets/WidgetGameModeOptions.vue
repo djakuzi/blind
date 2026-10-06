@@ -12,7 +12,19 @@ export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
 }
 
+export type tWidgetGameModeOptionParameter = 'players' | 'connection';
+
+export interface iWidgetGameModeOptionsSelection {
+  parameter: tWidgetGameModeOptionParameter;
+  playerOptionKey: string;
+  connectionType: tKeyTypeConnection | null;
+}
+
 const props = defineProps<PropsWidgetGameModeOptions>();
+
+const emit = defineEmits<{
+  select: [selection: iWidgetGameModeOptionsSelection];
+}>();
 
 const locale = useLocale();
 const preGameLocale = computed(() => locale.value.views.preGame.index.ui);
@@ -85,6 +97,14 @@ function syncConnectionSelection() {
   selectedConnectionType.value = availableConnections[0] ?? '';
 }
 
+function emitSelection(parameter: tWidgetGameModeOptionParameter) {
+  emit('select', {
+    parameter,
+    playerOptionKey: selectedPlayerOptionKey.value,
+    connectionType: selectedConnectionType.value || null,
+  });
+}
+
 function resetSelections() {
   selectedPlayerOptionKey.value = props.mode.playerOptions[0]?.key ?? '';
   selectedConnectionType.value = '';
@@ -98,6 +118,7 @@ function handlePlayerOptionChange(value: string) {
 
   selectedPlayerOptionKey.value = value;
   syncConnectionSelection();
+  emitSelection('players');
 }
 
 function handleConnectionChange(value: string) {
@@ -108,6 +129,7 @@ function handleConnectionChange(value: string) {
   }
 
   selectedConnectionType.value = connectionType;
+  emitSelection('connection');
 }
 
 watch(
