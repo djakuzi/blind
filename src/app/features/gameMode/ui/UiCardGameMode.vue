@@ -17,6 +17,7 @@ export interface PropsUiCardGameMode {
   mode: iGameMode;
   optionsAccessibilityLabel: string;
   connectionTypesAccessibilityLabel: string;
+  active?: boolean;
   disabled?: boolean;
   imageLoading?: 'eager' | 'lazy';
   imageFetchPriority?: 'high' | 'low' | 'auto';
@@ -24,6 +25,7 @@ export interface PropsUiCardGameMode {
 }
 
 const props = withDefaults(defineProps<PropsUiCardGameMode>(), {
+  active: false,
   disabled: false,
   imageLoading: 'lazy',
   imageFetchPriority: 'low',
@@ -80,6 +82,7 @@ function handleComplete() {
 <template>
   <AppCardHold
     class="ui-card-game-mode"
+    :class="{ 'ui-card-game-mode--active': active }"
     :disabled="disabled"
     width="100%"
     max-width="100%"
@@ -134,13 +137,22 @@ function handleComplete() {
 .ui-card-game-mode :deep(.app-card-hold) {
   height: 100%;
   transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    background-color 160ms ease;
+    border-color var(--app-motion-duration-medium) var(--app-motion-ease-default),
+    box-shadow var(--app-motion-duration-medium) var(--app-motion-ease-default),
+    background-color var(--app-motion-duration-medium) var(--app-motion-ease-default);
+}
+
+.ui-card-game-mode--active :deep(.app-card-hold) {
+  border-color: var(--app-color-primary);
+  box-shadow:
+    0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 34%, transparent),
+    0 0 2.5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent),
+    0 0 6rem color-mix(in srgb, var(--app-color-primary) 18%, transparent),
+    0 2rem 6rem color-mix(in srgb, var(--app-color-primary) 16%, transparent);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .ui-card-game-mode :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
+  .ui-card-game-mode:not(.ui-card-game-mode--active) :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
     border-color: var(--app-color-primary);
     box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 18%, transparent);
   }

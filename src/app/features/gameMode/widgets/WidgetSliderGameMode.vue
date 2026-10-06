@@ -48,6 +48,7 @@ function handleModeComplete() {
         <UiCardGameMode
           v-if="modes[index]"
           :mode="modes[index]"
+          :active="active"
           :disabled="!active"
           :image-loading="active ? 'eager' : 'lazy'"
           :image-fetch-priority="active ? 'high' : 'low'"
