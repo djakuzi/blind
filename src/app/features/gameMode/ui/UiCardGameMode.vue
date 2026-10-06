@@ -110,7 +110,7 @@ function handleComplete() {
 
         <div class="ui-card-game-mode__body">
           <AppFillAware color="text-primary" filled-color="on-primary">
-            <AppTitle :text="modeTitle" tag="h2" color="inherit" font-size="2xl" font-weight="bold" />
+            <AppTitle :text="modeTitle" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
           </AppFillAware>
 
           <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">
@@ -125,22 +125,6 @@ function handleComplete() {
             />
           </AppFillAware>
         </div>
-      </div>
-
-      <div class="ui-card-game-mode__footer">
-        <AppFillAware class="ui-card-game-mode__info" tag="div" color="text-primary" filled-color="on-primary" :initial-filled="true">
-          <AppInfoRowList
-            :items="optionItems"
-            width="auto"
-            max-width="100%"
-            size="big"
-            text-color="inherit"
-            divider-color="currentColor"
-            font-weight="bold"
-            :accessibility-label="optionsAccessibilityLabel"
-            :center-even="true"
-          />
-        </AppFillAware>
       </div>
     </div>
   </AppCardHold>
@@ -172,7 +156,6 @@ function handleComplete() {
   width: 100%;
   height: 100%;
   min-width: 0;
-  gap: var(--app-space-12);
 }
 
 .ui-card-game-mode__main {
@@ -191,7 +174,6 @@ function handleComplete() {
   align-items: center;
   width: 100%;
   min-width: 0;
-  /* gap: var(--app-space-6); */
   text-align: center;
 }
 
@@ -202,23 +184,5 @@ function handleComplete() {
 .ui-card-game-mode__image {
   flex: 0 1 auto;
   pointer-events: none;
-}
-
-.ui-card-game-mode__footer {
-  display: flex;
-  flex: 0 0 25%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-  gap: var(--app-space-2);
-}
-
-.ui-card-game-mode__info {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
 }
 </style>

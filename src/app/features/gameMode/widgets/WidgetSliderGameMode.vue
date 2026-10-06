@@ -35,7 +35,7 @@ function handleModeComplete() {
       :count="modes.length"
       width="100%"
       max-width="100%"
-      item-width="90%"
+      item-width="40%"
       item-max-width="120rem"
       :item-gap="8"
       size="big"
@@ -58,7 +58,7 @@ function handleModeComplete() {
         />
       </template>
 
-      <template #hint>
+      <!-- <template #hint>
         <AppHoldHint
           :text="preGameLocale.holdHint"
           :fine-pointer-items="[preGameLocale.desktopWheelHint, preGameLocale.desktopSelectHint]"
@@ -67,7 +67,7 @@ function handleModeComplete() {
           size="middle"
           max-width="100%"
         />
-      </template>
+      </template> -->
     </AppSlider>
   </div>
 </template>
