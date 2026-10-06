@@ -55,7 +55,7 @@ function handleComplete() {
     background-color="surface-primary"
     border-color="border-contrast"
     border-width="thick"
-    border-radius="xl"
+    border-radius="lg"
     overflow="hidden"
     :initial-progress="0"
     @complete="handleComplete"
