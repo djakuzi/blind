@@ -23,6 +23,7 @@ export interface PropsAppSlider {
   itemGap?: tSpaceValue;
   inactiveScale?: number;
   inactiveOpacity?: number;
+  viewportBleed?: tSpaceValue;
   contentDotsGap?: tSpaceValue;
   dotsHintGap?: tSpaceValue;
   dotsGap?: tSpaceValue;
@@ -46,6 +47,7 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
   itemGap: 6,
   inactiveScale: 0.88,
   inactiveOpacity: 0.45,
+  viewportBleed: 0,
   contentDotsGap: undefined,
   dotsHintGap: 12,
   dotsGap: 6,
@@ -131,6 +133,11 @@ const sliderDotColor = computed(() => resolveColorValue(props.dotColor));
 const sliderActiveDotColor = computed(() => resolveColorValue(props.activeDotColor));
 const sliderInactiveScale = computed(() => LibNumber.clamp(props.inactiveScale, 0, 1));
 const sliderInactiveOpacity = computed(() => LibNumber.clamp(props.inactiveOpacity, 0, 1));
+const sliderViewportClipPath = computed(() => {
+  const bleed = resolveSpaceValue(props.viewportBleed) ?? '0px';
+
+  return `inset(calc(0px - ${bleed}) 0 calc(0px - ${bleed}) 0)`;
+});
 
 const trackTransform = computed(() => `translate3d(${trackTranslate.value + dragOffset.value}px, 0, 0)`);
 
@@ -413,18 +420,20 @@ onBeforeUnmount(() => {
       @wheel="handleWheel"
       @keydown="handleKeydown"
     >
-      <div ref="trackElement" class="app-slider__track" :style="{ transform: trackTransform }">
-        <div
-          v-for="index in indexes"
-          :key="index"
-          class="app-slider__item"
-          :class="{ 'app-slider__item--active': isItemActive(index) }"
-          role="group"
-          :aria-label="itemAccessibilityLabel(index, count)"
-          :aria-hidden="!isItemActive(index)"
-        >
-          <div class="app-slider__item-content">
-            <slot name="item" :index="index" :active="isItemActive(index)" />
+      <div class="app-slider__viewport-clip">
+        <div ref="trackElement" class="app-slider__track" :style="{ transform: trackTransform }">
+          <div
+            v-for="index in indexes"
+            :key="index"
+            class="app-slider__item"
+            :class="{ 'app-slider__item--active': isItemActive(index) }"
+            role="group"
+            :aria-label="itemAccessibilityLabel(index, count)"
+            :aria-hidden="!isItemActive(index)"
+          >
+            <div class="app-slider__item-content">
+              <slot name="item" :index="index" :active="isItemActive(index)" />
+            </div>
           </div>
         </div>
       </div>
@@ -456,7 +465,6 @@ onBeforeUnmount(() => {
 .app-slider__viewport {
   width: 100%;
   min-width: 0;
-  overflow: hidden;
   cursor: grab;
   touch-action: pan-y;
   user-select: none;
@@ -467,6 +475,12 @@ onBeforeUnmount(() => {
     outline: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-primary);
     outline-offset: 2px;
   }
+}
+
+.app-slider__viewport-clip {
+  width: 100%;
+  min-width: 0;
+  clip-path: v-bind(sliderViewportClipPath);
 }
 
 .app-slider__track {
