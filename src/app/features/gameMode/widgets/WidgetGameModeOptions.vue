@@ -25,7 +25,7 @@ export interface PropsWidgetGameModeOptions {
 
 export type iWidgetGameModeOptionsSelection =
   | {
-      key: 'option';
+      key: 'players';
       value: string | null;
     }
   | {
@@ -133,9 +133,9 @@ function formatPlayerOption({ players, teamSize }: iApiGameModePlayerData) {
   return Array(teamCount).fill(teamSize).join(' VS ');
 }
 
-function emitOptionSelection() {
+function emitPlayersSelection() {
   emit('select', {
-    key: 'option',
+    key: 'players',
     value: selectedPlayerOptionKey.value || null,
   });
 }
@@ -169,7 +169,7 @@ function syncSelections() {
   selectedPlayerOptionKey.value = playerOption?.key ?? '';
   syncConnectionSelection(playerOption);
 
-  emitOptionSelection();
+  emitPlayersSelection();
   emitConnectionSelection();
 }
 
@@ -183,7 +183,7 @@ function handlePlayerOptionChange(value: string) {
   selectedPlayerOptionKey.value = playerOption.key;
   syncConnectionSelection(playerOption);
 
-  emitOptionSelection();
+  emitPlayersSelection();
   emitConnectionSelection();
 }
 

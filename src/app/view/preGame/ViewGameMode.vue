@@ -17,7 +17,7 @@ const gameModeStore = useGameModeStore();
 
 const activeModeIndex = ref(0);
 const selectedModeKey = ref<tGameModeKey | null>(null);
-const selectedOptionKey = ref<string | null>(null);
+const selectedPlayersKey = ref<string | null>(null);
 const selectedConnectionType = ref<tKeyTypeConnection | null>(null);
 
 const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? null);
@@ -27,8 +27,8 @@ function handleModeSelect(selection: iWidgetSliderGameModeSelection) {
 }
 
 function handleOptionSelect(selection: iWidgetGameModeOptionsSelection) {
-  if (selection.key === 'option') {
-    selectedOptionKey.value = selection.value;
+  if (selection.key === 'players') {
+    selectedPlayersKey.value = selection.value;
     return;
   }
 
@@ -38,7 +38,7 @@ function handleOptionSelect(selection: iWidgetGameModeOptionsSelection) {
 function handleModeComplete() {
   if (
     !selectedModeKey.value ||
-    !selectedOptionKey.value ||
+    !selectedPlayersKey.value ||
     !selectedConnectionType.value
   ) {
     return;
@@ -48,7 +48,7 @@ function handleModeComplete() {
     name: KEY_ROUTE.preGame.typeConnection,
     query: {
       mode: selectedModeKey.value,
-      option: selectedOptionKey.value,
+      players: selectedPlayersKey.value,
       connection: selectedConnectionType.value,
     },
   });
