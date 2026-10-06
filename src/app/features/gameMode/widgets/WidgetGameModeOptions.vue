@@ -5,9 +5,10 @@ import type { iApiGameModePlayerOption } from '@/app/domain/game/type/api/common
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
-import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
-import type { iAppSegmentedControlOption } from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
+import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
+import type { iAppSegmentedCardOption } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
+import { useGameStore } from '@/app/stores/game/game.store';
 
 export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
@@ -27,6 +28,7 @@ const emit = defineEmits<{
   select: [selection: iWidgetGameModeOptionsSelection];
 }>();
 
+const gameStore = useGameStore();
 const locale = useLocale();
 const preGameLocale = computed(() => locale.value.views.preGame.index.ui);
 
@@ -40,11 +42,21 @@ const selectedPlayerOption = computed(
     null,
 );
 
-const playerOptions = computed<iAppSegmentedControlOption[]>(() =>
-  props.mode.playerOptions.map((option) => ({
-    value: option.key,
-    label: formatPlayerOption(option),
-  })),
+const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
+  props.mode.playerOptions.map((option) => {
+    const icon = gameStore.media?.players[option.key]?.icon;
+
+    return {
+      value: option.key,
+      label: formatPlayerOption(option),
+      image: icon
+        ? {
+            light: icon.light,
+            dark: icon.dark,
+          }
+        : undefined,
+    };
+  }),
 );
 
 const connectionTypes = computed<tKeyTypeConnection[]>(() => {
@@ -59,7 +71,7 @@ const connectionTypes = computed<tKeyTypeConnection[]>(() => {
   return Array.from(connectionTypes);
 });
 
-const connectionOptions = computed<iAppSegmentedControlOption[]>(() => {
+const connectionOptions = computed<iAppSegmentedCardOption[]>(() => {
   const availableConnections = selectedPlayerOption.value?.connections ?? [];
 
   return connectionTypes.value.map((connectionType) => ({
@@ -160,7 +172,7 @@ watch(
         font-weight="medium"
       />
 
-      <AppSegmentedControl
+      <AppSegmentedCard
         :model-value="selectedPlayerOptionKey"
         :options="playerOptions"
         :disabled="mode.locked"
@@ -187,7 +199,7 @@ watch(
         font-weight="medium"
       />
 
-      <AppSegmentedControl
+      <AppSegmentedCard
         :model-value="selectedConnectionType"
         :options="connectionOptions"
         :disabled="mode.locked"
