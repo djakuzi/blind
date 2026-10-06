@@ -125,18 +125,9 @@ async function activateMeasurement() {
 }
 
 watch(
-  () => context?.rootElement.value,
-  () => {
-    if (context?.isActive.value) {
-      activateMeasurement();
-    }
-  },
-);
-
-watch(
-  () => context?.isActive.value ?? false,
-  (isActive) => {
-    if (!isActive) {
+  [element, () => context?.rootElement.value],
+  ([target, root]) => {
+    if (!target || !root) {
       stopObserving();
       isMeasured.value = false;
       return;
