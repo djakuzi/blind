@@ -193,7 +193,7 @@ watch(() => props.mode.key, syncSelections, { immediate: true });
         :options="playerOptions"
         :disabled="mode.locked"
         size="big"
-        width="60rem"
+        min-width="60rem"
         max-width="100%"
         @update:model-value="handlePlayerOptionChange"
       />
@@ -220,7 +220,6 @@ watch(() => props.mode.key, syncSelections, { immediate: true });
         :options="connectionOptions"
         :disabled="mode.locked"
         size="big"
-        width="80rem"
         max-width="100%"
         :equal-width="false"
         @update:model-value="handleConnectionChange"
