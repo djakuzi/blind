@@ -6,9 +6,18 @@ import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
-import type { iAppSegmentedCardOption } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
+import type {
+  iAppSegmentedCardOption,
+  iAppSegmentedCardOptionImage,
+} from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 import { useGameStore } from '@/app/stores/game/game.store';
+import BluetoothDark from '@/assets/icons/connectionType/bluetooth-dark.svg?url';
+import BluetoothLight from '@/assets/icons/connectionType/bluetooth-light.svg?url';
+import LanDark from '@/assets/icons/connectionType/lan-dark.svg?url';
+import LanLight from '@/assets/icons/connectionType/lan-light.svg?url';
+import OnlineDark from '@/assets/icons/connectionType/online-dark.svg?url';
+import OnlineLight from '@/assets/icons/connectionType/online-light.svg?url';
 
 export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
@@ -21,6 +30,21 @@ export interface iWidgetGameModeOptionsSelection {
   playerOptionKey: string;
   connectionType: tKeyTypeConnection | null;
 }
+
+const CONNECTION_IMAGES: Record<tKeyTypeConnection, iAppSegmentedCardOptionImage> = {
+  BLUETOOTH: {
+    light: BluetoothLight,
+    dark: BluetoothDark,
+  },
+  LAN: {
+    light: LanLight,
+    dark: LanDark,
+  },
+  ONLINE: {
+    light: OnlineLight,
+    dark: OnlineDark,
+  },
+};
 
 const props = defineProps<PropsWidgetGameModeOptions>();
 
@@ -77,6 +101,7 @@ const connectionOptions = computed<iAppSegmentedCardOption[]>(() => {
   return connectionTypes.value.map((connectionType) => ({
     value: connectionType,
     label: locale.value.connectionTypes[connectionType].title,
+    image: CONNECTION_IMAGES[connectionType],
     disabled: !availableConnections.includes(connectionType),
   }));
 });
