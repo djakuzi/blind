@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
-import type { iApiGameModePlayerOption } from '@/app/domain/game/type/api/common';
-import { useLocale } from '@/app/features/locale/composables/useLocale';
-import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
-import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
-import type {
-  iAppSegmentedCardOption,
-  iAppSegmentedCardOptionImage,
-} from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
-import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
-import { useGameStore } from '@/app/stores/game/game.store';
 import BluetoothDark from '@/assets/icons/connectionType/bluetooth-dark.svg?url';
 import BluetoothLight from '@/assets/icons/connectionType/bluetooth-light.svg?url';
 import LanDark from '@/assets/icons/connectionType/lan-dark.svg?url';
 import LanLight from '@/assets/icons/connectionType/lan-light.svg?url';
 import OnlineDark from '@/assets/icons/connectionType/online-dark.svg?url';
 import OnlineLight from '@/assets/icons/connectionType/online-light.svg?url';
+import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
+import type { iApiGameModePlayerOption } from '@/app/domain/game/type/api/common';
+import { useLocale } from '@/app/features/locale/composables/useLocale';
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
+import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
+import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
+import type {
+  iAppSegmentedCardOption,
+  iAppSegmentedCardOptionImage,
+} from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
+import { useGameStore } from '@/app/stores/game/game.store';
 
 export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
@@ -53,18 +53,21 @@ const emit = defineEmits<{
 }>();
 
 const gameStore = useGameStore();
-const locale = useLocale();
-const preGameLocale = computed(() => locale.value.views.preGame.index.ui);
+const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
+const connectionLocale = useLocale((locale) => locale.connectionTypes);
 
 const selectedPlayerOptionKey = ref('');
 const selectedConnectionType = ref<tKeyTypeConnection | ''>('');
 
+function findPlayerOption(key: string) {
+  return props.mode.playerOptions.find((option) => option.key === key);
+}
+
 const selectedPlayerOption = computed(
-  () =>
-    props.mode.playerOptions.find((option) => option.key === selectedPlayerOptionKey.value) ??
-    props.mode.playerOptions[0] ??
-    null,
+  () => findPlayerOption(selectedPlayerOptionKey.value) ?? props.mode.playerOptions[0] ?? null,
 );
+
+const availableConnections = computed(() => selectedPlayerOption.value?.connections ?? []);
 
 const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
   props.mode.playerOptions.map((option) => {
@@ -83,66 +86,54 @@ const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
   }),
 );
 
-const connectionTypes = computed<tKeyTypeConnection[]>(() => {
-  const connectionTypes = new Set<tKeyTypeConnection>();
+const connectionTypes = computed(() => [
+  ...new Set(props.mode.playerOptions.flatMap((option) => option.connections)),
+]);
 
-  for (const option of props.mode.playerOptions) {
-    for (const connectionType of option.connections) {
-      connectionTypes.add(connectionType);
-    }
-  }
-
-  return Array.from(connectionTypes);
-});
-
-const connectionOptions = computed<iAppSegmentedCardOption[]>(() => {
-  const availableConnections = selectedPlayerOption.value?.connections ?? [];
-
-  return connectionTypes.value.map((connectionType) => ({
+const connectionOptions = computed<iAppSegmentedCardOption[]>(() =>
+  connectionTypes.value.map((connectionType) => ({
     value: connectionType,
-    label: locale.value.connectionTypes[connectionType].title,
+    label: connectionLocale.value[connectionType].title,
     image: CONNECTION_IMAGES[connectionType],
-    disabled: !availableConnections.includes(connectionType),
-  }));
-});
+    disabled: !availableConnections.value.includes(connectionType),
+  })),
+);
 
-function formatPlayerOption(option: iApiGameModePlayerOption) {
-  const { players, teamSize } = option;
-
-  if (players <= 0 || teamSize <= 0 || players % teamSize !== 0) {
+function formatPlayerOption({ players, teamSize }: iApiGameModePlayerOption) {
+  if (players <= 0 || teamSize <= 0) {
     return String(players);
   }
 
   const teamCount = players / teamSize;
 
-  if (teamCount < 2) {
+  if (!Number.isInteger(teamCount) || teamCount < 2) {
     return String(players);
   }
 
-  return Array.from({ length: teamCount }, () => teamSize).join(' VS ');
+  return Array(teamCount).fill(teamSize).join(' VS ');
 }
 
-function syncConnectionSelection() {
-  const availableConnections = selectedPlayerOption.value?.connections ?? [];
+function syncConnectionSelection(playerOption = selectedPlayerOption.value) {
+  const connections = playerOption?.connections ?? [];
 
   if (
     selectedConnectionType.value &&
-    availableConnections.includes(selectedConnectionType.value)
+    connections.includes(selectedConnectionType.value)
   ) {
     return;
   }
 
-  selectedConnectionType.value = availableConnections[0] ?? '';
+  selectedConnectionType.value = connections[0] ?? '';
 }
 
 function syncSelections() {
   const playerOption =
-    props.mode.playerOptions.find((option) => option.key === selectedPlayerOptionKey.value) ??
+    findPlayerOption(selectedPlayerOptionKey.value) ??
     props.mode.playerOptions[0] ??
     null;
 
   selectedPlayerOptionKey.value = playerOption?.key ?? '';
-  syncConnectionSelection();
+  syncConnectionSelection(playerOption);
 }
 
 function emitSelection(parameter: tWidgetGameModeOptionParameter) {
@@ -154,19 +145,21 @@ function emitSelection(parameter: tWidgetGameModeOptionParameter) {
 }
 
 function handlePlayerOptionChange(value: string) {
-  if (!props.mode.playerOptions.some((option) => option.key === value)) {
+  const playerOption = findPlayerOption(value);
+
+  if (!playerOption) {
     return;
   }
 
-  selectedPlayerOptionKey.value = value;
-  syncConnectionSelection();
+  selectedPlayerOptionKey.value = playerOption.key;
+  syncConnectionSelection(playerOption);
   emitSelection('players');
 }
 
 function handleConnectionChange(value: string) {
   const connectionType = value as tKeyTypeConnection;
 
-  if (!selectedPlayerOption.value?.connections.includes(connectionType)) {
+  if (!availableConnections.value.includes(connectionType)) {
     return;
   }
 
@@ -174,13 +167,7 @@ function handleConnectionChange(value: string) {
   emitSelection('connection');
 }
 
-watch(
-  () => props.mode.key,
-  () => {
-    syncSelections();
-  },
-  { immediate: true },
-);
+watch(() => props.mode.key, syncSelections, { immediate: true });
 </script>
 
 <template>
@@ -235,7 +222,7 @@ watch(
         size="big"
         width="80rem"
         max-width="100%"
-        :equalWidth="false"
+        :equal-width="false"
         @update:model-value="handleConnectionChange"
       />
     </AppFlex>
