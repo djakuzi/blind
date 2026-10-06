@@ -20,7 +20,7 @@ const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? 
       direction="column"
       align="center"
       width="100%"
-      :gap="8"
+      :gap="12"
     >
       <WidgetSliderGameMode v-model="activeModeIndex" />
 
