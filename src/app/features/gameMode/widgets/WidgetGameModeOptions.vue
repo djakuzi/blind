@@ -159,13 +159,13 @@ watch(
 </script>
 
 <template>
-  <AppFlex class="widget-game-mode-options" direction="column" align="center" width="100%" :gap="8">
+  <AppFlex class="widget-game-mode-options" direction="column" align="center" width="100%" :gap="12">
     <AppFlex
       class="widget-game-mode-options__group"
       direction="column"
       align="center"
       width="100%"
-      :gap="3"
+      :gap="6"
       role="group"
       :aria-label="preGameLocale.players"
     >
@@ -192,7 +192,7 @@ watch(
       direction="column"
       align="center"
       width="100%"
-      :gap="3"
+      :gap="6"
       role="group"
       :aria-label="preGameLocale.connection"
     >
