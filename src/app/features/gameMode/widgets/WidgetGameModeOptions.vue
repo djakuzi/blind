@@ -4,7 +4,7 @@ import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import type { iApiGameModePlayerOption } from '@/app/domain/game/type/api/common';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
+import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
 import type { iAppSegmentedControlOption } from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
@@ -153,11 +153,11 @@ watch(
       role="group"
       :aria-label="preGameLocale.players"
     >
-      <AppMarqueeText
+      <AppTitle
         :text="preGameLocale.players"
+        tag="h3"
         font-size="lg"
         font-weight="medium"
-        :uppercase="true"
       />
 
       <AppSegmentedControl
@@ -180,11 +180,11 @@ watch(
       role="group"
       :aria-label="preGameLocale.connection"
     >
-      <AppMarqueeText
+      <AppTitle
         :text="preGameLocale.connection"
+        tag="h3"
         font-size="lg"
         font-weight="medium"
-        :uppercase="true"
       />
 
       <AppSegmentedControl
