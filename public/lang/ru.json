@@ -27,7 +27,9 @@
           "loadError": "Не удалось загрузить режимы игры",
           "loading": "Загрузка...",
           "modeOptionsAccessibilityLabel": "Параметры режима",
-          "connectionTypesAccessibilityLabel": "Доступные способы подключения"
+          "connectionTypesAccessibilityLabel": "Доступные способы подключения",
+          "players": "Игроки",
+          "connection": "Подключение"
         },
         "modals": {}
       },

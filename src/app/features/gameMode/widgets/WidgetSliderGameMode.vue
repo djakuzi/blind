@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import UiCardGameMode from '@/app/features/gameMode/ui/UiCardGameMode.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
-import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
 import { useGameStore } from '@/app/stores/game/game.store';
 
 const router = useRouter();
 const gameStore = useGameStore();
 
+const activeIndex = defineModel<number>({ default: 0 });
+
 const modes = computed(() => gameStore.modes);
-const activeIndex = ref(0);
 
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
 
@@ -57,17 +57,6 @@ function handleModeComplete() {
           @complete="handleModeComplete"
         />
       </template>
-
-      <!-- <template #hint>
-        <AppHoldHint
-          :text="preGameLocale.holdHint"
-          :fine-pointer-items="[preGameLocale.desktopWheelHint, preGameLocale.desktopSelectHint]"
-          direction="column"
-          fine-pointer-direction="column"
-          size="middle"
-          max-width="100%"
-        />
-      </template> -->
     </AppSlider>
   </div>
 </template>

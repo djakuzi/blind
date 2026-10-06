@@ -27,7 +27,9 @@
           "loadError": "Failed to load game modes",
           "loading": "Loading...",
           "modeOptionsAccessibilityLabel": "Game mode parameters",
-          "connectionTypesAccessibilityLabel": "Available connection methods"
+          "connectionTypesAccessibilityLabel": "Available connection methods",
+          "players": "Players",
+          "connection": "Connection"
         },
         "modals": {}
       },
