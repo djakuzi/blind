@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import WidgetGameModeOptions from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
 import WidgetSliderGameMode from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 const gameModeStore = useGameModeStore();
@@ -14,11 +15,17 @@ const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? 
 
 <template>
   <ViewLayout class="view-game-mode" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
-    <div class="view-game-mode__content">
+    <AppFlex
+      class="view-game-mode__content"
+      direction="column"
+      align="center"
+      width="100%"
+      :gap="8"
+    >
       <WidgetSliderGameMode v-model="activeModeIndex" />
 
       <WidgetGameModeOptions v-if="activeMode" :mode="activeMode" />
-    </div>
+    </AppFlex>
   </ViewLayout>
 </template>
 
@@ -28,11 +35,6 @@ const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? 
 }
 
 .view-game-mode__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
   min-width: 0;
-  gap: var(--app-space-8);
 }
 </style>
