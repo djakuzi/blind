@@ -110,18 +110,22 @@ function syncConnectionSelection() {
   selectedConnectionType.value = availableConnections[0] ?? '';
 }
 
+function syncSelections() {
+  const playerOption =
+    props.mode.playerOptions.find((option) => option.key === selectedPlayerOptionKey.value) ??
+    props.mode.playerOptions[0] ??
+    null;
+
+  selectedPlayerOptionKey.value = playerOption?.key ?? '';
+  syncConnectionSelection();
+}
+
 function emitSelection(parameter: tWidgetGameModeOptionParameter) {
   emit('select', {
     parameter,
     playerOptionKey: selectedPlayerOptionKey.value,
     connectionType: selectedConnectionType.value || null,
   });
-}
-
-function resetSelections() {
-  selectedPlayerOptionKey.value = props.mode.playerOptions[0]?.key ?? '';
-  selectedConnectionType.value = '';
-  syncConnectionSelection();
 }
 
 function handlePlayerOptionChange(value: string) {
@@ -148,7 +152,7 @@ function handleConnectionChange(value: string) {
 watch(
   () => props.mode.key,
   () => {
-    resetSelections();
+    syncSelections();
   },
   { immediate: true },
 );

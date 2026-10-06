@@ -131,6 +131,7 @@ function handleSelect(option: iAppSegmentedCardOption) {
       class="app-segmented-card__item app-interactive"
       :class="{
         'app-interactive--selected': isOptionSelected(option),
+        'app-segmented-card__item--with-image': option.image,
         'app-segmented-card__item--disabled': option.disabled,
       }"
       type="button"
@@ -221,6 +222,12 @@ function handleSelect(option: iAppSegmentedCardOption) {
 
 .app-segmented-card:not(.app-segmented-card--disabled) .app-segmented-card__item--disabled {
   filter: contrast(0.6);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-segmented-card__item--with-image.app-interactive:not(.app-interactive--selected):not(:disabled):not(.app-interactive--disabled):hover {
+    color: var(--app-color-text-primary);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
