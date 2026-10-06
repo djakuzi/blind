@@ -216,11 +216,11 @@ function handleSelect(option: iAppSegmentedCardOption) {
 }
 
 .app-segmented-card--disabled {
-  opacity: 0.4;
+  filter: contrast(0.6);
 }
 
 .app-segmented-card:not(.app-segmented-card--disabled) .app-segmented-card__item--disabled {
-  opacity: 0.4;
+  filter: contrast(0.6);
 }
 
 @media (prefers-reduced-motion: reduce) {
