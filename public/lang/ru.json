@@ -82,21 +82,13 @@
   },
   "game": {
     "modes": {
-      "DUEL": {
+      "single-hit": {
         "title": "DUEL",
         "description": "Одно попадание — одна жизнь"
       },
-      "COMBAT": {
+      "health": {
         "title": "COMBAT",
         "description": "Сражайся, пока здоровье не закончится"
-      },
-      "CLASH": {
-        "title": "CLASH",
-        "description": "Одна жизнь. Одна команда."
-      },
-      "BATTLE": {
-        "title": "BATTLE",
-        "description": "Командный бой до последнего выжившего"
       }
     },
     "format": {

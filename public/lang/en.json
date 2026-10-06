@@ -82,21 +82,13 @@
   },
   "game": {
     "modes": {
-      "DUEL": {
+      "single-hit": {
         "title": "DUEL",
         "description": "One hit — one life"
       },
-      "COMBAT": {
+      "health": {
         "title": "COMBAT",
         "description": "Fight until your health runs out"
-      },
-      "CLASH": {
-        "title": "CLASH",
-        "description": "One life. One team."
-      },
-      "BATTLE": {
-        "title": "BATTLE",
-        "description": "Team battle to the last survivor"
       }
     },
     "format": {

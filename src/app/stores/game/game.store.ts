@@ -5,6 +5,7 @@ import type { iGameState } from './game.type';
 export const useGameStore = defineStore('game', {
   state: (): iGameState => ({
     modes: [],
+    media: null,
   }),
 
   actions: {

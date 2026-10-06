@@ -1,72 +1,98 @@
-[
-  {
-    "key": "DUEL",
-    "img": {
-      "dark": "/game/images/gameMode/duel-dark.webp",
-      "light": "/game/images/gameMode/duel-light.webp"
-    },
-    "options": {
-      "teamSize": 1,
-      "players": 2,
+{
+  "modes": [
+    {
+      "key": "single-hit",
+      "name": "DUEL",
+      "description": "One hit — one life",
       "rounds": 3,
-      "winCondition": "single-hit"
+      "playerOptions": [
+        {
+          "key": "1v1",
+          "players": 2,
+          "teamSize": 1,
+          "connections": [
+            "BLUETOOTH",
+            "LAN",
+            "ONLINE"
+          ]
+        },
+        {
+          "key": "2v2",
+          "players": 4,
+          "teamSize": 2,
+          "connections": [
+            "LAN",
+            "ONLINE"
+          ]
+        }
+      ],
+      "locked": false,
+      "lockedText": null
     },
-    "typeConnection": [
-      "BLUETOOTH",
-      "LAN",
-      "ONLINE"
-    ]
-  },
-  {
-    "key": "COMBAT",
-    "img": {
-      "dark": "/game/images/gameMode/combat-dark.webp",
-      "light": "/game/images/gameMode/combat-light.webp"
-    },
-    "options": {
-      "teamSize": 1,
-      "players": 2,
+    {
+      "key": "health",
+      "name": "COMBAT",
+      "description": "Fight until your health runs out",
       "rounds": 3,
-      "winCondition": "health"
+      "playerOptions": [
+        {
+          "key": "1v1",
+          "players": 2,
+          "teamSize": 1,
+          "connections": [
+            "BLUETOOTH",
+            "LAN",
+            "ONLINE"
+          ]
+        },
+        {
+          "key": "2v2",
+          "players": 4,
+          "teamSize": 2,
+          "connections": [
+            "LAN",
+            "ONLINE"
+          ]
+        }
+      ],
+      "locked": false,
+      "lockedText": null
+    }
+  ],
+  "media": {
+    "modes": {
+      "single-hit": {
+        "image": {
+          "dark": "/game/images/gameMode/duel-dark.webp",
+          "light": "/game/images/gameMode/duel-light.webp"
+        }
+      },
+      "health": {
+        "image": {
+          "dark": "/game/images/gameMode/combat-dark.webp",
+          "light": "/game/images/gameMode/combat-light.webp"
+        }
+      }
     },
-    "typeConnection": [
-      "BLUETOOTH",
-      "LAN",
-      "ONLINE"
-    ]
-  },
-  {
-    "key": "CLASH",
-    "img": {
-      "dark": "/game/images/gameMode/clash-dark.webp",
-      "light": "/game/images/gameMode/clash-light.webp"
+    "players": {
+      "1v1": {
+        "icon": {
+          "dark": "/game/icons/playerOption/1v1-dark.svg",
+          "light": "/game/icons/playerOption/1v1-light.svg"
+        }
+      },
+      "2v2": {
+        "icon": {
+          "dark": "/game/icons/playerOption/2v2-dark.svg",
+          "light": "/game/icons/playerOption/2v2-light.svg"
+        }
+      }
     },
-    "options": {
-      "teamSize": 2,
-      "players": 4,
-      "rounds": 3,
-      "winCondition": "single-hit"
-    },
-    "typeConnection": [
-      "LAN",
-      "ONLINE"
-    ]
-  },
-  {
-    "key": "BATTLE",
-    "img": {
-      "dark": "/game/images/gameMode/battle-dark.webp",
-      "light": "/game/images/gameMode/battle-light.webp"
-    },
-    "options": {
-      "teamSize": 2,
-      "players": 4,
-      "rounds": 3,
-      "winCondition": "health"
-    },
-    "typeConnection": [
-      "LAN",
-      "ONLINE"
-    ]
+    "locked": {
+      "icon": {
+        "dark": "/game/icons/locked/lock-dark.svg",
+        "light": "/game/icons/locked/lock-light.svg"
+      }
+    }
   }
-]
+}
