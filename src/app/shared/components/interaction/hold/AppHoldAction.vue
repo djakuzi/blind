@@ -423,7 +423,7 @@ function resetHoldState(isImmediate = false) {
 
   releasePointerCapture();
 
-  if (wasCompleted && !isImmediate) {
+  if (wasCompleted) {
     isProgressActive.value = false;
     return;
   }
