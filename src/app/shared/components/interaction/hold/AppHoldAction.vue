@@ -407,7 +407,11 @@ function releasePointerCapture() {
 }
 
 function resetHoldState(isImmediate = false) {
-  const shouldAnimateRelease = !isImmediate && progress.value > normalizedInitialProgress.value;
+  const wasCompleted = hasCompleted.value;
+  const shouldAnimateRelease =
+    !isImmediate &&
+    !wasCompleted &&
+    progress.value > normalizedInitialProgress.value;
 
   holdStartTimer.cancel();
   holdCompleteTimer.cancel();
@@ -415,10 +419,16 @@ function resetHoldState(isImmediate = false) {
   stopProgressSound(isImmediate);
 
   isHolding.value = false;
-  hasCompleted.value = false;
   activeTouchId = undefined;
 
   releasePointerCapture();
+
+  if (wasCompleted && !isImmediate) {
+    isProgressActive.value = false;
+    return;
+  }
+
+  hasCompleted.value = false;
 
   if (shouldAnimateRelease) {
     animateReleaseProgress();
