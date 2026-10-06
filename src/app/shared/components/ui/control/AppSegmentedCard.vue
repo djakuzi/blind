@@ -56,7 +56,7 @@ const props = withDefaults(defineProps<PropsAppSegmentedCard>(), {
   gap: 2,
   paddingX: undefined,
   paddingY: undefined,
-  borderRadius: 'lg',
+  borderRadius: 'md',
   imageSize: undefined,
 });
 

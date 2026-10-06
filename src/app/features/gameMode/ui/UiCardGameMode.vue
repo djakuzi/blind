@@ -87,7 +87,7 @@ function handleComplete() {
     background-color="surface-primary"
     border-color="border-contrast"
     border-width="thick"
-    border-radius="2xl"
+    border-radius="xl"
     overflow="hidden"
     :initial-progress="15"
     @complete="handleComplete"
