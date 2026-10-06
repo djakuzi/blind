@@ -1,5 +1,5 @@
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
-import type { tOptionGameMode } from '@/game/types/gameMode.types';
+import type { tGameModeWinCondition, tOptionGameMode } from '@/game/types/gameMode.types';
 import type {
   iApiGameModeData,
   iApiGameModePlayerOption,
@@ -56,7 +56,7 @@ export class ModelGameMode implements iGameMode {
       players: option.players,
       teamSize: option.teamSize,
       rounds: this.rounds,
-      winCondition: this.key,
+      winCondition: this.getWinCondition(),
     };
   }
 
@@ -72,5 +72,13 @@ export class ModelGameMode implements iGameMode {
     }
 
     return option;
+  }
+
+  private getWinCondition(): tGameModeWinCondition {
+    if (this.key === 'single-hit' || this.key === 'health') {
+      return this.key;
+    }
+
+    throw new Error(`Game mode "${this.key}" has no playable win condition`);
   }
 }

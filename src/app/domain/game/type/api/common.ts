@@ -31,12 +31,7 @@ export interface iApiGameModePlayerMedia {
   icon: iApiThemeMedia;
 }
 
-export interface iApiGameModeLockedMedia {
-  icon: iApiThemeMedia;
-}
-
 export interface iApiGameModesMedia {
   modes: Record<tGameModeKey, iApiGameModeMedia>;
   players: Record<string, iApiGameModePlayerMedia>;
-  locked: iApiGameModeLockedMedia;
 }
