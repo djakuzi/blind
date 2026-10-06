@@ -146,9 +146,9 @@ function handleComplete() {
   border-color: var(--app-color-primary);
   box-shadow:
     0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 34%, transparent),
-    0 0 2.5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent),
-    0 0 6rem color-mix(in srgb, var(--app-color-primary) 18%, transparent),
-    0 2rem 6rem color-mix(in srgb, var(--app-color-primary) 16%, transparent);
+    0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent),
+    0 0 5rem color-mix(in srgb, var(--app-color-primary) 18%, transparent),
+    0 1rem 5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent);
 }
 
 @media (hover: hover) and (pointer: fine) {
