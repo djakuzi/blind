@@ -210,6 +210,7 @@ watch(
         size="big"
         width="80rem"
         max-width="100%"
+        :equalWidth="false"
         @update:model-value="handleConnectionChange"
       />
     </AppFlex>
