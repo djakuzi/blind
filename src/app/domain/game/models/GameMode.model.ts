@@ -6,11 +6,24 @@ import type {
   iApiThemeMedia,
 } from '../type/api/common';
 
+export interface iGameMode {
+  readonly key: iApiGameModeData['key'];
+  readonly name: string;
+  readonly description: string;
+  readonly rounds: number;
+  readonly playerOptions: iApiGameModePlayerOption[];
+  readonly locked: boolean;
+  readonly lockedText: string | null;
+  readonly img: iApiThemeMedia;
+  readonly options: tOptionGameMode;
+  readonly typeConnection: tKeyTypeConnection[];
+}
+
 export interface iPayloadModelGameMode extends iApiGameModeData {
   image: iApiThemeMedia;
 }
 
-export class ModelGameMode {
+export class ModelGameMode implements iGameMode {
   readonly key: iApiGameModeData['key'];
   readonly name: string;
   readonly description: string;

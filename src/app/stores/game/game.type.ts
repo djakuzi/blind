@@ -1,7 +1,7 @@
-import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
+import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import type { iApiGameModesMedia } from '@/app/domain/game/type/api/common';
 
 export interface iGameState {
-  modes: ModelGameMode[];
+  modes: iGameMode[];
   media: iApiGameModesMedia | null;
 }

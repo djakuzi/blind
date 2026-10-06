@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
+import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import type { iApiGameModePlayerOption } from '@/app/domain/game/type/api/common';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
@@ -9,7 +9,7 @@ import type { iAppSegmentedControlOption } from '@/app/shared/components/ui/cont
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 
 export interface PropsWidgetGameModeOptions {
-  mode: ModelGameMode;
+  mode: iGameMode;
 }
 
 const props = defineProps<PropsWidgetGameModeOptions>();

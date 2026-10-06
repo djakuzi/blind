@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
+import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
@@ -14,7 +14,7 @@ import { useLanguageStore } from '@/app/stores/language/language.store';
 import { formatGameModePlayers, formatGameModeRounds } from '../helpers/formatGameMode.helper';
 
 export interface PropsUiCardGameMode {
-  mode: ModelGameMode;
+  mode: iGameMode;
   optionsAccessibilityLabel: string;
   connectionTypesAccessibilityLabel: string;
   disabled?: boolean;
