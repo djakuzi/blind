@@ -43,7 +43,6 @@ watch(
       });
     }
   },
-  { immediate: true },
 );
 </script>
 

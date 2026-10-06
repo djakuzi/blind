@@ -1,58 +1,80 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import WidgetGameModeOptions from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
 import type { iWidgetGameModeOptionsSelection } from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
 import WidgetSliderGameMode from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
 import type { iWidgetSliderGameModeSelection } from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
+import { usePreGame } from '@/app/features/preGame/composables/usePreGame';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
-import type { tGameModeKey } from '@/game/types/gameMode.types';
 
 const router = useRouter();
 const gameModeStore = useGameModeStore();
+const {
+  mode,
+  players,
+  connection,
+  query,
+  setSelection,
+  flushSelection,
+} = usePreGame();
 
 const activeModeIndex = ref(0);
-const selectedModeKey = ref<tGameModeKey | null>(null);
-const selectedPlayersKey = ref<string | null>(null);
-const selectedConnectionType = ref<tKeyTypeConnection | null>(null);
 
 const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? null);
 
 function handleModeSelect(selection: iWidgetSliderGameModeSelection) {
-  selectedModeKey.value = selection.value;
+  setSelection({
+    mode: selection.value,
+  });
 }
 
 function handleOptionSelect(selection: iWidgetGameModeOptionsSelection) {
   if (selection.key === 'players') {
-    selectedPlayersKey.value = selection.value;
+    setSelection({
+      players: selection.value,
+    });
     return;
   }
 
-  selectedConnectionType.value = selection.value;
-}
-
-function handleModeComplete() {
-  if (
-    !selectedModeKey.value ||
-    !selectedPlayersKey.value ||
-    !selectedConnectionType.value
-  ) {
-    return;
-  }
-
-  router.push({
-    name: KEY_ROUTE.preGame.typeConnection,
-    query: {
-      mode: selectedModeKey.value,
-      players: selectedPlayersKey.value,
-      connection: selectedConnectionType.value,
-    },
+  setSelection({
+    connection: selection.value,
   });
 }
+
+async function handleModeComplete() {
+  await flushSelection();
+
+  if (!mode.value || !players.value || !connection.value) {
+    return;
+  }
+
+  await router.push({
+    name: KEY_ROUTE.preGame.typeConnection,
+    query: query.value,
+  });
+}
+
+watch(
+  mode,
+  (modeKey) => {
+    if (!modeKey) {
+      return;
+    }
+
+    const modeIndex = gameModeStore.modes.findIndex(
+      (gameMode) => gameMode.key === modeKey,
+    );
+
+    if (modeIndex >= 0 && activeModeIndex.value !== modeIndex) {
+      activeModeIndex.value = modeIndex;
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -73,6 +95,8 @@ function handleModeComplete() {
       <WidgetGameModeOptions
         v-if="activeMode"
         :mode="activeMode"
+        :players="players"
+        :connection="connection"
         @select="handleOptionSelect"
       />
     </AppFlex>

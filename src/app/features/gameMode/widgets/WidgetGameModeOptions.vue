@@ -21,16 +21,18 @@ import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
+  players?: string | null;
+  connection?: tKeyTypeConnection | null;
 }
 
 export type iWidgetGameModeOptionsSelection =
   | {
       key: 'players';
-      value: string | null;
+      value: string;
     }
   | {
       key: 'connection';
-      value: tKeyTypeConnection | null;
+      value: tKeyTypeConnection;
     };
 
 interface iResolvedPlayerOption extends iApiGameModePlayerData {
@@ -52,7 +54,10 @@ const CONNECTION_IMAGES: Record<tKeyTypeConnection, iAppSegmentedCardOptionImage
   },
 };
 
-const props = defineProps<PropsWidgetGameModeOptions>();
+const props = withDefaults(defineProps<PropsWidgetGameModeOptions>(), {
+  players: null,
+  connection: null,
+});
 
 const emit = defineEmits<{
   select: [selection: iWidgetGameModeOptionsSelection];
@@ -133,44 +138,20 @@ function formatPlayerOption({ players, teamSize }: iApiGameModePlayerData) {
   return Array(teamCount).fill(teamSize).join(' VS ');
 }
 
-function emitPlayersSelection() {
-  emit('select', {
-    key: 'players',
-    value: selectedPlayerOptionKey.value || null,
-  });
-}
-
-function emitConnectionSelection() {
-  emit('select', {
-    key: 'connection',
-    value: selectedConnectionType.value || null,
-  });
-}
-
-function syncConnectionSelection(playerOption = selectedPlayerOption.value) {
-  const connections = playerOption?.connections ?? [];
-
-  if (
-    selectedConnectionType.value &&
-    connections.includes(selectedConnectionType.value)
-  ) {
-    return;
-  }
-
-  selectedConnectionType.value = connections[0] ?? '';
-}
-
 function syncSelections() {
   const playerOption =
-    resolvePlayerOption(selectedPlayerOptionKey.value) ??
+    resolvePlayerOption(props.players ?? '') ??
     resolvedPlayerOptions.value[0] ??
     null;
 
   selectedPlayerOptionKey.value = playerOption?.key ?? '';
-  syncConnectionSelection(playerOption);
 
-  emitPlayersSelection();
-  emitConnectionSelection();
+  const connections = playerOption?.connections ?? [];
+
+  selectedConnectionType.value =
+    props.connection && connections.includes(props.connection)
+      ? props.connection
+      : connections[0] ?? '';
 }
 
 function handlePlayerOptionChange(value: string) {
@@ -181,10 +162,15 @@ function handlePlayerOptionChange(value: string) {
   }
 
   selectedPlayerOptionKey.value = playerOption.key;
-  syncConnectionSelection(playerOption);
 
-  emitPlayersSelection();
-  emitConnectionSelection();
+  if (!playerOption.connections.includes(selectedConnectionType.value as tKeyTypeConnection)) {
+    selectedConnectionType.value = playerOption.connections[0] ?? '';
+  }
+
+  emit('select', {
+    key: 'players',
+    value: playerOption.key,
+  });
 }
 
 function handleConnectionChange(value: string) {
@@ -195,10 +181,18 @@ function handleConnectionChange(value: string) {
   }
 
   selectedConnectionType.value = connectionType;
-  emitConnectionSelection();
+
+  emit('select', {
+    key: 'connection',
+    value: connectionType,
+  });
 }
 
-watch(() => props.mode.key, syncSelections, { immediate: true });
+watch(
+  () => [props.mode.key, props.players, props.connection],
+  syncSelections,
+  { immediate: true },
+);
 </script>
 
 <template>
