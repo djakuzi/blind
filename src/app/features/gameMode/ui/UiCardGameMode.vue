@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
@@ -59,41 +60,50 @@ function handleComplete() {
     :initial-progress="0"
     @complete="handleComplete"
   >
-    <div class="ui-card-game-mode__layout">
-      <div class="ui-card-game-mode__main">
-        <AppImage
-          class="ui-card-game-mode__image"
-          :src="imageSource"
-          :alt="mode.name"
-          width="15rem"
-          max-width="30%"
-          height="auto"
-          object-fit="contain"
-          aspect-ratio="1 / 1"
-          :loading="imageLoading"
-          :fetch-priority="imageFetchPriority"
-          :should-load="imageShouldLoad"
-        />
+    <AppFlex
+      class="ui-card-game-mode__main"
+      direction="column"
+      align="center"
+      justify="space-evenly"
+      width="100%"
+    >
+      <AppImage
+        class="ui-card-game-mode__image"
+        :src="imageSource"
+        :alt="mode.name"
+        width="15rem"
+        max-width="30%"
+        height="auto"
+        object-fit="contain"
+        aspect-ratio="1 / 1"
+        :loading="imageLoading"
+        :fetch-priority="imageFetchPriority"
+        :should-load="imageShouldLoad"
+      />
 
-        <div class="ui-card-game-mode__body">
-          <AppFillAware color="text-primary" filled-color="on-primary">
-            <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
-          </AppFillAware>
+      <AppFlex
+        class="ui-card-game-mode__body"
+        direction="column"
+        align="center"
+        width="100%"
+      >
+        <AppFillAware color="text-primary" filled-color="on-primary">
+          <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
+        </AppFillAware>
 
-          <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">
-            <AppText
-              :text="modeDescription"
-              color="inherit"
-              font-size="lg"
-              font-weight="medium"
-              :uppercase="true"
-              :ellipsis="true"
-              :max-lines="1"
-            />
-          </AppFillAware>
-        </div>
-      </div>
-    </div>
+        <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">
+          <AppText
+            :text="modeDescription"
+            color="inherit"
+            font-size="lg"
+            font-weight="medium"
+            :uppercase="true"
+            :ellipsis="true"
+            :max-lines="1"
+          />
+        </AppFillAware>
+      </AppFlex>
+    </AppFlex>
   </AppCardHold>
 </template>
 
@@ -126,29 +136,13 @@ function handleComplete() {
   height: 100%;
 }
 
-.ui-card-game-mode__layout {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-}
-
 .ui-card-game-mode__main {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
+  height: 100%;
   min-width: 0;
   min-height: 0;
 }
 
 .ui-card-game-mode__body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
   min-width: 0;
   text-align: center;
 }
