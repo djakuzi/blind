@@ -23,13 +23,15 @@ export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
 }
 
-export type tWidgetGameModeOptionParameter = 'players' | 'connection';
-
-export interface iWidgetGameModeOptionsSelection {
-  parameter: tWidgetGameModeOptionParameter;
-  playerOptionKey: string;
-  connectionType: tKeyTypeConnection | null;
-}
+export type iWidgetGameModeOptionsSelection =
+  | {
+      key: 'option';
+      value: string | null;
+    }
+  | {
+      key: 'connection';
+      value: tKeyTypeConnection | null;
+    };
 
 interface iResolvedPlayerOption extends iApiGameModePlayerData {
   key: string;
@@ -131,6 +133,20 @@ function formatPlayerOption({ players, teamSize }: iApiGameModePlayerData) {
   return Array(teamCount).fill(teamSize).join(' VS ');
 }
 
+function emitOptionSelection() {
+  emit('select', {
+    key: 'option',
+    value: selectedPlayerOptionKey.value || null,
+  });
+}
+
+function emitConnectionSelection() {
+  emit('select', {
+    key: 'connection',
+    value: selectedConnectionType.value || null,
+  });
+}
+
 function syncConnectionSelection(playerOption = selectedPlayerOption.value) {
   const connections = playerOption?.connections ?? [];
 
@@ -152,14 +168,9 @@ function syncSelections() {
 
   selectedPlayerOptionKey.value = playerOption?.key ?? '';
   syncConnectionSelection(playerOption);
-}
 
-function emitSelection(parameter: tWidgetGameModeOptionParameter) {
-  emit('select', {
-    parameter,
-    playerOptionKey: selectedPlayerOptionKey.value,
-    connectionType: selectedConnectionType.value || null,
-  });
+  emitOptionSelection();
+  emitConnectionSelection();
 }
 
 function handlePlayerOptionChange(value: string) {
@@ -171,7 +182,9 @@ function handlePlayerOptionChange(value: string) {
 
   selectedPlayerOptionKey.value = playerOption.key;
   syncConnectionSelection(playerOption);
-  emitSelection('players');
+
+  emitOptionSelection();
+  emitConnectionSelection();
 }
 
 function handleConnectionChange(value: string) {
@@ -182,7 +195,7 @@ function handleConnectionChange(value: string) {
   }
 
   selectedConnectionType.value = connectionType;
-  emitSelection('connection');
+  emitConnectionSelection();
 }
 
 watch(() => props.mode.key, syncSelections, { immediate: true });

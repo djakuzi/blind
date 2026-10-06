@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, watch } from 'vue';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import UiCardGameMode from '@/app/features/gameMode/ui/UiCardGameMode.vue';
-import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
+import type { tGameModeKey } from '@/game/types/gameMode.types';
 
-const router = useRouter();
+export interface iWidgetSliderGameModeSelection {
+  key: 'mode';
+  value: tGameModeKey;
+}
+
+const emit = defineEmits<{
+  select: [selection: iWidgetSliderGameModeSelection];
+  complete: [];
+}>();
+
 const gameModeStore = useGameModeStore();
 
 const activeIndex = defineModel<number>({ default: 0 });
 
 const modes = computed(() => gameModeStore.modes);
+const activeMode = computed(() => modes.value[activeIndex.value] ?? null);
 
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
 
@@ -21,10 +30,21 @@ function formatItemAccessibilityLabel(index: number, count: number) {
 }
 
 function handleModeComplete() {
-  router.push({
-    name: KEY_ROUTE.preGame.typeConnection,
-  });
+  emit('complete');
 }
+
+watch(
+  () => activeMode.value?.key,
+  (modeKey) => {
+    if (modeKey) {
+      emit('select', {
+        key: 'mode',
+        value: modeKey,
+      });
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
