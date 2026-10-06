@@ -92,7 +92,7 @@ function handleComplete() {
     border-width="thick"
     border-radius="xl"
     overflow="hidden"
-    :initial-progress="15"
+    :initial-progress="0"
     @complete="handleComplete"
   >
     <div class="ui-card-game-mode__layout">
