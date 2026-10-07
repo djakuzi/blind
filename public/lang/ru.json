@@ -91,6 +91,10 @@
       "health": {
         "title": "COMBAT",
         "description": "Сражайся, пока здоровье не закончится"
+      },
+      "survival": {
+        "title": "SURVIVAL",
+        "description": "Продержись как можно дольше"
       }
     },
     "format": {

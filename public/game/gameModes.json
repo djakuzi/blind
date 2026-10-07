@@ -21,6 +21,17 @@
       ],
       "locked": false,
       "lockedText": null
+    },
+    {
+      "key": "survival",
+      "name": "SURVIVAL",
+      "rounds": 3,
+      "options": [
+        "1v1",
+        "2v2"
+      ],
+      "locked": true,
+      "lockedText": null
     }
   ],
   "data": {
@@ -35,6 +46,12 @@
         "image": {
           "dark": "/game/images/gameMode/combat-dark.webp",
           "light": "/game/images/gameMode/combat-light.webp"
+        }
+      },
+      "survival": {
+        "image": {
+          "dark": "/game/images/gameMode/clash-dark.webp",
+          "light": "/game/images/gameMode/clash-light.webp"
         }
       }
     },

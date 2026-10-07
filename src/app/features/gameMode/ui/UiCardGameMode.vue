@@ -38,8 +38,13 @@ const modeLocale = useLocale((locale) => locale.game.modes[props.mode.key]);
 
 const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
 const modeDescription = computed(() => modeLocale.value?.description ?? '');
+const isDisabled = computed(() => props.disabled || props.mode.locked);
 
 function handleComplete() {
+  if (isDisabled.value) {
+    return;
+  }
+
   emit('complete');
 }
 </script>
@@ -47,8 +52,11 @@ function handleComplete() {
 <template>
   <AppCardHold
     class="ui-card-game-mode"
-    :class="{ 'ui-card-game-mode--active': active }"
-    :disabled="disabled"
+    :class="{
+      'ui-card-game-mode--active': active && !mode.locked,
+      'ui-card-game-mode--locked': mode.locked,
+    }"
+    :disabled="isDisabled"
     width="100%"
     max-width="100%"
     size="big"
@@ -118,8 +126,12 @@ function handleComplete() {
     0 1rem 5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent);
 }
 
+.ui-card-game-mode--locked :deep(.app-card-hold) {
+  filter: contrast(0.6);
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .ui-card-game-mode:not(.ui-card-game-mode--active) :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
+  .ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked) :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
     border-color: var(--app-color-primary);
     box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 18%, transparent);
   }
