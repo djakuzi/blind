@@ -39,13 +39,13 @@ export function usePreGame() {
   }));
 
   function readQueryValue(
-    value: LocationQueryValue | LocationQueryValue[],
+    value: LocationQueryValue | LocationQueryValue[] | undefined,
   ): string | null {
     if (Array.isArray(value)) {
       return value[0] ?? null;
     }
 
-    return value;
+    return value ?? null;
   }
 
   function resolveModeKey(value: string | null | undefined): tGameModeKey | null {
