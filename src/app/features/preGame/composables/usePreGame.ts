@@ -1,6 +1,6 @@
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import type { LocationQueryRaw, LocationQueryValue } from 'vue-router';
+import type { LocationQueryRaw } from 'vue-router';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 import { usePreGameStore } from '@/app/stores/preGame/preGame.store';
@@ -38,14 +38,14 @@ export function usePreGame() {
     connection: connection.value,
   }));
 
-  function readQueryValue(
-    value: LocationQueryValue | LocationQueryValue[] | undefined,
-  ): string | null {
+  function readQueryValue(value: unknown): string | null {
     if (Array.isArray(value)) {
-      return value[0] ?? null;
+      const firstValue = value[0];
+
+      return typeof firstValue === 'string' ? firstValue : null;
     }
 
-    return value ?? null;
+    return typeof value === 'string' ? value : null;
   }
 
   function resolveModeKey(value: string | null | undefined): tGameModeKey | null {
