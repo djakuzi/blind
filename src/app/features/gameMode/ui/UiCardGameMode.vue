@@ -3,6 +3,8 @@ import { computed } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
+import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
@@ -105,6 +107,27 @@ function handleComplete() {
         />
       </AppFillAware>
     </AppFlex>
+
+    <div
+      v-if="mode.locked"
+      class="ui-card-game-mode__locked-overlay"
+      aria-hidden="true"
+    />
+
+    <AppPosition
+      v-if="mode.locked"
+      class="ui-card-game-mode__locked-icon"
+      type="absolute"
+      center="xy"
+      layer="raised"
+    >
+      <AppIcon
+        group="locked"
+        icon="lock"
+        width="8rem"
+        height="8rem"
+      />
+    </AppPosition>
   </AppCardHold>
 </template>
 
@@ -124,10 +147,6 @@ function handleComplete() {
     0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent),
     0 0 5rem color-mix(in srgb, var(--app-color-primary) 18%, transparent),
     0 1rem 5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent);
-}
-
-.ui-card-game-mode--locked :deep(.app-card-hold) {
-  filter: contrast(0.6);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -154,6 +173,19 @@ function handleComplete() {
 
 .ui-card-game-mode__image {
   flex: 0 1 auto;
+  pointer-events: none;
+}
+
+.ui-card-game-mode__locked-overlay {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: color-mix(in srgb, var(--app-color-surface-primary) 48%, transparent);
+  backdrop-filter: blur(0.6rem) contrast(0.72);
+  pointer-events: none;
+}
+
+.ui-card-game-mode__locked-icon {
   pointer-events: none;
 }
 </style>
