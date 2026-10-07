@@ -97,6 +97,12 @@ function handleComplete() {
         <div class="app-card-hold__content">
           <slot :is-holding="isHolding" :is-complete="isComplete" />
         </div>
+
+        <slot
+          name="overlay"
+          :is-holding="isHolding"
+          :is-complete="isComplete"
+        />
       </AppCard>
     </template>
   </AppHoldAction>

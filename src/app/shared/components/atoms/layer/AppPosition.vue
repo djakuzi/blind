@@ -40,14 +40,23 @@ function resolvePositionOffsetValue(value?: tAppPositionOffsetValue) {
   return typeof value === 'string' && isSafeAreaToken(value) ? safeAreaTokenVar(value) : resolveSpaceValue(value);
 }
 
-const positionStyle = computed(() => ({
-  '--cp-position-type': props.type,
-  '--cp-position-layer': resolveLayerValue(props.layer),
-  '--cp-position-top': resolvePositionOffsetValue(props.position?.top) ?? 'auto',
-  '--cp-position-right': resolvePositionOffsetValue(props.position?.right) ?? 'auto',
-  '--cp-position-bottom': resolvePositionOffsetValue(props.position?.bottom) ?? 'auto',
-  '--cp-position-left': resolvePositionOffsetValue(props.position?.left) ?? 'auto',
-}));
+const positionStyle = computed(() => {
+  const centerX = props.center === 'x' || props.center === 'xy';
+  const centerY = props.center === 'y' || props.center === 'xy';
+
+  return {
+    '--cp-position-type': props.type,
+    '--cp-position-layer': resolveLayerValue(props.layer),
+    '--cp-position-top': centerY
+      ? '50%'
+      : resolvePositionOffsetValue(props.position?.top) ?? 'auto',
+    '--cp-position-right': resolvePositionOffsetValue(props.position?.right) ?? 'auto',
+    '--cp-position-bottom': resolvePositionOffsetValue(props.position?.bottom) ?? 'auto',
+    '--cp-position-left': centerX
+      ? '50%'
+      : resolvePositionOffsetValue(props.position?.left) ?? 'auto',
+  };
+});
 </script>
 
 <template>
@@ -70,18 +79,14 @@ const positionStyle = computed(() => ({
 }
 
 .app-position--center-x {
-  --cp-position-left: 50%;
   --cp-position-transform: translateX(-50%);
 }
 
 .app-position--center-y {
-  --cp-position-top: 50%;
   --cp-position-transform: translateY(-50%);
 }
 
 .app-position--center-xy {
-  --cp-position-top: 50%;
-  --cp-position-left: 50%;
   --cp-position-transform: translate(-50%, -50%);
 }
 </style>

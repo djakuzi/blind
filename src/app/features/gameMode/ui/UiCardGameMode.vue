@@ -108,26 +108,28 @@ function handleComplete() {
       </AppFillAware>
     </AppFlex>
 
-    <div
-      v-if="mode.locked"
-      class="ui-card-game-mode__locked-overlay"
-      aria-hidden="true"
-    />
-
-    <AppPosition
-      v-if="mode.locked"
-      class="ui-card-game-mode__locked-icon"
-      type="absolute"
-      center="xy"
-      layer="raised"
-    >
-      <AppIcon
-        group="locked"
-        icon="lock"
-        width="8rem"
-        height="8rem"
+    <template #overlay>
+      <div
+        v-if="mode.locked"
+        class="ui-card-game-mode__locked-overlay"
+        aria-hidden="true"
       />
-    </AppPosition>
+
+      <AppPosition
+        v-if="mode.locked"
+        class="ui-card-game-mode__locked-icon"
+        type="absolute"
+        center="xy"
+        layer="raised"
+      >
+        <AppIcon
+          group="locked"
+          icon="lock"
+          width="8rem"
+          height="8rem"
+        />
+      </AppPosition>
+    </template>
   </AppCardHold>
 </template>
 
@@ -178,7 +180,7 @@ function handleComplete() {
 
 .ui-card-game-mode__locked-overlay {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   inset: 0;
   background: color-mix(in srgb, var(--app-color-surface-primary) 48%, transparent);
   backdrop-filter: blur(0.6rem) contrast(0.72);
