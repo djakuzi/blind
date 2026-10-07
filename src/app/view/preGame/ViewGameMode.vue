@@ -17,7 +17,7 @@ const {
   mode,
   players,
   connection,
-  query,
+  selectionQuery,
   setSelection,
   flushSelection,
 } = usePreGame();
@@ -54,7 +54,7 @@ async function handleModeComplete() {
 
   await router.push({
     name: KEY_ROUTE.preGame.typeConnection,
-    query: query.value,
+    query: selectionQuery.value,
   });
 }
 

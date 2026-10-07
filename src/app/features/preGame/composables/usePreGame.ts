@@ -1,4 +1,5 @@
 import { computed, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useRoute, useRouter } from 'vue-router';
 import type { LocationQueryRaw } from 'vue-router';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
@@ -6,17 +7,18 @@ import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 import { usePreGameStore } from '@/app/stores/preGame/preGame.store';
 import type { iPreGameSelection } from '@/app/stores/preGame/preGame.type';
 import type { tGameModeKey } from '@/game/types/gameMode.types';
+import {
+  createPreGameSelectionQuery,
+  isPreGameSelectionQueryCurrent,
+  normalizePreGameSelection,
+  readPreGameQueryValue,
+} from '../helpers/preGameSelection.helper';
+import type { iPreGameSelectionInput } from '../helpers/preGameSelection.helper';
 
 export interface iPreGameSelectionPatch {
-  mode?: tGameModeKey | null;
-  players?: string | null;
-  connection?: tKeyTypeConnection | null;
-}
-
-interface iPreGameSelectionInput {
-  mode?: string | null;
-  players?: string | null;
-  connection?: string | null;
+  mode?: tGameModeKey;
+  players?: string;
+  connection?: tKeyTypeConnection;
 }
 
 export function usePreGame() {
@@ -25,126 +27,47 @@ export function usePreGame() {
   const gameModeStore = useGameModeStore();
   const preGameStore = usePreGameStore();
 
+  const { mode, players, connection } = storeToRefs(preGameStore);
+
   let isWritingQuery = false;
   let updateQueue = Promise.resolve();
+  let latestUpdate = Promise.resolve();
 
-  const mode = computed(() => preGameStore.mode);
-  const players = computed(() => preGameStore.players);
-  const connection = computed(() => preGameStore.connection);
+  const selectionQuery = computed<LocationQueryRaw>(() =>
+    createPreGameSelectionQuery({
+      mode: mode.value,
+      players: players.value,
+      connection: connection.value,
+    }),
+  );
 
-  const query = computed<LocationQueryRaw>(() => createSelectionQuery({
-    mode: mode.value,
-    players: players.value,
-    connection: connection.value,
-  }));
-
-  function readQueryValue(value: unknown): string | null {
-    if (Array.isArray(value)) {
-      const firstValue = value[0];
-
-      return typeof firstValue === 'string' ? firstValue : null;
-    }
-
-    return typeof value === 'string' ? value : null;
-  }
-
-  function resolveModeKey(value: string | null | undefined): tGameModeKey | null {
-    const mode = gameModeStore.modes.find((item) => item.key === value);
-
-    return mode?.key ?? gameModeStore.modes[0]?.key ?? null;
-  }
-
-  function resolvePlayersKey(
-    modeKey: tGameModeKey | null,
-    value: string | null | undefined,
-  ): string | null {
-    const mode = gameModeStore.modes.find((item) => item.key === modeKey);
-
-    if (!mode) {
-      return null;
-    }
-
-    const availablePlayers = mode.options.filter(
-      (key) => gameModeStore.data?.players[key] !== undefined,
-    );
-
-    if (value && availablePlayers.includes(value)) {
-      return value;
-    }
-
-    return availablePlayers[0] ?? null;
-  }
-
-  function resolveConnectionType(
-    playersKey: string | null,
-    value: string | null | undefined,
-  ): tKeyTypeConnection | null {
-    if (!playersKey) {
-      return null;
-    }
-
-    const availableConnections =
-      gameModeStore.data?.players[playersKey]?.connections ?? [];
-
-    return (
-      availableConnections.find((connectionType) => connectionType === value) ??
-      availableConnections[0] ??
-      null
+  function getNormalizedSelection(input: iPreGameSelectionInput) {
+    return normalizePreGameSelection(
+      input,
+      gameModeStore.modes,
+      gameModeStore.data,
     );
   }
 
-  function normalizeSelection(
-    input: iPreGameSelectionInput,
-  ): iPreGameSelection {
-    const mode = resolveModeKey(input.mode);
-    const players = resolvePlayersKey(mode, input.players);
-    const connection = resolveConnectionType(players, input.connection);
-
-    return {
-      mode,
-      players,
-      connection,
-    };
-  }
-
-  function createSelectionQuery(
+  function createCurrentRouteQuery(
     selection: iPreGameSelection,
   ): LocationQueryRaw {
     const nextQuery: LocationQueryRaw = {
       ...route.query,
     };
 
-    if (selection.mode) {
-      nextQuery.mode = selection.mode;
-    } else {
-      delete nextQuery.mode;
-    }
+    delete nextQuery.mode;
+    delete nextQuery.players;
+    delete nextQuery.connection;
 
-    if (selection.players) {
-      nextQuery.players = selection.players;
-    } else {
-      delete nextQuery.players;
-    }
-
-    if (selection.connection) {
-      nextQuery.connection = selection.connection;
-    } else {
-      delete nextQuery.connection;
-    }
-
-    return nextQuery;
-  }
-
-  function isSelectionQueryCurrent(selection: iPreGameSelection) {
-    return (
-      readQueryValue(route.query.mode) === selection.mode &&
-      readQueryValue(route.query.players) === selection.players &&
-      readQueryValue(route.query.connection) === selection.connection
-    );
+    return {
+      ...nextQuery,
+      ...createPreGameSelectionQuery(selection),
+    };
   }
 
   async function writeSelectionQuery(selection: iPreGameSelection) {
-    if (isSelectionQueryCurrent(selection)) {
+    if (isPreGameSelectionQueryCurrent(route.query, selection)) {
       return;
     }
 
@@ -152,7 +75,7 @@ export function usePreGame() {
 
     try {
       await router.replace({
-        query: createSelectionQuery(selection),
+        query: createCurrentRouteQuery(selection),
       });
     } finally {
       isWritingQuery = false;
@@ -160,13 +83,14 @@ export function usePreGame() {
   }
 
   function enqueueUpdate(operation: () => Promise<void>) {
-    updateQueue = updateQueue
-      .then(operation)
-      .catch((error) => {
-        console.error('Failed to update pre-game selection:', error);
-      });
+    const operationPromise = updateQueue.then(operation);
 
-    return updateQueue;
+    latestUpdate = operationPromise;
+    updateQueue = operationPromise.catch((error) => {
+      console.error('Failed to update pre-game selection:', error);
+    });
+
+    return operationPromise;
   }
 
   function syncFromQuery() {
@@ -175,11 +99,13 @@ export function usePreGame() {
     }
 
     return enqueueUpdate(async () => {
-      const selection = normalizeSelection({
-        mode: readQueryValue(route.query.mode) ?? preGameStore.mode,
-        players: readQueryValue(route.query.players) ?? preGameStore.players,
+      const selection = getNormalizedSelection({
+        mode: readPreGameQueryValue(route.query.mode) ?? preGameStore.mode,
+        players:
+          readPreGameQueryValue(route.query.players) ?? preGameStore.players,
         connection:
-          readQueryValue(route.query.connection) ?? preGameStore.connection,
+          readPreGameQueryValue(route.query.connection) ??
+          preGameStore.connection,
       });
 
       await writeSelectionQuery(selection);
@@ -189,7 +115,7 @@ export function usePreGame() {
 
   function setSelection(patch: iPreGameSelectionPatch) {
     return enqueueUpdate(async () => {
-      const selection = normalizeSelection({
+      const selection = getNormalizedSelection({
         mode: patch.mode ?? preGameStore.mode,
         players: patch.players ?? preGameStore.players,
         connection: patch.connection ?? preGameStore.connection,
@@ -201,7 +127,7 @@ export function usePreGame() {
   }
 
   function flushSelection() {
-    return updateQueue;
+    return latestUpdate;
   }
 
   watch(
@@ -224,7 +150,7 @@ export function usePreGame() {
     mode,
     players,
     connection,
-    query,
+    selectionQuery,
     setSelection,
     syncFromQuery,
     flushSelection,
