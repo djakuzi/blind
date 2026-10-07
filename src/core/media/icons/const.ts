@@ -6,6 +6,8 @@ import LanDark from '@/assets/icons/connectionType/lan-dark.svg?raw';
 import LanLight from '@/assets/icons/connectionType/lan-light.svg?raw';
 import OnlineDark from '@/assets/icons/connectionType/online-dark.svg?raw';
 import OnlineLight from '@/assets/icons/connectionType/online-light.svg?raw';
+import LockDark from '@/assets/icons/locked/lock-dark.svg?raw';
+import LockLight from '@/assets/icons/locked/lock-light.svg?raw';
 import BlindDark from '@/assets/icons/logo/blind-dark.svg?raw';
 import BlindLight from '@/assets/icons/logo/blind-light.svg?raw';
 import BlindTextBottomDark from '@/assets/icons/logo/blind-text-bottom-dark.svg?raw';
@@ -25,6 +27,10 @@ export const ICONS_ASSETS = {
     lanLight: LanLight,
     onlineDark: OnlineDark,
     onlineLight: OnlineLight,
+  },
+  locked: {
+    lockDark: LockDark,
+    lockLight: LockLight,
   },
   logo: {
     blindDark: BlindDark,

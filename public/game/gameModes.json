@@ -64,12 +64,6 @@
           "light": "/game/icons/playerOption/2v2-light.svg"
         }
       }
-    },
-    "locked": {
-      "icon": {
-        "dark": "/game/icons/locked/lock-dark.svg",
-        "light": "/game/icons/locked/lock-light.svg"
-      }
     }
   }
 }
