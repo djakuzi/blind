@@ -12,11 +12,10 @@ import { useControlSize } from '@/app/shared/composables/style/useControlSize';
 import { LibStyle } from '@/core/lib/style';
 
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
-import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
 import type { iControlSizePreset } from '@/app/shared/styles/presets/control.preset';
-import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
+import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
 
 export type tAppButtonVariant = 'primary' | 'secondary' | 'danger';
 
@@ -95,12 +94,14 @@ const BUTTON_SIZE_PRESET: Record<tBaseSizeVariant, iControlSizePreset> = {
 const variantConfig = computed(() => VARIANT_MAP[props.variant]);
 const { paddingX: buttonPaddingX, paddingY: buttonPaddingY, fontSize } = useControlSize(props, BUTTON_SIZE_PRESET);
 
-const buttonBackgroundColor = computed(() => resolveColorValue(props.backgroundColor ?? variantConfig.value.backgroundColor));
-const buttonBorderColor = computed(() => resolveColorValue(props.borderColor ?? variantConfig.value.borderColor));
+const buttonSurface = computed(() => resolveSurface({
+  backgroundColor: props.backgroundColor ?? variantConfig.value.backgroundColor,
+  borderColor: props.borderColor ?? variantConfig.value.borderColor,
+  borderWidth: props.borderWidth,
+  borderStyle: props.borderStyle,
+  borderRadius: props.borderRadius,
+}));
 const buttonTextColor = computed(() => resolveColorValue(props.textColor ?? variantConfig.value.textColor));
-const buttonBorderWidth = computed(() => resolveBorderWidthValue(props.borderWidth));
-const buttonBorderStyle = computed(() => resolveBorderStyleValue(props.borderStyle));
-const buttonBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
 const buttonFontSize = computed(() => resolveFontSizeValue(fontSize.value));
 
 const interactionStyle = computed(() => ({
@@ -109,12 +110,12 @@ const interactionStyle = computed(() => ({
 }));
 
 const buttonStyle = computed(() => ({
-  '--cp-button-background-color': buttonBackgroundColor.value,
-  '--cp-button-border-color': buttonBorderColor.value,
+  '--cp-button-background-color': buttonSurface.value.backgroundColor,
+  '--cp-button-border-color': buttonSurface.value.borderColor,
   '--cp-button-text-color': buttonTextColor.value,
-  '--cp-button-border-width': buttonBorderWidth.value,
-  '--cp-button-border-style': buttonBorderStyle.value,
-  '--cp-button-border-radius': buttonBorderRadius.value,
+  '--cp-button-border-width': buttonSurface.value.borderWidth,
+  '--cp-button-border-style': buttonSurface.value.borderStyle,
+  '--cp-button-border-radius': buttonSurface.value.borderRadius,
   '--cp-button-padding-x': buttonPaddingX.value,
   '--cp-button-padding-y': buttonPaddingY.value,
   '--cp-button-font-size': buttonFontSize.value,

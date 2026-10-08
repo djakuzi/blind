@@ -6,11 +6,10 @@ import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/core/lib/style';
 
-import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveLayerValue, type tLayerValue } from '@/app/shared/styles/contracts/layer.contract';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
-import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
+import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
 
 export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'>, PropsSurface, PropsAccessibility {
   modelValue: boolean;
@@ -65,6 +64,7 @@ const isScrollLocked = ref(false);
 
 const hasHeaderSlot = computed(() => Boolean(slots.header));
 const hasFooterSlot = computed(() => Boolean(slots.footer));
+const modalSurface = computed(() => resolveSurface(props));
 
 const modalStyle = computed(() => ({
   '--cp-modal-layer': resolveLayerValue(props.layer),
@@ -72,11 +72,11 @@ const modalStyle = computed(() => ({
   '--cp-modal-max-width': LibStyle.toSizeValue(props.maxWidth),
   '--cp-modal-max-height': LibStyle.toSizeValue(props.maxHeight),
   '--cp-modal-backdrop-color': resolveColorValue(props.backdropColor),
-  '--cp-modal-background-color': resolveColorValue(props.backgroundColor),
-  '--cp-modal-border-color': resolveColorValue(props.borderColor),
-  '--cp-modal-border-width': resolveBorderWidthValue(props.borderWidth),
-  '--cp-modal-border-style': resolveBorderStyleValue(props.borderStyle),
-  '--cp-modal-border-radius': resolveRadiusValue(props.borderRadius),
+  '--cp-modal-background-color': modalSurface.value.backgroundColor,
+  '--cp-modal-border-color': modalSurface.value.borderColor,
+  '--cp-modal-border-width': modalSurface.value.borderWidth,
+  '--cp-modal-border-style': modalSurface.value.borderStyle,
+  '--cp-modal-border-radius': modalSurface.value.borderRadius,
   '--cp-modal-header-padding-x': resolvePaddingValue(props.headerPaddingX),
   '--cp-modal-header-padding-y': resolvePaddingValue(props.headerPaddingY),
   '--cp-modal-body-padding-x': resolvePaddingValue(props.bodyPaddingX),

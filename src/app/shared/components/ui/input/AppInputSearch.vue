@@ -10,11 +10,10 @@ import { computed, ref } from 'vue';
 import { LibStyle } from '@/core/lib/style';
 import { useControlSize } from '@/app/shared/composables/style/useControlSize';
 
-import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
 import { resolveFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
-import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
+import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
 
 export interface PropsInputSearch
   extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsDisabled, PropsAccessibility {
@@ -62,19 +61,20 @@ const emit = defineEmits<{
 const inputRef = ref<HTMLInputElement | null>(null);
 
 const { paddingX, paddingY, fontSize } = useControlSize(props);
+const inputSurface = computed(() => resolveSurface(props));
 
 const inputStyle = computed(() => ({
   '--cp-input-search-width': LibStyle.toSizeValue(props.width),
   '--cp-input-search-max-width': LibStyle.toSizeValue(props.maxWidth),
   '--cp-input-search-padding-x': paddingX.value,
   '--cp-input-search-padding-y': paddingY.value,
-  '--cp-input-search-background-color': resolveColorValue(props.backgroundColor),
+  '--cp-input-search-background-color': inputSurface.value.backgroundColor,
   '--cp-input-search-text-color': resolveColorValue(props.disabled ? 'text-disabled' : props.textColor),
   '--cp-input-search-placeholder-color': resolveColorValue(props.disabled ? 'text-disabled' : props.placeholderColor),
-  '--cp-input-search-border-color': resolveColorValue(props.borderColor),
-  '--cp-input-search-border-width': resolveBorderWidthValue(props.borderWidth),
-  '--cp-input-search-border-style': resolveBorderStyleValue(props.borderStyle),
-  '--cp-input-search-border-radius': resolveRadiusValue(props.borderRadius),
+  '--cp-input-search-border-color': inputSurface.value.borderColor,
+  '--cp-input-search-border-width': inputSurface.value.borderWidth,
+  '--cp-input-search-border-style': inputSurface.value.borderStyle,
+  '--cp-input-search-border-radius': inputSurface.value.borderRadius,
   '--cp-input-search-font-size': resolveFontSizeValue(fontSize.value),
   '--cp-input-search-font-weight': resolveFontWeightValue(props.fontWeight),
 }));
