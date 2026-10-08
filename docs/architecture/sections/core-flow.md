@@ -66,16 +66,6 @@ Tool отвечает за:
 - platform-specific реализацию через adapters;
 - локальные helpers и engines конкретного инструмента.
 
-Текущие инструменты:
-
-- Audio;
-- Filesystem;
-- Input;
-- Storage;
-- System;
-- Vibration;
-- View.
-
 Platform-specific код должен оставаться внутри соответствующего Tool, если он существует только для реализации этого инструмента.
 
 Например Web Audio engine относится к Audio, OPFS — к Filesystem, gamepad rumble — к Vibration.
