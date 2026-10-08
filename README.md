@@ -1,38 +1,39 @@
-# Game Blind
+# Blind
 
-blind - the game
+Кроссплатформенная локальная PvP-аркада для Web, Desktop, Android и iOS.
 
-## Разделы
+**Стек:** Vue 3, TypeScript, Vite, Capacitor, Electron.
 
-- [Разворачивание проекта](./docs/projectSetup/index.md)
-- [Настройка проекта](./docs/settingsProject/index.md)
-- [Работа в проекте(CONTRIBUTING)](CONTRIBUTING.md)
-- [Архитектура](./docs/architecture/index.md)
-- [Плагины](./docs/plugins/index.md)
-- [Генераторы](./docs/generators/index.md)
-- [Интерфейс](./docs/interface/index.md)
-- [Аудио](./docs/audio/index.md)
+## Быстрый старт
 
-## История изменений
+Требуются Node.js >=22.12.0, npm и Git.
 
-Подробности в файле [CHANGELOG.md](CHANGELOG.md)
+```bash
+git clone https://github.com/djakuzi/blind.git
+cd blind
+npm ci
+npm run cli
+```
 
-## Настройка конфигурации
+Перед запуском настройте `.env.debug` и `.env.prod` по `.env.template`. Для мобильных платформ дополнительно нужны соответствующие SDK и локальные конфигурации.
 
-См. [Документацию по конфигурации Vite](https://vite.dev/config/).
+Без CLI:
 
-## Рекомендации
+```bash
+npm run dev
+npm run desktop:dev
+```
 
-### IDE
+Подробнее: [развёртывание](docs/projectSetup/index.md) · [запуск через CLI](docs/projectSetup/sections/cli.md) · [справочник CLI](docs/cli/index.md).
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (отключите Vetur).
+## Документация
 
-### Браузер
-
-- Браузеры на основе Chromium (Chrome, Edge, Brave и др.):
-- [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-- [Включить Custom Object Formatter в Chrome DevTools](http://bit.ly/object-formatters)
-
-### Поддержка типов для импортов `.vue` в TS
-
-TypeScript по умолчанию не может обрабатывать информацию о типах для импортов `.vue`, поэтому мы заменяем CLI `tsc` на `vue-tsc` для проверки типов. В редакторах необходимо установить [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar), чтобы языковой сервис TypeScript распознавал типы `.vue`.
+- [Настройка проекта](docs/settingsProject/index.md)
+- [Работа над проектом](CONTRIBUTING.md)
+- [Архитектура](docs/architecture/index.md)
+- [CLI](docs/cli/index.md)
+- [Плагины](docs/plugins/index.md)
+- [Генераторы](docs/generators/index.md)
+- [Интерфейс](docs/interface/index.md)
+- [Аудио](docs/audio/index.md)
+- [История изменений](CHANGELOG.md)

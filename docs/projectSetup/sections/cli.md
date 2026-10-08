@@ -1,39 +1,42 @@
-# Запуск через CLI
+# Быстрый запуск проекта через CLI
 
-CLI нужен для быстрого запуска приложения без ручного набора команд.
+## 1. Подготовка
 
-## Как использовать
+Установите Node.js >=22.12.0 и Git. Для Android понадобятся Android Studio и SDK, для iOS — macOS и Xcode. [Все требования](../index.md).
 
-Запустите меню:
+```bash
+git clone https://github.com/djakuzi/blind.git
+cd blind
+npm ci
+```
+
+Создайте и заполните `.env.debug` и `.env.prod` по `.env.template`. Для мобильных платформ подготовьте [локальные нативные настройки](../../settingsProject/sections/property.md).
+
+## 2. Проверка окружения
+
+```bash
+npm run cli -- project doctor
+npm run cli -- project doctor android
+npm run cli -- project doctor ios
+```
+
+Проверку Android или iOS выполняйте только для нужной платформы.
+
+## 3. Запуск
 
 ```bash
 npm run cli
 ```
 
-## Установка зависимостей
+В меню выберите нужную команду. Быстрые варианты без меню:
 
-Если зависимости еще не установлены, запустите CLI и выберите:
+| Платформа | Команда |
+| --- | --- |
+| Web | `npm run cli -- dev web` |
+| Desktop | `npm run cli -- dev desktop` |
+| Android | `npm run cli -- platform run android --build` |
+| iOS (macOS) | `npm run cli -- platform run ios --build` |
 
-1. `Зависимости`
-2. `Установить`
+Для запуска через IDE: `platform sync android --build` → `platform open android` (или аналогично для `ios`). Подключите устройство либо используйте эмулятор.
 
-## Запуск
-
-### Android
-
-2. В меню выберите `Запуск`.
-3. Выберите `Android` или в режиме live `Android Live`
-4. Дождитесь запуска приложения на устройстве или эмуляторе.
-
-### iOS
-
-2. В меню выберите `Запуск`.
-3. Выберите `iOS` или `Auto`.
-4. Дождитесь запуска приложения в Xcode или на устройстве.
-
-### Web
-
-2. В меню выберите `Запуск`.
-3. Выберите `Web`.
-4. Дождитесь старта Vite.
-5. Откройте адрес, который покажет терминал.
+Все команды: [справочник Blind CLI](../../cli/index.md). Ручные способы запуска: [Web](web.md), [Desktop](desktop.md), [Android](android.md), [iOS](ios.md).
