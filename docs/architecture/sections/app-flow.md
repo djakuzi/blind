@@ -68,10 +68,11 @@ src
 ├── core
 │   └── app
 │       └── setup
-│           ├── setupLifecycle.runner.ts
-│           ├── setupLifecycle.state.ts
-│           ├── setupLifecycle.type.ts
-│           └── useSetupLifecycle.ts
+│           └── lifecycle
+│               ├── setupLifecycle.runner.ts
+│               ├── setupLifecycle.state.ts
+│               ├── setupLifecycle.type.ts
+│               └── useSetupLifecycle.ts
 │
 └── app
     └── setup
