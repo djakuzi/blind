@@ -40,7 +40,8 @@ const motionStyle = computed(() => ({
 @keyframes app-effect-fade-out { to { opacity: 0; } }
 @keyframes app-effect-fade-held { 0%, 68% { opacity: 1; } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .app-fade-transition--active, .app-fade-transition--held { animation: none; opacity: 0; }
+  .app-fade-transition--active { animation: none; }
+  .app-fade-transition--held { animation: app-effect-fade-out 200ms ease-out forwards; }
 }
 
 </style>
