@@ -9,7 +9,7 @@ import type { tIconGroup, tIconName } from '@/core/media/icons';
 interface Props extends PropsWidth, Pick<PropsHeight, 'height'> {
   group: TGroup;
   icon: tIconName<TGroup>;
-  width: NonNullable<PropsWidth['width']>;
+  width: PropsWidth['width'];
   iconWidth?: PropsWidth['width'];
   iconHeight?: PropsHeight['height'];
   disabled?: boolean;

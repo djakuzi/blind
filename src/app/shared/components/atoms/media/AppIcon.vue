@@ -9,7 +9,7 @@ import { MediaIcons, type tIconGroup, type tIconName } from '@/core/media/icons'
 export interface PropsAppIcon<TGroup extends tIconGroup = tIconGroup> extends PropsWidth, Pick<PropsHeight, 'height'> {
   group: TGroup;
   icon: tIconName<TGroup>;
-  width: NonNullable<PropsWidth['width']>;
+  width: PropsWidth['width'];
   display?: CSSProperties['display'];
   alt?: string;
 }
