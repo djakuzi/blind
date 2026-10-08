@@ -32,7 +32,7 @@ const motionStyle = computed(() => ({
 </script>
 
 <template>
-  <component :is="animatedNode" v-if="animatedNode" />
+  <RenderNode />
 </template>
 
 <style>
