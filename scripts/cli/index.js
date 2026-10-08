@@ -6,6 +6,8 @@ import { createRegistry } from './core/registry.js';
 import { runCli } from './core/command.js';
 import { printError } from './core/terminal.js';
 import { registerProjectSection } from './sections/project.js';
+import { registerDevelopmentSection } from './sections/development.js';
+import { registerPlatformSection } from './sections/platform.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const controller = new AbortController();
@@ -15,6 +17,8 @@ process.once('SIGTERM', () => controller.abort());
 try {
   const registry = createRegistry();
   registerProjectSection(registry);
+  registerDevelopmentSection(registry);
+  registerPlatformSection(registry);
   const context = createContext({ root, signal: controller.signal });
   process.exitCode = await runCli(registry, context, process.argv.slice(2));
 } catch (error) {

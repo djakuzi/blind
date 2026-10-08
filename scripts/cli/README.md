@@ -1,8 +1,23 @@
 # Blind CLI
 
-Run interactive menu: `npm run cli`.
+Interactive: `npm run cli`. Direct command: `npm run cli -- <section> <command> [args]`.
 
-Direct commands: `npm run cli -- <section> <command> [args]`.
+## Development
+
+- `npm run cli -- dev web` (debug)
+- `npm run cli -- dev web --mode prod`
+- `npm run cli -- dev desktop`
+
+## Mobile platforms
+
+- `npm run cli -- platform sync android --build`
+- `npm run cli -- platform sync ios --build --mode debug`
+- `npm run cli -- platform open android`
+- `npm run cli -- platform open ios`
+- `npm run cli -- platform run android --build`
+- `npm run cli -- platform run ios --build`
+
+The `--build` flag builds Web assets using existing npm scripts and synchronizes them via Capacitor before the requested action. Without it, `sync` explicitly synchronizes existing assets; `run` uses the current native project without rebuilding or syncing. iOS commands require macOS. Capacitor is invoked with `npx --no-install` to avoid implicit dependency installation.
 
 ## Project diagnostics
 
@@ -10,12 +25,6 @@ Direct commands: `npm run cli -- <section> <command> [args]`.
 - `npm run cli -- project status`
 - `npm run cli -- project versions`
 - `npm run cli -- project env`
-- `npm run cli -- project doctor` (Web baseline)
-- `npm run cli -- project doctor android`
-- `npm run cli -- project doctor ios`
-- `npm run cli -- project doctor desktop`
-- `npm run cli -- help`
+- `npm run cli -- project doctor [web|desktop|android|ios]`
 
-Doctor uses the Node version from `package.json`, checks local environment files against `.env.template`, and checks platform tools. No secrets are printed or modified. Missing requirements result in exit code 1. Platform-specific tools are checked only when the relevant platform is requested.
-
-CLI uses Node.js ESM and no additional dependencies. Other sections will be implemented in later stages.
+Run `npm run cli -- help` to list all commands.
