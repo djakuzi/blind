@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsDisabled } from '@/app/shared/types/props';
+import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 withDefaults(defineProps<PropsDisabled>(), {
   disabled: false,
 });

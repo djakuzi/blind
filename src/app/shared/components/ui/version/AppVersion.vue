@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { PropsSizeVariant, PropsTypography } from '@/app/shared/types/props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsTypography } from '@/app/shared/types/props/typography.props';
 import { computed } from 'vue';
 
 import { resolveFontSizeValue } from '@/app/styles/contracts/fontSize.contract';

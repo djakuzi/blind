@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsSizeVariant } from '@/app/shared/types/props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import { computed } from 'vue';
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
 import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';

@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import type {
-  PropsWidth,
-  PropsPadding,
-  PropsBorderRadius,
-  PropsSizeVariant,
-  PropsDisabled,
-  PropsSelectionFeedback,
-} from '@/app/shared/types/props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
+import type { PropsBorderRadius } from '@/app/shared/types/props/surface.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/props/interaction.props';
 import { computed, ref } from 'vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';

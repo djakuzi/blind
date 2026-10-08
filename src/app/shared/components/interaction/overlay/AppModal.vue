@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsHeight, PropsSurface, PropsAccessibility } from '@/app/shared/types/props';
+import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimensions.props';
+import type { PropsSurface } from '@/app/shared/types/props/surface.props';
+import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/app/shared/lib/style';

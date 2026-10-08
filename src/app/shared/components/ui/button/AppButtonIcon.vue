@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="TGroup extends tIconGroup">
-import type { PropsWidth, PropsHeight, PropsDisabled } from '@/app/shared/types/props';
+import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimensions.props';
+import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';

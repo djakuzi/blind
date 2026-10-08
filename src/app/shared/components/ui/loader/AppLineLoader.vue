@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsSizeVariant } from '@/app/shared/types/props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import { computed, nextTick, ref, watch } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';

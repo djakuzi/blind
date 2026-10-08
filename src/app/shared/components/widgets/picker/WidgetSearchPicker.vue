@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsSelectionFeedback } from '@/app/shared/types/props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsSelectionFeedback } from '@/app/shared/types/props/interaction.props';
 import { computed, ref, watch } from 'vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';

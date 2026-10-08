@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsWidth } from '@/app/shared/types/props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import { computed } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 

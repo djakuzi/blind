@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant } from '@/app/shared/types/props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
+import type { PropsSurface } from '@/app/shared/types/props/surface.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';

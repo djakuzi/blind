@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { PropsSizeVariant, PropsGap, PropsWidth, PropsTypography, PropsUppercase } from '@/app/shared/types/props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsGap } from '@/app/shared/types/props/spacing.props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsTypography, PropsUppercase } from '@/app/shared/types/props/typography.props';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import AppPulseAttention from '@/app/shared/components/effects/attention/AppPulseAttention.vue';
 import { LibStyle } from '@/app/shared/lib/style';

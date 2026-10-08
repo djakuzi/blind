@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import type {
-  PropsWidth,
-  PropsPadding,
-  PropsBorderRadius,
-  PropsSizeVariant,
-  PropsGap,
-  PropsDisabled,
-  PropsSelectionFeedback,
-} from '@/app/shared/types/props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsPadding, PropsGap } from '@/app/shared/types/props/spacing.props';
+import type { PropsBorderRadius } from '@/app/shared/types/props/surface.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';

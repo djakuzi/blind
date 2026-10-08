@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsTypography } from '@/app/shared/types/props';
+import type { PropsTypography } from '@/app/shared/types/props/typography.props';
 import { computed } from 'vue';
 import { resolveColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveFontSizeValue } from '@/app/styles/contracts/fontSize.contract';

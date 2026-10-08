@@ -1,5 +1,6 @@
 <script lang="ts">
-import type { PropsWidth, PropsHeight, PropsMargin } from '@/app/shared/types/props';
+import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimensions.props';
+import type { PropsMargin } from '@/app/shared/types/props/spacing.props';
 import type { CSSProperties } from 'vue';
 
 type tAppBlockTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer' | 'span';

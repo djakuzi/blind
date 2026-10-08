@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import type {
-  PropsWidth,
-  PropsPadding,
-  PropsSurface,
-  PropsSizeVariant,
-  PropsFont,
-  PropsDisabled,
-  PropsAccessibility,
-} from '@/app/shared/types/props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
+import type { PropsSurface } from '@/app/shared/types/props/surface.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsFont } from '@/app/shared/types/props/typography.props';
+import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
+import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
 import { computed, ref } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 

@@ -1,5 +1,8 @@
 <script lang="ts">
-import type { PropsWidth, PropsPadding, PropsGap, PropsSizeVariant, PropsAccessibilityLabel } from '@/app/shared/types/props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsPadding, PropsGap } from '@/app/shared/types/props/spacing.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsAccessibilityLabel } from '@/app/shared/types/props/accessibility.props';
 import type { CSSProperties } from 'vue';
 
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';

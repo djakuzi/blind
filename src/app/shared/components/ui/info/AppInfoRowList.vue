@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase, PropsAccessibilityLabel } from '@/app/shared/types/props';
+import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsFont, PropsUppercase } from '@/app/shared/types/props/typography.props';
+import type { PropsAccessibilityLabel } from '@/app/shared/types/props/accessibility.props';
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';

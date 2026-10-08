@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsTransitionTiming } from '@/app/shared/types/props';
+import type { PropsTransitionTiming } from '@/app/shared/types/props/animation.props';
 import { cloneVNode, computed, useSlots } from 'vue';
 
 const props = withDefaults(defineProps<PropsTransitionTiming>(), {
