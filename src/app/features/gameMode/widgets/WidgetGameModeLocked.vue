@@ -52,7 +52,6 @@ const lockedDescription = computed(() => modeLocale.value?.locked?.description ?
 <style scoped>
 .widget-game-mode-locked {
   min-width: 0;
-  min-height: 30rem;
   text-align: center;
 }
 

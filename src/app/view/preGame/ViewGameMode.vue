@@ -10,8 +10,9 @@ import { usePreGame } from '@/app/features/preGame/composables/usePreGame';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import AppSwapTransition from '@/app/shared/components/effects/transition/AppSwapTransition.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
-import { SPACE_TOKENS, spaceTokenVar } from '@/app/styles/contracts/space.contract';
+import { spaceTokenVar } from '@/app/styles/contracts/space.contract';
 
 const router = useRouter();
 const gameModeStore = useGameModeStore();
@@ -27,6 +28,7 @@ const {
 const activeModeIndex = ref(0);
 
 const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? null);
+const activeModeStateKey = computed(() => activeMode.value?.locked ? 'locked' : 'options');
 
 function handleModeSelect(selection: iWidgetSliderGameModeSelection) {
   setSelection({
@@ -95,18 +97,24 @@ watch(
         @complete="handleModeComplete"
       />
 
-      <WidgetGameModeLocked
-        v-if="activeMode?.locked"
-        :mode="activeMode"
-      />
+      <AppSwapTransition
+        v-if="activeMode"
+        class="view-game-mode__state"
+        :transition-key="activeModeStateKey"
+      >
+        <WidgetGameModeLocked
+          v-if="activeMode.locked"
+          :mode="activeMode"
+        />
 
-      <WidgetGameModeOptions
-        v-else-if="activeMode"
-        :mode="activeMode"
-        :players="players"
-        :connection="connection"
-        @select="handleOptionSelect"
-      />
+        <WidgetGameModeOptions
+          v-else
+          :mode="activeMode"
+          :players="players"
+          :connection="connection"
+          @select="handleOptionSelect"
+        />
+      </AppSwapTransition>
     </AppFlex>
   </ViewLayout>
 </template>
@@ -118,5 +126,9 @@ watch(
 
 .view-game-mode__content {
   min-width: 0;
+}
+
+.view-game-mode__state {
+  min-height: 30rem;
 }
 </style>
