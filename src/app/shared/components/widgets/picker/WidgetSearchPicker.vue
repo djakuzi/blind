@@ -2,7 +2,7 @@
 import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import type { PropsSelectionFeedback } from '@/app/shared/types/props/interaction.props';
 import { computed, ref, watch } from 'vue';
-import { useAudio } from '@/app/shared/composables/audio/useAudio';
+import { useSelectionFeedback } from '@/app/shared/composables/interaction/useSelectionFeedback';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppModal from '@/app/shared/components/interaction/overlay/AppModal.vue';
@@ -12,8 +12,6 @@ import type { iAppInfoRowImage, PropsAppInfoRow } from '@/app/shared/components/
 import AppInputSearch from '@/app/shared/components/ui/input/AppInputSearch.vue';
 import type { PropsInputSearch } from '@/app/shared/components/ui/input/AppInputSearch.vue';
 import { LibStyle } from '@/core/lib/style';
-
-import { ToolVibration } from '@/core/platform';
 
 export interface iWidgetSearchPickerItem {
   value: string;
@@ -49,7 +47,7 @@ const props = withDefaults(defineProps<PropsWidgetSearchPicker>(), {
   row: undefined,
 });
 
-const { play } = useAudio();
+const { triggerSelectionFeedback } = useSelectionFeedback(props);
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean];
@@ -120,13 +118,7 @@ function handleSelect(item: iWidgetSearchPickerItem) {
 
   emit('select', item.value, item);
 
-  if (props.sound !== null) {
-    play(props.sound);
-  }
-
-  if (props.vibration) {
-    ToolVibration.selectionChanged();
-  }
+  triggerSelectionFeedback();
 }
 
 function resolveItemImage(item: iWidgetSearchPickerItem) {

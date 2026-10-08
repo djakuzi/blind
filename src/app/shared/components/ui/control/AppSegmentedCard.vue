@@ -7,7 +7,7 @@ import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/p
 import { computed } from 'vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
-import { useAudio } from '@/app/shared/composables/audio/useAudio';
+import { useSelectionFeedback } from '@/app/shared/composables/interaction/useSelectionFeedback';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
 import { LibStyle } from '@/core/lib/style';
 import type { tStyleSizeValue } from '@/core/lib/style';
@@ -16,7 +16,6 @@ import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset'
 import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
-import { ToolVibration } from '@/core/platform';
 
 export interface iAppSegmentedCardOptionImage {
   light: string;
@@ -67,7 +66,7 @@ const IMAGE_SIZE_PRESET: Record<tBaseSizeVariant, tStyleSizeValue> = {
   big: '5rem',
 };
 
-const { play } = useAudio();
+const { triggerSelectionFeedback } = useSelectionFeedback(props);
 const { resolvedThemeMode } = useAppThemeMode();
 
 const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
@@ -104,13 +103,7 @@ function handleSelect(option: iAppSegmentedCardOption) {
 
   emit('update:modelValue', option.value);
 
-  if (props.sound !== null) {
-    play(props.sound);
-  }
-
-  if (props.vibration) {
-    ToolVibration.selectionChanged();
-  }
+  triggerSelectionFeedback();
 }
 </script>
 

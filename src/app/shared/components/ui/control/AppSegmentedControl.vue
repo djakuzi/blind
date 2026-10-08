@@ -6,13 +6,12 @@ import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/props/interaction.props';
 import { computed, ref } from 'vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
-import { useAudio } from '@/app/shared/composables/audio/useAudio';
+import { useSelectionFeedback } from '@/app/shared/composables/interaction/useSelectionFeedback';
 import { LibStyle } from '@/core/lib/style';
 
 import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
 import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
-import { ToolVibration } from '@/core/platform';
 
 export interface iAppSegmentedControlOption {
   label: string;
@@ -39,7 +38,7 @@ const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
   borderRadius: 'lg',
 });
 
-const { play } = useAudio();
+const { triggerSelectionFeedback } = useSelectionFeedback(props);
 
 const emit = defineEmits<{
   'update:modelValue': [value: string];
@@ -92,13 +91,7 @@ function handleSelect(option: iAppSegmentedControlOption) {
 
   emit('update:modelValue', option.value);
 
-  if (props.sound !== null) {
-    play(props.sound);
-  }
-
-  if (props.vibration) {
-    ToolVibration.selectionChanged();
-  }
+  triggerSelectionFeedback();
 }
 </script>
 

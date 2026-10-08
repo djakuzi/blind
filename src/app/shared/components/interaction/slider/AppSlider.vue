@@ -4,7 +4,7 @@ import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/props/interaction.props';
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
-import { useAudio } from '@/app/shared/composables/audio/useAudio';
+import { useSelectionFeedback } from '@/app/shared/composables/interaction/useSelectionFeedback';
 import { LibStyle } from '@/core/lib/style';
 import type { tStyleSizeValue } from '@/core/lib/style';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
@@ -12,7 +12,6 @@ import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contrac
 import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
-import { ToolVibration } from '@/core/platform';
 
 export interface PropsAppSlider extends PropsWidth, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {
   modelValue: number;
@@ -56,7 +55,7 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
   vibration: true,
 });
 
-const { play } = useAudio();
+const { triggerSelectionFeedback } = useSelectionFeedback(props);
 
 const emit = defineEmits<{
   'update:modelValue': [value: number];
@@ -154,13 +153,7 @@ function setActiveIndex(index: number) {
 
   emit('update:modelValue', nextIndex);
 
-  if (props.sound !== null) {
-    play(props.sound);
-  }
-
-  if (props.vibration) {
-    ToolVibration.selectionChanged();
-  }
+  triggerSelectionFeedback();
 }
 
 function getActiveItemElement() {

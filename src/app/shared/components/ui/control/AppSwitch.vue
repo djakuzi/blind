@@ -4,13 +4,12 @@ import type { PropsBorderRadius } from '@/app/shared/types/props/surface.props';
 import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
-import { useAudio } from '@/app/shared/composables/audio/useAudio';
+import { useSelectionFeedback } from '@/app/shared/composables/interaction/useSelectionFeedback';
 import { LibStyle } from '@/core/lib/style';
 
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveRadiusValue, type tRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
-import { ToolVibration } from '@/core/platform';
 
 export interface PropsAppSwitch extends PropsWidth, PropsBorderRadius, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {
   modelValue: boolean;
@@ -37,7 +36,7 @@ const props = withDefaults(defineProps<PropsAppSwitch>(), {
   borderColor: 'border-strong',
 });
 
-const { play } = useAudio();
+const { triggerSelectionFeedback } = useSelectionFeedback(props);
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean];
@@ -66,13 +65,7 @@ function handleToggle() {
 
   emit('update:modelValue', !props.modelValue);
 
-  if (props.sound !== null) {
-    play(props.sound);
-  }
-
-  if (props.vibration) {
-    ToolVibration.selectionChanged();
-  }
+  triggerSelectionFeedback();
 }
 </script>
 
