@@ -47,14 +47,10 @@ const positionStyle = computed(() => {
   return {
     '--cp-position-type': props.type,
     '--cp-position-layer': resolveLayerValue(props.layer),
-    '--cp-position-top': centerY
-      ? '50%'
-      : resolvePositionOffsetValue(props.position?.top) ?? 'auto',
+    '--cp-position-top': centerY ? '50%' : (resolvePositionOffsetValue(props.position?.top) ?? 'auto'),
     '--cp-position-right': resolvePositionOffsetValue(props.position?.right) ?? 'auto',
     '--cp-position-bottom': resolvePositionOffsetValue(props.position?.bottom) ?? 'auto',
-    '--cp-position-left': centerX
-      ? '50%'
-      : resolvePositionOffsetValue(props.position?.left) ?? 'auto',
+    '--cp-position-left': centerX ? '50%' : (resolvePositionOffsetValue(props.position?.left) ?? 'auto'),
   };
 });
 </script>

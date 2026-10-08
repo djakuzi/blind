@@ -13,10 +13,7 @@ import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
-import type {
-  iAppSegmentedCardOption,
-  iAppSegmentedCardOptionImage,
-} from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
+import type { iAppSegmentedCardOption, iAppSegmentedCardOptionImage } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 export interface PropsWidgetGameModeOptions {
@@ -86,17 +83,10 @@ function resolvePlayerOption(key: string): iResolvedPlayerOption | null {
 }
 
 const resolvedPlayerOptions = computed(() =>
-  props.mode.options
-    .map(resolvePlayerOption)
-    .filter((option): option is iResolvedPlayerOption => option !== null),
+  props.mode.options.map(resolvePlayerOption).filter((option): option is iResolvedPlayerOption => option !== null),
 );
 
-const selectedPlayerOption = computed(
-  () =>
-    resolvePlayerOption(selectedPlayerOptionKey.value) ??
-    resolvedPlayerOptions.value[0] ??
-    null,
-);
+const selectedPlayerOption = computed(() => resolvePlayerOption(selectedPlayerOptionKey.value) ?? resolvedPlayerOptions.value[0] ?? null);
 
 const availableConnections = computed(() => selectedPlayerOption.value?.connections ?? []);
 
@@ -111,9 +101,7 @@ const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
   })),
 );
 
-const connectionTypes = computed(() => [
-  ...new Set(resolvedPlayerOptions.value.flatMap((option) => option.connections)),
-]);
+const connectionTypes = computed(() => [...new Set(resolvedPlayerOptions.value.flatMap((option) => option.connections))]);
 
 const connectionOptions = computed<iAppSegmentedCardOption[]>(() =>
   connectionTypes.value.map((connectionType) => ({
@@ -139,19 +127,13 @@ function formatPlayerOption({ players, teamSize }: iApiGameModePlayerData) {
 }
 
 function syncSelections() {
-  const playerOption =
-    resolvePlayerOption(props.players ?? '') ??
-    resolvedPlayerOptions.value[0] ??
-    null;
+  const playerOption = resolvePlayerOption(props.players ?? '') ?? resolvedPlayerOptions.value[0] ?? null;
 
   selectedPlayerOptionKey.value = playerOption?.key ?? '';
 
   const connections = playerOption?.connections ?? [];
 
-  selectedConnectionType.value =
-    props.connection && connections.includes(props.connection)
-      ? props.connection
-      : connections[0] ?? '';
+  selectedConnectionType.value = props.connection && connections.includes(props.connection) ? props.connection : (connections[0] ?? '');
 }
 
 function handlePlayerOptionChange(value: string) {
@@ -188,11 +170,7 @@ function handleConnectionChange(value: string) {
   });
 }
 
-watch(
-  () => [props.mode.key, props.players, props.connection],
-  syncSelections,
-  { immediate: true },
-);
+watch(() => [props.mode.key, props.players, props.connection], syncSelections, { immediate: true });
 </script>
 
 <template>
@@ -206,12 +184,7 @@ watch(
       role="group"
       :aria-label="preGameLocale.players"
     >
-      <AppTitle
-        :text="preGameLocale.players"
-        tag="h3"
-        font-size="lg"
-        font-weight="medium"
-      />
+      <AppTitle :text="preGameLocale.players" tag="h3" font-size="lg" font-weight="medium" />
 
       <AppSegmentedCard
         :model-value="selectedPlayerOptionKey"
@@ -233,12 +206,7 @@ watch(
       role="group"
       :aria-label="preGameLocale.connection"
     >
-      <AppTitle
-        :text="preGameLocale.connection"
-        tag="h3"
-        font-size="lg"
-        font-weight="medium"
-      />
+      <AppTitle :text="preGameLocale.connection" tag="h3" font-size="lg" font-weight="medium" />
 
       <AppSegmentedCard
         :model-value="selectedConnectionType"

@@ -33,18 +33,9 @@ function handleBack() {
         @click="handleBack"
       />
 
-      <AppHeaderRailTitle
-        v-if="hasLayoutHeaderTitle"
-        class="layout-header__title"
-        :text="layoutHeaderTitle"
-        font-size="xl"
-      />
+      <AppHeaderRailTitle v-if="hasLayoutHeaderTitle" class="layout-header__title" :text="layoutHeaderTitle" font-size="xl" />
 
-      <AppLogo
-        v-else-if="hasLayoutHeaderLogo"
-        class="layout-header__logo"
-        size="small"
-      />
+      <AppLogo v-else-if="hasLayoutHeaderLogo" class="layout-header__logo" size="small" />
 
       <span class="layout-header__spacer" aria-hidden="true" />
     </AppFlex>
@@ -58,10 +49,7 @@ function handleBack() {
   display: flex;
   align-items: center;
   width: 100%;
-  padding:
-    var(--cp-layout-padding-vertical, 0px)
-    var(--cp-layout-padding-horizontal, 0px)
-    var(--app-space-2);
+  padding: var(--cp-layout-padding-vertical, 0px) var(--cp-layout-padding-horizontal, 0px) var(--app-space-2);
 }
 
 .layout-header__title {

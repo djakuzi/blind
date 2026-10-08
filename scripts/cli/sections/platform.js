@@ -20,7 +20,8 @@ async function ensurePlatform(context, platform) {
 
 function parseOptions(args, action) {
   const [platform, ...flags] = args;
-  if (!MOBILE.includes(platform)) throw new Error(`Usage: platform ${action} <android|ios>${action === 'open' ? '' : ' [--build] [--mode debug|prod]'}`);
+  if (!MOBILE.includes(platform))
+    throw new Error(`Usage: platform ${action} <android|ios>${action === 'open' ? '' : ' [--build] [--mode debug|prod]'}`);
   if (action === 'open') {
     if (flags.length) throw new Error('Usage: platform open <android|ios>');
     return { platform, build: false, mode: 'prod' };
@@ -55,7 +56,8 @@ export function registerPlatformSection(registry) {
     registry.addCommand({
       section: 'platform',
       id: action,
-      description: action === 'open' ? 'Open native IDE: <android|ios>' : `${action} native project: <android|ios> [--build] [--mode debug|prod]`,
+      description:
+        action === 'open' ? 'Open native IDE: <android|ios>' : `${action} native project: <android|ios> [--build] [--mode debug|prod]`,
       async run(context, args) {
         let selectedArgs = args;
         if (args.length === 0) {

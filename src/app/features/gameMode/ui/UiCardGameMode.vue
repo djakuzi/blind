@@ -78,10 +78,7 @@ function handleComplete() {
       :justify="mode.locked ? 'between' : 'space-evenly'"
       width="100%"
     >
-      <AppFillAware
-        :color="mode.locked ? 'text-disabled' : 'text-primary'"
-        :filled-color="mode.locked ? 'text-disabled' : 'on-primary'"
-      >
+      <AppFillAware :color="mode.locked ? 'text-disabled' : 'text-primary'" :filled-color="mode.locked ? 'text-disabled' : 'on-primary'">
         <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
       </AppFillAware>
 
@@ -118,25 +115,10 @@ function handleComplete() {
     </AppFlex>
 
     <template #overlay>
-      <div
-        v-if="mode.locked"
-        class="ui-card-game-mode__locked-overlay"
-        aria-hidden="true"
-      />
+      <div v-if="mode.locked" class="ui-card-game-mode__locked-overlay" aria-hidden="true" />
 
-      <AppPosition
-        v-if="mode.locked"
-        class="ui-card-game-mode__locked-icon"
-        type="absolute"
-        center="xy"
-        layer="raised"
-      >
-        <AppIcon
-          group="locked"
-          icon="lock"
-          width="8rem"
-          height="8rem"
-        />
+      <AppPosition v-if="mode.locked" class="ui-card-game-mode__locked-icon" type="absolute" center="xy" layer="raised">
+        <AppIcon group="locked" icon="lock" width="8rem" height="8rem" />
       </AppPosition>
     </template>
   </AppCardHold>
@@ -161,7 +143,8 @@ function handleComplete() {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked) :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
+  .ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked)
+    :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
     border-color: var(--app-color-primary);
     box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 18%, transparent);
   }

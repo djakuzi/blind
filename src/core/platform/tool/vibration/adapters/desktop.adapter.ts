@@ -1,8 +1,4 @@
-import {
-  GAMEPAD_VIBRATION_IMPACT,
-  GAMEPAD_VIBRATION_NOTIFICATION,
-  GAMEPAD_VIBRATION_SELECTION,
-} from '../const';
+import { GAMEPAD_VIBRATION_IMPACT, GAMEPAD_VIBRATION_NOTIFICATION, GAMEPAD_VIBRATION_SELECTION } from '../const';
 import { HelperGamepadVibration } from '../helpers/gamepad.helper';
 import type { iVibrationAdapter } from '../type';
 
@@ -16,20 +12,14 @@ export const DesktopVibrationAdapter: iVibrationAdapter = {
   },
 
   impact(style) {
-    return HelperGamepadVibration.rumble(
-      GAMEPAD_VIBRATION_IMPACT[style],
-    );
+    return HelperGamepadVibration.rumble(GAMEPAD_VIBRATION_IMPACT[style]);
   },
 
   notification(type) {
-    return HelperGamepadVibration.rumble(
-      GAMEPAD_VIBRATION_NOTIFICATION[type],
-    );
+    return HelperGamepadVibration.rumble(GAMEPAD_VIBRATION_NOTIFICATION[type]);
   },
 
   selection(phase) {
-    return HelperGamepadVibration.rumble(
-      GAMEPAD_VIBRATION_SELECTION[phase],
-    );
+    return HelperGamepadVibration.rumble(GAMEPAD_VIBRATION_SELECTION[phase]);
   },
 };

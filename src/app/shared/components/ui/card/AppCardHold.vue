@@ -6,9 +6,7 @@ import type { PropsAppBloodFill } from '@/app/shared/components/effects/fill/App
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import type { PropsAppHoldAction } from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 
-export type PropsAppCardHold = PropsAppCard &
-  PropsAppHoldAction &
-  Omit<PropsAppBloodFill, 'isActive' | 'progressRatio'>;
+export type PropsAppCardHold = PropsAppCard & PropsAppHoldAction & Omit<PropsAppBloodFill, 'isActive' | 'progressRatio'>;
 
 withDefaults(defineProps<PropsAppCardHold>(), {
   tag: 'div',
@@ -100,11 +98,7 @@ function handleComplete() {
           <slot :is-holding="isHolding" :is-complete="isComplete" />
         </div>
 
-        <slot
-          name="overlay"
-          :is-holding="isHolding"
-          :is-complete="isComplete"
-        />
+        <slot name="overlay" :is-holding="isHolding" :is-complete="isComplete" />
       </AppCard>
     </template>
   </AppHoldAction>

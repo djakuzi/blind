@@ -26,7 +26,6 @@ export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<
   dividerWidth?: tBorderWidthValue;
   dividerStyle?: tBorderStyleValue;
   showLastDivider?: boolean;
-
 }
 </script>
 

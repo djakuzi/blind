@@ -8,10 +8,7 @@ import { CONTROL_SIZE_PRESET, type iControlSizePreset } from '@/app/shared/style
 
 type tControlSizeProps = PropsSizeVariant & PropsPadding & Pick<PropsFont, 'fontSize'>;
 
-export function useControlSize(
-  props: tControlSizeProps,
-  preset: Record<tBaseSizeVariant, iControlSizePreset> = CONTROL_SIZE_PRESET,
-) {
+export function useControlSize(props: tControlSizeProps, preset: Record<tBaseSizeVariant, iControlSizePreset> = CONTROL_SIZE_PRESET) {
   const sizeConfig = computed(() => preset[props.size ?? 'middle']);
 
   const paddingX = computed(() => resolvePaddingValue(props.paddingX ?? sizeConfig.value.paddingX));

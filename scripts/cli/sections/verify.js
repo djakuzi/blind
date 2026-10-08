@@ -49,14 +49,18 @@ export function registerVerifySection(registry) {
   const generated = registry.find(['generate', 'check']);
   if (!generated) throw new Error('Generate section must be registered before Verify.');
   registry.addCommand({
-    section: 'verify', id: 'generated', description: 'Check generated files',
+    section: 'verify',
+    id: 'generated',
+    description: 'Check generated files',
     async run(context, args) {
       assertNoArgs(args, 'verify generated');
       return generated.run(context, []);
     },
   });
   registry.addCommand({
-    section: 'verify', id: 'all', description: 'Run every quality check',
+    section: 'verify',
+    id: 'all',
+    description: 'Run every quality check',
     run: (context, args) => checkAll(context, args, generated.run),
   });
 
@@ -66,7 +70,9 @@ export function registerVerifySection(registry) {
     { id: 'lint', script: 'lint:fix', description: 'Run ESLint --fix' },
   ]) {
     registry.addCommand({
-      section: 'fix', id: item.id, description: item.description,
+      section: 'fix',
+      id: item.id,
+      description: item.description,
       async run(context, args) {
         assertNoArgs(args, `fix ${item.id}`);
         return runNpm(context, item.script);
@@ -74,7 +80,9 @@ export function registerVerifySection(registry) {
     });
   }
   registry.addCommand({
-    section: 'fix', id: 'all', description: 'Run Prettier --write then ESLint --fix',
+    section: 'fix',
+    id: 'all',
+    description: 'Run Prettier --write then ESLint --fix',
     async run(context, args) {
       assertNoArgs(args, 'fix all');
       for (const script of ['format', 'lint:fix']) {

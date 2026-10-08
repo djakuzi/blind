@@ -10,10 +10,7 @@ function matches(query: string) {
   return globalThis.matchMedia(query).matches;
 }
 
-function subscribe(
-  query: string,
-  callback: tMediaQueryChangeCallback,
-): iPlatformSubscription {
+function subscribe(query: string, callback: tMediaQueryChangeCallback): iPlatformSubscription {
   if (typeof globalThis.matchMedia !== 'function') {
     return {
       unsubscribe() {},

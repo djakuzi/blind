@@ -57,17 +57,24 @@ async function checkEnvironment(root) {
     }
     const keys = parseEnvKeys(await readFile(filePath, 'utf8'));
     const missing = required.filter((key) => !keys.has(key));
-    healthy = report(name, missing.length === 0, missing.length ? `missing keys: ${missing.join(', ')}` : 'all required keys present') && healthy;
+    healthy =
+      report(name, missing.length === 0, missing.length ? `missing keys: ${missing.join(', ')}` : 'all required keys present') && healthy;
   }
   return healthy;
 }
 
 function platformChecks(platform) {
   if (platform === 'android') {
-    return [['Java', 'java', ['-version']], ['ADB', 'adb', ['version']]];
+    return [
+      ['Java', 'java', ['-version']],
+      ['ADB', 'adb', ['version']],
+    ];
   }
   if (platform === 'ios') {
-    return [['Xcode', 'xcodebuild', ['-version']], ['CocoaPods', 'pod', ['--version']]];
+    return [
+      ['Xcode', 'xcodebuild', ['-version']],
+      ['CocoaPods', 'pod', ['--version']],
+    ];
   }
   if (platform === 'desktop' || platform === 'web') return [];
   throw new Error('Usage: project doctor [web|desktop|android|ios]');
@@ -108,7 +115,7 @@ async function status(context, args) {
   printLine(`Branch: ${git.status === 0 ? git.stdout.trim() || '(detached)' : 'unavailable'}`);
   printLine(`Working tree: ${porcelain.status !== 0 ? 'unavailable' : porcelain.stdout.trim() ? 'modified' : 'clean'}`);
   printLine(`Node: ${process.version}; OS: ${process.platform}`);
-  printLine(`Dependencies: ${await exists(join(context.root, 'node_modules')) ? 'installed' : 'missing'}`);
+  printLine(`Dependencies: ${(await exists(join(context.root, 'node_modules'))) ? 'installed' : 'missing'}`);
   return 0;
 }
 
@@ -120,7 +127,8 @@ async function versions(context, args) {
   for (const [name, bin, params] of [
     ['npm', process.platform === 'win32' ? 'npm.cmd' : 'npm', ['--version']],
     ['Git', 'git', ['--version']],
-  ]) printLine(`${name}: ${runVersion(bin, params) ?? 'not installed'}`);
+  ])
+    printLine(`${name}: ${runVersion(bin, params) ?? 'not installed'}`);
   for (const name of ['vue', 'vite', 'typescript', 'electron', '@capacitor/core']) {
     printLine(`${name}: ${pkg.dependencies?.[name] ?? pkg.devDependencies?.[name] ?? 'not configured'}`);
   }
@@ -129,17 +137,27 @@ async function versions(context, args) {
 
 export function registerProjectSection(registry) {
   registry.addSection({ id: 'project', title: 'Project', description: 'Project status and environment diagnostics' });
-  registry.addCommand({ section: 'project', id: 'info', description: 'Show basic project information', run: async (context, args) => {
-    assertNoArgs(args, 'project info');
-    const pkg = await getPackage(context.root);
-    printLine(`Project: ${pkg.name}\nVersion: ${pkg.version}\nNode: ${process.version}\nPlatform: ${process.platform}`);
-    return 0;
-  } });
+  registry.addCommand({
+    section: 'project',
+    id: 'info',
+    description: 'Show basic project information',
+    run: async (context, args) => {
+      assertNoArgs(args, 'project info');
+      const pkg = await getPackage(context.root);
+      printLine(`Project: ${pkg.name}\nVersion: ${pkg.version}\nNode: ${process.version}\nPlatform: ${process.platform}`);
+      return 0;
+    },
+  });
   registry.addCommand({ section: 'project', id: 'status', description: 'Show Git and workspace status', run: status });
   registry.addCommand({ section: 'project', id: 'versions', description: 'Show tool and dependency versions', run: versions });
-  registry.addCommand({ section: 'project', id: 'env', description: 'Check environment keys without exposing values', run: async (context, args) => {
-    assertNoArgs(args, 'project env');
-    return (await checkEnvironment(context.root)) ? 0 : 1;
-  } });
+  registry.addCommand({
+    section: 'project',
+    id: 'env',
+    description: 'Check environment keys without exposing values',
+    run: async (context, args) => {
+      assertNoArgs(args, 'project env');
+      return (await checkEnvironment(context.root)) ? 0 : 1;
+    },
+  });
   registry.addCommand({ section: 'project', id: 'doctor', description: 'Check requirements: [web|desktop|android|ios]', run: doctor });
 }

@@ -24,7 +24,6 @@ export interface PropsInputSearch
   placeholderColor?: tColorValue;
   name?: string;
   autocomplete?: string;
-
 }
 
 const props = withDefaults(defineProps<PropsInputSearch>(), {

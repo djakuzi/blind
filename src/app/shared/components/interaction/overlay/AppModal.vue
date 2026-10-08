@@ -24,7 +24,6 @@ export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   lockScroll?: boolean;
-
 }
 
 const props = withDefaults(defineProps<PropsAppModal>(), {

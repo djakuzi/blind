@@ -22,7 +22,6 @@ export interface PropsAppSegmentedControl
   extends PropsWidth, PropsPadding, PropsBorderRadius, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {
   modelValue: string;
   options: readonly iAppSegmentedControlOption[];
-
 }
 
 const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
@@ -53,11 +52,7 @@ const { paddingX: itemPaddingX, paddingY: itemPaddingY, fontSize: itemFontSize }
 const isContentWidth = computed(() => props.width === 'fit-content' || props.width === 'auto');
 
 function isOptionMarqueePlaying(option: iAppSegmentedControlOption) {
-  return (
-    option.value === props.modelValue ||
-    option.value === hoveredOptionValue.value ||
-    option.value === focusedOptionValue.value
-  );
+  return option.value === props.modelValue || option.value === hoveredOptionValue.value || option.value === focusedOptionValue.value;
 }
 
 function handleMouseEnter(option: iAppSegmentedControlOption) {

@@ -18,9 +18,7 @@ export function useLayoutHeader() {
 
   const layoutHeaderTitle = computed(() => headerConfig.value?.title?.(locale.value) ?? '');
 
-  const hasLayoutHeaderLogo = computed(
-    () => !hasLayoutHeaderTitle.value && headerConfig.value?.logo === true,
-  );
+  const hasLayoutHeaderLogo = computed(() => !hasLayoutHeaderTitle.value && headerConfig.value?.logo === true);
 
   return {
     hasLayoutHeader,

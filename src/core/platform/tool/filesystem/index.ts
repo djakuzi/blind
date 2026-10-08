@@ -12,8 +12,4 @@ const FilesystemAdapter = resolveRuntimeAdapter({
   desktop: DesktopFilesystemAdapter,
 });
 
-export const {
-  setJson,
-  getJson,
-  remove,
-} = createFilesystemTool(FilesystemAdapter);
+export const { setJson, getJson, remove } = createFilesystemTool(FilesystemAdapter);

@@ -4,10 +4,7 @@ let shouldKeepAwake = false;
 let isVisibilitySubscribed = false;
 
 function getWakeLock(): WakeLock | undefined {
-  if (
-    typeof navigator === 'undefined' ||
-    !('wakeLock' in navigator)
-  ) {
+  if (typeof navigator === 'undefined' || !('wakeLock' in navigator)) {
     return undefined;
   }
 
@@ -17,11 +14,7 @@ function getWakeLock(): WakeLock | undefined {
 async function acquire() {
   const wakeLock = getWakeLock();
 
-  if (
-    !wakeLock ||
-    typeof document === 'undefined' ||
-    document.visibilityState !== 'visible'
-  ) {
+  if (!wakeLock || typeof document === 'undefined' || document.visibilityState !== 'visible') {
     return false;
   }
 
@@ -64,11 +57,7 @@ async function acquire() {
 }
 
 function handleVisibilityChange() {
-  if (
-    !shouldKeepAwake ||
-    typeof document === 'undefined' ||
-    document.visibilityState !== 'visible'
-  ) {
+  if (!shouldKeepAwake || typeof document === 'undefined' || document.visibilityState !== 'visible') {
     return;
   }
 

@@ -20,9 +20,7 @@ function createHandledResult() {
 
 export function createAudioTool(adapter: iAudioAdapter) {
   let muted = false;
-  let completeSubscription:
-    | Awaited<ReturnType<iAudioAdapter['subscribeComplete']>>
-    | undefined;
+  let completeSubscription: Awaited<ReturnType<iAudioAdapter['subscribeComplete']>> | undefined;
   let completeSubscriptionRequest: Promise<void> | undefined;
 
   const activePlayCounts = new Map<string, number>();
@@ -58,8 +56,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
     }
 
     const request = (async () => {
-      completeSubscription =
-        await adapter.subscribeComplete(decrementActivePlay);
+      completeSubscription = await adapter.subscribeComplete(decrementActivePlay);
     })();
 
     completeSubscriptionRequest = request;
@@ -107,9 +104,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
     }
   }
 
-  async function preload(
-    input: iAudioPreloadResource | readonly iAudioPreloadResource[],
-  ) {
+  async function preload(input: iAudioPreloadResource | readonly iAudioPreloadResource[]) {
     const resources = Array.isArray(input) ? input : [input];
 
     await ensureCompleteSubscription();
@@ -118,18 +113,12 @@ export function createAudioTool(adapter: iAudioAdapter) {
     return createHandledResult();
   }
 
-  async function play(
-    audio: iAudioResource,
-    options: iAudioPlayOptions = {},
-  ) {
+  async function play(audio: iAudioResource, options: iAudioPlayOptions = {}) {
     if (muted) {
       return createHandledResult();
     }
 
-    activePlayCounts.set(
-      audio.id,
-      (activePlayCounts.get(audio.id) ?? 0) + 1,
-    );
+    activePlayCounts.set(audio.id, (activePlayCounts.get(audio.id) ?? 0) + 1);
 
     try {
       await adapter.playResource(audio, options);
@@ -186,10 +175,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
     }
   }
 
-  async function loop(
-    audio: iAudioResource,
-    options: iAudioLoopOptions = {},
-  ) {
+  async function loop(audio: iAudioResource, options: iAudioLoopOptions = {}) {
     const loopState = {
       audio,
       options: {
@@ -214,10 +200,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
     return createHandledResult();
   }
 
-  async function setLoopVolume(
-    audio: iAudioResource,
-    options: iAudioLoopVolumeOptions,
-  ) {
+  async function setLoopVolume(audio: iAudioResource, options: iAudioLoopVolumeOptions) {
     const loopState = activeLoops.get(audio.id);
 
     if (!loopState) {
@@ -270,14 +253,9 @@ export function createAudioTool(adapter: iAudioAdapter) {
     if (muted) {
       await Promise.allSettled([...loopRequests.values()]);
 
-      const audioIds = new Set([
-        ...activePlayCounts.keys(),
-        ...runningLoopIds,
-      ]);
+      const audioIds = new Set([...activePlayCounts.keys(), ...runningLoopIds]);
 
-      await Promise.all(
-        [...audioIds].map((assetId) => adapter.stopResource(assetId)),
-      );
+      await Promise.all([...audioIds].map((assetId) => adapter.stopResource(assetId)));
 
       activePlayCounts.clear();
       runningLoopIds.clear();
@@ -285,9 +263,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
       return createHandledResult();
     }
 
-    await Promise.all(
-      [...activeLoops.values()].map((loopState) => startLoop(loopState)),
-    );
+    await Promise.all([...activeLoops.values()].map((loopState) => startLoop(loopState)));
 
     return createHandledResult();
   }
@@ -298,9 +274,7 @@ export function createAudioTool(adapter: iAudioAdapter) {
     await Promise.allSettled([
       ...preloadRequests.values(),
       ...loopRequests.values(),
-      ...(completeSubscriptionRequest
-        ? [completeSubscriptionRequest]
-        : []),
+      ...(completeSubscriptionRequest ? [completeSubscriptionRequest] : []),
     ]);
 
     const subscription = completeSubscription;

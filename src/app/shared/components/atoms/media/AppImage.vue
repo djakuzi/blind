@@ -62,14 +62,7 @@ function handleLoad(event: Event) {
 </script>
 
 <template>
-  <AppBlock
-    class="app-image"
-    :display="display"
-    :width="width"
-    :max-width="maxWidth"
-    :height="height"
-    :style="imageStyle"
-  >
+  <AppBlock class="app-image" :display="display" :width="width" :max-width="maxWidth" :height="height" :style="imageStyle">
     <img
       v-if="shouldLoad"
       class="app-image__media"

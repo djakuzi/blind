@@ -17,10 +17,7 @@ export function useAudio() {
     });
   }
 
-  async function startLoop(
-    id: tAudioId,
-    options: ToolAudio.iAudioLoopOptions,
-  ) {
+  async function startLoop(id: tAudioId, options: ToolAudio.iAudioLoopOptions) {
     if (loops.has(id)) {
       if (options.volume !== undefined) {
         await setLoopVolume(id, {
@@ -63,19 +60,13 @@ export function useAudio() {
     }
   }
 
-  async function loop(
-    input: tAudioInput,
-    options: ToolAudio.iAudioLoopOptions = {},
-  ) {
+  async function loop(input: tAudioInput, options: ToolAudio.iAudioLoopOptions = {}) {
     const ids = Array.isArray(input) ? input : [input];
 
     await Promise.all(ids.map((id) => startLoop(id, options)));
   }
 
-  async function setLoopVolume(
-    id: tAudioId,
-    options: ToolAudio.iAudioLoopVolumeOptions,
-  ) {
+  async function setLoopVolume(id: tAudioId, options: ToolAudio.iAudioLoopVolumeOptions) {
     const activeRequest = loopRequests.get(id);
 
     if (activeRequest) {

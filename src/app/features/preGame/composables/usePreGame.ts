@@ -42,16 +42,10 @@ export function usePreGame() {
   );
 
   function getNormalizedSelection(input: iPreGameSelectionInput) {
-    return normalizePreGameSelection(
-      input,
-      gameModeStore.modes,
-      gameModeStore.data,
-    );
+    return normalizePreGameSelection(input, gameModeStore.modes, gameModeStore.data);
   }
 
-  function createCurrentRouteQuery(
-    selection: iPreGameSelection,
-  ): LocationQueryRaw {
+  function createCurrentRouteQuery(selection: iPreGameSelection): LocationQueryRaw {
     const nextQuery: LocationQueryRaw = {
       ...route.query,
     };
@@ -101,11 +95,8 @@ export function usePreGame() {
     return enqueueUpdate(async () => {
       const selection = getNormalizedSelection({
         mode: readPreGameQueryValue(route.query.mode) ?? preGameStore.mode,
-        players:
-          readPreGameQueryValue(route.query.players) ?? preGameStore.players,
-        connection:
-          readPreGameQueryValue(route.query.connection) ??
-          preGameStore.connection,
+        players: readPreGameQueryValue(route.query.players) ?? preGameStore.players,
+        connection: readPreGameQueryValue(route.query.connection) ?? preGameStore.connection,
       });
 
       await writeSelectionQuery(selection);
@@ -131,13 +122,7 @@ export function usePreGame() {
   }
 
   watch(
-    [
-      () => route.query.mode,
-      () => route.query.players,
-      () => route.query.connection,
-      () => gameModeStore.modes,
-      () => gameModeStore.data,
-    ],
+    [() => route.query.mode, () => route.query.players, () => route.query.connection, () => gameModeStore.modes, () => gameModeStore.data],
     () => {
       if (!isWritingQuery) {
         syncFromQuery();

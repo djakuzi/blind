@@ -19,13 +19,4 @@ const AudioAdapter = resolveRuntimeAdapter({
   desktop: DesktopAudioAdapter,
 });
 
-export const {
-  activate,
-  preload,
-  play,
-  loop,
-  setLoopVolume,
-  stop,
-  setMuted,
-  destroy,
-} = createAudioTool(AudioAdapter);
+export const { activate, preload, play, loop, setLoopVolume, stop, setMuted, destroy } = createAudioTool(AudioAdapter);

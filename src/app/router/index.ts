@@ -1,9 +1,4 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-  type RouteRecordRaw,
-} from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import { setupRouteLazyRunner } from '@/core/app/route/lazy/routeLazy.runner';
 import { PlatformRuntime } from '@/core/platform';
 import { KEY_ROUTE } from './constants/route.const';
@@ -30,9 +25,7 @@ export const rootRoute: RouteRecordRaw = {
 };
 
 const router = createRouter({
-  history: PlatformRuntime.isDesktop()
-    ? createWebHashHistory()
-    : createWebHistory(import.meta.env.BASE_URL),
+  history: PlatformRuntime.isDesktop() ? createWebHashHistory() : createWebHistory(import.meta.env.BASE_URL),
   routes: [rootRoute],
 });
 

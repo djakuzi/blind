@@ -1,8 +1,4 @@
-import type {
-  iEnterViewFullscreenOptions,
-  iSetupViewOptions,
-  iViewAdapter,
-} from './type';
+import type { iEnterViewFullscreenOptions, iSetupViewOptions, iViewAdapter } from './type';
 
 export function createViewTool(adapter: iViewAdapter) {
   function getViewportRatio() {
@@ -27,17 +23,11 @@ export function createViewTool(adapter: iViewAdapter) {
     }
 
     if (options.isWebViewLimitedByStatusBar !== undefined) {
-      results.push(
-        await adapter.setWebViewLimitedByStatusBar(
-          options.isWebViewLimitedByStatusBar,
-        ),
-      );
+      results.push(await adapter.setWebViewLimitedByStatusBar(options.isWebViewLimitedByStatusBar));
     }
 
     if (options.isStatusBarVisible !== undefined) {
-      results.push(
-        await adapter.setStatusBarVisible(options.isStatusBarVisible),
-      );
+      results.push(await adapter.setStatusBarVisible(options.isStatusBarVisible));
     }
 
     return {

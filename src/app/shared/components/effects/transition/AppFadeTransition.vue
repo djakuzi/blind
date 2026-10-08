@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const slots = useSlots();
 const animatedNode = computed(() => {
-  const node = slots.default?.().find(vnode => typeof vnode.type !== 'symbol');
+  const node = slots.default?.().find((vnode) => typeof vnode.type !== 'symbol');
   if (!node) return null;
   return cloneVNode(node, {
     class: props.active ? (props.holdUntilEnd ? 'app-fade-transition--held' : 'app-fade-transition--active') : undefined,
@@ -33,14 +33,32 @@ const RenderNode = () => animatedNode.value;
 </template>
 
 <style>
-
-.app-fade-transition--active { animation: app-effect-fade-out var(--effect-duration) ease-out var(--effect-delay) forwards; }
-.app-fade-transition--held { animation: app-effect-fade-held var(--effect-duration) ease-out var(--effect-delay) forwards; }
-@keyframes app-effect-fade-out { to { opacity: 0; } }
-@keyframes app-effect-fade-held { 0%, 68% { opacity: 1; } 100% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) {
-  .app-fade-transition--active { animation: none; }
-  .app-fade-transition--held { animation: app-effect-fade-out 200ms ease-out forwards; }
+.app-fade-transition--active {
+  animation: app-effect-fade-out var(--effect-duration) ease-out var(--effect-delay) forwards;
 }
-
+.app-fade-transition--held {
+  animation: app-effect-fade-held var(--effect-duration) ease-out var(--effect-delay) forwards;
+}
+@keyframes app-effect-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes app-effect-fade-held {
+  0%,
+  68% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-fade-transition--active {
+    animation: none;
+  }
+  .app-fade-transition--held {
+    animation: app-effect-fade-out 200ms ease-out forwards;
+  }
+}
 </style>

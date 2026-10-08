@@ -42,7 +42,6 @@ export interface PropsAppInfoRowList
   dividerWidth?: tBorderWidthValue;
   dividerColor?: tColorValue;
   textColor?: tColorValue;
-
 }
 
 const props = withDefaults(defineProps<PropsAppInfoRowList>(), {

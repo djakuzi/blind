@@ -16,19 +16,12 @@ import { spaceTokenVar } from '@/app/shared/styles/contracts/space.contract';
 
 const router = useRouter();
 const gameModeStore = useGameModeStore();
-const {
-  mode,
-  players,
-  connection,
-  selectionQuery,
-  setSelection,
-  flushSelection,
-} = usePreGame();
+const { mode, players, connection, selectionQuery, setSelection, flushSelection } = usePreGame();
 
 const activeModeIndex = ref(0);
 
 const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? null);
-const activeModeStateKey = computed(() => activeMode.value?.locked ? 'locked' : 'options');
+const activeModeStateKey = computed(() => (activeMode.value?.locked ? 'locked' : 'options'));
 
 function handleModeSelect(selection: iWidgetSliderGameModeSelection) {
   setSelection({
@@ -69,9 +62,7 @@ watch(
       return;
     }
 
-    const modeIndex = gameModeStore.modes.findIndex(
-      (gameMode) => gameMode.key === modeKey,
-    );
+    const modeIndex = gameModeStore.modes.findIndex((gameMode) => gameMode.key === modeKey);
 
     if (modeIndex >= 0 && activeModeIndex.value !== modeIndex) {
       activeModeIndex.value = modeIndex;
@@ -83,37 +74,13 @@ watch(
 
 <template>
   <ViewLayout class="view-game-mode" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
-    <AppFlex
-      class="view-game-mode__content"
-      direction="column"
-      align="center"
-      width="100%"
-      :margin="spaceTokenVar(14) + '0 0 0'"
-      :gap="12"
-    >
-      <WidgetSliderGameMode
-        v-model="activeModeIndex"
-        @select="handleModeSelect"
-        @complete="handleModeComplete"
-      />
+    <AppFlex class="view-game-mode__content" direction="column" align="center" width="100%" :margin="spaceTokenVar(14) + '0 0 0'" :gap="12">
+      <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
 
-      <AppSwapTransition
-        v-if="activeMode"
-        class="view-game-mode__state"
-        :transition-key="activeModeStateKey"
-      >
-        <WidgetGameModeLocked
-          v-if="activeMode.locked"
-          :mode="activeMode"
-        />
+      <AppSwapTransition v-if="activeMode" class="view-game-mode__state" :transition-key="activeModeStateKey">
+        <WidgetGameModeLocked v-if="activeMode.locked" :mode="activeMode" />
 
-        <WidgetGameModeOptions
-          v-else
-          :mode="activeMode"
-          :players="players"
-          :connection="connection"
-          @select="handleOptionSelect"
-        />
+        <WidgetGameModeOptions v-else :mode="activeMode" :players="players" :connection="connection" @select="handleOptionSelect" />
       </AppSwapTransition>
     </AppFlex>
   </ViewLayout>

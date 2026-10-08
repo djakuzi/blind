@@ -25,7 +25,7 @@ async function inventory(root, target) {
   }
   const results = [];
   for (const entry of entries) {
-    if (entry.isDirectory()) results.push(...await inventory(root, join(target, entry.name)));
+    if (entry.isDirectory()) results.push(...(await inventory(root, join(target, entry.name))));
     else if (entry.isFile() && (!target.startsWith('src/assets/fonts') || entry.name.endsWith('.woff2'))) {
       const path = join(target, entry.name);
       results.push([path, await readFile(join(root, path))]);
@@ -37,10 +37,12 @@ async function inventory(root, target) {
 async function normalized(source, filepath, content) {
   if (!content || !filepath.endsWith('.ts')) return content;
   const config = (await prettier.resolveConfig(join(source, filepath))) ?? {};
-  return Buffer.from(await prettier.format(content.toString('utf8'), {
-    ...config,
-    filepath: join(source, filepath),
-  }));
+  return Buffer.from(
+    await prettier.format(content.toString('utf8'), {
+      ...config,
+      filepath: join(source, filepath),
+    }),
+  );
 }
 
 async function compareOutputs(source, temporary) {
@@ -98,7 +100,9 @@ export function registerGenerateSection(registry) {
   registry.addSection({ id: 'generate', title: 'Generate', description: 'Run existing project generators' });
   for (const generator of GENERATORS) {
     registry.addCommand({
-      section: 'generate', id: generator.id, description: `Run ${generator.id} generator`,
+      section: 'generate',
+      id: generator.id,
+      description: `Run ${generator.id} generator`,
       async run(context, args) {
         if (args.length) throw new Error(`Usage: generate ${generator.id}`);
         return runNpm(context, generator.script);
@@ -106,7 +110,9 @@ export function registerGenerateSection(registry) {
     });
   }
   registry.addCommand({
-    section: 'generate', id: 'all', description: 'Run all generators',
+    section: 'generate',
+    id: 'all',
+    description: 'Run all generators',
     async run(context, args) {
       if (args.length) throw new Error('Usage: generate all');
       for (const generator of GENERATORS) {
@@ -118,7 +124,9 @@ export function registerGenerateSection(registry) {
     },
   });
   registry.addCommand({
-    section: 'generate', id: 'check', description: 'Verify generated files without modifying the project',
+    section: 'generate',
+    id: 'check',
+    description: 'Verify generated files without modifying the project',
     async run(context, args) {
       if (args.length) throw new Error('Usage: generate check');
       return generateCheck(context);

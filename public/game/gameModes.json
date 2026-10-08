@@ -4,30 +4,21 @@
       "key": "single-hit",
       "name": "DUEL",
       "rounds": 3,
-      "options": [
-        "1v1",
-        "2v2"
-      ],
+      "options": ["1v1", "2v2"],
       "locked": false
     },
     {
       "key": "health",
       "name": "COMBAT",
       "rounds": 3,
-      "options": [
-        "1v1",
-        "2v2"
-      ],
+      "options": ["1v1", "2v2"],
       "locked": false
     },
     {
       "key": "survival",
       "name": "SURVIVAL",
       "rounds": 3,
-      "options": [
-        "1v1",
-        "2v2"
-      ],
+      "options": ["1v1", "2v2"],
       "locked": true
     }
   ],
@@ -56,11 +47,7 @@
       "1v1": {
         "players": 2,
         "teamSize": 1,
-        "connections": [
-          "BLUETOOTH",
-          "LAN",
-          "ONLINE"
-        ],
+        "connections": ["BLUETOOTH", "LAN", "ONLINE"],
         "icon": {
           "dark": "/game/icons/playerOption/1v1-dark.svg",
           "light": "/game/icons/playerOption/1v1-light.svg"
@@ -69,10 +56,7 @@
       "2v2": {
         "players": 4,
         "teamSize": 2,
-        "connections": [
-          "LAN",
-          "ONLINE"
-        ],
+        "connections": ["LAN", "ONLINE"],
         "icon": {
           "dark": "/game/icons/playerOption/2v2-dark.svg",
           "light": "/game/icons/playerOption/2v2-light.svg"

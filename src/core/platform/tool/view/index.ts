@@ -4,13 +4,7 @@ import { MobileViewAdapter } from './adapters/mobile.adapter';
 import { WebViewAdapter } from './adapters/web.adapter';
 import { createViewTool } from './tool';
 
-export type {
-  iEnterViewFullscreenOptions,
-  iSetupViewOptions,
-  iViewAdapter,
-  tViewFullscreenNavigation,
-  tViewOrientation,
-} from './type';
+export type { iEnterViewFullscreenOptions, iSetupViewOptions, iViewAdapter, tViewFullscreenNavigation, tViewOrientation } from './type';
 
 const ViewAdapter = resolveRuntimeAdapter({
   web: WebViewAdapter,
@@ -18,11 +12,4 @@ const ViewAdapter = resolveRuntimeAdapter({
   desktop: DesktopViewAdapter,
 });
 
-export const {
-  getViewportRatio,
-  setupView,
-  isFullscreen,
-  enterFullscreen,
-  exitFullscreen,
-  toggleFullscreen,
-} = createViewTool(ViewAdapter);
+export const { getViewportRatio, setupView, isFullscreen, enterFullscreen, exitFullscreen, toggleFullscreen } = createViewTool(ViewAdapter);

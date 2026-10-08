@@ -126,40 +126,17 @@ onMounted(async () => {
     }"
     :style="marqueeStyle"
   >
-    <span
-      ref="paddingMeasureRef"
-      class="app-marquee-text__padding-measure"
-      aria-hidden="true"
-    />
+    <span ref="paddingMeasureRef" class="app-marquee-text__padding-measure" aria-hidden="true" />
 
     <span class="app-marquee-text__track">
       <span ref="contentRef" class="app-marquee-text__item">
         <span ref="textRef" class="app-marquee-text__content">
-          <AppText
-            :text="text"
-            tag="span"
-            :color="color"
-            :font-size="fontSize"
-            :font-weight="fontWeight"
-            :uppercase="uppercase"
-          />
+          <AppText :text="text" tag="span" :color="color" :font-size="fontSize" :font-weight="fontWeight" :uppercase="uppercase" />
         </span>
       </span>
 
-      <span
-        v-if="isOverflowing"
-        ref="cloneRef"
-        class="app-marquee-text__item app-marquee-text__item--clone"
-        aria-hidden="true"
-      >
-        <AppText
-          :text="text"
-          tag="span"
-          :color="color"
-          :font-size="fontSize"
-          :font-weight="fontWeight"
-          :uppercase="uppercase"
-        />
+      <span v-if="isOverflowing" ref="cloneRef" class="app-marquee-text__item app-marquee-text__item--clone" aria-hidden="true">
+        <AppText :text="text" tag="span" :color="color" :font-size="fontSize" :font-weight="fontWeight" :uppercase="uppercase" />
       </span>
     </span>
   </span>
@@ -206,18 +183,8 @@ onMounted(async () => {
 .app-marquee-text--overflowing {
   --cp-marquee-text-edge-fade: var(--app-space-5);
 
-  -webkit-mask-image: linear-gradient(
-    to right,
-    #000 0,
-    #000 calc(100% - var(--cp-marquee-text-edge-fade)),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    #000 0,
-    #000 calc(100% - var(--cp-marquee-text-edge-fade)),
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - var(--cp-marquee-text-edge-fade)), transparent 100%);
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - var(--cp-marquee-text-edge-fade)), transparent 100%);
 }
 
 .app-marquee-text--playing {

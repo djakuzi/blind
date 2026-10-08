@@ -21,9 +21,7 @@ interface iWebAudioLoopSource {
   gain: GainNode;
 }
 
-export function createWebAudioEngine(
-  loadAudioData: tAudioDataLoader,
-): iAudioAdapter {
+export function createWebAudioEngine(loadAudioData: tAudioDataLoader): iAudioAdapter {
   let audioContext: AudioContext | undefined;
   let masterGain: GainNode | undefined;
 
@@ -108,11 +106,7 @@ export function createWebAudioEngine(
     stopSource(loop.source);
   }
 
-  async function createSource(
-    audio: iAudioResource,
-    options: iAudioPlayOptions,
-    isLoop: boolean,
-  ) {
+  async function createSource(audio: iAudioResource, options: iAudioPlayOptions, isLoop: boolean) {
     const resource = getResource(audio);
     const context = getAudioContext();
 
@@ -130,13 +124,8 @@ export function createWebAudioEngine(
     source.buffer = resource.buffer;
     source.loop = isLoop;
 
-    const volume =
-      HelperAudio.normalizeVolume(audio.volume) *
-      HelperAudio.normalizeVolume(options.volume);
-    const offset = Math.min(
-      HelperAudio.normalizeTime(options.time),
-      resource.buffer.duration,
-    );
+    const volume = HelperAudio.normalizeVolume(audio.volume) * HelperAudio.normalizeVolume(options.volume);
+    const offset = Math.min(HelperAudio.normalizeTime(options.time), resource.buffer.duration);
     const delay = HelperAudio.normalizeTime(options.delay);
 
     gain.gain.setValueAtTime(volume, context.currentTime);
@@ -176,8 +165,7 @@ export function createWebAudioEngine(
         gain,
       });
     } else {
-      const sources =
-        activeSources.get(audio.id) ?? new Set<AudioBufferSourceNode>();
+      const sources = activeSources.get(audio.id) ?? new Set<AudioBufferSourceNode>();
 
       sources.add(source);
       activeSources.set(audio.id, sources);
@@ -221,10 +209,7 @@ export function createWebAudioEngine(
       return createSource(audio, options, true);
     },
 
-    async setLoopVolume(
-      audio: iAudioResource,
-      options: iAudioLoopVolumeOptions,
-    ) {
+    async setLoopVolume(audio: iAudioResource, options: iAudioLoopVolumeOptions) {
       const loop = loopSources.get(audio.id);
 
       if (!loop) {
@@ -232,9 +217,7 @@ export function createWebAudioEngine(
       }
 
       const context = getAudioContext();
-      const volume =
-        HelperAudio.normalizeVolume(audio.volume) *
-        HelperAudio.normalizeVolume(options.volume);
+      const volume = HelperAudio.normalizeVolume(audio.volume) * HelperAudio.normalizeVolume(options.volume);
       const duration = HelperAudio.normalizeTime(options.duration);
       const now = context.currentTime;
 
@@ -254,9 +237,7 @@ export function createWebAudioEngine(
       stopLoopSource(assetId);
     },
 
-    async subscribeComplete(
-      callback: tAudioCompleteCallback,
-    ): Promise<iPlatformSubscription> {
+    async subscribeComplete(callback: tAudioCompleteCallback): Promise<iPlatformSubscription> {
       completeCallbacks.add(callback);
 
       return {

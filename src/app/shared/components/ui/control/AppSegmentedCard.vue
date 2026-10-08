@@ -175,10 +175,7 @@ function handleSelect(option: iAppSegmentedCardOption) {
   box-sizing: border-box;
   gap: v-bind(itemImageTextGap);
   padding: v-bind(itemPaddingY) v-bind(itemPaddingX);
-  border:
-    var(--app-border-width-medium)
-    var(--app-border-style-solid)
-    var(--app-color-border-strong);
+  border: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-border-strong);
   border-radius: v-bind(itemBorderRadius);
   background: var(--app-color-surface-primary);
   color: var(--app-color-text-primary);
@@ -212,7 +209,9 @@ function handleSelect(option: iAppSegmentedCardOption) {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .app-segmented-card__item--with-image.app-interactive:not(.app-interactive--selected):not(:disabled):not(.app-interactive--disabled):hover {
+  .app-segmented-card__item--with-image.app-interactive:not(.app-interactive--selected):not(:disabled):not(
+      .app-interactive--disabled
+    ):hover {
     color: var(--app-color-text-primary);
   }
 }

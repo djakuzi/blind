@@ -1,9 +1,4 @@
-import {
-  initializeBlockingSetupState,
-  resetSetupState,
-  setBlockingSetupStatus,
-  setupState,
-} from './setupLifecycle.state';
+import { initializeBlockingSetupState, resetSetupState, setBlockingSetupStatus, setupState } from './setupLifecycle.state';
 import type { iSetup } from './setupLifecycle.type';
 
 const blockingSetupRegistry = new Map<string, iSetup>();

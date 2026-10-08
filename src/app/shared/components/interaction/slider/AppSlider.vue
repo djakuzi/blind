@@ -170,7 +170,6 @@ async function updateTrackPosition() {
   await nextTick();
 
   positionFrame.request(() => {
-
     const viewport = viewportElement.value;
     const activeItem = getActiveItemElement();
 

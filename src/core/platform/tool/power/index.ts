@@ -12,7 +12,4 @@ const PowerAdapter = resolveRuntimeAdapter({
   desktop: DesktopPowerAdapter,
 });
 
-export const {
-  keepAwake,
-  allowSleep,
-} = createPowerTool(PowerAdapter);
+export const { keepAwake, allowSleep } = createPowerTool(PowerAdapter);

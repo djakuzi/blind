@@ -1,9 +1,4 @@
-import {
-  FINE_HOVER_POINTER_MEDIA_QUERY,
-  FINE_POINTER_MEDIA_QUERY,
-  HOVER_MEDIA_QUERY,
-  PRIMARY_FINE_POINTER_MEDIA_QUERY,
-} from './const';
+import { FINE_HOVER_POINTER_MEDIA_QUERY, FINE_POINTER_MEDIA_QUERY, HOVER_MEDIA_QUERY, PRIMARY_FINE_POINTER_MEDIA_QUERY } from './const';
 import type { iInputAdapter, tInputMediaQueryChangeCallback } from './type';
 
 export function createInputTool(adapter: iInputAdapter) {
@@ -27,10 +22,7 @@ export function createInputTool(adapter: iInputAdapter) {
     },
 
     onFineHoverPointerChange(callback: tInputMediaQueryChangeCallback) {
-      return adapter.subscribeMediaQuery(
-        FINE_HOVER_POINTER_MEDIA_QUERY,
-        callback,
-      );
+      return adapter.subscribeMediaQuery(FINE_HOVER_POINTER_MEDIA_QUERY, callback);
     },
   };
 }

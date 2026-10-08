@@ -8,10 +8,7 @@ export function createFilesystemTool(adapter: iFilesystemAdapter) {
   }
 
   async function setJson<T>(path: string, value: T) {
-    await adapter.writeFile(
-      normalizePath(path),
-      HelperJson.serialize(value),
-    );
+    await adapter.writeFile(normalizePath(path), HelperJson.serialize(value));
   }
 
   async function getJson<T>(path: string) {

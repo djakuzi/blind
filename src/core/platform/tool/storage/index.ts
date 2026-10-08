@@ -12,12 +12,4 @@ const StorageAdapter = resolveRuntimeAdapter({
   desktop: DesktopStorageAdapter,
 });
 
-export const {
-  setItem,
-  getItem,
-  removeItem,
-  setJson,
-  getJson,
-  loadTimedJsonCache,
-  saveTimedJsonCache,
-} = createStorageTool(StorageAdapter);
+export const { setItem, getItem, removeItem, setJson, getJson, loadTimedJsonCache, saveTimedJsonCache } = createStorageTool(StorageAdapter);

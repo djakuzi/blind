@@ -47,26 +47,12 @@ defineProps<Props>();
 .app-transition-header__surface::before {
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    #000 0%,
-    rgba(0, 0, 0, 0.78) 90%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg,
-    #000 0%,
-    rgba(0, 0, 0, 0.78) 90%,
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.78) 90%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.78) 90%, transparent 100%);
 }
 
 .app-transition-header__surface::after {
-  background: linear-gradient(
-    180deg,
-    var(--app-color-surface-glass-top) 10%,
-    var(--app-color-surface-glass-bottom) 100%
-  );
+  background: linear-gradient(180deg, var(--app-color-surface-glass-top) 10%, var(--app-color-surface-glass-bottom) 100%);
 }
 
 .app-transition-header__content {

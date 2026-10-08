@@ -38,10 +38,11 @@ export function registerBuildSection(registry) {
     description: 'Web build: [debug|prod]',
     async run(context, args) {
       let mode = args[0];
-      if (args.length === 0) mode = await select(context, 'Select Web build mode:', [
-        { label: 'Debug', value: 'debug' },
-        { label: 'Production', value: 'prod' },
-      ]);
+      if (args.length === 0)
+        mode = await select(context, 'Select Web build mode:', [
+          { label: 'Debug', value: 'debug' },
+          { label: 'Production', value: 'prod' },
+        ]);
       if (mode === null) return 0;
       if (!['debug', 'prod'].includes(mode) || args.length > 1) usage('build web', '[debug|prod]');
       return runNpm(context, `build:${mode}`);
@@ -66,7 +67,11 @@ export function registerBuildSection(registry) {
       let platform = args[0];
       let mode = args[1] ?? 'prod';
       if (args.length === 0) {
-        platform = await select(context, 'Select mobile platform:', MOBILE.map((value) => ({ label: value, value })));
+        platform = await select(
+          context,
+          'Select mobile platform:',
+          MOBILE.map((value) => ({ label: value, value })),
+        );
         if (platform === null) return 0;
         mode = await select(context, 'Select Web build mode:', [
           { label: 'Debug', value: 'debug' },
@@ -91,12 +96,13 @@ export function registerBuildSection(registry) {
     description: 'Create desktop package: [current|mac|win|linux]',
     async run(context, args) {
       let target = args[0];
-      if (args.length === 0) target = await select(context, 'Select desktop target:', [
-        { label: 'Current operating system', value: 'current' },
-        { label: 'macOS', value: 'mac' },
-        { label: 'Windows', value: 'win' },
-        { label: 'Linux', value: 'linux' },
-      ]);
+      if (args.length === 0)
+        target = await select(context, 'Select desktop target:', [
+          { label: 'Current operating system', value: 'current' },
+          { label: 'macOS', value: 'mac' },
+          { label: 'Windows', value: 'win' },
+          { label: 'Linux', value: 'linux' },
+        ]);
       if (target === null) return 0;
       if (!['current', ...TARGETS].includes(target) || args.length > 1) {
         usage('package desktop', '[current|mac|win|linux]');
@@ -104,7 +110,9 @@ export function registerBuildSection(registry) {
       const actualTarget = target === 'current' ? HOST_TARGET[process.platform] : target;
       if (!actualTarget) throw new Error(`Unsupported host: ${process.platform}`);
       if (actualTarget !== HOST_TARGET[process.platform]) {
-        throw new Error(`Cross-platform packaging for ${actualTarget} is not supported by this CLI. Build on its matching OS or use GitHub Actions.`);
+        throw new Error(
+          `Cross-platform packaging for ${actualTarget} is not supported by this CLI. Build on its matching OS or use GitHub Actions.`,
+        );
       }
       return runNpm(context, target === 'current' ? 'desktop:package' : `desktop:package:${target}`);
     },

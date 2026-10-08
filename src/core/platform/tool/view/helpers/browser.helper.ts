@@ -1,10 +1,6 @@
 import type { iPlatformActionResult, iPlatformValue } from '../../../type';
 import { HelperViewAction } from './action.helper';
-import type {
-  iEnterViewFullscreenOptions,
-  iViewSize,
-  tViewOrientation,
-} from '../type';
+import type { iEnterViewFullscreenOptions, iViewSize, tViewOrientation } from '../type';
 
 function getViewportSize(): iPlatformValue<iViewSize> {
   return {
@@ -15,9 +11,7 @@ function getViewportSize(): iPlatformValue<iViewSize> {
   };
 }
 
-async function setOrientation(
-  orientation: tViewOrientation,
-): Promise<iPlatformActionResult> {
+async function setOrientation(orientation: tViewOrientation): Promise<iPlatformActionResult> {
   if (typeof screen === 'undefined' || !screen.orientation) {
     return {
       isHandled: false,
@@ -38,19 +32,12 @@ async function setOrientation(
 
 async function isFullscreen() {
   return {
-    value:
-      typeof document !== 'undefined' &&
-      document.fullscreenElement !== null,
+    value: typeof document !== 'undefined' && document.fullscreenElement !== null,
   };
 }
 
-async function enterFullscreen(
-  options: iEnterViewFullscreenOptions,
-): Promise<iPlatformActionResult> {
-  if (
-    typeof document === 'undefined' ||
-    typeof document.documentElement.requestFullscreen !== 'function'
-  ) {
+async function enterFullscreen(options: iEnterViewFullscreenOptions): Promise<iPlatformActionResult> {
+  if (typeof document === 'undefined' || typeof document.documentElement.requestFullscreen !== 'function') {
     return {
       isHandled: false,
     };
@@ -74,10 +61,7 @@ async function enterFullscreen(
 }
 
 async function exitFullscreen(): Promise<iPlatformActionResult> {
-  if (
-    typeof document === 'undefined' ||
-    typeof document.exitFullscreen !== 'function'
-  ) {
+  if (typeof document === 'undefined' || typeof document.exitFullscreen !== 'function') {
     return {
       isHandled: false,
     };

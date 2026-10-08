@@ -11,4 +11,4 @@ export interface PropsHeight {
   maxHeight?: tStyleSizeValue;
 }
 
-export interface PropsDimensions extends PropsWidth, PropsHeight { }
+export interface PropsDimensions extends PropsWidth, PropsHeight {}

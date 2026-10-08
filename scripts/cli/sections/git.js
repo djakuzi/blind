@@ -48,7 +48,10 @@ async function create(context, args) {
   if (args.length !== 0) assertArgs(args, 2, 'git create <feature|bugfix|hotfix> <task-description>');
   if (!TYPES.includes(type)) throw new Error('Invalid branch type.');
   const name = `${type}/${suffix}`;
-  if (!NAME.test(name)) throw new Error('Invalid branch name. Use lower-case words separated by hyphens (up to three words), optionally prefixed by task number.');
+  if (!NAME.test(name))
+    throw new Error(
+      'Invalid branch name. Use lower-case words separated by hyphens (up to three words), optionally prefixed by task number.',
+    );
   if (!clean(context)) throw new Error('Working tree must be clean.');
   const base = type === 'hotfix' ? 'main' : 'development';
   if (current(context) !== base) throw new Error(`Checkout ${base} before creating a ${type} branch.`);
@@ -76,7 +79,9 @@ function updateDevelopment(context, args) {
 export function registerGitSection(registry) {
   registry.addSection({ id: 'git', title: 'Git', description: 'Safe repository operations' });
   registry.addCommand({
-    section: 'git', id: 'status', description: 'Display current branch and working tree status',
+    section: 'git',
+    id: 'status',
+    description: 'Display current branch and working tree status',
     run(context, args) {
       assertArgs(args, 0, 'git status');
       printLine(`Branch: ${current(context) || '(detached)'}`);
@@ -85,7 +90,9 @@ export function registerGitSection(registry) {
     },
   });
   registry.addCommand({
-    section: 'git', id: 'check', description: 'Validate current branch naming',
+    section: 'git',
+    id: 'check',
+    description: 'Validate current branch naming',
     run(context, args) {
       assertArgs(args, 0, 'git check');
       const name = current(context);

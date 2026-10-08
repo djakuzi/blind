@@ -4,12 +4,7 @@ import type { iFilesystemAdapter } from '../type';
 const FILE_NOT_FOUND_ERROR_CODE = 'OS-PLUG-FILE-0008';
 
 function isFileNotFoundError(error: unknown) {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'code' in error &&
-    error.code === FILE_NOT_FOUND_ERROR_CODE
-  );
+  return typeof error === 'object' && error !== null && 'code' in error && error.code === FILE_NOT_FOUND_ERROR_CODE;
 }
 
 export const MobileFilesystemAdapter: iFilesystemAdapter = {

@@ -78,7 +78,6 @@ const rowStyle = computed(() => ({
   '--cp-info-row-media-gap': resolveSpaceValue(rowMediaGap.value),
   '--cp-info-row-text-color': resolveColorValue(props.textColor),
 }));
-
 </script>
 
 <template>

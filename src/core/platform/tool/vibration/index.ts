@@ -20,11 +20,4 @@ const VibrationAdapter = resolveRuntimeAdapter({
   desktop: DesktopVibrationAdapter,
 });
 
-export const {
-  vibrate,
-  impact,
-  notification,
-  selectionStart,
-  selectionChanged,
-  selectionEnd,
-} = createVibrationTool(VibrationAdapter);
+export const { vibrate, impact, notification, selectionStart, selectionChanged, selectionEnd } = createVibrationTool(VibrationAdapter);

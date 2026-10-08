@@ -94,13 +94,15 @@ const BUTTON_SIZE_PRESET: Record<tBaseSizeVariant, iControlSizePreset> = {
 const variantConfig = computed(() => VARIANT_MAP[props.variant]);
 const { paddingX: buttonPaddingX, paddingY: buttonPaddingY, fontSize } = useControlSize(props, BUTTON_SIZE_PRESET);
 
-const buttonSurface = computed(() => resolveSurface({
-  backgroundColor: props.backgroundColor ?? variantConfig.value.backgroundColor,
-  borderColor: props.borderColor ?? variantConfig.value.borderColor,
-  borderWidth: props.borderWidth,
-  borderStyle: props.borderStyle,
-  borderRadius: props.borderRadius,
-}));
+const buttonSurface = computed(() =>
+  resolveSurface({
+    backgroundColor: props.backgroundColor ?? variantConfig.value.backgroundColor,
+    borderColor: props.borderColor ?? variantConfig.value.borderColor,
+    borderWidth: props.borderWidth,
+    borderStyle: props.borderStyle,
+    borderRadius: props.borderRadius,
+  }),
+);
 const buttonTextColor = computed(() => resolveColorValue(props.textColor ?? variantConfig.value.textColor));
 const buttonFontSize = computed(() => resolveFontSizeValue(fontSize.value));
 

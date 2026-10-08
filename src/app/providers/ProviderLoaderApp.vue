@@ -7,7 +7,8 @@ import WidgetLoaderApp from '@/app/overlay/loader/widgets/WidgetLoaderApp.vue';
 const loader = useLoaderProvider();
 
 const LOADER_ROOT_SELECTOR = '[data-app-loader-root]';
-const FOCUSABLE_SELECTOR = 'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE_SELECTOR =
+  'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
 
 function getLoaderRoot() {
   return document.querySelector<HTMLElement>(LOADER_ROOT_SELECTOR);

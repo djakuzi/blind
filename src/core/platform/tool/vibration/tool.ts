@@ -1,14 +1,5 @@
-import {
-  DEFAULT_VIBRATION_DURATION,
-  DEFAULT_VIBRATION_IMPACT_STYLE,
-  DEFAULT_VIBRATION_NOTIFICATION_TYPE,
-} from './const';
-import type {
-  iVibrationAdapter,
-  iVibrationImpactOptions,
-  iVibrationNotificationOptions,
-  iVibrationOptions,
-} from './type';
+import { DEFAULT_VIBRATION_DURATION, DEFAULT_VIBRATION_IMPACT_STYLE, DEFAULT_VIBRATION_NOTIFICATION_TYPE } from './const';
+import type { iVibrationAdapter, iVibrationImpactOptions, iVibrationNotificationOptions, iVibrationOptions } from './type';
 
 function normalizeDuration(value: number) {
   if (!Number.isFinite(value)) {
@@ -19,21 +10,15 @@ function normalizeDuration(value: number) {
 }
 
 export function createVibrationTool(adapter: iVibrationAdapter) {
-  function vibrate({
-    duration = DEFAULT_VIBRATION_DURATION,
-  }: iVibrationOptions = {}) {
+  function vibrate({ duration = DEFAULT_VIBRATION_DURATION }: iVibrationOptions = {}) {
     return adapter.vibrate(normalizeDuration(duration));
   }
 
-  function impact({
-    style = DEFAULT_VIBRATION_IMPACT_STYLE,
-  }: iVibrationImpactOptions = {}) {
+  function impact({ style = DEFAULT_VIBRATION_IMPACT_STYLE }: iVibrationImpactOptions = {}) {
     return adapter.impact(style);
   }
 
-  function notification({
-    type = DEFAULT_VIBRATION_NOTIFICATION_TYPE,
-  }: iVibrationNotificationOptions = {}) {
+  function notification({ type = DEFAULT_VIBRATION_NOTIFICATION_TYPE }: iVibrationNotificationOptions = {}) {
     return adapter.notification(type);
   }
 

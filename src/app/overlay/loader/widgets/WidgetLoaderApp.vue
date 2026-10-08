@@ -149,68 +149,61 @@ async function handleErrorAction(action: iLoaderErrorAction) {
     }"
   >
     <AppFadeTransition :active="phase === 'leaving'" :duration="2300" hold-until-end>
-    <AppGrid :class="loaderClass" place-items="center" min-height="100dvh">
-      <AppFlex class="widget-loader-app__content" direction="column" align="center" max-width="100%" width="100%">
+      <AppGrid :class="loaderClass" place-items="center" min-height="100dvh">
+        <AppFlex class="widget-loader-app__content" direction="column" align="center" max-width="100%" width="100%">
+          <AppFadeTransition :active="phase === 'leaving'">
+            <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
+          </AppFadeTransition>
+
+          <AppFadeTransition v-if="error" :active="phase === 'leaving'">
+            <AppStatusBlock class="widget-loader-app__status" :text="error.title" variant="error" size="big" width="70rem" max-width="100%">
+              <template v-if="error.actions?.length" #action>
+                <AppFlex align="center" justify="center" wrap="wrap" :gap="3" width="100%">
+                  <AppButton
+                    v-for="(action, index) in error.actions"
+                    :key="`${action.title}-${index}`"
+                    :text="action.title"
+                    :variant="index === 0 ? 'primary' : 'secondary'"
+                    :disabled="isActionRunning"
+                    size="small"
+                    @click="handleErrorAction(action)"
+                  />
+                </AppFlex>
+              </template>
+            </AppStatusBlock>
+          </AppFadeTransition>
+
+          <AppFadeTransition v-else :active="phase === 'leaving'">
+            <AppLineLoader
+              class="widget-loader-app__status"
+              :mode="progressMode"
+              :progress="progress"
+              :text="text"
+              size="big"
+              width="70rem"
+              max-width="100%"
+              @complete="handleLoaderProgressComplete"
+            />
+          </AppFadeTransition>
+        </AppFlex>
+
+        <AppRevealTransition :active="phase === 'leaving'" :duration="2100" :delay="120">
+          <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="58rem" height="58rem" />
+        </AppRevealTransition>
+
         <AppFadeTransition :active="phase === 'leaving'">
-          <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
+          <AppPosition
+            class="widget-loader-app__version"
+            type="absolute"
+            :position="{
+              right: 'horizontal',
+              bottom: 'vertical',
+            }"
+          >
+            <AppVersion size="big" />
+          </AppPosition>
         </AppFadeTransition>
-
-        <AppFadeTransition v-if="error" :active="phase === 'leaving'">
-          <AppStatusBlock
-          class="widget-loader-app__status"
-          :text="error.title"
-          variant="error"
-          size="big"
-          width="70rem"
-          max-width="100%"
-        >
-          <template v-if="error.actions?.length" #action>
-            <AppFlex align="center" justify="center" wrap="wrap" :gap="3" width="100%">
-              <AppButton
-                v-for="(action, index) in error.actions"
-                :key="`${action.title}-${index}`"
-                :text="action.title"
-                :variant="index === 0 ? 'primary' : 'secondary'"
-                :disabled="isActionRunning"
-                size="small"
-                @click="handleErrorAction(action)"
-              />
-            </AppFlex>
-          </template>
-          </AppStatusBlock>
-        </AppFadeTransition>
-
-        <AppFadeTransition v-else :active="phase === 'leaving'">
-          <AppLineLoader
-          class="widget-loader-app__status"
-          :mode="progressMode"
-          :progress="progress"
-          :text="text"
-          size="big"
-          width="70rem"
-          max-width="100%"
-          @complete="handleLoaderProgressComplete"
-          />
-        </AppFadeTransition>
-      </AppFlex>
-
-      <AppRevealTransition :active="phase === 'leaving'" :duration="2100" :delay="120">
-        <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="58rem" height="58rem" />
-      </AppRevealTransition>
-
-      <AppFadeTransition :active="phase === 'leaving'">
-      <AppPosition
-        class="widget-loader-app__version"
-        type="absolute"
-        :position="{
-          right: 'horizontal',
-          bottom: 'vertical',
-        }"
-      >
-        <AppVersion size="big" />
-      </AppPosition>
-      </AppFadeTransition>
-    </AppGrid>
+      </AppGrid>
     </AppFadeTransition>
   </AppPosition>
 </template>
@@ -223,7 +216,9 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   background: var(--app-color-background);
 }
 
-.widget-loader-app--leaving { pointer-events: none; }
+.widget-loader-app--leaving {
+  pointer-events: none;
+}
 
 .widget-loader-app__content {
   gap: var(--app-space-5);
@@ -241,6 +236,8 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .widget-loader-app--leaving { pointer-events: none; }
+  .widget-loader-app--leaving {
+    pointer-events: none;
+  }
 }
 </style>

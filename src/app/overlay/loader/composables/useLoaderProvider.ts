@@ -3,11 +3,7 @@ import { storeToRefs } from 'pinia';
 import { LOADER_MIN_VISIBLE_DURATION_MS, LOADER_PROGRESS_MODE_DEFAULT } from '@/app/stores/loader/loader.const';
 import { LibScheduler } from '@/core/lib/scheduler';
 import { useLoaderStore } from '@/app/stores/loader/loader.store';
-import type {
-  iLoaderResourceError,
-  iLoaderScope,
-  tLoaderProgressMode,
-} from '@/app/stores/loader/loader.type';
+import type { iLoaderResourceError, iLoaderScope, tLoaderProgressMode } from '@/app/stores/loader/loader.type';
 
 function hasScopeState(scope: iLoaderScope, states: readonly string[]) {
   return Object.values(scope.resources).some((resource) => states.includes(resource.state));

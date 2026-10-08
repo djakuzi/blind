@@ -19,22 +19,8 @@ const lockedDescription = computed(() => modeLocale.value?.locked?.description ?
 </script>
 
 <template>
-  <AppFlex
-    class="widget-game-mode-locked"
-    direction="column"
-    align="center"
-    justify="center"
-    width="100%"
-    :gap="4"
-    role="status"
-  >
-    <AppTitle
-      :text="lockedTitle"
-      tag="h3"
-      color="error-text"
-      font-size="xl"
-      font-weight="medium"
-    />
+  <AppFlex class="widget-game-mode-locked" direction="column" align="center" justify="center" width="100%" :gap="4" role="status">
+    <AppTitle :text="lockedTitle" tag="h3" color="error-text" font-size="xl" font-weight="medium" />
 
     <AppText
       class="widget-game-mode-locked__description"

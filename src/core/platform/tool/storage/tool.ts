@@ -46,10 +46,7 @@ export function createStorageTool(adapter: iStorageAdapter) {
   async function loadTimedJsonCache<T>(key: string, ttlMs: number) {
     const { value } = await getJson<unknown>(key);
 
-    if (
-      !HelperCache.isTimedStorageEntry<T>(value) ||
-      Date.now() - value.timestamp > ttlMs
-    ) {
+    if (!HelperCache.isTimedStorageEntry<T>(value) || Date.now() - value.timestamp > ttlMs) {
       await removeItem(key);
 
       return {

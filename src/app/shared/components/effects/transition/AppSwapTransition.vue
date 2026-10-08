@@ -8,14 +8,8 @@ defineProps<PropsAppSwapTransition>();
 
 <template>
   <div class="app-swap-transition">
-    <Transition
-      name="app-swap-transition-content"
-      mode="out-in"
-    >
-      <div
-        :key="transitionKey"
-        class="app-swap-transition__content"
-      >
+    <Transition name="app-swap-transition-content" mode="out-in">
+      <div :key="transitionKey" class="app-swap-transition__content">
         <slot />
       </div>
     </Transition>

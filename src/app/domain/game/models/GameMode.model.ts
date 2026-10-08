@@ -1,7 +1,4 @@
-import type {
-  iApiGameModeData,
-  iApiThemeMedia,
-} from '../type/api/common';
+import type { iApiGameModeData, iApiThemeMedia } from '../type/api/common';
 
 export interface iGameMode {
   readonly key: iApiGameModeData['key'];

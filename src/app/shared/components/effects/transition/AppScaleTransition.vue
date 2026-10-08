@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const slots = useSlots();
 const animatedNode = computed(() => {
-  const node = slots.default?.().find(vnode => typeof vnode.type !== 'symbol');
+  const node = slots.default?.().find((vnode) => typeof vnode.type !== 'symbol');
   if (!node) return null;
   return cloneVNode(node, {
     class: props.active ? 'app-scale-transition--active' : undefined,
@@ -35,9 +35,22 @@ const RenderNode = () => animatedNode.value;
 </template>
 
 <style>
-
-.app-scale-transition--active { animation: app-effect-scale var(--effect-duration) ease-out var(--effect-delay) forwards; }
-@keyframes app-effect-scale { from { opacity: 0; scale: var(--effect-scale-from); } to { opacity: 1; scale: var(--effect-scale-to); } }
-@media (prefers-reduced-motion: reduce) { .app-scale-transition--active { animation: none; } }
-
+.app-scale-transition--active {
+  animation: app-effect-scale var(--effect-duration) ease-out var(--effect-delay) forwards;
+}
+@keyframes app-effect-scale {
+  from {
+    opacity: 0;
+    scale: var(--effect-scale-from);
+  }
+  to {
+    opacity: 1;
+    scale: var(--effect-scale-to);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-scale-transition--active {
+    animation: none;
+  }
+}
 </style>

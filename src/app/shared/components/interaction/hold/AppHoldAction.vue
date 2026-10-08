@@ -151,22 +151,13 @@ async function startProgressSound() {
     volume: PROGRESS_SOUND_START_VOLUME,
   });
 
-  if (
-    session !== progressSoundSession ||
-    !isHolding.value ||
-    props.progressSound !== soundId
-  ) {
+  if (session !== progressSoundSession || !isHolding.value || props.progressSound !== soundId) {
     return;
   }
 
   activeProgressSoundId = soundId;
 
-  const rampDuration = Math.max(
-    0,
-    holdDuration -
-      PROGRESS_SOUND_START_DELAY -
-      PROGRESS_SOUND_RELEASE_DURATION,
-  );
+  const rampDuration = Math.max(0, holdDuration - PROGRESS_SOUND_START_DELAY - PROGRESS_SOUND_RELEASE_DURATION);
 
   await setLoopVolume(soundId, {
     volume: PROGRESS_SOUND_END_VOLUME,
@@ -209,15 +200,9 @@ function scheduleProgressSound() {
     }, delay);
   }
 
-  const fadeDelay = Math.max(
-    0,
-    holdDuration - PROGRESS_SOUND_RELEASE_DURATION,
-  );
+  const fadeDelay = Math.max(0, holdDuration - PROGRESS_SOUND_RELEASE_DURATION);
 
-  progressSoundFadeTimer.start(
-    fadeProgressSoundForComplete,
-    fadeDelay,
-  );
+  progressSoundFadeTimer.start(fadeProgressSoundForComplete, fadeDelay);
 }
 
 function stopProgressSound(isImmediate = false) {
@@ -300,10 +285,7 @@ function updateHoldProgress() {
 
   const elapsed = getCurrentTime() - holdStartedAt;
   const initialProgress = normalizedInitialProgress.value;
-  const nextProgress = Math.min(
-    100,
-    initialProgress + (elapsed / holdDuration) * (100 - initialProgress),
-  );
+  const nextProgress = Math.min(100, initialProgress + (elapsed / holdDuration) * (100 - initialProgress));
 
   setProgress(nextProgress);
 
@@ -407,10 +389,7 @@ function releasePointerCapture() {
 
 function resetHoldState(isImmediate = false) {
   const wasCompleted = hasCompleted.value;
-  const shouldAnimateRelease =
-    !isImmediate &&
-    !wasCompleted &&
-    progress.value > normalizedInitialProgress.value;
+  const shouldAnimateRelease = !isImmediate && !wasCompleted && progress.value > normalizedInitialProgress.value;
 
   holdStartTimer.cancel();
   holdCompleteTimer.cancel();
@@ -612,11 +591,7 @@ onBeforeUnmount(() => {
     @mouseleave="resetMouseHold"
     @contextmenu.prevent
   >
-    <slot
-      :is-holding="isHolding"
-      :is-progress-active="isProgressActive"
-      :is-complete="hasCompleted"
-    />
+    <slot :is-holding="isHolding" :is-progress-active="isProgressActive" :is-complete="hasCompleted" />
   </div>
 </template>
 

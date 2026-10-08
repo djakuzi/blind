@@ -4,12 +4,7 @@ import { DesktopSystemAdapter } from './adapters/desktop.adapter';
 import { MobileSystemAdapter } from './adapters/mobile.adapter';
 import { createSystemTool } from './tool';
 
-export type {
-  iSystemAdapter,
-  iSystemScale,
-  tSystemThemeMode,
-  tSystemThemeSource,
-} from './type';
+export type { iSystemAdapter, iSystemScale, tSystemThemeMode, tSystemThemeSource } from './type';
 
 const SystemAdapter = resolveRuntimeAdapter({
   web: BrowserSystemAdapter,
@@ -17,9 +12,4 @@ const SystemAdapter = resolveRuntimeAdapter({
   desktop: DesktopSystemAdapter,
 });
 
-export const {
-  getSystemLanguage,
-  getSystemScale,
-  getPreferredThemeMode,
-  setThemeSource,
-} = createSystemTool(SystemAdapter);
+export const { getSystemLanguage, getSystemScale, getPreferredThemeMode, setThemeSource } = createSystemTool(SystemAdapter);

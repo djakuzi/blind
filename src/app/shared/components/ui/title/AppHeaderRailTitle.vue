@@ -11,25 +11,16 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   <div class="app-header-rail-title">
     <span class="app-header-rail-title__line" aria-hidden="true" />
 
-    <span
-      class="app-header-rail-title__connector app-header-rail-title__connector--left"
-      aria-hidden="true"
-    >
+    <span class="app-header-rail-title__connector app-header-rail-title__connector--left" aria-hidden="true">
       <span class="app-header-rail-title__diagonal" />
       <span class="app-header-rail-title__dot" />
     </span>
 
     <div class="app-header-rail-title__frame">
-      <AppTitle
-        class="app-header-rail-title__title"
-        v-bind="props"
-      />
+      <AppTitle class="app-header-rail-title__title" v-bind="props" />
     </div>
 
-    <span
-      class="app-header-rail-title__connector app-header-rail-title__connector--right"
-      aria-hidden="true"
-    >
+    <span class="app-header-rail-title__connector app-header-rail-title__connector--right" aria-hidden="true">
       <span class="app-header-rail-title__diagonal" />
       <span class="app-header-rail-title__dot" />
     </span>
@@ -117,9 +108,7 @@ const props = defineProps<PropsAppHeaderRailTitle>();
   min-width: 0;
   max-width: 100%;
   padding: 0 var(--app-space-5) var(--app-space-2);
-  border-bottom: var(--cp-header-rail-title-line-width)
-    var(--app-border-style-solid)
-    var(--cp-header-rail-title-line-color);
+  border-bottom: var(--cp-header-rail-title-line-width) var(--app-border-style-solid) var(--cp-header-rail-title-line-color);
 }
 
 .app-header-rail-title__title {

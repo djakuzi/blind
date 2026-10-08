@@ -68,10 +68,7 @@ function handleComplete() {
   >
     <template #default="{ isProgressActive }">
       <button :class="buttonClass" :disabled="disabled" type="button">
-        <AppBloodFill
-          :flow-front-duration="bloodFlowFrontDuration"
-          :is-active="isProgressActive"
-        />
+        <AppBloodFill :flow-front-duration="bloodFlowFrontDuration" :is-active="isProgressActive" />
 
         <AppFillAware class="app-button-hold__content" tag="span" color="inherit" filled-color="on-primary">
           <slot>{{ text }}</slot>

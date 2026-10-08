@@ -1,12 +1,6 @@
 import { NativeAudio } from '@capgo/capacitor-native-audio';
 import { HelperAudio } from '../helpers/audio.helper';
-import type {
-  iAudioAdapter,
-  iAudioLoopOptions,
-  iAudioLoopVolumeOptions,
-  iAudioPlayOptions,
-  iAudioPreloadResource,
-} from '../type';
+import type { iAudioAdapter, iAudioLoopOptions, iAudioLoopVolumeOptions, iAudioPlayOptions, iAudioPreloadResource } from '../type';
 
 interface iMobileAudioPool {
   audio: iAudioPreloadResource;
@@ -61,14 +55,8 @@ async function ensureConfigured() {
   }
 }
 
-function createPlayOptions(
-  assetId: string,
-  options: iAudioPlayOptions,
-  defaultVolume?: number,
-) {
-  const volume =
-    HelperAudio.normalizeVolume(defaultVolume) *
-    HelperAudio.normalizeVolume(options.volume);
+function createPlayOptions(assetId: string, options: iAudioPlayOptions, defaultVolume?: number) {
+  const volume = HelperAudio.normalizeVolume(defaultVolume) * HelperAudio.normalizeVolume(options.volume);
 
   return {
     assetId,
@@ -90,12 +78,7 @@ function createPlayOptions(
   };
 }
 
-async function preloadNativeAsset(
-  assetId: string,
-  ownerId: string,
-  audio: iAudioPreloadResource,
-  trackCompletion = true,
-) {
+async function preloadNativeAsset(assetId: string, ownerId: string, audio: iAudioPreloadResource, trackCompletion = true) {
   const options = {
     assetId,
     assetPath: audio.src,
@@ -135,12 +118,7 @@ async function ensureLoopPreloaded(pool: iMobileAudioPool) {
     return;
   }
 
-  const request = preloadNativeAsset(
-    pool.loopAssetId,
-    pool.audio.id,
-    pool.audio,
-    false,
-  ).then(() => {
+  const request = preloadNativeAsset(pool.loopAssetId, pool.audio.id, pool.audio, false).then(() => {
     pool.isLoopPreloaded = true;
   });
 
@@ -168,16 +146,9 @@ export const MobileAudioAdapter: iAudioAdapter = {
     await ensureConfigured();
 
     const channels = HelperAudio.normalizeChannels(audio.channels);
-    const playAssetIds = Array.from(
-      { length: channels },
-      (_, index) => createPlayAssetId(audio.id, index),
-    );
+    const playAssetIds = Array.from({ length: channels }, (_, index) => createPlayAssetId(audio.id, index));
 
-    await Promise.all(
-      playAssetIds.map((assetId) =>
-        preloadNativeAsset(assetId, audio.id, audio),
-      ),
-    );
+    await Promise.all(playAssetIds.map((assetId) => preloadNativeAsset(assetId, audio.id, audio)));
 
     audioPools.set(audio.id, {
       audio,
@@ -198,9 +169,7 @@ export const MobileAudioAdapter: iAudioAdapter = {
 
     pool.nextPlayIndex = (pool.nextPlayIndex + 1) % pool.playAssetIds.length;
 
-    await NativeAudio.play(
-      createPlayOptions(assetId, options, audio.volume),
-    );
+    await NativeAudio.play(createPlayOptions(assetId, options, audio.volume));
   },
 
   async startLoop(audio, options: iAudioLoopOptions) {
@@ -210,10 +179,7 @@ export const MobileAudioAdapter: iAudioAdapter = {
 
     await NativeAudio.setVolume({
       assetId: pool.loopAssetId,
-      volume: HelperAudio.normalizeNativeVolume(
-        HelperAudio.normalizeVolume(audio.volume) *
-          HelperAudio.normalizeVolume(options.volume),
-      ),
+      volume: HelperAudio.normalizeNativeVolume(HelperAudio.normalizeVolume(audio.volume) * HelperAudio.normalizeVolume(options.volume)),
     });
 
     await NativeAudio.loop({
@@ -221,10 +187,7 @@ export const MobileAudioAdapter: iAudioAdapter = {
     });
   },
 
-  async setLoopVolume(
-    audio,
-    options: iAudioLoopVolumeOptions,
-  ) {
+  async setLoopVolume(audio, options: iAudioLoopVolumeOptions) {
     const pool = getAudioPool(audio.id);
 
     if (!pool.isLoopPreloaded) {
@@ -233,10 +196,7 @@ export const MobileAudioAdapter: iAudioAdapter = {
 
     await NativeAudio.setVolume({
       assetId: pool.loopAssetId,
-      volume: HelperAudio.normalizeNativeVolume(
-        HelperAudio.normalizeVolume(audio.volume) *
-          HelperAudio.normalizeVolume(options.volume),
-      ),
+      volume: HelperAudio.normalizeNativeVolume(HelperAudio.normalizeVolume(audio.volume) * HelperAudio.normalizeVolume(options.volume)),
       duration: HelperAudio.normalizeTime(options.duration),
     });
   },
@@ -251,10 +211,7 @@ export const MobileAudioAdapter: iAudioAdapter = {
       return;
     }
 
-    const nativeAssetIds = [
-      ...pool.playAssetIds,
-      ...(pool.isLoopPreloaded ? [pool.loopAssetId] : []),
-    ];
+    const nativeAssetIds = [...pool.playAssetIds, ...(pool.isLoopPreloaded ? [pool.loopAssetId] : [])];
 
     await Promise.all(
       nativeAssetIds.map((nativeAssetId) =>
@@ -266,16 +223,13 @@ export const MobileAudioAdapter: iAudioAdapter = {
   },
 
   async subscribeComplete(callback) {
-    const listener = await NativeAudio.addListener(
-      'complete',
-      ({ assetId }) => {
-        const ownerId = nativeAssetOwners.get(assetId);
+    const listener = await NativeAudio.addListener('complete', ({ assetId }) => {
+      const ownerId = nativeAssetOwners.get(assetId);
 
-        if (ownerId !== undefined) {
-          callback(ownerId);
-        }
-      },
-    );
+      if (ownerId !== undefined) {
+        callback(ownerId);
+      }
+    });
 
     return {
       async unsubscribe() {

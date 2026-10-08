@@ -23,8 +23,7 @@ async function rumble(options: iGamepadRumbleOptions) {
     };
   }
 
-  const gamepads =
-    navigator.getGamepads() as unknown as ArrayLike<iHapticGamepad | null>;
+  const gamepads = navigator.getGamepads() as unknown as ArrayLike<iHapticGamepad | null>;
 
   for (const gamepad of Array.from(gamepads)) {
     const actuator = gamepad?.vibrationActuator;

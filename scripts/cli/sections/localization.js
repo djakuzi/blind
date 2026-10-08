@@ -24,7 +24,11 @@ function compare(reference, target, path, errors, base, code) {
       errors.push(`${code}: invalid or missing string at ${path}`);
       return;
     }
-    const placeholders = (value) => [...value.matchAll(/\{([a-zA-Z][\w]*)\}/g)].map((match) => match[1]).sort().join(',');
+    const placeholders = (value) =>
+      [...value.matchAll(/\{([a-zA-Z][\w]*)\}/g)]
+        .map((match) => match[1])
+        .sort()
+        .join(',');
     if (placeholders(reference) !== placeholders(target)) {
       errors.push(`${code}: placeholder mismatch at ${path}`);
     }
@@ -83,7 +87,11 @@ async function validate(root, showLanguages = false) {
       const imagesRoot = resolve(root, 'public/lang/images') + sep;
       if (!image.startsWith(imagesRoot)) errors.push(`${key}: image path outside lang/images`);
       else {
-        try { await access(image); } catch { errors.push(`${key}: missing image ${img}`); }
+        try {
+          await access(image);
+        } catch {
+          errors.push(`${key}: missing image ${img}`);
+        }
       }
     }
     if (showLanguages) printLine(`${key} — ${name} (v${version})${isDefault ? ' [default]' : ''}`);
@@ -99,9 +107,10 @@ async function validate(root, showLanguages = false) {
   const baseline = loaded.get(defaultEntry?.key?.toLowerCase()) ?? loaded.values().next().value;
   if (baseline) {
     if (!isRecord(baseline)) errors.push('Default locale must be a JSON object');
-    else for (const [code, locale] of loaded) {
-      compare(baseline, locale, 'locale', errors, baseline, code);
-    }
+    else
+      for (const [code, locale] of loaded) {
+        compare(baseline, locale, 'locale', errors, baseline, code);
+      }
   }
 
   if (errors.length) {
@@ -116,14 +125,18 @@ async function validate(root, showLanguages = false) {
 export function registerLocalizationSection(registry) {
   registry.addSection({ id: 'locale', title: 'Localization', description: 'Validate bundled language resources' });
   registry.addCommand({
-    section: 'locale', id: 'check', description: 'Validate locale files and metadata',
+    section: 'locale',
+    id: 'check',
+    description: 'Validate locale files and metadata',
     run(context, args) {
       if (args.length) throw new Error('Usage: locale check');
       return validate(context.root);
     },
   });
   registry.addCommand({
-    section: 'locale', id: 'languages', description: 'List registered languages and validate resources',
+    section: 'locale',
+    id: 'languages',
+    description: 'List registered languages and validate resources',
     run(context, args) {
       if (args.length) throw new Error('Usage: locale languages');
       return validate(context.root, true);

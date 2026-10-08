@@ -1,8 +1,4 @@
-import {
-  type tAppThemeMode,
-  APP_THEME_SYSTEM_MODE,
-  APP_THEME_ATTRIBUTE_NAME,
-} from '@/app/shared/styles/contracts/appTheme.contract';
+import { type tAppThemeMode, APP_THEME_SYSTEM_MODE, APP_THEME_ATTRIBUTE_NAME } from '@/app/shared/styles/contracts/appTheme.contract';
 import { DomAttribute } from '@/core/dom/attribute';
 import { ToolSystem } from '@/core/platform';
 
