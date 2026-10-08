@@ -1,12 +1,21 @@
 # Blind CLI
 
-Entry point: `npm run cli` (interactive) or `npm run cli -- <section> <command>`.
+Run interactive menu: `npm run cli`.
 
-Stage 1 provides the command registry, interactive menu, process runner, error handling and `project info` smoke command.
+Direct commands: `npm run cli -- <section> <command> [args]`.
 
-Available:
+## Project diagnostics
 
-- `npm run cli -- help`
 - `npm run cli -- project info`
+- `npm run cli -- project status`
+- `npm run cli -- project versions`
+- `npm run cli -- project env`
+- `npm run cli -- project doctor` (Web baseline)
+- `npm run cli -- project doctor android`
+- `npm run cli -- project doctor ios`
+- `npm run cli -- project doctor desktop`
+- `npm run cli -- help`
 
-Other project sections are implemented in subsequent stages. The CLI runs with Node.js and adds no third-party dependencies.
+Doctor uses the Node version from `package.json`, checks local environment files against `.env.template`, and checks platform tools. No secrets are printed or modified. Missing requirements result in exit code 1. Platform-specific tools are checked only when the relevant platform is requested.
+
+CLI uses Node.js ESM and no additional dependencies. Other sections will be implemented in later stages.
