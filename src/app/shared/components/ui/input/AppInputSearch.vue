@@ -17,7 +17,12 @@ import { resolveFontWeightValue } from '@/app/styles/contracts/fontWeight.contra
 import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
 
-export interface PropsInputSearch extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, Pick<PropsTextTypography, 'textColor' | 'fontSize' | 'fontWeight'> {
+export interface PropsInputSearch
+  extends PropsWidth,
+    PropsPadding,
+    PropsSurface,
+    PropsSizeVariant,
+    Pick<PropsTextTypography, 'textColor' | 'fontSize' | 'fontWeight'> {
   modelValue: string;
   placeholder?: string;
   disabled?: boolean;
