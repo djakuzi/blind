@@ -8,12 +8,11 @@ import { computed } from 'vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import { useSelectionFeedback } from '@/app/shared/composables/interaction/useSelectionFeedback';
+import { useControlSize } from '@/app/shared/composables/style/useControlSize';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
 import { LibStyle } from '@/core/lib/style';
 import type { tStyleSizeValue } from '@/core/lib/style';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
-import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
-import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
@@ -69,15 +68,12 @@ const IMAGE_SIZE_PRESET: Record<tBaseSizeVariant, tStyleSizeValue> = {
 const { triggerSelectionFeedback } = useSelectionFeedback(props);
 const { resolvedThemeMode } = useAppThemeMode();
 
-const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
 const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
 const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 const controlGap = computed(() => resolveSpaceValue(props.gap));
 const itemImageTextGap = computed(() => resolveSpaceValue(props.imageTextGap));
-const itemPaddingX = computed(() => resolvePaddingValue(props.paddingX ?? sizeConfig.value.paddingX));
-const itemPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? sizeConfig.value.paddingY));
 const itemBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
-const itemFontSize = computed(() => sizeConfig.value.fontSize);
+const { paddingX: itemPaddingX, paddingY: itemPaddingY, fontSize: itemFontSize } = useControlSize(props);
 const resolvedImageSize = computed(() => LibStyle.toSizeValue(props.imageSize ?? IMAGE_SIZE_PRESET[props.size]));
 
 function isOptionSelected(option: iAppSegmentedCardOption) {

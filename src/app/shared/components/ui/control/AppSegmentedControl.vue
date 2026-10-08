@@ -7,10 +7,9 @@ import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/p
 import { computed, ref } from 'vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import { useSelectionFeedback } from '@/app/shared/composables/interaction/useSelectionFeedback';
+import { useControlSize } from '@/app/shared/composables/style/useControlSize';
 import { LibStyle } from '@/core/lib/style';
 
-import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
-import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 
 export interface iAppSegmentedControlOption {
@@ -47,13 +46,10 @@ const emit = defineEmits<{
 const hoveredOptionValue = ref<string | null>(null);
 const focusedOptionValue = ref<string | null>(null);
 
-const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
 const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
 const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 const controlBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
-const itemPaddingX = computed(() => resolvePaddingValue(props.paddingX ?? sizeConfig.value.paddingX));
-const itemPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? sizeConfig.value.paddingY));
-const itemFontSize = computed(() => sizeConfig.value.fontSize);
+const { paddingX: itemPaddingX, paddingY: itemPaddingY, fontSize: itemFontSize } = useControlSize(props);
 const isContentWidth = computed(() => props.width === 'fit-content' || props.width === 'auto');
 
 function isOptionMarqueePlaying(option: iAppSegmentedControlOption) {

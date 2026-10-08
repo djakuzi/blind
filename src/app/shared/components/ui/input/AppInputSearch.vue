@@ -8,13 +8,12 @@ import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
 import { computed, ref } from 'vue';
 import { LibStyle } from '@/core/lib/style';
+import { useControlSize } from '@/app/shared/composables/style/useControlSize';
 
-import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
 import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
 import { resolveFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
-import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 
 export interface PropsInputSearch
@@ -62,13 +61,13 @@ const emit = defineEmits<{
 
 const inputRef = ref<HTMLInputElement | null>(null);
 
-const sizeConfig = computed(() => CONTROL_SIZE_PRESET[props.size]);
+const { paddingX, paddingY, fontSize } = useControlSize(props);
 
 const inputStyle = computed(() => ({
   '--cp-input-search-width': LibStyle.toSizeValue(props.width),
   '--cp-input-search-max-width': LibStyle.toSizeValue(props.maxWidth),
-  '--cp-input-search-padding-x': resolvePaddingValue(props.paddingX ?? sizeConfig.value.paddingX),
-  '--cp-input-search-padding-y': resolvePaddingValue(props.paddingY ?? sizeConfig.value.paddingY),
+  '--cp-input-search-padding-x': paddingX.value,
+  '--cp-input-search-padding-y': paddingY.value,
   '--cp-input-search-background-color': resolveColorValue(props.backgroundColor),
   '--cp-input-search-text-color': resolveColorValue(props.disabled ? 'text-disabled' : props.textColor),
   '--cp-input-search-placeholder-color': resolveColorValue(props.disabled ? 'text-disabled' : props.placeholderColor),
@@ -76,7 +75,7 @@ const inputStyle = computed(() => ({
   '--cp-input-search-border-width': resolveBorderWidthValue(props.borderWidth),
   '--cp-input-search-border-style': resolveBorderStyleValue(props.borderStyle),
   '--cp-input-search-border-radius': resolveRadiusValue(props.borderRadius),
-  '--cp-input-search-font-size': resolveFontSizeValue(props.fontSize ?? sizeConfig.value.fontSize),
+  '--cp-input-search-font-size': resolveFontSizeValue(fontSize.value),
   '--cp-input-search-font-weight': resolveFontWeightValue(props.fontWeight),
 }));
 
