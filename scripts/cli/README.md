@@ -72,3 +72,14 @@ Run `npm run cli -- help` to list all commands.
 - `npm run cli -- locale languages` — list supported languages and validate them.
 
 Validation is read-only. Plural forms may vary by language; `other` is required. The existing typed Locale contract is additionally checked by the project's TypeScript build.
+
+## Git
+
+- `npm run cli -- git status`
+- `npm run cli -- git check`
+- `npm run cli -- git create feature 123-new-menu`
+- `npm run cli -- git create bugfix 124-input-fix`
+- `npm run cli -- git create hotfix 125-crash`
+- `npm run cli -- git update`
+
+Branch creation requires a clean working tree and the correct base branch (development for feature/bugfix, main for hotfix). `git update` must run from development and only fast-forwards to origin/development; it never performs an automatic conflict merge or push.
