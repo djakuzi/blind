@@ -8,6 +8,11 @@ export function enterMenuScreen() {
   active = true;
 }
 
+export function clearMenuScreen() {
+  if (!active) return;
+  stdout.write('\x1b[H\x1b[J');
+}
+
 export function leaveMenuScreen() {
   if (!active) return;
   stdout.write('\x1b[?1049l');

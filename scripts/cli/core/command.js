@@ -3,7 +3,7 @@ import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
 import { printLine, showHelp } from './terminal.js';
 import { choose } from './prompt.js';
-import { enterMenuScreen, leaveMenuScreen } from './screen.js';
+import { enterMenuScreen, leaveMenuScreen, clearMenuScreen } from './screen.js';
 
 async function runCommand(command, context, args) {
   if (context.signal.aborted) return 130;
@@ -16,7 +16,7 @@ async function runInteractive(registry, context) {
   let sectionIndex = 0;
   enterMenuScreen();
   try {
-  while (!context.signal.aborted) {
+    while (!context.signal.aborted) {
     const menu = [
       ...sections.map((section) => ({ label: section.title, description: section.description, section })),
       { label: 'Exit', exit: true },
@@ -37,7 +37,8 @@ async function runInteractive(registry, context) {
       });
       if (!selected || selected.back) break;
       commandIndex = section.commands.findIndex((command) => command.path === selected.command.path);
-      leaveMenuScreen();
+      clearMenuScreen();
+      printLine(`${paint.brand('◆ BLIND CLI')}  /  ${paint.accent(selected.command.path)}\n`);
       try {
         const code = await runCommand(selected.command, context, []);
         printLine(`\n${paint.accent(selected.command.path)}: ${code === 0 ? paint.success('Completed') : paint.error(`Exited with code ${code}`)}`);
@@ -53,11 +54,10 @@ async function runInteractive(registry, context) {
         throw error;
       } finally {
         readline.close();
-        enterMenuScreen();
       }
     }
   }
-  return 130;
+    return 130;
   } finally {
     leaveMenuScreen();
   }
