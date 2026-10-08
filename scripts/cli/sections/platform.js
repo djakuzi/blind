@@ -2,6 +2,7 @@ import { access } from 'node:fs/promises';
 import { join } from 'node:path';
 import { runNpm, runCapacitor } from '../core/npm.js';
 import { printLine } from '../core/terminal.js';
+import { choose } from '../core/prompt.js';
 
 const MOBILE = ['android', 'ios'];
 
@@ -56,7 +57,33 @@ export function registerPlatformSection(registry) {
       id: action,
       description: action === 'open' ? 'Open native IDE: <android|ios>' : `${action} native project: <android|ios> [--build] [--mode debug|prod]`,
       async run(context, args) {
-        const { platform, build, mode } = parseOptions(args, action);
+        let selectedArgs = args;
+        if (args.length === 0) {
+          printLine('Choose platform:');
+          const platforms = [
+            { label: 'Back', value: null },
+            { label: 'Android', value: 'android' },
+            { label: 'iOS', value: 'ios' },
+          ];
+          platforms.forEach((item, index) => printLine(`${index}. ${item.label}`));
+          const choice = await choose(platforms, context.signal);
+          if (!choice?.value) return 0;
+          selectedArgs = [choice.value];
+          if (action !== 'open') {
+            printLine('Build and sync Web assets first?');
+            const options = [
+              { label: 'Back', flags: null },
+              { label: 'No, use existing assets', flags: [] },
+              { label: 'Build production + sync', flags: ['--build'] },
+              { label: 'Build debug + sync', flags: ['--build', '--mode', 'debug'] },
+            ];
+            options.forEach((item, index) => printLine(`${index}. ${item.label}`));
+            const preparation = await choose(options, context.signal);
+            if (!preparation?.flags) return 0;
+            selectedArgs.push(...preparation.flags);
+          }
+        }
+        const { platform, build, mode } = parseOptions(selectedArgs, action);
         await ensurePlatform(context, platform);
         if (build) {
           printLine(`Building Web assets (${mode})...`);
