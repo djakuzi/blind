@@ -6,8 +6,6 @@ import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 
 type tAppLogoVariant = 'blind' | 'blindTextBottom' | 'blindTextRight';
 
-type tAppLogoSizeValue = number | string;
-
 interface Props extends PropsWidth, Pick<PropsHeight, 'height'>, PropsSizeVariant {
   logo?: tAppLogoVariant;
   blur?: boolean;
