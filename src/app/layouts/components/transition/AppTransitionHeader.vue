@@ -64,7 +64,7 @@ defineProps<Props>();
 .app-transition-header__surface::after {
   background: linear-gradient(
     180deg,
-    var(--app-color-surface-glass-top) 0,
+    var(--app-color-surface-glass-top) 10%,
     var(--app-color-surface-glass-bottom) 100%
   );
 }
