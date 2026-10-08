@@ -1,24 +1,21 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsSizeVariant, PropsSurfaceRadius } from '@/app/shared/types/props';
 import { computed } from 'vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
 import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
 
-export interface PropsAppSwitch {
+export interface PropsAppSwitch extends PropsWidth, PropsSizeVariant, PropsSurfaceRadius {
   modelValue: boolean;
   accessibilityLabel: string;
   disabled?: boolean;
   sound?: tAudioId | null;
   vibration?: boolean;
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  borderRadius?: tRadiusValue;
   thumbBorderRadius?: tRadiusValue;
   activeColor?: tColorValue;
   inactiveColor?: tColorValue;

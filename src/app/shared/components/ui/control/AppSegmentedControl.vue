@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsPadding, PropsSizeVariant, PropsSurfaceRadius } from '@/app/shared/types/props';
 import { computed, ref } from 'vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+
 import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
+import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
 import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
 
@@ -17,18 +17,12 @@ export interface iAppSegmentedControlOption {
   disabled?: boolean;
 }
 
-export interface PropsAppSegmentedControl {
+export interface PropsAppSegmentedControl extends PropsWidth, PropsPadding, PropsSizeVariant, PropsSurfaceRadius {
   modelValue: string;
   options: readonly iAppSegmentedControlOption[];
   disabled?: boolean;
   sound?: tAudioId | null;
   vibration?: boolean;
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  paddingX?: tPaddingValue;
-  paddingY?: tPaddingValue;
-  borderRadius?: tRadiusValue;
 }
 
 const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
