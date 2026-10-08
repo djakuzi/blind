@@ -1,9 +1,9 @@
 # Форматирование кода
 
 Форматирование кода в проекте контролируется через `Prettier`.
-Актуальная конфигурация находится в [prettier.config.js](/Users/djakuzi/project/blind/prettier.config.js).
+Актуальная конфигурация находится в [prettier.config.js](../../../prettier.config.js).
 
-`ESLint` отвечает за ошибки кода и project-specific правила. Его конфигурация находится в [eslint.config.js](/Users/djakuzi/project/blind/eslint.config.js).
+`ESLint` отвечает за ошибки кода и project-specific правила. Его конфигурация находится в [eslint.config.js](../../../eslint.config.js).
 
 ## Команды
 
