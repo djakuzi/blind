@@ -1,6 +1,7 @@
 <script lang="ts">
+import type { PropsWidth, PropsPadding, PropsGap, PropsSizeVariant } from '@/app/shared/types/props';
 import type { CSSProperties } from 'vue';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import type { tBorderStyleValue, tBorderWidthValue } from '@/app/styles/contracts/border.contract';
 import type { tColorValue } from '@/app/styles/contracts/color.contract';
@@ -9,15 +10,9 @@ import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 export type tWidgetListKey = string | number;
 
-export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<string, unknown>> {
+export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<string, unknown>> extends PropsWidth, PropsPadding, PropsGap, PropsSizeVariant {
   items: readonly TItem[];
   itemKey?: string | ((item: TItem, index: number) => tWidgetListKey);
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  gap?: tSpaceValue;
-  paddingX?: tPaddingValue;
-  paddingY?: tPaddingValue;
   rowGap?: tSpaceValue;
   rowAlign?: CSSProperties['alignItems'] | 'start' | 'end';
   rowJustify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between';

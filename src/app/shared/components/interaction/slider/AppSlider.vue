@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsSizeVariant } from '@/app/shared/types/props';
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
@@ -12,12 +13,9 @@ import { LibScheduler } from '@/core/lib/scheduler';
 import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
 
-export interface PropsAppSlider {
+export interface PropsAppSlider extends PropsWidth, PropsSizeVariant {
   modelValue: number;
   count: number;
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
   itemWidth?: tStyleSizeValue;
   itemMaxWidth?: tStyleSizeValue;
   itemGap?: tSpaceValue;

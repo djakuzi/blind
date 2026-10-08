@@ -1,16 +1,16 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsPadding, PropsSizeVariant, PropsTypography, PropsTextOverflow } from '@/app/shared/types/props';
 import { computed, useSlots } from 'vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import type { PropsAppImage } from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+
 import { BASE_SIZE_FONT_PRESET, BASE_SIZE_MEDIA_WIDTH_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/presets/base.preset';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
+
+import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 export interface iAppInfoRowImage extends Pick<PropsAppImage, 'loading' | 'decoding' | 'objectFit' | 'aspectRatio'> {
@@ -20,24 +20,14 @@ export interface iAppInfoRowImage extends Pick<PropsAppImage, 'loading' | 'decod
 
 export type tAppInfoRowMediaPosition = 'left' | 'right';
 
-export interface PropsAppInfoRow {
+export interface PropsAppInfoRow extends PropsWidth, PropsPadding, PropsSizeVariant, Pick<PropsTypography, 'fontSize' | 'fontWeight' | 'uppercase'>, PropsTextOverflow {
   text: string;
   image?: iAppInfoRowImage;
   mediaPosition?: tAppInfoRowMediaPosition;
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  paddingX?: tPaddingValue;
-  paddingY?: tPaddingValue;
   mediaWidth?: tStyleSizeValue;
   mediaHeight?: tStyleSizeValue;
   mediaGap?: tSpaceValue;
-  fontSize?: tFontSizeValue;
-  fontWeight?: tFontWeightValue;
   textColor?: tColorValue;
-  uppercase?: boolean;
-  ellipsis?: boolean;
-  maxLines?: number;
 }
 
 const props = withDefaults(defineProps<PropsAppInfoRow>(), {

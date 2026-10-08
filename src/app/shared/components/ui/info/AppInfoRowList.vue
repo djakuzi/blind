@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { PropsPadding, PropsSizeVariant, PropsTypography } from '@/app/shared/types/props';
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
@@ -10,9 +11,8 @@ import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { BASE_SIZE_FONT_PRESET, BASE_SIZE_MEDIA_WIDTH_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/presets/base.preset';
 import { resolveBorderWidthValue, type tBorderWidthValue } from '@/app/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
+
+import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 import type { tIconGroup, tIconName } from '@/core/media/icons';
 
@@ -30,20 +30,14 @@ export interface iAppInfoRowListItem {
   icon?: tAppInfoRowListItemIcon;
 }
 
-export interface PropsAppInfoRowList extends Omit<PropsAppDistributedRow, 'count'> {
+export interface PropsAppInfoRowList extends Omit<PropsAppDistributedRow, 'count'>, PropsPadding, PropsSizeVariant, Pick<PropsTypography, 'fontSize' | 'fontWeight' | 'uppercase'> {
   items: readonly iAppInfoRowListItem[];
-  size?: tBaseSizeVariant;
-  paddingX?: tPaddingValue;
-  paddingY?: tPaddingValue;
   iconWidth?: tStyleSizeValue;
   iconGap?: tSpaceValue;
   dividerHeight?: tStyleSizeValue;
   dividerWidth?: tBorderWidthValue;
   dividerColor?: tColorValue;
-  fontSize?: tFontSizeValue;
-  fontWeight?: tFontWeightValue;
   textColor?: tColorValue;
-  uppercase?: boolean;
   accessibilityLabel?: string;
 }
 

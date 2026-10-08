@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { PropsWidth } from '@/app/shared/types/props';
 import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue';
 import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
@@ -13,21 +14,19 @@ interface iAppHoldActionActions {
   complete?: () => void;
 }
 
-export interface PropsAppHoldAction {
+export interface PropsAppHoldAction extends PropsWidth {
   actions?: iAppHoldActionActions;
   disabled?: boolean;
   duration?: number;
   fillDuration?: number;
   holdStartDelay?: number;
   initialProgress?: number;
-  maxWidth?: tStyleSizeValue;
   moveCancelThreshold?: number;
   releaseDuration?: number;
   progressSound?: tAudioId | null;
   sound?: tAudioId | null;
   startSound?: tAudioId | null;
   vibrationDuration?: number;
-  width?: tStyleSizeValue;
 }
 
 const props = withDefaults(defineProps<PropsAppHoldAction>(), {

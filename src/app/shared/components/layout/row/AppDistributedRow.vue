@@ -1,17 +1,16 @@
 <script setup lang="ts">
+import type { PropsWidth } from '@/app/shared/types/props';
 import { computed } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 type tAppDistributedRowNode = { type: 'item'; index: number } | { type: 'separator'; index: number };
 
 export type tAppDistributedRowOverflow = 'hidden' | 'visible';
 
-export interface PropsAppDistributedRow {
+export interface PropsAppDistributedRow extends PropsWidth {
   count: number;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
   separatorGap?: tSpaceValue;
   centerEven?: boolean;
   centerOdd?: boolean;

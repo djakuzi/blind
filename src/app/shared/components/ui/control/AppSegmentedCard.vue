@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsPadding, PropsBorderRadius, PropsSizeVariant, PropsGap } from '@/app/shared/types/props';
 import { computed } from 'vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
@@ -8,8 +9,8 @@ import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
+import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
@@ -28,21 +29,14 @@ export interface iAppSegmentedCardOption {
   disabled?: boolean;
 }
 
-export interface PropsAppSegmentedCard {
+export interface PropsAppSegmentedCard extends PropsWidth, PropsPadding, PropsBorderRadius, PropsSizeVariant, PropsGap {
   modelValue: string;
   options: readonly iAppSegmentedCardOption[];
   disabled?: boolean;
   sound?: tAudioId | null;
   vibration?: boolean;
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
   equalWidth?: boolean;
-  gap?: tSpaceValue;
   imageTextGap?: tSpaceValue;
-  paddingX?: tPaddingValue;
-  paddingY?: tPaddingValue;
-  borderRadius?: tRadiusValue;
   imageSize?: tStyleSizeValue;
 }
 

@@ -1,23 +1,19 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsMargin, PropsGap } from '@/app/shared/types/props';
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
+
 import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
 
 type tAppFlexTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer';
 
-interface Props {
+interface Props extends PropsWidth, PropsMargin, PropsGap {
   tag?: tAppFlexTag;
   direction?: CSSProperties['flexDirection'];
   align?: CSSProperties['alignItems'] | 'start' | 'end';
   justify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between';
   wrap?: CSSProperties['flexWrap'];
-  gap?: tSpaceValue;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  margin?: tSpaceValue;
 }
 
 const props = withDefaults(defineProps<Props>(), {

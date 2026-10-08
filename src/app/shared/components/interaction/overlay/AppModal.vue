@@ -1,31 +1,19 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsHeight, PropsSurface } from '@/app/shared/types/props';
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import {
-  resolveBorderStyleValue,
-  resolveBorderWidthValue,
-  type tBorderStyleValue,
-  type tBorderWidthValue,
-} from '@/app/styles/contracts/border.contract';
+
+import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveLayerValue, type tLayerValue } from '@/app/styles/contracts/layer.contract';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
+import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
 
-export interface PropsAppModal {
+export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'>, PropsSurface {
   modelValue: boolean;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  maxHeight?: tStyleSizeValue;
   layer?: tLayerValue;
   backdropColor?: tColorValue;
-  backgroundColor?: tColorValue;
-  borderColor?: tColorValue;
-  borderWidth?: tBorderWidthValue;
-  borderStyle?: tBorderStyleValue;
-  borderRadius?: tRadiusValue;
   headerPaddingX?: tPaddingValue;
   headerPaddingY?: tPaddingValue;
   bodyPaddingX?: tPaddingValue;

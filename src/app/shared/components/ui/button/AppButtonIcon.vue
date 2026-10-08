@@ -1,18 +1,17 @@
 <script setup lang="ts" generic="TGroup extends tIconGroup">
+import type { PropsWidth, PropsHeight } from '@/app/shared/types/props';
 import { computed } from 'vue';
-import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tIconGroup, tIconName } from '@/core/media/icons';
 
-interface Props {
+interface Props extends PropsWidth, Pick<PropsHeight, 'height'> {
   group: TGroup;
   icon: tIconName<TGroup>;
-  width: PropsAppBlock['width'];
-  height?: PropsAppBlock['height'];
-  iconWidth?: PropsAppBlock['width'];
-  iconHeight?: PropsAppBlock['height'];
+  width: NonNullable<PropsWidth['width']>;
+  iconWidth?: PropsWidth['width'];
+  iconHeight?: PropsHeight['height'];
   disabled?: boolean;
   ariaLabel: string;
 }

@@ -1,37 +1,25 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsTypography } from '@/app/shared/types/props';
 import { computed } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { resolveBorderStyleValue, resolveBorderWidthValue, type tBorderStyleValue, type tBorderWidthValue } from '@/app/styles/contracts/border.contract';
+import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
 import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
+
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
+import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
 
 export type tAppButtonVariant = 'primary' | 'secondary' | 'danger';
 
-export interface PropsAppButton {
+export interface PropsAppButton extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, Pick<PropsTypography, 'fontSize' | 'fontWeight' | 'uppercase'> {
   text: string;
   variant?: tAppButtonVariant;
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
   disabled?: boolean;
-  backgroundColor?: tColorValue;
-  borderColor?: tColorValue;
   textColor?: tColorValue;
-  borderWidth?: tBorderWidthValue;
-  borderStyle?: tBorderStyleValue;
-  borderRadius?: tRadiusValue;
-  paddingX?: tPaddingValue;
-  paddingY?: tPaddingValue;
-  fontSize?: tFontSizeValue;
-  fontWeight?: tFontWeightValue;
-  uppercase?: boolean;
 }
 
 const props = withDefaults(defineProps<PropsAppButton>(), {

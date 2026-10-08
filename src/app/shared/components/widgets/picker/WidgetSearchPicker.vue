@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { PropsWidth } from '@/app/shared/types/props';
 import { computed, ref, watch } from 'vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
@@ -10,7 +11,7 @@ import type { iAppInfoRowImage, PropsAppInfoRow } from '@/app/shared/components/
 import AppInputSearch from '@/app/shared/components/ui/input/AppInputSearch.vue';
 import type { PropsInputSearch } from '@/app/shared/components/ui/input/AppInputSearch.vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+
 import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
 
@@ -22,15 +23,13 @@ export interface iWidgetSearchPickerItem {
   disabled?: boolean;
 }
 
-export interface PropsWidgetSearchPicker {
+export interface PropsWidgetSearchPicker extends PropsWidth {
   modelValue: boolean;
   items: readonly iWidgetSearchPickerItem[];
   selectedValue?: string;
   title?: string;
   emptyText?: string;
   triggerAriaLabel?: string;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
   sound?: tAudioId | null;
   vibration?: boolean;
   modal?: Omit<PropsAppModal, 'modelValue'>;
