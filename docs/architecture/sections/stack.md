@@ -8,7 +8,7 @@
 4. <span hidden data-doc-marker="stack-pinia:start"></span>`Pinia 4.0.x`<span hidden data-doc-marker="stack-pinia:end"></span> - управление состоянием.
 5. <span hidden data-doc-marker="stack-vue-router:start"></span>`Vue Router 5.x`<span hidden data-doc-marker="stack-vue-router:end"></span> - маршрутизация.
 6. <span hidden data-doc-marker="stack-plugin-vue:start"></span>`@vitejs/plugin-vue 6.x`<span hidden data-doc-marker="stack-plugin-vue:end"></span> - интеграция Vue с Vite.
-7. `ESLint 9.x` - статический анализ кода и проверка качества исходников.
+7. <span hidden data-doc-marker="stack-eslint:start"></span>`ESLint 10.x`<span hidden data-doc-marker="stack-eslint:end"></span> - статический анализ кода и проверка качества исходников.
 
 ### Поддержка окружения
 
