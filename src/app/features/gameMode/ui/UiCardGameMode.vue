@@ -75,7 +75,7 @@ function handleComplete() {
       class="ui-card-game-mode__main"
       direction="column"
       align="center"
-      justify="space-evenly"
+      :justify="mode.locked ? 'between' : 'space-evenly'"
       width="100%"
     >
       <AppFillAware

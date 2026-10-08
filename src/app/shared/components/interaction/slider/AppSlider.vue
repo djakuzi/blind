@@ -485,13 +485,14 @@ onBeforeUnmount(() => {
 
 .app-slider__track {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   gap: v-bind(sliderItemGap);
   transition: transform var(--app-motion-duration-slower) var(--app-motion-ease-enter);
 }
 
 .app-slider__item {
+  display: flex;
   flex: 0 0 v-bind(sliderItemWidth);
   width: v-bind(sliderItemWidth);
   max-width: v-bind(sliderItemMaxWidth);
@@ -512,6 +513,7 @@ onBeforeUnmount(() => {
 }
 
 .app-slider__item-content {
+  display: flex;
   width: 100%;
   min-width: 0;
 }
