@@ -1,10 +1,8 @@
 <script setup lang="ts">
+import type { PropsTransitionTiming } from '@/app/shared/types/props';
 import { cloneVNode, computed, useSlots } from 'vue';
 
-interface Props {
-  active?: boolean;
-  duration?: number;
-  delay?: number;
+interface Props extends PropsTransitionTiming {
   fromScale?: number;
   toScale?: number;
 }

@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont } from '@/app/shared/types/props';
+import type {
+  PropsWidth,
+  PropsPadding,
+  PropsSurface,
+  PropsSizeVariant,
+  PropsFont,
+  PropsDisabled,
+  PropsAccessibility,
+} from '@/app/shared/types/props';
 import { computed, ref } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 
@@ -11,18 +19,16 @@ import { resolveFontWeightValue } from '@/app/styles/contracts/fontWeight.contra
 import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
 
-export interface PropsInputSearch extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont {
+export interface PropsInputSearch
+  extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsDisabled, PropsAccessibility {
   modelValue: string;
   placeholder?: string;
-  disabled?: boolean;
   readonly?: boolean;
   textColor?: tColorValue;
   placeholderColor?: tColorValue;
   name?: string;
   autocomplete?: string;
-  ariaLabel?: string;
-  ariaLabelledby?: string;
-  ariaDescribedby?: string;
+
 }
 
 const props = withDefaults(defineProps<PropsInputSearch>(), {

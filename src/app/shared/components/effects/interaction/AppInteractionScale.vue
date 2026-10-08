@@ -1,7 +1,6 @@
 <script setup lang="ts">
-interface Props {
-  disabled?: boolean;
-}
+import type { PropsDisabled } from '@/app/shared/types/props';
+interface Props extends PropsDisabled {}
 
 withDefaults(defineProps<Props>(), {
   disabled: false,

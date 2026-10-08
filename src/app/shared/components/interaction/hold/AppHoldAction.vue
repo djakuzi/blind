@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsWidth } from '@/app/shared/types/props';
+import type { PropsWidth, PropsDisabled } from '@/app/shared/types/props';
 import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue';
 import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
 import { LibStyle } from '@/app/shared/lib/style';
@@ -14,9 +14,8 @@ interface iAppHoldActionActions {
   complete?: () => void;
 }
 
-export interface PropsAppHoldAction extends PropsWidth {
+export interface PropsAppHoldAction extends PropsWidth, PropsDisabled {
   actions?: iAppHoldActionActions;
-  disabled?: boolean;
   duration?: number;
   fillDuration?: number;
   holdStartDelay?: number;

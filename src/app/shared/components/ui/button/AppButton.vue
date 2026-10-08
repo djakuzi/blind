@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsUppercase } from '@/app/shared/types/props';
+import type {
+  PropsWidth,
+  PropsPadding,
+  PropsSurface,
+  PropsSizeVariant,
+  PropsFont,
+  PropsUppercase,
+  PropsDisabled,
+} from '@/app/shared/types/props';
 import { computed } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
@@ -15,10 +23,9 @@ import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
 
 export type tAppButtonVariant = 'primary' | 'secondary' | 'danger';
 
-export interface PropsAppButton extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsUppercase {
+export interface PropsAppButton extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsUppercase, PropsDisabled {
   text: string;
   variant?: tAppButtonVariant;
-  disabled?: boolean;
   textColor?: tColorValue;
 }
 

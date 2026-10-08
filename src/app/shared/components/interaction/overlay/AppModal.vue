@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsHeight, PropsSurface } from '@/app/shared/types/props';
+import type { PropsWidth, PropsHeight, PropsSurface, PropsAccessibility } from '@/app/shared/types/props';
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/app/shared/lib/style';
@@ -10,7 +10,7 @@ import { resolveLayerValue, type tLayerValue } from '@/app/styles/contracts/laye
 import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
 
-export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'>, PropsSurface {
+export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'>, PropsSurface, PropsAccessibility {
   modelValue: boolean;
   layer?: tLayerValue;
   backdropColor?: tColorValue;
@@ -23,9 +23,7 @@ export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   lockScroll?: boolean;
-  ariaLabel?: string;
-  ariaLabelledby?: string;
-  ariaDescribedby?: string;
+
 }
 
 const props = withDefaults(defineProps<PropsAppModal>(), {

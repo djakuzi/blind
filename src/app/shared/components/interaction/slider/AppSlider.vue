@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsSizeVariant } from '@/app/shared/types/props';
+import type { PropsWidth, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/props';
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
@@ -10,10 +10,9 @@ import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/colo
 import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
-import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
 
-export interface PropsAppSlider extends PropsWidth, PropsSizeVariant {
+export interface PropsAppSlider extends PropsWidth, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {
   modelValue: number;
   count: number;
   itemWidth?: tStyleSizeValue;
@@ -29,9 +28,6 @@ export interface PropsAppSlider extends PropsWidth, PropsSizeVariant {
   dotColor?: tColorValue;
   activeDotColor?: tColorValue;
   wheel?: boolean;
-  disabled?: boolean;
-  sound?: tAudioId | null;
-  vibration?: boolean;
   accessibilityLabel: string;
   itemAccessibilityLabel: (index: number, count: number) => string;
 }

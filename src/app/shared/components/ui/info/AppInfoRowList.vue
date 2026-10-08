@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase } from '@/app/shared/types/props';
+import type { PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase, PropsAccessibilityLabel } from '@/app/shared/types/props';
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
@@ -31,7 +31,7 @@ export interface iAppInfoRowListItem {
 }
 
 export interface PropsAppInfoRowList
-  extends Omit<PropsAppDistributedRow, 'count'>, PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase {
+  extends Omit<PropsAppDistributedRow, 'count'>, PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase, PropsAccessibilityLabel {
   items: readonly iAppInfoRowListItem[];
   iconWidth?: tStyleSizeValue;
   iconGap?: tSpaceValue;
@@ -39,7 +39,7 @@ export interface PropsAppInfoRowList
   dividerWidth?: tBorderWidthValue;
   dividerColor?: tColorValue;
   textColor?: tColorValue;
-  accessibilityLabel?: string;
+
 }
 
 const props = withDefaults(defineProps<PropsAppInfoRowList>(), {

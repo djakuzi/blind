@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { PropsWidth, PropsPadding, PropsGap, PropsSizeVariant } from '@/app/shared/types/props';
+import type { PropsWidth, PropsPadding, PropsGap, PropsSizeVariant, PropsAccessibilityLabel } from '@/app/shared/types/props';
 import type { CSSProperties } from 'vue';
 
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
@@ -11,7 +11,7 @@ import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 export type tWidgetListKey = string | number;
 
 export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<string, unknown>>
-  extends PropsWidth, PropsPadding, PropsGap, PropsSizeVariant {
+  extends PropsWidth, PropsPadding, PropsGap, PropsSizeVariant, PropsAccessibilityLabel {
   items: readonly TItem[];
   itemKey?: string | ((item: TItem, index: number) => tWidgetListKey);
   rowGap?: tSpaceValue;
@@ -23,7 +23,7 @@ export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<
   dividerWidth?: tBorderWidthValue;
   dividerStyle?: tBorderStyleValue;
   showLastDivider?: boolean;
-  accessibilityLabel?: string;
+
 }
 </script>
 
