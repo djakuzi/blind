@@ -2,9 +2,7 @@
 import type { PropsTransitionTiming } from '@/app/shared/types/props';
 import { cloneVNode, computed, useSlots } from 'vue';
 
-interface Props extends PropsTransitionTiming {}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsTransitionTiming>(), {
   active: false,
   duration: 320,
   delay: 0,

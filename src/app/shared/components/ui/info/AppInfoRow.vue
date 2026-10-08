@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsPadding, PropsSizeVariant, PropsTypography, PropsTextOverflow } from '@/app/shared/types/props';
+import type { PropsWidth, PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase, PropsTextOverflow } from '@/app/shared/types/props';
 import { computed, useSlots } from 'vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import type { PropsAppImage } from '@/app/shared/components/atoms/media/AppImage.vue';
