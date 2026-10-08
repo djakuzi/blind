@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsHeight, PropsSizeVariant } from '@/app/shared/types/props';
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
@@ -7,12 +8,8 @@ type tAppLogoVariant = 'blind' | 'blindTextBottom' | 'blindTextRight';
 
 type tAppLogoSizeValue = number | string;
 
-interface Props {
-  size?: tBaseSizeVariant;
+interface Props extends PropsWidth, Pick<PropsHeight, 'height'>, PropsSizeVariant {
   logo?: tAppLogoVariant;
-  width?: tAppLogoSizeValue;
-  height?: tAppLogoSizeValue;
-  maxWidth?: tAppLogoSizeValue;
   blur?: boolean;
 }
 

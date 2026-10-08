@@ -1,42 +1,32 @@
 <script setup lang="ts">
+import type {
+  PropsWidth,
+  PropsPadding,
+  PropsSurface,
+  PropsSizeVariant,
+  PropsTextTypography,
+} from '@/app/shared/types/props';
 import { computed, useSlots } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+
 import type { tAppStatus } from '@/app/shared/types/status';
 import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
 import { BASE_SIZE_FONT_PRESET } from '@/app/styles/presets/base.preset';
-import type { tBorderStyleValue, tBorderWidthValue } from '@/app/styles/contracts/border.contract';
+
 import type { tColorValue } from '@/app/styles/contracts/color.contract';
-import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
-import type { tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import type { tRadiusValue } from '@/app/styles/contracts/radius.contract';
+
 import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 export type tAppStatusBlockAlign = 'left' | 'center' | 'right';
 
-export interface PropsAppStatusBlock {
+export interface PropsAppStatusBlock extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsTextTypography {
   text: string;
   variant?: tAppStatus;
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  paddingX?: tPaddingValue;
-  paddingY?: tPaddingValue;
   gap?: tSpaceValue;
-  backgroundColor?: tColorValue;
-  borderColor?: tColorValue;
-  borderWidth?: tBorderWidthValue;
-  borderStyle?: tBorderStyleValue;
-  borderRadius?: tRadiusValue;
-  textColor?: tColorValue;
-  fontSize?: tFontSizeValue;
-  fontWeight?: tFontWeightValue;
   textAlign?: tAppStatusBlockAlign;
   actionAlign?: tAppStatusBlockAlign;
-  uppercase?: boolean;
 }
 
 const props = withDefaults(defineProps<PropsAppStatusBlock>(), {

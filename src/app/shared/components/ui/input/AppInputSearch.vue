@@ -1,40 +1,28 @@
 <script setup lang="ts">
+import type {
+  PropsWidth,
+  PropsPadding,
+  PropsSurface,
+  PropsSizeVariant,
+  PropsTextTypography,
+} from '@/app/shared/types/props';
 import { computed, ref } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
-import {
-  resolveBorderStyleValue,
-  resolveBorderWidthValue,
-  type tBorderStyleValue,
-  type tBorderWidthValue,
-} from '@/app/styles/contracts/border.contract';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import { resolveFontWeightValue, type tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
 
-export interface PropsInputSearch {
+import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
+import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/styles/contracts/border.contract';
+import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
+import { resolveFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
+import { resolveFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
+import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
+
+export interface PropsInputSearch extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, Pick<PropsTextTypography, 'textColor' | 'fontSize' | 'fontWeight'> {
   modelValue: string;
   placeholder?: string;
   disabled?: boolean;
   readonly?: boolean;
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  paddingX?: tPaddingValue;
-  paddingY?: tPaddingValue;
-  backgroundColor?: tColorValue;
-  textColor?: tColorValue;
   placeholderColor?: tColorValue;
-  borderColor?: tColorValue;
-  borderWidth?: tBorderWidthValue;
-  borderStyle?: tBorderStyleValue;
-  borderRadius?: tRadiusValue;
-  fontSize?: tFontSizeValue;
-  fontWeight?: tFontWeightValue;
   name?: string;
   autocomplete?: string;
   ariaLabel?: string;
