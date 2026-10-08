@@ -83,3 +83,14 @@ Validation is read-only. Plural forms may vary by language; `other` is required.
 - `npm run cli -- git update`
 
 Branch creation requires a clean working tree and the correct base branch (development for feature/bugfix, main for hotfix). `git update` must run from development and only fast-forwards to origin/development; it never performs an automatic conflict merge or push.
+
+## Clean
+
+- `npm run cli -- clean web` — remove `dist`
+- `npm run cli -- clean desktop` — remove `dist-electron`
+- `npm run cli -- clean release` — remove `release/desktop`
+- `npm run cli -- clean cache` — remove known Vite/npm cache directories
+- `npm run cli -- clean dependencies` — remove `node_modules`
+- `npm run cli -- clean reinstall` — remove `node_modules` and run `npm ci`
+
+Use `--dry-run` to preview operations or `--yes` to confirm explicitly in non-interactive mode. Without `--yes`, destructive operations prompt for confirmation in an interactive terminal. No user preferences, source files, native project directories or environment files are targeted.
