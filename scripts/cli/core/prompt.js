@@ -3,7 +3,7 @@ import { emitKeypressEvents } from 'node:readline';
 import { stdin, stdout } from 'node:process';
 
 function display(title, items, index, hint) {
-  stdout.write('\x1b[2J\x1b[H');
+  stdout.write('\x1b[H\x1b[J');
   stdout.write(`${paint.brand('◆ BLIND CLI')} ${paint.muted(' / ')} ${paint.accent(title)}\n${paint.muted('─'.repeat(38))}\n\n`);
   const rows = Math.max(4, (stdout.rows || 24) - 8);
   const start = Math.max(0, Math.min(index - Math.floor(rows / 2), items.length - rows));
@@ -58,6 +58,5 @@ export async function choose(items, signal, { title = 'Choose', initialIndex = 0
     signal?.removeEventListener('abort', onAbort);
     stdin.setRawMode(initialRaw);
     stdin.pause();
-    stdout.write('\x1b[2J\x1b[H');
   }
 }
