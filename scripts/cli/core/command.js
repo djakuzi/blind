@@ -1,23 +1,57 @@
+import { createInterface } from 'node:readline/promises';
+import { stdin, stdout } from 'node:process';
 import { printLine, showHelp } from './terminal.js';
 import { choose } from './prompt.js';
-
-function printMenu(sections) {
-  printLine('\nBlind CLI');
-  printLine('---------');
-  const choices = [{ label: 'Exit', kind: 'exit' }];
-  for (const section of sections) {
-    for (const command of section.commands) {
-      choices.push({ label: `${section.title} / ${command.id}`, kind: 'command', command });
-    }
-  }
-  choices.forEach((item, index) => printLine(`${index}. ${item.label}`));
-  return choices;
-}
 
 async function runCommand(command, context, args) {
   if (context.signal.aborted) return 130;
   const result = await command.run(context, args);
   return Number.isInteger(result) ? result : 0;
+}
+
+async function runInteractive(registry, context) {
+  const sections = registry.sections();
+  let sectionIndex = 0;
+  while (!context.signal.aborted) {
+    const menu = [
+      ...sections.map((section) => ({ label: section.title, description: section.description, section })),
+      { label: 'Exit', exit: true },
+    ];
+    const sectionChoice = await choose(menu, context.signal, { title: 'Sections', initialIndex: sectionIndex });
+    if (!sectionChoice || sectionChoice.exit) return context.signal.aborted ? 130 : 0;
+    sectionIndex = sections.findIndex((item) => item.id === sectionChoice.section.id);
+    const section = sectionChoice.section;
+    let commandIndex = 0;
+    while (!context.signal.aborted) {
+      const commands = [
+        ...section.commands.map((command) => ({ label: command.id, description: command.description, command })),
+        { label: 'Back', back: true },
+      ];
+      const selected = await choose(commands, context.signal, {
+        title: section.title,
+        initialIndex: commandIndex,
+      });
+      if (!selected || selected.back) break;
+      commandIndex = section.commands.findIndex((command) => command.path === selected.command.path);
+      try {
+        const code = await runCommand(selected.command, context, []);
+        printLine(`\n${selected.command.path}: ${code === 0 ? 'Completed' : `Exited with code ${code}`}`);
+      } catch (error) {
+        printLine(`\nCommand failed: ${error instanceof Error ? error.message : String(error)}`);
+      }
+      if (context.signal.aborted) return 130;
+      const readline = createInterface({ input: stdin, output: stdout });
+      try {
+        await readline.question('Press Enter to return to the menu... ', { signal: context.signal });
+      } catch (error) {
+        if (context.signal.aborted || error?.name === 'AbortError') return 130;
+        throw error;
+      } finally {
+        readline.close();
+      }
+    }
+  }
+  return 130;
 }
 
 export async function runCli(registry, context, args) {
@@ -27,22 +61,8 @@ export async function runCli(registry, context, args) {
       return 0;
     }
     const command = registry.find(args.slice(0, 2));
-    if (!command) {
-      throw new Error(`Unknown command: ${args.join(' ')}. See: npm run cli -- help`);
-    }
+    if (!command) throw new Error(`Unknown command: ${args.join(' ')}. See: npm run cli -- help`);
     return runCommand(command, context, args.slice(2));
   }
-
-  while (!context.signal.aborted) {
-    const choices = printMenu(registry.sections());
-    const selected = await choose(choices, context.signal);
-    if (!selected || selected.kind === 'exit') return context.signal.aborted ? 130 : 0;
-    try {
-      const code = await runCommand(selected.command, context, []);
-      if (code !== 0) printLine(`Command exited with code ${code}.`);
-    } catch (error) {
-      printLine(`Command failed: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
-  return 130;
+  return runInteractive(registry, context);
 }
