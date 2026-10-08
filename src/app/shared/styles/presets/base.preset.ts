@@ -1,6 +1,6 @@
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import type { tFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export const BASE_SIZE_FONT_PRESET: Record<tBaseSizeVariant, tFontSizeValue> = {
   small: 'sm',

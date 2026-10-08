@@ -1,6 +1,6 @@
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import type { tPaddingValue } from '@/app/styles/contracts/padding.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import type { tFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import type { tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 
 export interface iControlSizePreset {
   paddingX: tPaddingValue;
