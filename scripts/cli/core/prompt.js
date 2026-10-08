@@ -1,20 +1,21 @@
+import { paint } from './colors.js';
 import { emitKeypressEvents } from 'node:readline';
 import { stdin, stdout } from 'node:process';
 
 function display(title, items, index, hint) {
   stdout.write('\x1b[2J\x1b[H');
-  stdout.write(`Blind CLI  /  ${title}\n\n`);
+  stdout.write(`${paint.brand('◆ BLIND CLI')} ${paint.muted(' / ')} ${paint.accent(title)}\n${paint.muted('─'.repeat(38))}\n\n`);
   const rows = Math.max(4, (stdout.rows || 24) - 8);
   const start = Math.max(0, Math.min(index - Math.floor(rows / 2), items.length - rows));
   const end = Math.min(items.length, start + rows);
-  if (start > 0) stdout.write('  ↑ more\n');
+  if (start > 0) stdout.write(`${paint.muted('  ↑ more')}\n`);
   for (let i = start; i < end; i += 1) {
     const selected = i === index;
-    stdout.write(`${selected ? '\x1b[7m❯ ' : '  '}${items[i].label}${selected ? '\x1b[0m' : ''}\n`);
+    stdout.write(`${selected ? paint.selected(` ❯ ${items[i].label} `) : `   ${items[i].label}`}\n`);
   }
-  if (end < items.length) stdout.write('  ↓ more\n');
-  if (items[index]?.description) stdout.write(`\n${items[index].description}\n`);
-  stdout.write(`\n${hint}\n`);
+  if (end < items.length) stdout.write(`${paint.muted('  ↓ more')}\n`);
+  if (items[index]?.description) stdout.write(`\n${paint.muted(items[index].description)}\n`);
+  stdout.write(`\n${paint.muted(hint)}\n`);
 }
 
 export async function choose(items, signal, { title = 'Choose', initialIndex = 0 } = {}) {

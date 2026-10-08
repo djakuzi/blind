@@ -1,3 +1,4 @@
+import { paint } from './colors.js';
 import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
 import { printLine, showHelp } from './terminal.js';
@@ -35,9 +36,9 @@ async function runInteractive(registry, context) {
       commandIndex = section.commands.findIndex((command) => command.path === selected.command.path);
       try {
         const code = await runCommand(selected.command, context, []);
-        printLine(`\n${selected.command.path}: ${code === 0 ? 'Completed' : `Exited with code ${code}`}`);
+        printLine(`\n${paint.accent(selected.command.path)}: ${code === 0 ? paint.success('Completed') : paint.error(`Exited with code ${code}`)}`);
       } catch (error) {
-        printLine(`\nCommand failed: ${error instanceof Error ? error.message : String(error)}`);
+        printLine(`\n${paint.error('Command failed:')} ${error instanceof Error ? error.message : String(error)}`);
       }
       if (context.signal.aborted) return 130;
       const readline = createInterface({ input: stdin, output: stdout });
