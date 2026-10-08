@@ -183,8 +183,8 @@ function handleComplete() {
   z-index: 2;
   inset: 0;
   background: color-mix(in srgb, var(--app-color-surface-primary) 48%, transparent);
-  backdrop-filter: blur(2px) contrast(0.72);
-  --webkit-backdrop-filter: blur(2px) contrast(0.72);
+  backdrop-filter: blur(2px) contrast(1);
+  --webkit-backdrop-filter: blur(2px);
   pointer-events: none;
 }
 
