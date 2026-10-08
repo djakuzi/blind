@@ -9,7 +9,6 @@ export interface iGameMode {
   readonly rounds: number;
   readonly options: string[];
   readonly locked: boolean;
-  readonly lockedText: string | null;
   readonly img: iApiThemeMedia;
 }
 
@@ -23,7 +22,6 @@ export class ModelGameMode implements iGameMode {
   readonly rounds: number;
   readonly options: string[];
   readonly locked: boolean;
-  readonly lockedText: string | null;
 
   private readonly image: iApiThemeMedia;
 
@@ -33,7 +31,6 @@ export class ModelGameMode implements iGameMode {
     this.rounds = payload.rounds;
     this.options = payload.options;
     this.locked = payload.locked;
-    this.lockedText = payload.lockedText;
     this.image = payload.image;
   }
 

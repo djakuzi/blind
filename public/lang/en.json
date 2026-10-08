@@ -94,7 +94,11 @@
       },
       "survival": {
         "title": "SURVIVAL",
-        "description": "Survive as long as you can"
+        "description": "Survive as long as you can",
+        "locked": {
+          "title": "Mode unavailable",
+          "description": "This mode is still in development"
+        }
       }
     },
     "format": {

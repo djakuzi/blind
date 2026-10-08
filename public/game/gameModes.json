@@ -8,8 +8,7 @@
         "1v1",
         "2v2"
       ],
-      "locked": false,
-      "lockedText": null
+      "locked": false
     },
     {
       "key": "health",
@@ -19,8 +18,7 @@
         "1v1",
         "2v2"
       ],
-      "locked": false,
-      "lockedText": null
+      "locked": false
     },
     {
       "key": "survival",
@@ -30,8 +28,7 @@
         "1v1",
         "2v2"
       ],
-      "locked": true,
-      "lockedText": null
+      "locked": true
     }
   ],
   "data": {

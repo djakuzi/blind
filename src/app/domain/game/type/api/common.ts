@@ -12,7 +12,6 @@ export interface iApiGameModeData {
   rounds: number;
   options: string[];
   locked: boolean;
-  lockedText: string | null;
 }
 
 export interface iApiGameModeResourceData {

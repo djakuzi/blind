@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import WidgetGameModeLocked from '@/app/features/gameMode/widgets/WidgetGameModeLocked.vue';
 import WidgetGameModeOptions from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
 import type { iWidgetGameModeOptionsSelection } from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
 import WidgetSliderGameMode from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
@@ -92,8 +93,13 @@ watch(
         @complete="handleModeComplete"
       />
 
+      <WidgetGameModeLocked
+        v-if="activeMode?.locked"
+        :mode="activeMode"
+      />
+
       <WidgetGameModeOptions
-        v-if="activeMode"
+        v-else-if="activeMode"
         :mode="activeMode"
         :players="players"
         :connection="connection"

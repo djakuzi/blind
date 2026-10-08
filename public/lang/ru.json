@@ -94,7 +94,11 @@
       },
       "survival": {
         "title": "SURVIVAL",
-        "description": "Продержись как можно дольше"
+        "description": "Продержись как можно дольше",
+        "locked": {
+          "title": "Режим недоступен",
+          "description": "Этот режим ещё в разработке"
+        }
       }
     },
     "format": {
