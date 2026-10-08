@@ -87,21 +87,13 @@ const viewLayoutStyle = computed(() => {
 
   return {
     '--cp-view-layout-align': resolveViewLayoutAlign(props.align),
-
     '--cp-view-layout-flex': isFullHeight ? '1 1 auto' : '0 0 auto',
-
     '--cp-view-layout-height': isFullHeight ? '100%' : 'auto',
-
     '--cp-view-layout-justify': resolveViewLayoutJustify(props.justify),
-
     '--cp-view-layout-max-height': isFullHeight ? '100%' : 'none',
-
     '--cp-view-layout-padding': resolveViewLayoutPadding(props.padding),
-
     '--cp-view-layout-overflow': props.overflow,
-
     '--cp-view-layout-bleed-horizontal': resolveBleedHorizontal(props.bleed),
-
     '--cp-view-layout-bleed-vertical': resolveBleedVertical(props.bleed),
   };
 });

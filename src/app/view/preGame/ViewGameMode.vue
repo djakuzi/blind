@@ -11,6 +11,7 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
+import { SPACE_TOKENS, spaceTokenVar } from '@/app/styles/contracts/space.contract';
 
 const router = useRouter();
 const gameModeStore = useGameModeStore();
@@ -79,12 +80,13 @@ watch(
 </script>
 
 <template>
-  <ViewLayout class="view-game-mode" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
+  <ViewLayout class="view-game-mode" align="center" justify="start" padding="none" overflow="hidden" bleed="horizontal">
     <AppFlex
       class="view-game-mode__content"
       direction="column"
       align="center"
       width="100%"
+      :margin="spaceTokenVar(14) + '0 0 0'"
       :gap="12"
     >
       <WidgetSliderGameMode
