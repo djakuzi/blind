@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsSizeVariant, PropsGap, PropsWidth, PropsTypography } from '@/app/shared/types/props';
+import type { PropsSizeVariant, PropsGap, PropsWidth, PropsTypography, PropsUppercase } from '@/app/shared/types/props';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import AppPulseAttention from '@/app/shared/components/effects/attention/AppPulseAttention.vue';
 import { LibStyle } from '@/app/shared/lib/style';
@@ -12,7 +12,8 @@ import { ToolInput } from '@/core/platform';
 
 export type tAppHoldHintDirection = 'row' | 'column';
 
-export interface PropsAppHoldHint extends PropsSizeVariant, PropsGap, Pick<PropsWidth, 'maxWidth'>, Pick<PropsTypography, 'color' | 'fontSize' | 'uppercase'> {
+export interface PropsAppHoldHint
+  extends PropsSizeVariant, PropsGap, Pick<PropsWidth, 'maxWidth'>, Pick<PropsTypography, 'color' | 'fontSize'>, PropsUppercase {
   text?: string;
   items?: readonly string[];
   finePointerItems?: readonly string[];

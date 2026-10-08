@@ -20,7 +20,7 @@ export interface iAppInfoRowImage extends Pick<PropsAppImage, 'loading' | 'decod
 
 export type tAppInfoRowMediaPosition = 'left' | 'right';
 
-export interface PropsAppInfoRow extends PropsWidth, PropsPadding, PropsSizeVariant, Pick<PropsTypography, 'fontSize' | 'fontWeight' | 'uppercase'>, PropsTextOverflow {
+export interface PropsAppInfoRow extends PropsWidth, PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase, PropsTextOverflow {
   text: string;
   image?: iAppInfoRowImage;
   mediaPosition?: tAppInfoRowMediaPosition;

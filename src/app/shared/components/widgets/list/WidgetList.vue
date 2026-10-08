@@ -10,7 +10,8 @@ import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 export type tWidgetListKey = string | number;
 
-export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<string, unknown>> extends PropsWidth, PropsPadding, PropsGap, PropsSizeVariant {
+export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<string, unknown>>
+  extends PropsWidth, PropsPadding, PropsGap, PropsSizeVariant {
   items: readonly TItem[];
   itemKey?: string | ((item: TItem, index: number) => tWidgetListKey);
   rowGap?: tSpaceValue;

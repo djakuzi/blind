@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsPadding, PropsSizeVariant, PropsTypography } from '@/app/shared/types/props';
+import type { PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase } from '@/app/shared/types/props';
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
@@ -30,7 +30,8 @@ export interface iAppInfoRowListItem {
   icon?: tAppInfoRowListItemIcon;
 }
 
-export interface PropsAppInfoRowList extends Omit<PropsAppDistributedRow, 'count'>, PropsPadding, PropsSizeVariant, Pick<PropsTypography, 'fontSize' | 'fontWeight' | 'uppercase'> {
+export interface PropsAppInfoRowList
+  extends Omit<PropsAppDistributedRow, 'count'>, PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase {
   items: readonly iAppInfoRowListItem[];
   iconWidth?: tStyleSizeValue;
   iconGap?: tSpaceValue;

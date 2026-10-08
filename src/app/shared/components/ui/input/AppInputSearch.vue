@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsTypography } from '@/app/shared/types/props';
+import type { PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont } from '@/app/shared/types/props';
 import { computed, ref } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 
@@ -11,7 +11,7 @@ import { resolveFontWeightValue } from '@/app/styles/contracts/fontWeight.contra
 import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
 import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
 
-export interface PropsInputSearch extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, Pick<PropsTypography, 'fontSize' | 'fontWeight'> {
+export interface PropsInputSearch extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont {
   modelValue: string;
   placeholder?: string;
   disabled?: boolean;

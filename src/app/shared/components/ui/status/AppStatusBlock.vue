@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsTypography } from '@/app/shared/types/props';
+import type { PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsUppercase } from '@/app/shared/types/props';
 import { computed, useSlots } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
@@ -15,7 +15,7 @@ import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 export type tAppStatusBlockAlign = 'left' | 'center' | 'right';
 
-export interface PropsAppStatusBlock extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, Pick<PropsTypography, 'fontSize' | 'fontWeight' | 'uppercase'> {
+export interface PropsAppStatusBlock extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsUppercase {
   text: string;
   variant?: tAppStatus;
   gap?: tSpaceValue;
