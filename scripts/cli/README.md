@@ -2,6 +2,17 @@
 
 Interactive: `npm run cli`. Direct command: `npm run cli -- <section> <command> [args]`.
 
+## Build / Package
+
+- `npm run cli -- build web debug`
+- `npm run cli -- build web prod`
+- `npm run cli -- build desktop`
+- `npm run cli -- build mobile android [debug|prod]`
+- `npm run cli -- build mobile ios [debug|prod]`
+- `npm run cli -- package desktop [current|mac|win|linux]`
+
+All builds invoke the pre-existing npm scripts. Mobile preparation builds Web assets and runs `cap sync`; opening IDE and launching devices remain in the Platforms section. Desktop packaging is limited to the current host OS; use GitHub Actions for other targets.
+
 ## Development
 
 - `npm run cli -- dev web` (debug)
