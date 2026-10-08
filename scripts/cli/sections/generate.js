@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 import { runNpm } from '../core/npm.js';
 import { printLine } from '../core/terminal.js';
+import * as prettier from 'prettier';
 
 const GENERATORS = [
   { id: 'styles', script: 'app:generate:style-contracts', outputs: ['src/app/shared/styles/contracts'] },
@@ -33,6 +34,15 @@ async function inventory(root, target) {
   return results;
 }
 
+async function normalized(source, filepath, content) {
+  if (!content || !filepath.endsWith('.ts')) return content;
+  const config = (await prettier.resolveConfig(join(source, filepath))) ?? {};
+  return Buffer.from(await prettier.format(content.toString('utf8'), {
+    ...config,
+    filepath: join(source, filepath),
+  }));
+}
+
 async function compareOutputs(source, temporary) {
   const outputs = [...new Set(GENERATORS.flatMap((item) => item.outputs))];
   const changed = [];
@@ -40,7 +50,10 @@ async function compareOutputs(source, temporary) {
     const oldFiles = new Map(await inventory(source, output));
     const newFiles = new Map(await inventory(temporary, output));
     for (const path of new Set([...oldFiles.keys(), ...newFiles.keys()])) {
-      if (!oldFiles.get(path)?.equals(newFiles.get(path)) && !(oldFiles.get(path) === undefined && newFiles.get(path) === undefined)) changed.push(path);
+      const before = await normalized(source, path, oldFiles.get(path));
+      const after = await normalized(source, path, newFiles.get(path));
+      if (!before && !after) continue;
+      if (!before || !after || !before.equals(after)) changed.push(path);
     }
   }
   return changed.sort();
