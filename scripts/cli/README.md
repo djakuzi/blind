@@ -39,3 +39,15 @@ The `--build` flag builds Web assets using existing npm scripts and synchronizes
 - `npm run cli -- project doctor [web|desktop|android|ios]`
 
 Run `npm run cli -- help` to list all commands.
+
+## Generators
+
+- `npm run cli -- generate styles`
+- `npm run cli -- generate icons`
+- `npm run cli -- generate audio`
+- `npm run cli -- generate fonts`
+- `npm run cli -- generate docs`
+- `npm run cli -- generate all`
+- `npm run cli -- generate check`
+
+`generate check` runs the generators in a temporary project copy and compares their outputs with current generated files. It needs local `node_modules` and does not alter the working source tree.
