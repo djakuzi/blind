@@ -1,4 +1,4 @@
-import type { tAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
+import type { tAppThemeMode } from '@/app/shared/styles/contracts/appTheme.contract';
 import { ToolStorage } from '@/core/platform';
 import { APP_THEME_MODE_STORAGE_KEY } from '../settings.const';
 import type { iSettingsState } from '../settings.type';

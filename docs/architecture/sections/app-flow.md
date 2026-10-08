@@ -408,12 +408,13 @@ Domain не должен зависеть от UI-слоёв.
 
 ## Shared
 
-`shared` — слой независимых переиспользуемых примитивов.
+`shared` — слой переиспользуемых примитивов и общих UI-ресурсов приложения.
 
 Сюда могут входить:
 
 - UI atoms/primitives;
 - generic widgets;
+- дизайн-система в `shared/styles`;
 - utilities;
 - helpers;
 - contracts;
@@ -427,9 +428,9 @@ shared
 → не знает о конкретном feature/view/route
 ```
 
-## Styles
+## Shared Styles
 
-`styles` содержит глобальную визуальную систему:
+`src/app/shared/styles` содержит общую дизайн-систему приложения, которую используют переиспользуемые UI-компоненты:
 
 - tokens;
 - contracts;
@@ -440,7 +441,7 @@ shared
 - colors;
 - responsive primitives.
 
-Styles описывают визуальные правила и не должны зависеть от feature logic.
+Styles описывают визуальные правила и не должны зависеть от feature logic. CSS-токены являются source of truth для генерируемых contracts; правила их изменения описаны в [CSS Style](../../contributing/sections/cssStyle.md).
 
 ## Допустимые Зависимости
 
@@ -602,7 +603,7 @@ src/app/features
 src/app/stores
 src/app/domain
 src/app/shared
-src/app/styles
+src/app/shared/styles
 ```
 
 Пути являются навигационными ориентирами, а не обязательной внутренней реализацией.

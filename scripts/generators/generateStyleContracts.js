@@ -2,8 +2,8 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const ROOT_PATH = process.cwd();
-const TOKENS_PATH = path.resolve(ROOT_PATH, 'src/app/styles/tokens');
-const CONTRACTS_PATH = path.resolve(ROOT_PATH, 'src/app/styles/contracts');
+const TOKENS_PATH = path.resolve(ROOT_PATH, 'src/app/shared/styles/tokens');
+const CONTRACTS_PATH = path.resolve(ROOT_PATH, 'src/app/shared/styles/contracts');
 
 const FILE_HEADER = (sourceFile) =>
   [
@@ -83,7 +83,7 @@ function renderColorContract(colorTokens) {
   };
 
   const content = [
-    FILE_HEADER('src/app/styles/tokens/colors.css'),
+    FILE_HEADER('src/app/shared/styles/tokens/colors.css'),
     ...COLOR_GROUP_NAMES.map((name) => renderConstArray(name, groups[name])),
     renderConstArray(
       'COLOR_TOKENS',
@@ -214,7 +214,7 @@ function renderSimpleNumberContract({
 
 function renderBorderContract(borderWidthTokens, borderStyleTokens) {
   return [
-    FILE_HEADER('src/app/styles/tokens/borders.css'),
+    FILE_HEADER('src/app/shared/styles/tokens/borders.css'),
     renderConstArray('BORDER_WIDTH_TOKENS', borderWidthTokens),
     renderConstArray('BORDER_STYLE_TOKENS', borderStyleTokens),
     renderTypeAlias('tBorderWidthToken', 'BORDER_WIDTH_TOKENS'),
@@ -298,7 +298,7 @@ async function generateStyleContracts() {
   await writeContract(
     'fontSize.contract.ts',
     renderSimpleStringContract({
-      sourceFile: 'src/app/styles/tokens/typography.css',
+      sourceFile: 'src/app/shared/styles/tokens/typography.css',
       constName: 'FONT_SIZE_TOKENS',
       typeName: 'tFontSizeToken',
       valueTypeName: 'tFontSizeValue',
@@ -324,7 +324,7 @@ async function generateStyleContracts() {
   await writeContract(
     'fontWeight.contract.ts',
     renderSimpleStringContract({
-      sourceFile: 'src/app/styles/tokens/typography.css',
+      sourceFile: 'src/app/shared/styles/tokens/typography.css',
       constName: 'FONT_WEIGHT_TOKENS',
       typeName: 'tFontWeightToken',
       valueTypeName: 'tFontWeightValue',
@@ -359,7 +359,7 @@ async function generateStyleContracts() {
   await writeContract(
     'radius.contract.ts',
     renderSimpleStringContract({
-      sourceFile: 'src/app/styles/tokens/radius.css',
+      sourceFile: 'src/app/shared/styles/tokens/radius.css',
       constName: 'RADIUS_TOKENS',
       typeName: 'tRadiusToken',
       valueTypeName: 'tRadiusValue',
@@ -384,7 +384,7 @@ async function generateStyleContracts() {
   await writeContract(
     'space.contract.ts',
     renderSimpleNumberContract({
-      sourceFile: 'src/app/styles/tokens/spacing.css',
+      sourceFile: 'src/app/shared/styles/tokens/spacing.css',
       constName: 'SPACE_TOKENS',
       typeName: 'tSpaceToken',
       valueTypeName: 'tSpaceValue',
@@ -410,7 +410,7 @@ async function generateStyleContracts() {
   await writeContract(
     'padding.contract.ts',
     renderSimpleNumberContract({
-      sourceFile: 'src/app/styles/tokens/padding.css',
+      sourceFile: 'src/app/shared/styles/tokens/padding.css',
       constName: 'PADDING_TOKENS',
       typeName: 'tPaddingToken',
       valueTypeName: 'tPaddingValue',
@@ -435,7 +435,7 @@ async function generateStyleContracts() {
   await writeContract(
     'safeArea.contract.ts',
     renderSimpleStringContract({
-      sourceFile: 'src/app/styles/tokens/safearea.css',
+      sourceFile: 'src/app/shared/styles/tokens/safearea.css',
       constName: 'SAFE_AREA_TOKENS',
       typeName: 'tSafeAreaToken',
       valueTypeName: 'tSafeAreaValue',

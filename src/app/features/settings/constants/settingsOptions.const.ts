@@ -1,5 +1,5 @@
-import type { tAppScaleMode } from '@/app/styles/contracts/appScale.contract.ts';
-import type { tAppThemeMode } from '@/app/styles/contracts/appTheme.contract.ts';
+import type { tAppScaleMode } from '@/app/shared/styles/contracts/appScale.contract.ts';
+import type { tAppThemeMode } from '@/app/shared/styles/contracts/appTheme.contract.ts';
 
 type tSettingsThemeMode = tAppThemeMode;
 

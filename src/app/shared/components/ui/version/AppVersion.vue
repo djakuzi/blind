@@ -3,7 +3,7 @@ import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsTypography } from '@/app/shared/types/props/typography.props';
 import { computed } from 'vue';
 
-import { resolveFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
+import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
 import { config } from '@/config';
 
 type tAppVersionVariant = 'primary';

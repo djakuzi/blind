@@ -3,7 +3,7 @@ import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import { computed } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 
-import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 type tAppDistributedRowNode = { type: 'item'; index: number } | { type: 'separator'; index: number };
 

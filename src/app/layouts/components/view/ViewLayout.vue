@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
-import { safeAreaTokenVar } from '@/app/styles/contracts/safeArea.contract';
+import { safeAreaTokenVar } from '@/app/shared/styles/contracts/safeArea.contract';
 
 type tViewLayoutPadding = 'none' | 'safe-area' | 'horizontal' | 'vertical';
 

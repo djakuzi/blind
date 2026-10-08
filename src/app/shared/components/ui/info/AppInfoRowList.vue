@@ -10,13 +10,13 @@ import AppDistributedRow from '@/app/shared/components/layout/row/AppDistributed
 import type { PropsAppDistributedRow } from '@/app/shared/components/layout/row/AppDistributedRow.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { BASE_SIZE_FONT_PRESET, BASE_SIZE_MEDIA_WIDTH_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/presets/base.preset';
-import { resolveBorderWidthValue, type tBorderWidthValue } from '@/app/styles/contracts/border.contract';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import { BASE_SIZE_FONT_PRESET, BASE_SIZE_MEDIA_WIDTH_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/shared/styles/presets/base.preset';
+import { resolveBorderWidthValue, type tBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 
-import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 import type { tIconGroup, tIconName } from '@/core/media/icons';
 
 export type tAppInfoRowListItemIcon = {

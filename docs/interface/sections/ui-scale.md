@@ -26,7 +26,7 @@ Layout при этом продолжает занимать реальный vi
 
 ## Базовый масштаб
 
-В `src/app/styles/tokens/scale.css`:
+В `src/app/shared/styles/tokens/scale.css`:
 
 ```css
 :root {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { FILL_CONTEXT } from '@/app/shared/context/fill/fill.context';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 
 type tAppFillAwareTag = 'span' | 'div';
 

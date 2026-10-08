@@ -3,7 +3,7 @@ import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimension
 import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 
 type tAppLogoVariant = 'blind' | 'blindTextBottom' | 'blindTextRight';
 

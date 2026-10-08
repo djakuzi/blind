@@ -1,5 +1,5 @@
-import type { tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
+import type { tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export interface PropsPadding {
   paddingX?: tPaddingValue;

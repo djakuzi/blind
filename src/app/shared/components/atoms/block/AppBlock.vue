@@ -15,7 +15,7 @@ export interface PropsAppBlock extends PropsWidth, Pick<PropsHeight, 'height'>, 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
+import { resolveSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 const props = withDefaults(defineProps<PropsAppBlock>(), {
   tag: 'div',

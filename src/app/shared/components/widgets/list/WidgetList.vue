@@ -5,11 +5,11 @@ import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsAccessibilityLabel } from '@/app/shared/types/props/accessibility.props';
 import type { CSSProperties } from 'vue';
 
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import type { tBorderStyleValue, tBorderWidthValue } from '@/app/styles/contracts/border.contract';
-import type { tColorValue } from '@/app/styles/contracts/color.contract';
-import type { tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import type { tBorderStyleValue, tBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
+import type { tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import type { tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export type tWidgetListKey = string | number;
 
@@ -33,9 +33,9 @@ export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<
 <script setup lang="ts" generic="TItem extends Record<string, unknown>">
 import { computed } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/styles/contracts/border.contract';
-import { resolveColorValue } from '@/app/styles/contracts/color.contract';
-import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
+import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
+import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 
 const props = withDefaults(defineProps<PropsWidgetList<TItem>>(), {
   itemKey: undefined,

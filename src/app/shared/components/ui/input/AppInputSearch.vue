@@ -9,13 +9,13 @@ import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.
 import { computed, ref } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 
-import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
-import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/styles/contracts/border.contract';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import { resolveFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
-import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
+import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
+import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import { resolveFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
+import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 
 export interface PropsInputSearch
   extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsDisabled, PropsAccessibility {

@@ -6,11 +6,11 @@ import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/app/shared/lib/style';
 
-import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/styles/contracts/border.contract';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveLayerValue, type tLayerValue } from '@/app/styles/contracts/layer.contract';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
+import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveLayerValue, type tLayerValue } from '@/app/shared/styles/contracts/layer.contract';
+import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 
 export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'>, PropsSurface, PropsAccessibility {
   modelValue: boolean;

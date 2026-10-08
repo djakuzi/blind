@@ -12,7 +12,7 @@ import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppSwapTransition from '@/app/shared/components/effects/transition/AppSwapTransition.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
-import { spaceTokenVar } from '@/app/styles/contracts/space.contract';
+import { spaceTokenVar } from '@/app/shared/styles/contracts/space.contract';
 
 const router = useRouter();
 const gameModeStore = useGameModeStore();

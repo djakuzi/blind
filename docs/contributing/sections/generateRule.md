@@ -30,7 +30,7 @@
 Примеры источников:
 
 - `package.json`
-- `src/app/styles/tokens/*`
+- `src/app/shared/styles/tokens/*`
 - `src/assets/*`
 
 ## Правила изменения файлов

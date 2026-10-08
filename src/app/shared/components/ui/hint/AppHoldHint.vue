@@ -7,10 +7,10 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import AppPulseAttention from '@/app/shared/components/effects/attention/AppPulseAttention.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 
-import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/presets/base.preset';
-import { resolveColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/shared/styles/presets/base.preset';
+import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 import { ToolInput } from '@/core/platform';
 
 export type tAppHoldHintDirection = 'row' | 'column';

@@ -11,11 +11,11 @@ import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
-import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
-import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
+import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
+import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 import { ToolVibration } from '@/core/platform';
 
 export interface iAppSegmentedCardOptionImage {

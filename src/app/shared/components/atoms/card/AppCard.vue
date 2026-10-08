@@ -7,11 +7,11 @@ import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/styles/contracts/border.contract';
-import { resolveColorValue } from '@/app/styles/contracts/color.contract';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
+import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 
 type tAppCardTag = 'div' | 'section' | 'article';
 

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { tLayerValue } from '@/app/styles/contracts/layer.contract';
-import { resolveLayerValue } from '@/app/styles/contracts/layer.contract';
-import type { tSafeAreaToken } from '@/app/styles/contracts/safeArea.contract';
-import { isSafeAreaToken, safeAreaTokenVar } from '@/app/styles/contracts/safeArea.contract';
-import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
-import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
+import type { tLayerValue } from '@/app/shared/styles/contracts/layer.contract';
+import { resolveLayerValue } from '@/app/shared/styles/contracts/layer.contract';
+import type { tSafeAreaToken } from '@/app/shared/styles/contracts/safeArea.contract';
+import { isSafeAreaToken, safeAreaTokenVar } from '@/app/shared/styles/contracts/safeArea.contract';
+import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
+import { resolveSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 type tAppPositionType = 'fixed' | 'absolute' | 'relative' | 'sticky';
 type tAppPositionCenter = 'x' | 'y' | 'xy';

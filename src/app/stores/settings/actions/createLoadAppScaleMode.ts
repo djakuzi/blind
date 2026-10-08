@@ -1,4 +1,4 @@
-import { APP_SCALE_SYSTEM_MODE, isAppScaleMode, resolveNearestAppScalePresetMode } from '@/app/styles/contracts/appScale.contract';
+import { APP_SCALE_SYSTEM_MODE, isAppScaleMode, resolveNearestAppScalePresetMode } from '@/app/shared/styles/contracts/appScale.contract';
 import { ToolStorage, ToolSystem } from '@/core/platform';
 import { APP_SCALE_MODE_STORAGE_KEY } from '../settings.const';
 import type { iSettingsState } from '../settings.type';

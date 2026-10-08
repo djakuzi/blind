@@ -10,13 +10,13 @@ import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
 import { LibStyle } from '@/app/shared/lib/style';
 
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/styles/contracts/border.contract';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveFontSizeValue, type tFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
 
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
+import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 
 export type tAppButtonVariant = 'primary' | 'secondary' | 'danger';
 

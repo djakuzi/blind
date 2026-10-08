@@ -10,12 +10,12 @@ import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 
 import type { tAppStatus } from '@/app/shared/types/status';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { BASE_SIZE_FONT_PRESET } from '@/app/styles/presets/base.preset';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import { BASE_SIZE_FONT_PRESET } from '@/app/shared/styles/presets/base.preset';
 
-import type { tColorValue } from '@/app/styles/contracts/color.contract';
+import type { tColorValue } from '@/app/shared/styles/contracts/color.contract';
 
-import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
+import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export type tAppStatusBlockAlign = 'left' | 'center' | 'right';
 

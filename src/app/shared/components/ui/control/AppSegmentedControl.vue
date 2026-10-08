@@ -9,9 +9,9 @@ import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
 
-import { CONTROL_SIZE_PRESET } from '@/app/styles/presets/control.preset';
-import { resolvePaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue } from '@/app/styles/contracts/radius.contract';
+import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
+import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 import { ToolVibration } from '@/core/platform';
 
 export interface iAppSegmentedControlOption {

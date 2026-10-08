@@ -7,9 +7,9 @@ import { computed } from 'vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
 
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveRadiusValue, type tRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 import { ToolVibration } from '@/core/platform';
 
 export interface PropsAppSwitch extends PropsWidth, PropsBorderRadius, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {

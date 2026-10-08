@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { PropsTypography, PropsTextOverflow } from '@/app/shared/types/props/typography.props';
 import { computed } from 'vue';
-import { resolveColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import { resolveFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
+import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import { resolveFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
 
 type tAppTextTag = 'p' | 'span' | 'div' | 'label';
 

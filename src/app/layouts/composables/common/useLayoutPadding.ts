@@ -1,7 +1,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import type { tLayoutSafeArea } from '@/app/layouts/types/layout.type';
-import { safeAreaTokenVar } from '@/app/styles/contracts/safeArea.contract';
+import { safeAreaTokenVar } from '@/app/shared/styles/contracts/safeArea.contract';
 
 function resolveLayoutPadding(safeArea: tLayoutSafeArea) {
   const vertical = safeAreaTokenVar('vertical');

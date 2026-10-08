@@ -5,7 +5,7 @@ import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
 
-import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
+import { resolveSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 type tAppFlexTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer';
 

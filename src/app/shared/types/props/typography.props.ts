@@ -1,6 +1,6 @@
-import type { tColorValue } from '@/app/styles/contracts/color.contract';
-import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import type { tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
+import type { tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import type { tFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import type { tFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
 
 export interface PropsFont {
   fontSize?: tFontSizeValue;

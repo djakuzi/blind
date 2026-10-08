@@ -1,4 +1,4 @@
-import { APP_THEME_SYSTEM_MODE, isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
+import { APP_THEME_SYSTEM_MODE, isAppThemeMode } from '@/app/shared/styles/contracts/appTheme.contract';
 import { ToolStorage } from '@/core/platform';
 import { APP_THEME_MODE_STORAGE_KEY } from '../settings.const';
 import type { iSettingsState } from '../settings.type';

@@ -7,9 +7,9 @@ import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserve
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
 import { ToolVibration } from '@/core/platform';

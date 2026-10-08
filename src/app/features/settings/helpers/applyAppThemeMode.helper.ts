@@ -2,7 +2,7 @@ import {
   type tAppThemeMode,
   APP_THEME_SYSTEM_MODE,
   APP_THEME_ATTRIBUTE_NAME,
-} from '@/app/styles/contracts/appTheme.contract';
+} from '@/app/shared/styles/contracts/appTheme.contract';
 import { DomAttribute } from '@/core/dom/attribute';
 import { ToolSystem } from '@/core/platform';
 

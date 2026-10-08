@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import ProviderLoaderApp from '@/app/providers/ProviderLoaderApp.vue';
-import '@/app/styles/index.css';
+import '@/app/shared/styles/index.css';
 import { useSetupLifecycle } from '@/core/app/setup/lifecycle/useSetupLifecycle';
 
 const setup = useSetupLifecycle();
