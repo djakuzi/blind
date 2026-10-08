@@ -1,19 +1,17 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsHeight } from '@/app/shared/types/props';
+import type { CSSProperties } from 'vue';
 import { computed, ref } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
-import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 
 type tAppImageFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
 type tAppImageFetchPriority = 'high' | 'low' | 'auto';
 
-export interface PropsAppImage {
+export interface PropsAppImage extends PropsWidth, Pick<PropsHeight, 'height'> {
   src: string;
   alt?: string;
-  maxWidth?: PropsAppBlock['maxWidth'];
-  width?: PropsAppBlock['width'];
-  height?: PropsAppBlock['height'];
   objectFit?: tAppImageFit;
-  display?: PropsAppBlock['display'];
+  display?: CSSProperties['display'];
   aspectRatio?: string;
   loading?: 'eager' | 'lazy';
   decoding?: 'async' | 'sync' | 'auto';

@@ -1,18 +1,13 @@
 <script lang="ts">
+import type { PropsWidth, PropsHeight, PropsMargin } from '@/app/shared/types/props';
 import type { CSSProperties } from 'vue';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 type tAppBlockTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer' | 'span';
 
-export interface PropsAppBlock {
+export interface PropsAppBlock extends PropsWidth, Pick<PropsHeight, 'height'>, PropsMargin {
   tag?: tAppBlockTag;
   display?: CSSProperties['display'];
   overflow?: CSSProperties['overflow'];
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  height?: tStyleSizeValue;
-  margin?: tSpaceValue;
 }
 </script>
 
