@@ -27,7 +27,9 @@
           "loadError": "Не удалось загрузить режимы игры",
           "loading": "Загрузка...",
           "modeOptionsAccessibilityLabel": "Параметры режима",
-          "connectionTypesAccessibilityLabel": "Доступные способы подключения"
+          "connectionTypesAccessibilityLabel": "Доступные способы подключения",
+          "players": "Игроки",
+          "connection": "Подключение"
         },
         "modals": {}
       },
@@ -82,21 +84,21 @@
   },
   "game": {
     "modes": {
-      "DUEL": {
+      "single-hit": {
         "title": "DUEL",
         "description": "Одно попадание — одна жизнь"
       },
-      "COMBAT": {
+      "health": {
         "title": "COMBAT",
         "description": "Сражайся, пока здоровье не закончится"
       },
-      "CLASH": {
-        "title": "CLASH",
-        "description": "Одна жизнь. Одна команда."
-      },
-      "BATTLE": {
-        "title": "BATTLE",
-        "description": "Командный бой до последнего выжившего"
+      "survival": {
+        "title": "SURVIVAL",
+        "description": "Продержись как можно дольше",
+        "locked": {
+          "title": "Режим недоступен",
+          "description": "Этот режим ещё в разработке"
+        }
       }
     },
     "format": {

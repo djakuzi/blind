@@ -11,6 +11,8 @@ export interface LocaleViewPreGame {
       loading: string;
       modeOptionsAccessibilityLabel: string;
       connectionTypesAccessibilityLabel: string;
+      players: string;
+      connection: string;
     };
     modals: Record<string, never>;
   };

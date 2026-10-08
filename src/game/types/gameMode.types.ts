@@ -1,4 +1,7 @@
-export type tGameModeWinCondition = 'single-hit' | 'health';
+export type tPlayableGameModeKey = 'single-hit' | 'health';
+export type tGameModeKey = tPlayableGameModeKey | 'survival';
+
+export type tGameModeWinCondition = tPlayableGameModeKey;
 
 export type tOptionGameMode = {
   readonly players: number;

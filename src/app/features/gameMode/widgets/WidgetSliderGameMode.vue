@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, watch } from 'vue';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import UiCardGameMode from '@/app/features/gameMode/ui/UiCardGameMode.vue';
-import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
-import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
-import { useGameStore } from '@/app/stores/game/game.store';
+import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
+import type { tGameModeKey } from '@/game/types/gameMode.types';
 
-const router = useRouter();
-const gameStore = useGameStore();
+export interface iWidgetSliderGameModeSelection {
+  key: 'mode';
+  value: tGameModeKey;
+}
 
-const modes = computed(() => gameStore.modes);
-const activeIndex = ref(0);
+const emit = defineEmits<{
+  select: [selection: iWidgetSliderGameModeSelection];
+  complete: [];
+}>();
+
+const gameModeStore = useGameModeStore();
+
+const activeIndex = defineModel<number>({ default: 0 });
+
+const modes = computed(() => gameModeStore.modes);
+const activeMode = computed(() => modes.value[activeIndex.value] ?? null);
 
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
 
@@ -21,10 +30,20 @@ function formatItemAccessibilityLabel(index: number, count: number) {
 }
 
 function handleModeComplete() {
-  router.push({
-    name: KEY_ROUTE.preGame.typeConnection,
-  });
+  emit('complete');
 }
+
+watch(
+  () => activeMode.value?.key,
+  (modeKey) => {
+    if (modeKey) {
+      emit('select', {
+        key: 'mode',
+        value: modeKey,
+      });
+    }
+  },
+);
 </script>
 
 <template>
@@ -35,12 +54,13 @@ function handleModeComplete() {
       :count="modes.length"
       width="100%"
       max-width="100%"
-      item-width="90%"
-      item-max-width="120rem"
+      item-width="70rem"
+      item-max-width="70rem"
       :item-gap="8"
       size="big"
       :inactive-scale="0.88"
       :inactive-opacity="0.42"
+      viewport-bleed="8rem"
       :accessibility-label="preGameLocale.accessibilityLabel"
       :item-accessibility-label="formatItemAccessibilityLabel"
     >
@@ -48,6 +68,7 @@ function handleModeComplete() {
         <UiCardGameMode
           v-if="modes[index]"
           :mode="modes[index]"
+          :active="active"
           :disabled="!active"
           :image-loading="active ? 'eager' : 'lazy'"
           :image-fetch-priority="active ? 'high' : 'low'"
@@ -55,17 +76,6 @@ function handleModeComplete() {
           :options-accessibility-label="preGameLocale.modeOptionsAccessibilityLabel"
           :connection-types-accessibility-label="preGameLocale.connectionTypesAccessibilityLabel"
           @complete="handleModeComplete"
-        />
-      </template>
-
-      <template #hint>
-        <AppHoldHint
-          :text="preGameLocale.holdHint"
-          :fine-pointer-items="[preGameLocale.desktopWheelHint, preGameLocale.desktopSelectHint]"
-          direction="column"
-          fine-pointer-direction="column"
-          size="middle"
-          max-width="100%"
         />
       </template>
     </AppSlider>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import AppFadeTransition from '@/app/shared/components/effects/transition/AppFadeTransition.vue';
+import AppRevealTransition from '@/app/shared/components/effects/transition/AppRevealTransition.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppGrid from '@/app/shared/components/atoms/block/AppGrid.vue';
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
@@ -146,12 +148,15 @@ async function handleErrorAction(action: iLoaderErrorAction) {
       left: 0,
     }"
   >
+    <AppFadeTransition :active="phase === 'leaving'" :duration="2300" hold-until-end>
     <AppGrid :class="loaderClass" place-items="center" min-height="100dvh">
       <AppFlex class="widget-loader-app__content" direction="column" align="center" max-width="100%" width="100%">
-        <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
+        <AppFadeTransition :active="phase === 'leaving'">
+          <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
+        </AppFadeTransition>
 
-        <AppStatusBlock
-          v-if="error"
+        <AppFadeTransition v-if="error" :active="phase === 'leaving'">
+          <AppStatusBlock
           class="widget-loader-app__status"
           :text="error.title"
           variant="error"
@@ -172,10 +177,11 @@ async function handleErrorAction(action: iLoaderErrorAction) {
               />
             </AppFlex>
           </template>
-        </AppStatusBlock>
+          </AppStatusBlock>
+        </AppFadeTransition>
 
-        <AppLineLoader
-          v-else
+        <AppFadeTransition v-else :active="phase === 'leaving'">
+          <AppLineLoader
           class="widget-loader-app__status"
           :mode="progressMode"
           :progress="progress"
@@ -184,11 +190,15 @@ async function handleErrorAction(action: iLoaderErrorAction) {
           width="70rem"
           max-width="100%"
           @complete="handleLoaderProgressComplete"
-        />
+          />
+        </AppFadeTransition>
       </AppFlex>
 
-      <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="58rem" height="58rem" />
+      <AppRevealTransition :active="phase === 'leaving'" :duration="2100" :delay="120">
+        <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="58rem" height="58rem" />
+      </AppRevealTransition>
 
+      <AppFadeTransition :active="phase === 'leaving'">
       <AppPosition
         class="widget-loader-app__version"
         type="absolute"
@@ -199,7 +209,9 @@ async function handleErrorAction(action: iLoaderErrorAction) {
       >
         <AppVersion size="big" />
       </AppPosition>
+      </AppFadeTransition>
     </AppGrid>
+    </AppFadeTransition>
   </AppPosition>
 </template>
 
@@ -209,13 +221,9 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   overflow: hidden;
   padding: var(--app-safe-area-vertical) var(--app-safe-area-horizontal);
   background: var(--app-color-background);
-  --widget-loader-app-leave-duration: 2300ms;
 }
 
-.widget-loader-app--leaving {
-  pointer-events: none;
-  animation: widget-loader-app-background-leave var(--widget-loader-app-leave-duration) ease-out forwards;
-}
+.widget-loader-app--leaving { pointer-events: none; }
 
 .widget-loader-app__content {
   gap: var(--app-space-5);
@@ -232,80 +240,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   transform: translate(-50%, -50%) scale(0.82);
 }
 
-.widget-loader-app--leaving .widget-loader-app__wordmark,
-.widget-loader-app--leaving .widget-loader-app__status,
-.widget-loader-app--leaving .widget-loader-app__version {
-  animation: widget-loader-app-content-leave 320ms ease-out forwards;
-}
-
-.widget-loader-app--leaving .widget-loader-app__exit-logo {
-  will-change: transform, opacity;
-  animation: widget-loader-app-logo-leave 2100ms 120ms forwards;
-}
-
-@keyframes widget-loader-app-content-leave {
-  to {
-    opacity: 0;
-  }
-}
-
-
-@keyframes widget-loader-app-logo-leave {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.82);
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  24% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.06);
-  }
-
-  36% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  72% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-    animation-timing-function: cubic-bezier(0.4, 0, 0.8, 0.2);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.94);
-  }
-}
-
-@keyframes widget-loader-app-background-leave {
-  0%,
-  68% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .widget-loader-app--leaving {
-    animation: widget-loader-app-reduced-leave 200ms ease-out forwards;
-  }
-
-  .widget-loader-app--leaving .widget-loader-app__status,
-  .widget-loader-app--leaving .widget-loader-app__version,
-  .widget-loader-app--leaving .widget-loader-app__wordmark,
-  .widget-loader-app--leaving .widget-loader-app__exit-logo {
-    animation: none;
-  }
-
-  @keyframes widget-loader-app-reduced-leave {
-    to {
-      opacity: 0;
-    }
-  }
+  .widget-loader-app--leaving { pointer-events: none; }
 }
 </style>

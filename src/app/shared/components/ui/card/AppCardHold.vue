@@ -25,6 +25,7 @@ withDefaults(defineProps<PropsAppCardHold>(), {
   overflow: 'hidden',
   actions: undefined,
   disabled: false,
+  color: 'primary',
   flowFrontDuration: 1200,
   waveHeight: 'clamp(3.5rem, 12%, 6rem)',
   waveLengthScale: 1.3,
@@ -88,6 +89,7 @@ function handleComplete() {
         :overflow="overflow"
       >
         <AppBloodFill
+          :color="color"
           :flow-front-duration="flowFrontDuration"
           :is-active="isProgressActive"
           :wave-height="waveHeight"
@@ -97,6 +99,12 @@ function handleComplete() {
         <div class="app-card-hold__content">
           <slot :is-holding="isHolding" :is-complete="isComplete" />
         </div>
+
+        <slot
+          name="overlay"
+          :is-holding="isHolding"
+          :is-complete="isComplete"
+        />
       </AppCard>
     </template>
   </AppHoldAction>

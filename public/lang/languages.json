@@ -3,14 +3,14 @@
     "key": "en",
     "name": "English",
     "img": "/lang/images/en.svg",
-    "version": "3",
+    "version": "7",
     "isDefault": true
   },
   {
     "key": "ru",
     "name": "Русский",
     "img": "/lang/images/ru.svg",
-    "version": "3",
+    "version": "7",
     "isDefault": false
   }
 ]

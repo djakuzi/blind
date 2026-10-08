@@ -1,20 +1,15 @@
 <script setup lang="ts">
+import type { PropsTypography, PropsTextOverflow } from '@/app/shared/types/props/typography.props';
 import { computed } from 'vue';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import { resolveFontWeightValue, type tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
+import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import { resolveFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
 
 type tAppTextTag = 'p' | 'span' | 'div' | 'label';
 
-export interface PropsAppText {
+export interface PropsAppText extends PropsTypography, PropsTextOverflow {
   text: string;
   tag?: tAppTextTag;
-  color?: tColorValue;
-  fontSize?: tFontSizeValue;
-  fontWeight?: tFontWeightValue;
-  uppercase?: boolean;
-  ellipsis?: boolean;
-  maxLines?: number;
 }
 
 const props = withDefaults(defineProps<PropsAppText>(), {

@@ -1,5 +1,6 @@
-import type { iApiGameModeData } from './common';
+import type { iApiGameModeData, iApiGameModesResourceData } from './common';
 
-export interface iResponseGameMode extends iApiGameModeData {
-  key: string;
+export interface iResponseGameModes {
+  modes: iApiGameModeData[];
+  data: iApiGameModesResourceData;
 }

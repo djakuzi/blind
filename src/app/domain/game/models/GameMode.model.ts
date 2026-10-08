@@ -1,19 +1,40 @@
-import type { iApiGameModeData } from '../type/api/common';
+import type {
+  iApiGameModeData,
+  iApiThemeMedia,
+} from '../type/api/common';
 
-export interface iPayloadModelGameMode extends iApiGameModeData {
-  key: string;
+export interface iGameMode {
+  readonly key: iApiGameModeData['key'];
+  readonly name: string;
+  readonly rounds: number;
+  readonly options: string[];
+  readonly locked: boolean;
+  readonly img: iApiThemeMedia;
 }
 
-export class ModelGameMode {
-  readonly key: string;
-  readonly img: iApiGameModeData['img'];
-  readonly options: iApiGameModeData['options'];
-  readonly typeConnection: iApiGameModeData['typeConnection'];
+export interface iPayloadModelGameMode extends iApiGameModeData {
+  image: iApiThemeMedia;
+}
+
+export class ModelGameMode implements iGameMode {
+  readonly key: iApiGameModeData['key'];
+  readonly name: string;
+  readonly rounds: number;
+  readonly options: string[];
+  readonly locked: boolean;
+
+  private readonly image: iApiThemeMedia;
 
   constructor(payload: iPayloadModelGameMode) {
     this.key = payload.key;
-    this.img = payload.img;
+    this.name = payload.name;
+    this.rounds = payload.rounds;
     this.options = payload.options;
-    this.typeConnection = payload.typeConnection;
+    this.locked = payload.locked;
+    this.image = payload.image;
+  }
+
+  get img(): iApiThemeMedia {
+    return this.image;
   }
 }

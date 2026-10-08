@@ -1,15 +1,14 @@
 <script setup lang="ts">
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsTypography } from '@/app/shared/types/props/typography.props';
 import { computed } from 'vue';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import type { tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import { resolveFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
+
+import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
 import { config } from '@/config';
 
 type tAppVersionVariant = 'primary';
 
-interface Props {
-  size?: tBaseSizeVariant;
-  fontSize?: tFontSizeValue;
+interface Props extends PropsSizeVariant, Pick<PropsTypography, 'fontSize'> {
   variant?: tAppVersionVariant;
 }
 

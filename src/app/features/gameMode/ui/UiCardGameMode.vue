@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ModelGameMode } from '@/app/domain/game/models/GameMode.model';
+import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
+import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
 import AppCardHold from '@/app/shared/components/ui/card/AppCardHold.vue';
-import AppInfoRowList from '@/app/shared/components/ui/info/AppInfoRowList.vue';
-import type { iAppInfoRowListItem } from '@/app/shared/components/ui/info/AppInfoRowList.vue';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
-import { useLanguageStore } from '@/app/stores/language/language.store';
-import { formatGameModePlayers, formatGameModeRounds } from '../helpers/formatGameMode.helper';
 
 export interface PropsUiCardGameMode {
-  mode: ModelGameMode;
+  mode: iGameMode;
   optionsAccessibilityLabel: string;
   connectionTypesAccessibilityLabel: string;
+  active?: boolean;
   disabled?: boolean;
   imageLoading?: 'eager' | 'lazy';
   imageFetchPriority?: 'high' | 'low' | 'auto';
@@ -24,6 +24,7 @@ export interface PropsUiCardGameMode {
 }
 
 const props = withDefaults(defineProps<PropsUiCardGameMode>(), {
+  active: false,
   disabled: false,
   imageLoading: 'lazy',
   imageFetchPriority: 'low',
@@ -35,44 +36,17 @@ const emit = defineEmits<{
 }>();
 
 const { resolvedThemeMode } = useAppThemeMode();
-const languageStore = useLanguageStore();
-const locale = useLocale();
+const modeLocale = useLocale((locale) => locale.game.modes[props.mode.key]);
 
 const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
-
-const currentLanguageCode = computed(() => {
-  if (!languageStore.currentLanguage) {
-    throw new Error('Current language is not initialized');
-  }
-
-  return languageStore.currentLanguage.key;
-});
-
-const modeLocale = computed(() => locale.value.game.modes[props.mode.key]);
-
-const modeTitle = computed(() => modeLocale.value?.title ?? props.mode.key);
-
 const modeDescription = computed(() => modeLocale.value?.description ?? '');
-
-const optionItems = computed<iAppInfoRowListItem[]>(() => [
-  {
-    id: 'players',
-    text: formatGameModePlayers(props.mode, currentLanguageCode.value, locale.value),
-  },
-  {
-    id: 'rounds',
-    text: formatGameModeRounds(props.mode, currentLanguageCode.value, locale.value),
-  },
-]);
-
-const connectionItems = computed<iAppInfoRowListItem[]>(() =>
-  props.mode.typeConnection.map((connectionType) => ({
-    id: connectionType,
-    text: locale.value.connectionTypes[connectionType].title,
-  })),
-);
+const isDisabled = computed(() => props.disabled || props.mode.locked);
 
 function handleComplete() {
+  if (isDisabled.value) {
+    return;
+  }
+
   emit('complete');
 }
 </script>
@@ -80,86 +54,91 @@ function handleComplete() {
 <template>
   <AppCardHold
     class="ui-card-game-mode"
-    :disabled="disabled"
+    :class="{
+      'ui-card-game-mode--active': active && !mode.locked,
+      'ui-card-game-mode--locked': mode.locked,
+    }"
+    :disabled="isDisabled"
+    :color="mode.locked ? 'text-disabled' : 'primary'"
     width="100%"
     max-width="100%"
     size="big"
-    :padding-x="0"
-    :padding-y="8"
     background-color="surface-primary"
     border-color="border-contrast"
     border-width="thick"
-    border-radius="2xl"
+    border-radius="lg"
     overflow="hidden"
-    :initial-progress="20"
+    :initial-progress="0"
     @complete="handleComplete"
   >
-    <div class="ui-card-game-mode__layout">
-      <div class="ui-card-game-mode__main">
-        <div class="ui-card-game-mode__header">
-          <AppFillAware color="text-primary" filled-color="on-primary">
-            <AppTitle :text="modeTitle" tag="h2" color="inherit" font-size="2xxl" font-weight="bold" />
-          </AppFillAware>
+    <AppFlex
+      class="ui-card-game-mode__main"
+      direction="column"
+      align="center"
+      :justify="mode.locked ? 'between' : 'space-evenly'"
+      width="100%"
+    >
+      <AppFillAware
+        :color="mode.locked ? 'text-disabled' : 'text-primary'"
+        :filled-color="mode.locked ? 'text-disabled' : 'on-primary'"
+      >
+        <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
+      </AppFillAware>
 
-          <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">
-            <AppText
-              :text="modeDescription"
-              color="inherit"
-              font-size="lg"
-              font-weight="medium"
-              :uppercase="true"
-              :ellipsis="true"
-              :max-lines="1"
-            />
-          </AppFillAware>
-        </div>
+      <AppImage
+        v-if="!mode.locked"
+        class="ui-card-game-mode__image"
+        :src="imageSource"
+        :alt="mode.name"
+        width="15rem"
+        max-width="30%"
+        height="auto"
+        object-fit="contain"
+        aspect-ratio="1 / 1"
+        :loading="imageLoading"
+        :fetch-priority="imageFetchPriority"
+        :should-load="imageShouldLoad"
+      />
 
-        <AppImage
-          class="ui-card-game-mode__image"
-          :src="imageSource"
-          :alt="modeTitle"
-          width="20rem"
-          max-width="30%"
-          height="auto"
-          object-fit="contain"
-          aspect-ratio="1 / 1"
-          :loading="imageLoading"
-          :fetch-priority="imageFetchPriority"
-          :should-load="imageShouldLoad"
+      <AppFillAware
+        class="ui-card-game-mode__description"
+        :color="mode.locked ? 'text-disabled' : 'text-secondary'"
+        :filled-color="mode.locked ? 'text-disabled' : 'on-primary'"
+      >
+        <AppText
+          :text="modeDescription"
+          color="inherit"
+          font-size="lg"
+          font-weight="medium"
+          :uppercase="true"
+          :ellipsis="true"
+          :max-lines="1"
         />
-      </div>
+      </AppFillAware>
+    </AppFlex>
 
-      <div class="ui-card-game-mode__footer">
-        <AppFillAware class="ui-card-game-mode__info" tag="div" color="text-primary" filled-color="on-primary" :initial-filled="true">
-          <AppInfoRowList
-            :items="optionItems"
-            width="auto"
-            max-width="100%"
-            size="big"
-            text-color="inherit"
-            divider-color="currentColor"
-            font-weight="bold"
-            :accessibility-label="optionsAccessibilityLabel"
-            :center-even="true"
-          />
-        </AppFillAware>
+    <template #overlay>
+      <div
+        v-if="mode.locked"
+        class="ui-card-game-mode__locked-overlay"
+        aria-hidden="true"
+      />
 
-        <AppFillAware class="ui-card-game-mode__info" tag="div" color="text-primary" filled-color="on-primary" :initial-filled="true">
-          <AppInfoRowList
-            :items="connectionItems"
-            width="auto"
-            max-width="100%"
-            size="big"
-            text-color="inherit"
-            divider-color="currentColor"
-            font-weight="medium"
-            :center-even="false"
-            :center-odd="false"
-            :accessibility-label="connectionTypesAccessibilityLabel"
-          />
-        </AppFillAware>
-      </div>
-    </div>
+      <AppPosition
+        v-if="mode.locked"
+        class="ui-card-game-mode__locked-icon"
+        type="absolute"
+        center="xy"
+        layer="raised"
+      >
+        <AppIcon
+          group="locked"
+          icon="lock"
+          width="8rem"
+          height="8rem"
+        />
+      </AppPosition>
+    </template>
   </AppCardHold>
 </template>
 
@@ -167,13 +146,22 @@ function handleComplete() {
 .ui-card-game-mode :deep(.app-card-hold) {
   height: 100%;
   transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    background-color 160ms ease;
+    border-color var(--app-motion-duration-medium) var(--app-motion-ease-default),
+    box-shadow var(--app-motion-duration-medium) var(--app-motion-ease-default),
+    background-color var(--app-motion-duration-medium) var(--app-motion-ease-default);
+}
+
+.ui-card-game-mode--active :deep(.app-card-hold) {
+  border-color: var(--app-color-primary);
+  box-shadow:
+    0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 34%, transparent),
+    0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent),
+    0 0 5rem color-mix(in srgb, var(--app-color-primary) 18%, transparent),
+    0 1rem 5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .ui-card-game-mode :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
+  .ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked) :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
     border-color: var(--app-color-primary);
     box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 18%, transparent);
   }
@@ -183,33 +171,10 @@ function handleComplete() {
   height: 100%;
 }
 
-.ui-card-game-mode__layout {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+.ui-card-game-mode__main {
   height: 100%;
   min-width: 0;
-  gap: var(--app-space-12);
-}
-
-.ui-card-game-mode__main {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  min-width: 0;
   min-height: 0;
-  gap: var(--app-space-8);
-}
-
-.ui-card-game-mode__header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  min-width: 0;
-  gap: var(--app-space-12);
   text-align: center;
 }
 
@@ -222,21 +187,18 @@ function handleComplete() {
   pointer-events: none;
 }
 
-.ui-card-game-mode__footer {
-  display: flex;
-  flex: 0 0 25%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-  gap: var(--app-space-2);
+.ui-card-game-mode__locked-overlay {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: color-mix(in srgb, var(--app-color-surface-primary) 48%, transparent);
+  backdrop-filter: blur(2px) contrast(1);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
 }
 
-.ui-card-game-mode__info {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
+.ui-card-game-mode__locked-icon {
+  opacity: 0.55;
+  pointer-events: none;
 }
 </style>

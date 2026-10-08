@@ -1,33 +1,31 @@
 <script setup lang="ts">
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsGap } from '@/app/shared/types/props/spacing.props';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsTypography, PropsUppercase } from '@/app/shared/types/props/typography.props';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import AppPulseAttention from '@/app/shared/components/effects/attention/AppPulseAttention.vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/styles/presets/base.preset';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+
+import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/shared/styles/presets/base.preset';
+import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 import { ToolInput } from '@/core/platform';
 
 export type tAppHoldHintDirection = 'row' | 'column';
 
-export interface PropsAppHoldHint {
+export interface PropsAppHoldHint
+  extends PropsSizeVariant, PropsGap, Pick<PropsWidth, 'maxWidth'>, Pick<PropsTypography, 'color' | 'fontSize'>, PropsUppercase {
   text?: string;
   items?: readonly string[];
   finePointerItems?: readonly string[];
-  size?: tBaseSizeVariant;
   direction?: tAppHoldHintDirection;
   finePointerDirection?: tAppHoldHintDirection;
-  gap?: tSpaceValue;
   finePointerGap?: tSpaceValue;
-  maxWidth?: tStyleSizeValue;
-  color?: tColorValue;
-  fontSize?: tFontSizeValue;
   pulse?: boolean;
   pulseDuration?: number;
   pulseScale?: number;
-  uppercase?: boolean;
 }
 
 const props = withDefaults(defineProps<PropsAppHoldHint>(), {

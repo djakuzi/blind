@@ -1,35 +1,16 @@
 <script setup lang="ts">
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import { computed } from 'vue';
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
 import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
+import type { PropsAppHoldAction } from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import type { tAudioId } from '@/core/media/audio';
 
 type tAppButtonHoldVariant = 'primary';
 
-interface iAppButtonHoldActions {
-  complete?: () => void;
-}
-
-interface Props {
-  actions?: iAppButtonHoldActions;
-  disabled?: boolean;
+interface Props extends Omit<PropsAppHoldAction, 'moveCancelThreshold'>, PropsSizeVariant {
   bloodFlowFrontDuration?: number;
-  duration?: number;
-  fillDuration?: number;
-  holdStartDelay?: number;
-  initialProgress?: number;
-  releaseDuration?: number;
-  progressSound?: tAudioId | null;
-  sound?: tAudioId | null;
-  startSound?: tAudioId | null;
-  vibrationDuration?: number;
-  size?: tBaseSizeVariant;
-  maxWidth?: tStyleSizeValue;
-  width?: tStyleSizeValue;
   variant?: tAppButtonHoldVariant;
   text?: string;
 }

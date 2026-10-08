@@ -1,72 +1,83 @@
-[
-  {
-    "key": "DUEL",
-    "img": {
-      "dark": "/game/images/gameMode/duel-dark.webp",
-      "light": "/game/images/gameMode/duel-light.webp"
-    },
-    "options": {
-      "teamSize": 1,
-      "players": 2,
+{
+  "modes": [
+    {
+      "key": "single-hit",
+      "name": "DUEL",
       "rounds": 3,
-      "winCondition": "single-hit"
+      "options": [
+        "1v1",
+        "2v2"
+      ],
+      "locked": false
     },
-    "typeConnection": [
-      "BLUETOOTH",
-      "LAN",
-      "ONLINE"
-    ]
-  },
-  {
-    "key": "COMBAT",
-    "img": {
-      "dark": "/game/images/gameMode/combat-dark.webp",
-      "light": "/game/images/gameMode/combat-light.webp"
-    },
-    "options": {
-      "teamSize": 1,
-      "players": 2,
+    {
+      "key": "health",
+      "name": "COMBAT",
       "rounds": 3,
-      "winCondition": "health"
+      "options": [
+        "1v1",
+        "2v2"
+      ],
+      "locked": false
     },
-    "typeConnection": [
-      "BLUETOOTH",
-      "LAN",
-      "ONLINE"
-    ]
-  },
-  {
-    "key": "CLASH",
-    "img": {
-      "dark": "/game/images/gameMode/clash-dark.webp",
-      "light": "/game/images/gameMode/clash-light.webp"
-    },
-    "options": {
-      "teamSize": 2,
-      "players": 4,
+    {
+      "key": "survival",
+      "name": "SURVIVAL",
       "rounds": 3,
-      "winCondition": "single-hit"
+      "options": [
+        "1v1",
+        "2v2"
+      ],
+      "locked": true
+    }
+  ],
+  "data": {
+    "modes": {
+      "single-hit": {
+        "image": {
+          "dark": "/game/images/gameMode/duel-dark.webp",
+          "light": "/game/images/gameMode/duel-light.webp"
+        }
+      },
+      "health": {
+        "image": {
+          "dark": "/game/images/gameMode/combat-dark.webp",
+          "light": "/game/images/gameMode/combat-light.webp"
+        }
+      },
+      "survival": {
+        "image": {
+          "dark": "/game/images/gameMode/clash-dark.webp",
+          "light": "/game/images/gameMode/clash-light.webp"
+        }
+      }
     },
-    "typeConnection": [
-      "LAN",
-      "ONLINE"
-    ]
-  },
-  {
-    "key": "BATTLE",
-    "img": {
-      "dark": "/game/images/gameMode/battle-dark.webp",
-      "light": "/game/images/gameMode/battle-light.webp"
-    },
-    "options": {
-      "teamSize": 2,
-      "players": 4,
-      "rounds": 3,
-      "winCondition": "health"
-    },
-    "typeConnection": [
-      "LAN",
-      "ONLINE"
-    ]
+    "players": {
+      "1v1": {
+        "players": 2,
+        "teamSize": 1,
+        "connections": [
+          "BLUETOOTH",
+          "LAN",
+          "ONLINE"
+        ],
+        "icon": {
+          "dark": "/game/icons/playerOption/1v1-dark.svg",
+          "light": "/game/icons/playerOption/1v1-light.svg"
+        }
+      },
+      "2v2": {
+        "players": 4,
+        "teamSize": 2,
+        "connections": [
+          "LAN",
+          "ONLINE"
+        ],
+        "icon": {
+          "dark": "/game/icons/playerOption/2v2-dark.svg",
+          "light": "/game/icons/playerOption/2v2-light.svg"
+        }
+      }
+    }
   }
-]
+}

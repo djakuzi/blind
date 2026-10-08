@@ -1,6 +1,6 @@
 import { computed } from 'vue';
-import type { tAppScalePresetMode } from '@/app/styles/contracts/appScale.contract';
-import type { tAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
+import type { tAppScalePresetMode } from '@/app/shared/styles/contracts/appScale.contract';
+import type { tAppThemeMode } from '@/app/shared/styles/contracts/appTheme.contract';
 import { useSettingsStore } from '@/app/stores/settings/settings.store';
 import { applyAppScaleMode } from '../helpers/applyAppScaleMode.helper';
 import { applyAppThemeMode } from '../helpers/applyAppThemeMode.helper';

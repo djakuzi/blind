@@ -1,28 +1,28 @@
 <script setup lang="ts">
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/props/interaction.props';
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { LibStyle } from '@/app/shared/lib/style';
 import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveSpaceValue, type tSpaceValue } from '@/app/styles/contracts/space.contract';
+import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
-import type { tAudioId } from '@/core/media/audio';
 import { ToolVibration } from '@/core/platform';
 
-export interface PropsAppSlider {
+export interface PropsAppSlider extends PropsWidth, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {
   modelValue: number;
   count: number;
-  size?: tBaseSizeVariant;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
   itemWidth?: tStyleSizeValue;
   itemMaxWidth?: tStyleSizeValue;
   itemGap?: tSpaceValue;
   inactiveScale?: number;
   inactiveOpacity?: number;
+  viewportBleed?: tSpaceValue;
   contentDotsGap?: tSpaceValue;
   dotsHintGap?: tSpaceValue;
   dotsGap?: tSpaceValue;
@@ -30,9 +30,6 @@ export interface PropsAppSlider {
   dotColor?: tColorValue;
   activeDotColor?: tColorValue;
   wheel?: boolean;
-  disabled?: boolean;
-  sound?: tAudioId | null;
-  vibration?: boolean;
   accessibilityLabel: string;
   itemAccessibilityLabel: (index: number, count: number) => string;
 }
@@ -46,6 +43,7 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
   itemGap: 6,
   inactiveScale: 0.88,
   inactiveOpacity: 0.45,
+  viewportBleed: 0,
   contentDotsGap: undefined,
   dotsHintGap: 12,
   dotsGap: 6,
@@ -131,6 +129,11 @@ const sliderDotColor = computed(() => resolveColorValue(props.dotColor));
 const sliderActiveDotColor = computed(() => resolveColorValue(props.activeDotColor));
 const sliderInactiveScale = computed(() => LibNumber.clamp(props.inactiveScale, 0, 1));
 const sliderInactiveOpacity = computed(() => LibNumber.clamp(props.inactiveOpacity, 0, 1));
+const sliderViewportClipPath = computed(() => {
+  const bleed = resolveSpaceValue(props.viewportBleed) ?? '0px';
+
+  return `inset(calc(0px - ${bleed}) 0 calc(0px - ${bleed}) 0)`;
+});
 
 const trackTransform = computed(() => `translate3d(${trackTranslate.value + dragOffset.value}px, 0, 0)`);
 
@@ -413,18 +416,20 @@ onBeforeUnmount(() => {
       @wheel="handleWheel"
       @keydown="handleKeydown"
     >
-      <div ref="trackElement" class="app-slider__track" :style="{ transform: trackTransform }">
-        <div
-          v-for="index in indexes"
-          :key="index"
-          class="app-slider__item"
-          :class="{ 'app-slider__item--active': isItemActive(index) }"
-          role="group"
-          :aria-label="itemAccessibilityLabel(index, count)"
-          :aria-hidden="!isItemActive(index)"
-        >
-          <div class="app-slider__item-content">
-            <slot name="item" :index="index" :active="isItemActive(index)" />
+      <div class="app-slider__viewport-clip">
+        <div ref="trackElement" class="app-slider__track" :style="{ transform: trackTransform }">
+          <div
+            v-for="index in indexes"
+            :key="index"
+            class="app-slider__item"
+            :class="{ 'app-slider__item--active': isItemActive(index) }"
+            role="group"
+            :aria-label="itemAccessibilityLabel(index, count)"
+            :aria-hidden="!isItemActive(index)"
+          >
+            <div class="app-slider__item-content">
+              <slot name="item" :index="index" :active="isItemActive(index)" />
+            </div>
           </div>
         </div>
       </div>
@@ -456,7 +461,6 @@ onBeforeUnmount(() => {
 .app-slider__viewport {
   width: 100%;
   min-width: 0;
-  overflow: hidden;
   cursor: grab;
   touch-action: pan-y;
   user-select: none;
@@ -469,15 +473,22 @@ onBeforeUnmount(() => {
   }
 }
 
+.app-slider__viewport-clip {
+  width: 100%;
+  min-width: 0;
+  clip-path: v-bind(sliderViewportClipPath);
+}
+
 .app-slider__track {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   gap: v-bind(sliderItemGap);
   transition: transform var(--app-motion-duration-slower) var(--app-motion-ease-enter);
 }
 
 .app-slider__item {
+  display: flex;
   flex: 0 0 v-bind(sliderItemWidth);
   width: v-bind(sliderItemWidth);
   max-width: v-bind(sliderItemMaxWidth);
@@ -498,6 +509,7 @@ onBeforeUnmount(() => {
 }
 
 .app-slider__item-content {
+  display: flex;
   width: 100%;
   min-width: 0;
 }

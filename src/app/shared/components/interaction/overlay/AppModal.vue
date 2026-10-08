@@ -1,31 +1,21 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimensions.props';
+import type { PropsSurface } from '@/app/shared/types/props/surface.props';
+import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import {
-  resolveBorderStyleValue,
-  resolveBorderWidthValue,
-  type tBorderStyleValue,
-  type tBorderWidthValue,
-} from '@/app/styles/contracts/border.contract';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveLayerValue, type tLayerValue } from '@/app/styles/contracts/layer.contract';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
-import { resolveRadiusValue, type tRadiusValue } from '@/app/styles/contracts/radius.contract';
 
-export interface PropsAppModal {
+import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveLayerValue, type tLayerValue } from '@/app/shared/styles/contracts/layer.contract';
+import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
+
+export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'>, PropsSurface, PropsAccessibility {
   modelValue: boolean;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  maxHeight?: tStyleSizeValue;
   layer?: tLayerValue;
   backdropColor?: tColorValue;
-  backgroundColor?: tColorValue;
-  borderColor?: tColorValue;
-  borderWidth?: tBorderWidthValue;
-  borderStyle?: tBorderStyleValue;
-  borderRadius?: tRadiusValue;
   headerPaddingX?: tPaddingValue;
   headerPaddingY?: tPaddingValue;
   bodyPaddingX?: tPaddingValue;
@@ -35,9 +25,7 @@ export interface PropsAppModal {
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   lockScroll?: boolean;
-  ariaLabel?: string;
-  ariaLabelledby?: string;
-  ariaDescribedby?: string;
+
 }
 
 const props = withDefaults(defineProps<PropsAppModal>(), {

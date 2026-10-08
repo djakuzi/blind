@@ -1,17 +1,16 @@
 <script setup lang="ts" generic="TGroup extends tIconGroup">
+import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimensions.props';
 import { computed } from 'vue';
+import type { CSSProperties } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
-import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
 import { MediaIcons, type tIconGroup, type tIconName } from '@/core/media/icons';
 
-export interface PropsAppIcon<TGroup extends tIconGroup = tIconGroup> {
+export interface PropsAppIcon<TGroup extends tIconGroup = tIconGroup> extends PropsWidth, Pick<PropsHeight, 'height'> {
   group: TGroup;
   icon: tIconName<TGroup>;
-  width: PropsAppBlock['width'];
-  height?: PropsAppBlock['height'];
-  maxWidth?: PropsAppBlock['maxWidth'];
-  display?: PropsAppBlock['display'];
+  width: PropsWidth['width'];
+  display?: CSSProperties['display'];
   alt?: string;
 }
 

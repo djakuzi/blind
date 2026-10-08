@@ -93,11 +93,11 @@ function readExistingAudioVolumes(filePath) {
 
   const content = readFileSync(filePath, 'utf8');
   const volumes = new Map();
-  const entryPattern = /  '([^']+)': \{([\s\S]*?)\n  \},/g;
+  const entryPattern = / {2}'([^']+)': \{([\s\S]*?)\n {2}\},/g;
 
   for (const match of content.matchAll(entryPattern)) {
     const [, audioId, entryContent] = match;
-    const volumeMatch = entryContent.match(/\n    volume: (-?\d+(?:\.\d+)?),/);
+    const volumeMatch = entryContent.match(/\n {4}volume: (-?\d+(?:\.\d+)?),/);
 
     if (!volumeMatch) {
       continue;

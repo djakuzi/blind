@@ -2,7 +2,7 @@
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import type { PropsAppTitle } from '@/app/shared/components/atoms/typography/AppTitle.vue';
 
-export interface PropsAppHeaderRailTitle extends PropsAppTitle {}
+export type PropsAppHeaderRailTitle = PropsAppTitle;
 
 const props = defineProps<PropsAppHeaderRailTitle>();
 </script>

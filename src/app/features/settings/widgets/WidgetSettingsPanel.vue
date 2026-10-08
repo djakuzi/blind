@@ -7,8 +7,8 @@ import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmented
 import WidgetList from '@/app/shared/components/widgets/list/WidgetList.vue';
 import WidgetSearchPicker from '@/app/shared/components/widgets/picker/WidgetSearchPicker.vue';
 import type { iWidgetSearchPickerItem } from '@/app/shared/components/widgets/picker/WidgetSearchPicker.vue';
-import { APP_SCALE_SYSTEM_MODE, isAppScaleMode } from '@/app/styles/contracts/appScale.contract';
-import { isAppThemeMode } from '@/app/styles/contracts/appTheme.contract';
+import { APP_SCALE_SYSTEM_MODE, isAppScaleMode } from '@/app/shared/styles/contracts/appScale.contract';
+import { isAppThemeMode } from '@/app/shared/styles/contracts/appTheme.contract';
 import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
 import { useAppLanguage } from '@/app/features/locale/composables/useAppLanguage';
 import { useLocale } from '@/app/features/locale/composables/useLocale';

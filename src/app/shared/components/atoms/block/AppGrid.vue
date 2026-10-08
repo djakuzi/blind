@@ -1,21 +1,17 @@
 <script setup lang="ts">
+import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimensions.props';
+import type { PropsMargin, PropsGap } from '@/app/shared/types/props/spacing.props';
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
-import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
+
+import { resolveSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 type tAppGridTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer';
 
-interface Props {
+interface Props extends PropsWidth, Pick<PropsHeight, 'minHeight'>, PropsMargin, PropsGap {
   tag?: tAppGridTag;
   placeItems?: CSSProperties['placeItems'];
-  gap?: tSpaceValue;
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  minHeight?: tStyleSizeValue;
-  margin?: tSpaceValue;
 }
 
 const props = withDefaults(defineProps<Props>(), {

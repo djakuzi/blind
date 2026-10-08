@@ -1,18 +1,15 @@
 <script setup lang="ts">
+import type { PropsTypography } from '@/app/shared/types/props/typography.props';
 import { computed } from 'vue';
-import { resolveColorValue, type tColorValue } from '@/app/styles/contracts/color.contract';
-import { resolveFontSizeValue, type tFontSizeValue } from '@/app/styles/contracts/fontSize.contract';
-import { resolveFontWeightValue, type tFontWeightValue } from '@/app/styles/contracts/fontWeight.contract';
+import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import { resolveFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
 
 export type tAppTitleTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-export interface PropsAppTitle {
+export interface PropsAppTitle extends PropsTypography {
   text: string;
   tag?: tAppTitleTag;
-  color?: tColorValue;
-  fontSize?: tFontSizeValue;
-  fontWeight?: tFontWeightValue;
-  uppercase?: boolean;
 }
 
 const props = withDefaults(defineProps<PropsAppTitle>(), {

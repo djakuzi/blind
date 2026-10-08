@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import { computed, nextTick, ref, watch } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import type { PropsAppBlock } from '@/app/shared/components/atoms/block/AppBlock.vue';
-import type { tBaseSizeVariant } from '@/app/styles/contracts/base';
+
 import { LibNumber } from '@/core/lib/number';
 
 export type tAppLineLoaderMode = 'determinate' | 'indeterminate';
@@ -13,12 +14,9 @@ interface iAppLineLoaderActions {
   complete?: () => void;
 }
 
-interface Props {
+interface Props extends PropsWidth, PropsSizeVariant {
   mode?: tAppLineLoaderMode;
   progress?: number;
-  size?: tBaseSizeVariant;
-  maxWidth?: PropsAppBlock['maxWidth'];
-  width?: PropsAppBlock['width'];
   variant?: tAppLineLoaderVariant;
   actions?: iAppLineLoaderActions;
   text: string;

@@ -1,13 +1,31 @@
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
-import type { tOptionGameMode } from '@/game/types/gameMode.types';
+import type { tGameModeKey } from '@/game/types/gameMode.types';
 
-export interface iApiGameModeImage {
+export interface iApiThemeMedia {
   dark: string;
   light: string;
 }
 
 export interface iApiGameModeData {
-  img: iApiGameModeImage;
-  options: tOptionGameMode;
-  typeConnection: tKeyTypeConnection[];
+  key: tGameModeKey;
+  name: string;
+  rounds: number;
+  options: string[];
+  locked: boolean;
+}
+
+export interface iApiGameModeResourceData {
+  image: iApiThemeMedia;
+}
+
+export interface iApiGameModePlayerData {
+  players: number;
+  teamSize: number;
+  connections: tKeyTypeConnection[];
+  icon: iApiThemeMedia;
+}
+
+export interface iApiGameModesResourceData {
+  modes: Record<tGameModeKey, iApiGameModeResourceData>;
+  players: Record<string, iApiGameModePlayerData>;
 }

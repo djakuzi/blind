@@ -1,14 +1,12 @@
 <script setup lang="ts">
+import type { PropsTypography } from '@/app/shared/types/props/typography.props';
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
-import type { PropsAppText } from '@/app/shared/components/atoms/typography/AppText.vue';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/styles/contracts/padding.contract';
+import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 
-export interface PropsAppMarqueeText extends Pick<
-  PropsAppText,
-  'text' | 'color' | 'fontSize' | 'fontWeight' | 'uppercase'
-> {
+export interface PropsAppMarqueeText extends PropsTypography {
+  text: string;
   play?: boolean;
   speed?: number;
   minDuration?: number;

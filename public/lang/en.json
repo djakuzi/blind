@@ -27,7 +27,9 @@
           "loadError": "Failed to load game modes",
           "loading": "Loading...",
           "modeOptionsAccessibilityLabel": "Game mode parameters",
-          "connectionTypesAccessibilityLabel": "Available connection methods"
+          "connectionTypesAccessibilityLabel": "Available connection methods",
+          "players": "Players",
+          "connection": "Connection"
         },
         "modals": {}
       },
@@ -82,21 +84,21 @@
   },
   "game": {
     "modes": {
-      "DUEL": {
+      "single-hit": {
         "title": "DUEL",
         "description": "One hit — one life"
       },
-      "COMBAT": {
+      "health": {
         "title": "COMBAT",
         "description": "Fight until your health runs out"
       },
-      "CLASH": {
-        "title": "CLASH",
-        "description": "One life. One team."
-      },
-      "BATTLE": {
-        "title": "BATTLE",
-        "description": "Team battle to the last survivor"
+      "survival": {
+        "title": "SURVIVAL",
+        "description": "Survive as long as you can",
+        "locked": {
+          "title": "Mode unavailable",
+          "description": "This mode is still in development"
+        }
       }
     },
     "format": {

@@ -153,7 +153,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 ## 7. CSS
 
-Правила CSS, style tokens, contracts, component styles и устройство `src/app/styles` вынесены в отдельный раздел [CSS Style](./cssStyle.md).
+Правила CSS, style tokens, contracts, component styles и устройство `src/app/shared/styles` вынесены в отдельный раздел [CSS Style](./cssStyle.md).
 
 ## Импорты
 

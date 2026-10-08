@@ -1,25 +1,21 @@
 <script lang="ts">
+import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimensions.props';
+import type { PropsMargin } from '@/app/shared/types/props/spacing.props';
 import type { CSSProperties } from 'vue';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
-import type { tSpaceValue } from '@/app/styles/contracts/space.contract';
 
 type tAppBlockTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer' | 'span';
 
-export interface PropsAppBlock {
+export interface PropsAppBlock extends PropsWidth, Pick<PropsHeight, 'height'>, PropsMargin {
   tag?: tAppBlockTag;
   display?: CSSProperties['display'];
   overflow?: CSSProperties['overflow'];
-  width?: tStyleSizeValue;
-  maxWidth?: tStyleSizeValue;
-  height?: tStyleSizeValue;
-  margin?: tSpaceValue;
 }
 </script>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { LibStyle } from '@/app/shared/lib/style';
-import { resolveSpaceValue } from '@/app/styles/contracts/space.contract';
+import { resolveSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 const props = withDefaults(defineProps<PropsAppBlock>(), {
   tag: 'div',
