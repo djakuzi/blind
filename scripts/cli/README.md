@@ -65,3 +65,10 @@ Run `npm run cli -- help` to list all commands.
 - `npm run cli -- fix all`
 
 `verify all` runs every check sequentially, reports individual failures and returns a nonzero exit status if any check fails. The generated-file check runs in a temporary copy. Web/Desktop builds create build artifacts, but do not intentionally rewrite project source. Only `fix` runs the existing formatting and lint auto-fix scripts.
+
+## Localization
+
+- `npm run cli -- locale check` — validate language metadata, SVG files, locale structure and interpolation parameters.
+- `npm run cli -- locale languages` — list supported languages and validate them.
+
+Validation is read-only. Plural forms may vary by language; `other` is required. The existing typed Locale contract is additionally checked by the project's TypeScript build.
