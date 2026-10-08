@@ -5,7 +5,7 @@ import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';

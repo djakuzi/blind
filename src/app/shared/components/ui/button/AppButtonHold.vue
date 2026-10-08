@@ -5,7 +5,7 @@ import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue'
 import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import type { PropsAppHoldAction } from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 type tAppButtonHoldVariant = 'primary';
 

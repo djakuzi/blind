@@ -1,6 +1,6 @@
 import type { iApiGameModePlayerData } from '@/app/domain/game/type/api/common';
 import type { Locale } from '@/app/shared/types/locale';
-import { LibText } from '@/app/shared/lib/text';
+import { LibText } from '@/core/lib/text';
 
 export function formatGameModePlayers(option: iApiGameModePlayerData, languageCode: string, locale: Locale) {
   const { players, teamSize } = option;

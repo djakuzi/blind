@@ -5,7 +5,7 @@ import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import type { PropsTypography, PropsUppercase } from '@/app/shared/types/props/typography.props';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import AppPulseAttention from '@/app/shared/components/effects/attention/AppPulseAttention.vue';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/shared/styles/presets/base.preset';
 import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';

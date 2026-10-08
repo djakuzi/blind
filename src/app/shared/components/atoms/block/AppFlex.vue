@@ -3,7 +3,7 @@ import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import type { PropsMargin, PropsGap } from '@/app/shared/types/props/spacing.props';
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 import { resolveSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 

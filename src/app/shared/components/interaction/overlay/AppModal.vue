@@ -4,7 +4,7 @@ import type { PropsSurface } from '@/app/shared/types/props/surface.props';
 import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';

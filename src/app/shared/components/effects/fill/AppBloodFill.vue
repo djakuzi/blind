@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
+import type { tStyleSizeValue } from '@/core/lib/style';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { LibNumber } from '@/core/lib/number';
 

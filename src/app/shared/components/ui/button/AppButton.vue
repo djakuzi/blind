@@ -8,7 +8,7 @@ import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';

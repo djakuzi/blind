@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import { computed } from 'vue';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 

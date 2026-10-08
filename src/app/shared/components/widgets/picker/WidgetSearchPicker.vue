@@ -11,7 +11,7 @@ import AppInfoRow from '@/app/shared/components/ui/info/AppInfoRow.vue';
 import type { iAppInfoRowImage, PropsAppInfoRow } from '@/app/shared/components/ui/info/AppInfoRow.vue';
 import AppInputSearch from '@/app/shared/components/ui/input/AppInputSearch.vue';
 import type { PropsInputSearch } from '@/app/shared/components/ui/input/AppInputSearch.vue';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 import { ToolVibration } from '@/core/platform';
 

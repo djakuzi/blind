@@ -4,7 +4,7 @@ import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 import type { tIconGroup, tIconName } from '@/core/media/icons';
 
 interface Props extends PropsWidth, Pick<PropsHeight, 'height'>, PropsDisabled {

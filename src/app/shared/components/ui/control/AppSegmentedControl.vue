@@ -7,7 +7,7 @@ import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/p
 import { computed, ref } from 'vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
 import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';

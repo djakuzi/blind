@@ -1,4 +1,4 @@
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import type { tStyleSizeValue } from '@/core/lib/style';
 
 export interface PropsWidth {
   width?: tStyleSizeValue;
@@ -11,4 +11,4 @@ export interface PropsHeight {
   maxHeight?: tStyleSizeValue;
 }
 
-export interface PropsDimensions extends PropsWidth, PropsHeight {}
+export interface PropsDimensions extends PropsWidth, PropsHeight { }

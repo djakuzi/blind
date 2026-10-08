@@ -7,7 +7,7 @@ import type { PropsFont } from '@/app/shared/types/props/typography.props';
 import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
 import { computed, ref } from 'vue';
-import { LibStyle } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
 
 import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
 import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';

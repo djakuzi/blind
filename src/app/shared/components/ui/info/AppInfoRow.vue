@@ -7,8 +7,8 @@ import { computed, useSlots } from 'vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import type { PropsAppImage } from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
-import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
+import type { tStyleSizeValue } from '@/core/lib/style';
 
 import { BASE_SIZE_FONT_PRESET, BASE_SIZE_MEDIA_WIDTH_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/shared/styles/presets/base.preset';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';

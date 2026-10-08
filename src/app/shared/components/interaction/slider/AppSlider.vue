@@ -5,8 +5,8 @@ import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/p
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
-import { LibStyle } from '@/app/shared/lib/style';
-import type { tStyleSizeValue } from '@/app/shared/lib/style';
+import { LibStyle } from '@/core/lib/style';
+import type { tStyleSizeValue } from '@/core/lib/style';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';

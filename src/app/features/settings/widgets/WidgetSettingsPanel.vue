@@ -13,7 +13,7 @@ import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
 import { useAppLanguage } from '@/app/features/locale/composables/useAppLanguage';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import { useLoaderRegistry } from '@/app/overlay/loader/composables/useLoaderRegistry';
-import { LibText } from '@/app/shared/lib/text';
+import { LibText } from '@/core/lib/text';
 import { SETTINGS_SCALE_VALUES, SETTINGS_SOUND_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
 import { useSettings } from '../composables/useSettings';
 
