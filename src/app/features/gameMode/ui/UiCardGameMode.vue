@@ -59,6 +59,7 @@ function handleComplete() {
       'ui-card-game-mode--locked': mode.locked,
     }"
     :disabled="isDisabled"
+    :color="mode.locked ? 'text-disabled' : 'primary'"
     width="100%"
     max-width="100%"
     size="big"
@@ -77,11 +78,15 @@ function handleComplete() {
       justify="space-evenly"
       width="100%"
     >
-      <AppFillAware color="text-primary" filled-color="on-primary">
+      <AppFillAware
+        :color="mode.locked ? 'text-disabled' : 'text-primary'"
+        :filled-color="mode.locked ? 'text-disabled' : 'on-primary'"
+      >
         <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
       </AppFillAware>
 
       <AppImage
+        v-if="!mode.locked"
         class="ui-card-game-mode__image"
         :src="imageSource"
         :alt="mode.name"
@@ -95,7 +100,11 @@ function handleComplete() {
         :should-load="imageShouldLoad"
       />
 
-      <AppFillAware class="ui-card-game-mode__description" color="text-secondary" filled-color="on-primary">
+      <AppFillAware
+        class="ui-card-game-mode__description"
+        :color="mode.locked ? 'text-disabled' : 'text-secondary'"
+        :filled-color="mode.locked ? 'text-disabled' : 'on-primary'"
+      >
         <AppText
           :text="modeDescription"
           color="inherit"
@@ -184,11 +193,12 @@ function handleComplete() {
   inset: 0;
   background: color-mix(in srgb, var(--app-color-surface-primary) 48%, transparent);
   backdrop-filter: blur(2px) contrast(1);
-  --webkit-backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   pointer-events: none;
 }
 
 .ui-card-game-mode__locked-icon {
+  opacity: 0.55;
   pointer-events: none;
 }
 </style>
