@@ -12,7 +12,11 @@ import { ToolInput } from '@/core/platform';
 
 export type tAppHoldHintDirection = 'row' | 'column';
 
-export interface PropsAppHoldHint extends Pick<PropsWidth, 'maxWidth'>, PropsSizeVariant, PropsGap, Pick<PropsTypography, 'color' | 'fontSize' | 'uppercase'> {
+export interface PropsAppHoldHint
+  extends Pick<PropsWidth, 'maxWidth'>,
+    PropsSizeVariant,
+    PropsGap,
+    Pick<PropsTypography, 'color' | 'fontSize' | 'uppercase'> {
   text?: string;
   items?: readonly string[];
   finePointerItems?: readonly string[];
