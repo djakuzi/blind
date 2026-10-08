@@ -13,3 +13,11 @@
 ```text
 src/assets/fonts/comfortaa/Comfortaa-Medium.ttf
 ```
+
+## Source of truth
+
+Исходные шрифты находятся в `src/assets/fonts/`. Созданные `.woff2`-файлы размещаются рядом с соответствующими `.ttf`.
+
+## Когда запускать
+
+Запускайте `npm run app:generate:fonts-woff2` после добавления, замены или изменения исходных `.ttf`-файлов, а также для восстановления производных `.woff2`.
