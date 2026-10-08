@@ -155,9 +155,8 @@ async function handleErrorAction(action: iLoaderErrorAction) {
           <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
         </AppFadeTransition>
 
-        <AppFadeTransition :active="phase === 'leaving'">
+        <AppFadeTransition v-if="error" :active="phase === 'leaving'">
           <AppStatusBlock
-          v-if="error"
           class="widget-loader-app__status"
           :text="error.title"
           variant="error"
@@ -181,9 +180,8 @@ async function handleErrorAction(action: iLoaderErrorAction) {
           </AppStatusBlock>
         </AppFadeTransition>
 
-        <AppFadeTransition :active="phase === 'leaving'">
+        <AppFadeTransition v-else :active="phase === 'leaving'">
           <AppLineLoader
-          v-else
           class="widget-loader-app__status"
           :mode="progressMode"
           :progress="progress"
@@ -224,6 +222,8 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   padding: var(--app-safe-area-vertical) var(--app-safe-area-horizontal);
   background: var(--app-color-background);
 }
+
+.widget-loader-app--leaving { pointer-events: none; }
 
 .widget-loader-app__content {
   gap: var(--app-space-5);
