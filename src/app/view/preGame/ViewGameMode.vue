@@ -82,7 +82,7 @@ watch(
 </script>
 
 <template>
-  <ViewLayout class="view-game-mode" align="center" justify="start" padding="none" overflow="hidden" bleed="horizontal">
+  <ViewLayout class="view-game-mode" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
     <AppFlex
       class="view-game-mode__content"
       direction="column"
