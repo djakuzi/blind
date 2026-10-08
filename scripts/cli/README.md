@@ -51,3 +51,17 @@ Run `npm run cli -- help` to list all commands.
 - `npm run cli -- generate check`
 
 `generate check` runs the generators in a temporary project copy and compares their outputs with current generated files. It needs local `node_modules` and does not alter the working source tree.
+
+## Verify / Fix
+
+- `npm run cli -- verify format`
+- `npm run cli -- verify lint`
+- `npm run cli -- verify web`
+- `npm run cli -- verify desktop`
+- `npm run cli -- verify generated`
+- `npm run cli -- verify all`
+- `npm run cli -- fix format`
+- `npm run cli -- fix lint`
+- `npm run cli -- fix all`
+
+`verify all` runs every check sequentially, reports individual failures and returns a nonzero exit status if any check fails. The generated-file check runs in a temporary copy. Web/Desktop builds create build artifacts, but do not intentionally rewrite project source. Only `fix` runs the existing formatting and lint auto-fix scripts.

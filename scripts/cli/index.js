@@ -10,6 +10,7 @@ import { registerDevelopmentSection } from './sections/development.js';
 import { registerPlatformSection } from './sections/platform.js';
 import { registerBuildSection } from './sections/build.js';
 import { registerGenerateSection } from './sections/generate.js';
+import { registerVerifySection } from './sections/verify.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const controller = new AbortController();
@@ -23,6 +24,7 @@ try {
   registerPlatformSection(registry);
   registerBuildSection(registry);
   registerGenerateSection(registry);
+  registerVerifySection(registry);
   const context = createContext({ root, signal: controller.signal });
   process.exitCode = await runCli(registry, context, process.argv.slice(2));
 } catch (error) {
