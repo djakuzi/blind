@@ -27,6 +27,7 @@ const motionStyle = computed(() => ({
   '--effect-duration': `${props.duration}ms`,
   '--effect-delay': `${props.delay}ms`,
 }));
+const RenderNode = () => animatedNode.value;
 </script>
 
 <template>
