@@ -190,9 +190,9 @@ Generated-файлы:
 - `src/core/media/audio/const.ts`
 - `src/core/media/audio/type.ts`
 
-не редактируются вручную.
+не редактируются вручную, **кроме поля `volume`** в `const.ts`. Генератор сохраняет вручную заданную громкость существующего audio ID при повторном запуске.
 
-Для изменения audio registry нужно изменить source of truth в `src/assets/audio/` и запустить:
+Для изменения структуры audio registry нужно изменить source of truth в `src/assets/audio/` и запустить:
 
 ```bash
 npm run app:generate:audio-assets
