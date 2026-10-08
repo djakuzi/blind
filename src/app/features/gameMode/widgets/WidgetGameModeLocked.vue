@@ -31,7 +31,7 @@ const lockedDescription = computed(() => modeLocale.value?.locked?.description ?
     <AppTitle
       :text="lockedTitle"
       tag="h3"
-      color="text-disabled"
+      color="error-text"
       font-size="xl"
       font-weight="medium"
     />
@@ -39,7 +39,7 @@ const lockedDescription = computed(() => modeLocale.value?.locked?.description ?
     <AppText
       class="widget-game-mode-locked__description"
       :text="lockedDescription"
-      color="text-tertiary"
+      color="text-secondary"
       font-size="md"
       font-weight="medium"
       :uppercase="true"
