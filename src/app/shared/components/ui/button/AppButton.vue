@@ -8,14 +8,14 @@ import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
+import { useControlSize } from '@/app/shared/composables/style/useControlSize';
 import { LibStyle } from '@/core/lib/style';
 
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
-import { resolveFontSizeValue, type tFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
-
-import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import type { iControlSizePreset } from '@/app/shared/styles/presets/control.preset';
 import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 
 export type tAppButtonVariant = 'primary' | 'secondary' | 'danger';
@@ -74,14 +74,7 @@ const VARIANT_MAP: Record<
   },
 };
 
-const SIZE_MAP: Record<
-  tBaseSizeVariant,
-  {
-    paddingX: tPaddingValue;
-    paddingY: tPaddingValue;
-    fontSize: tFontSizeValue;
-  }
-> = {
+const BUTTON_SIZE_PRESET: Record<tBaseSizeVariant, iControlSizePreset> = {
   small: {
     paddingX: 6,
     paddingY: 3,
@@ -100,7 +93,7 @@ const SIZE_MAP: Record<
 };
 
 const variantConfig = computed(() => VARIANT_MAP[props.variant]);
-const sizeConfig = computed(() => SIZE_MAP[props.size]);
+const { paddingX: buttonPaddingX, paddingY: buttonPaddingY, fontSize } = useControlSize(props, BUTTON_SIZE_PRESET);
 
 const buttonBackgroundColor = computed(() => resolveColorValue(props.backgroundColor ?? variantConfig.value.backgroundColor));
 const buttonBorderColor = computed(() => resolveColorValue(props.borderColor ?? variantConfig.value.borderColor));
@@ -108,9 +101,7 @@ const buttonTextColor = computed(() => resolveColorValue(props.textColor ?? vari
 const buttonBorderWidth = computed(() => resolveBorderWidthValue(props.borderWidth));
 const buttonBorderStyle = computed(() => resolveBorderStyleValue(props.borderStyle));
 const buttonBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
-const buttonPaddingX = computed(() => resolvePaddingValue(props.paddingX ?? sizeConfig.value.paddingX));
-const buttonPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? sizeConfig.value.paddingY));
-const buttonFontSize = computed(() => resolveFontSizeValue(props.fontSize ?? sizeConfig.value.fontSize));
+const buttonFontSize = computed(() => resolveFontSizeValue(fontSize.value));
 
 const interactionStyle = computed(() => ({
   width: LibStyle.toSizeValue(props.width),
