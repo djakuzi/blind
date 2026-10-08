@@ -31,6 +31,11 @@ const MARKERS = [
   },
   {
     filePath: path.resolve('docs/architecture/sections/stack.md'),
+    marker: 'stack-eslint',
+    value: (packageJson) => `ESLint ${toMajorVersion(packageJson.devDependencies.eslint)}`,
+  },
+  {
+    filePath: path.resolve('docs/architecture/sections/stack.md'),
     marker: 'stack-plugin-vue',
     value: (packageJson) => `@vitejs/plugin-vue ${toMajorVersion(packageJson.devDependencies['@vitejs/plugin-vue'])}`,
   },
