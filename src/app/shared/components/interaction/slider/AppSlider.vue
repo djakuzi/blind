@@ -546,8 +546,7 @@ onBeforeUnmount(() => {
 }
 
 .app-slider--dragging {
-  .app-slider__viewport,
-  .app-slider__viewport :deep(*) {
+  .app-slider__viewport {
     cursor: var(--app-cursor-grabbing);
   }
 
