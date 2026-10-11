@@ -1,0 +1,4 @@
+:root {
+  /* Cursor */
+  --app-cursor-default: url("../cursor/default.svg") 5 3, default;
+}

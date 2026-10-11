@@ -28,4 +28,5 @@ button {
 #app {
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  cursor: var(--app-cursor-default);
 }
