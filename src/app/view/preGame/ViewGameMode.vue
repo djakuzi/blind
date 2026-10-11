@@ -98,4 +98,10 @@ watch(
 .view-game-mode__state {
   min-height: 30rem;
 }
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .view-game-mode__state {
+    min-height: 20rem;
+  }
+}
 </style>
