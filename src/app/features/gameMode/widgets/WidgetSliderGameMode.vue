@@ -82,6 +82,7 @@ watch(
 
       <template #hint="{ canNavigate }">
         <AppHoldHint
+          v-if="!activeMode?.locked"
           :text="preGameLocale.holdHint"
           :fine-pointer-items="canNavigate ? [preGameLocale.desktopWheelHint, preGameLocale.desktopSelectHint] : [preGameLocale.desktopSelectHint]"
           direction="row"
