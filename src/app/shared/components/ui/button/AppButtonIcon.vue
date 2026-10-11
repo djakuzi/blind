@@ -64,6 +64,6 @@ const buttonStyle = computed(() => ({
 }
 
 .app-button-icon:disabled {
-  cursor: default;
+  cursor: var(--app-cursor-default);
 }
 </style>

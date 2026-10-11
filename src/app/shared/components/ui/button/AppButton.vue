@@ -190,7 +190,7 @@ const buttonStyle = computed(() => ({
   border-color: var(--app-color-border-default);
   background: var(--app-color-surface-secondary);
   color: var(--app-color-text-disabled);
-  cursor: default;
+  cursor: var(--app-cursor-default);
 }
 
 .app-button__text {

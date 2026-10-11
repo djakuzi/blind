@@ -119,7 +119,7 @@ function handleToggle() {
 
   &.app-switch--disabled {
     opacity: 0.5;
-    cursor: default;
+    cursor: var(--app-cursor-default);
   }
 
   &:focus-visible {

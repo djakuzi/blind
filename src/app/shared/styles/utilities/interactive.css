@@ -17,13 +17,13 @@
 .app-interactive:disabled,
 .app-interactive--disabled {
   color: var(--app-color-text-disabled);
-  cursor: default;
+  cursor: var(--app-cursor-default);
 }
 
 .app-interactive--selected:not(:disabled):not(.app-interactive--disabled) {
   background: var(--app-color-primary);
   color: var(--app-color-on-primary);
-  cursor: default;
+  cursor: var(--app-cursor-default);
 }
 
 @media (hover: hover) and (pointer: fine) {

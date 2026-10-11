@@ -116,7 +116,7 @@ function handleComplete() {
 
 .app-button-hold:disabled {
   color: var(--app-color-text-disabled);
-  cursor: default;
+  cursor: var(--app-cursor-default);
 }
 
 .app-button-hold__content {
