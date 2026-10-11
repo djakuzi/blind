@@ -121,6 +121,6 @@ function handleComplete() {
 }
 
 .app-card-hold--disabled {
-  cursor: var(--app-cursor-default);
+  cursor: var(--app-cursor-disabled);
 }
 </style>

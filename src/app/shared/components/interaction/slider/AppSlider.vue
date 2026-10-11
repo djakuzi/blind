@@ -558,7 +558,7 @@ onBeforeUnmount(() => {
 
 .app-slider--disabled {
   .app-slider__viewport {
-    cursor: var(--app-cursor-default);
+    cursor: var(--app-cursor-disabled);
   }
 }
 

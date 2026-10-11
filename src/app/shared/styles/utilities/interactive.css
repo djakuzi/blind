@@ -17,7 +17,7 @@
 .app-interactive:disabled,
 .app-interactive--disabled {
   color: var(--app-color-text-disabled);
-  cursor: var(--app-cursor-default);
+  cursor: var(--app-cursor-disabled);
 }
 
 .app-interactive--selected:not(:disabled):not(.app-interactive--disabled) {

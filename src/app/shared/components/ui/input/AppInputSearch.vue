@@ -183,7 +183,7 @@ defineExpose({
   &:disabled {
     background: var(--app-color-surface-secondary);
     color: var(--app-color-text-disabled);
-    cursor: var(--app-cursor-default);
+    cursor: var(--app-cursor-disabled);
   }
 }
 
