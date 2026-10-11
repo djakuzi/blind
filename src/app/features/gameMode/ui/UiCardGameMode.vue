@@ -85,6 +85,7 @@ function handleComplete() {
       <AppImage
         v-if="!mode.locked"
         class="ui-card-game-mode__image"
+        :class="`ui-card-game-mode__image--${resolvedThemeMode}`"
         :src="imageSource"
         :alt="mode.name"
         width="15rem"
@@ -168,6 +169,14 @@ function handleComplete() {
 .ui-card-game-mode__image {
   flex: 0 1 auto;
   pointer-events: none;
+}
+
+.ui-card-game-mode__image--light {
+  filter: brightness(0.78) contrast(1.12);
+}
+
+.ui-card-game-mode__image--dark {
+  filter: brightness(1.12) contrast(1.08);
 }
 
 .ui-card-game-mode__locked-overlay {
