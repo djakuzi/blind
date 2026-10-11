@@ -174,12 +174,11 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
 </script>
 
 <template>
-  <AppFlex class="widget-game-mode-options" direction="column" align="center" width="100%" :gap="12">
+  <div class="widget-game-mode-options">
     <AppFlex
-      class="widget-game-mode-options__group"
+      class="widget-game-mode-options__group widget-game-mode-options__group--players"
       direction="column"
       align="center"
-      width="100%"
       :gap="6"
       role="group"
       :aria-label="preGameLocale.players"
@@ -198,10 +197,9 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
     </AppFlex>
 
     <AppFlex
-      class="widget-game-mode-options__group"
+      class="widget-game-mode-options__group widget-game-mode-options__group--connection"
       direction="column"
       align="center"
-      width="100%"
       :gap="6"
       role="group"
       :aria-label="preGameLocale.connection"
@@ -218,12 +216,66 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
         @update:model-value="handleConnectionChange"
       />
     </AppFlex>
-  </AppFlex>
+  </div>
 </template>
 
 <style scoped>
-.widget-game-mode-options,
-.widget-game-mode-options__group {
+.widget-game-mode-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   min-width: 0;
+  gap: var(--app-space-10);
+  padding-top: var(--app-space-5);
+  border-top: var(--app-border-width-thin) var(--app-border-style-solid) var(--app-color-border-subtle);
+}
+
+.widget-game-mode-options__group {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .widget-game-mode-options {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--app-space-8);
+    padding-top: var(--app-space-3);
+  }
+
+  .widget-game-mode-options__group {
+    flex: 0 1 auto;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .widget-game-mode-options__group :deep(.app-title) {
+    font-size: clamp(12px, var(--app-font-size-sm), 18px);
+  }
+
+  .widget-game-mode-options__group :deep(.app-segmented-card__item) {
+    min-height: 44px;
+  }
+
+  .widget-game-mode-options__group--players :deep(.app-segmented-card__text) {
+    font-size: clamp(12px, var(--app-font-size-lg), 18px);
+  }
+
+  .widget-game-mode-options__group--connection :deep(.app-segmented-card__item) {
+    position: relative;
+    min-width: 44px;
+    padding: var(--app-space-2);
+  }
+
+  .widget-game-mode-options__group--connection :deep(.app-segmented-card__text) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 </style>
