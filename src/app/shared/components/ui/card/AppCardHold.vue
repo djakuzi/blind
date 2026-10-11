@@ -107,7 +107,7 @@ function handleComplete() {
 <style scoped>
 .app-card-hold {
   position: relative;
-  cursor: pointer;
+  cursor: var(--app-cursor-pointer);
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;

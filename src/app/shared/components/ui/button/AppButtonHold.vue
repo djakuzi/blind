@@ -96,7 +96,7 @@ function handleComplete() {
   text-align: center;
   text-transform: uppercase;
   overflow: hidden;
-  cursor: pointer;
+  cursor: var(--app-cursor-pointer);
   user-select: none;
   touch-action: none;
   appearance: none;

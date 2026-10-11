@@ -103,7 +103,7 @@ function handleToggle() {
   border-radius: v-bind(switchBorderRadius);
   background: v-bind(switchInactiveColor);
   overflow: hidden;
-  cursor: pointer;
+  cursor: var(--app-cursor-pointer);
   appearance: none;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;

@@ -159,7 +159,7 @@ const buttonStyle = computed(() => ({
   line-height: var(--app-line-height-control);
   text-align: center;
   overflow: hidden;
-  cursor: pointer;
+  cursor: var(--app-cursor-pointer);
   user-select: none;
   appearance: none;
   -webkit-tap-highlight-color: transparent;

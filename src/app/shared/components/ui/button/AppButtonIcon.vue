@@ -58,7 +58,7 @@ const buttonStyle = computed(() => ({
   padding: 0;
   border: 0;
   background: transparent;
-  cursor: pointer;
+  cursor: var(--app-cursor-pointer);
   appearance: none;
   -webkit-tap-highlight-color: transparent;
 }
