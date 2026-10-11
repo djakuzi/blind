@@ -4,6 +4,7 @@
 @import './tokens/scale.css';
 @import './tokens/borders.css';
 @import './tokens/colors.css';
+@import './tokens/cursors.css';
 @import './tokens/spacing.css';
 @import './tokens/radius.css';
 @import './tokens/layer.css';
