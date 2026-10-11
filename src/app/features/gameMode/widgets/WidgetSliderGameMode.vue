@@ -2,6 +2,7 @@
 import { computed, watch } from 'vue';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import UiCardGameMode from '@/app/features/gameMode/ui/UiCardGameMode.vue';
+import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 import type { tGameModeKey } from '@/game/types/gameMode.types';
@@ -76,6 +77,18 @@ watch(
           :options-accessibility-label="preGameLocale.modeOptionsAccessibilityLabel"
           :connection-types-accessibility-label="preGameLocale.connectionTypesAccessibilityLabel"
           @complete="handleModeComplete"
+        />
+      </template>
+
+      <template #hint="{ canNavigate }">
+        <AppHoldHint
+          :text="preGameLocale.holdHint"
+          :fine-pointer-items="canNavigate ? [preGameLocale.desktopWheelHint, preGameLocale.desktopSelectHint] : [preGameLocale.desktopSelectHint]"
+          direction="row"
+          fine-pointer-direction="row"
+          :fine-pointer-gap="6"
+          font-size="clamp(12px, var(--app-font-size-sm), 20px)"
+          :pulse="false"
         />
       </template>
     </AppSlider>
