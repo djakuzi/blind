@@ -1,5 +1,5 @@
 :root {
   /* Cursor */
-  --app-cursor-default: url("../cursor/default.svg") 5 3, default;
-  --app-cursor-pointer: url("../cursor/pointer.svg") 5 3, pointer;
+  --app-cursor-default: url("../cursor/default-light.svg") 5 3, default;
+  --app-cursor-pointer: url("../cursor/pointer-light.svg") 5 3, pointer;
 }
