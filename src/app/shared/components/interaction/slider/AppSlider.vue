@@ -453,7 +453,7 @@ onBeforeUnmount(() => {
 .app-slider__viewport {
   width: 100%;
   min-width: 0;
-  cursor: grab;
+  cursor: var(--app-cursor-grab);
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
@@ -547,7 +547,7 @@ onBeforeUnmount(() => {
 
 .app-slider--dragging {
   .app-slider__viewport {
-    cursor: grabbing;
+    cursor: var(--app-cursor-grabbing);
   }
 
   .app-slider__track {
