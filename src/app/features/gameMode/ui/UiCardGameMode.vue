@@ -106,7 +106,7 @@ function handleComplete() {
           :text="modeDescription"
           color="inherit"
           font-size="lg"
-          font-weight="medium"
+          font-weight="semibold"
           :uppercase="true"
           :ellipsis="true"
           :max-lines="1"

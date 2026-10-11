@@ -26,8 +26,8 @@
     "modes": {
       "single-hit": {
         "image": {
-          "dark": "/game/images/gameMode/duel-dark.webp",
-          "light": "/game/images/gameMode/duel-light.webp"
+          "dark": "/game/images/gameMode/duel-dark.png",
+          "light": "/game/images/gameMode/duel-light.png"
         }
       },
       "health": {
