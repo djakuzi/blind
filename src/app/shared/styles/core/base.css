@@ -26,6 +26,22 @@ button {
   font-weight: var(--app-font-weight-bold);
 }
 
+:where(
+  input:not([type]),
+  input[type='text'],
+  input[type='search'],
+  input[type='email'],
+  input[type='password'],
+  input[type='url'],
+  input[type='tel'],
+  input[type='number'],
+  textarea,
+  [contenteditable='true'],
+  [contenteditable='plaintext-only']
+):not(:disabled) {
+  cursor: var(--app-cursor-text);
+}
+
 #app {
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;

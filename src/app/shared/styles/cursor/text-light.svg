@@ -1,0 +1,48 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 32 32"
+  fill="none"
+>
+  <defs>
+    <filter id="textDotGlow" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="0.8" result="blur" />
+      <feFlood flood-color="#D92D32" flood-opacity="0.45" result="color" />
+      <feComposite in="color" in2="blur" operator="in" result="glow" />
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Контрастная светлая обводка I-образного курсора -->
+  <path
+    d="M11 6H21 M16 6V26 M11 26H21"
+    stroke="#F7F7F8"
+    stroke-width="4.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Тёмная основа, как у остальных курсоров проекта -->
+  <path
+    d="M11 6H21 M16 6V26 M11 26H21"
+    stroke="#0B0B0C"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Фирменная красная точка -->
+  <circle
+    cx="24.5"
+    cy="23.5"
+    r="2"
+    fill="#D92D32"
+    stroke="#F7F7F8"
+    stroke-width="0.6"
+    filter="url(#textDotGlow)"
+  />
+</svg>
