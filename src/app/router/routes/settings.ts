@@ -16,6 +16,7 @@ export const routeSettings: RouteRecordRaw = {
           header: {
             title: (locale) => locale.views.settings.index.ui.title,
           },
+          version: true,
         },
       },
     },
