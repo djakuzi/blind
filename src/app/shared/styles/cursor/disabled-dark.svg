@@ -1,0 +1,154 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 32 32"
+  fill="none"
+>
+  <defs>
+    <!-- Очень слабое красное свечение стрелки -->
+    <filter
+      id="pointerGlow"
+      x="-30%"
+      y="-30%"
+      width="160%"
+      height="160%"
+    >
+      <feGaussianBlur
+        stdDeviation="0.65"
+        result="blur"
+      />
+
+      <feFlood
+        flood-color="#D92D32"
+        flood-opacity="0.22"
+        result="color"
+      />
+
+      <feComposite
+        in="color"
+        in2="blur"
+        operator="in"
+        result="glow"
+      />
+
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Свечение знака запрета -->
+    <filter
+      id="forbidGlow"
+      x="-150%"
+      y="-150%"
+      width="400%"
+      height="400%"
+    >
+      <feGaussianBlur stdDeviation="0.9" result="blur" />
+      <feFlood flood-color="#D92D32" flood-opacity="0.45" result="color" />
+      <feComposite in="color" in2="blur" operator="in" result="glow" />
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Слабый красный glow за стрелкой -->
+  <path
+    d="
+      M 5 3
+      L 22.5 16.2
+
+      C 23.15 16.7
+        22.95 17.7
+        22.15 17.95
+
+      L 16.55 19.65
+
+      C 16.1 19.8
+        15.75 20.15
+        15.62 20.6
+
+      L 14.05 25.95
+
+      C 13.8 26.8
+        12.7 26.95
+        12.25 26.25
+
+      L 5 3
+      Z
+    "
+    fill="#F7F7F8"
+    stroke="#D92D32"
+    stroke-width="2.8"
+    stroke-linejoin="round"
+    opacity="0.18"
+    filter="url(#pointerGlow)"
+  />
+
+  <!-- Основная резкая стрелка -->
+  <path
+    d="
+      M 5 3
+      L 22.5 16.2
+
+      C 23.15 16.7
+        22.95 17.7
+        22.15 17.95
+
+      L 16.55 19.65
+
+      C 16.1 19.8
+        15.75 20.15
+        15.62 20.6
+
+      L 14.05 25.95
+
+      C 13.8 26.8
+        12.7 26.95
+        12.25 26.25
+
+      L 5 3
+      Z
+    "
+    fill="#F7F7F8"
+    stroke="#0B0B0C"
+    stroke-width="1.7"
+    stroke-linejoin="round"
+  />
+
+  <!-- Светлая контрастная подложка знака запрета -->
+  <circle
+    cx="21.5"
+    cy="25.5"
+    r="4.4"
+    stroke="#0B0B0C"
+    stroke-width="2.6"
+  />
+  <path
+    d="M17.55 21.55L23.45 27.45"
+    stroke="#0B0B0C"
+    stroke-width="2.6"
+    stroke-linecap="round"
+  />
+
+  <!-- Красный знак запрета -->
+  <circle
+    cx="21.5"
+    cy="25.5"
+    r="4.4"
+    stroke="#D92D32"
+    stroke-width="1.5"
+    filter="url(#forbidGlow)"
+  />
+  <path
+    d="M17.55 21.55L23.45 27.45"
+    stroke="#D92D32"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    filter="url(#forbidGlow)"
+  />
+</svg>
