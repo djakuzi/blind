@@ -32,8 +32,8 @@
       },
       "health": {
         "image": {
-          "dark": "/game/images/gameMode/combat-dark.webp",
-          "light": "/game/images/gameMode/combat-light.webp"
+          "dark": "/game/images/gameMode/combat-dark.png",
+          "light": "/game/images/gameMode/combat-light.png"
         }
       },
       "survival": {
