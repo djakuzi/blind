@@ -1,29 +1,29 @@
 :root {
   /* Cursor */
-  --app-cursor-default: url("../cursor/default-light.svg") 5 3, default;
-  --app-cursor-disabled: url("../cursor/disabled-light.svg") 5 3, not-allowed;
-  --app-cursor-pointer: url("../cursor/pointer-light.svg") 5 3, pointer;
-  --app-cursor-text: url("../cursor/text-light.svg") 16 16, text;
-  --app-cursor-grab: url("../cursor/grab-light.svg") 5 3, grab;
+  --app-cursor-default: url("/src/app/shared/styles/cursor/default-light.svg") 5 3, default;
+  --app-cursor-disabled: url("/src/app/shared/styles/cursor/disabled-light.svg") 5 3, not-allowed;
+  --app-cursor-pointer: url("/src/app/shared/styles/cursor/pointer-light.svg") 5 3, pointer;
+  --app-cursor-text: url("/src/app/shared/styles/cursor/text-light.svg") 16 16, text;
+  --app-cursor-grab: url("/src/app/shared/styles/cursor/grab-light.svg") 5 3, grab;
   --app-cursor-grabbing: url("/src/app/shared/styles/cursor/grabbing-light.svg") 18 23, grabbing;
 }
 
 :root[data-theme='dark'] {
-  --app-cursor-default: url("../cursor/default-dark.svg") 5 3, default;
-  --app-cursor-disabled: url("../cursor/disabled-dark.svg") 5 3, not-allowed;
-  --app-cursor-pointer: url("../cursor/pointer-dark.svg") 5 3, pointer;
-  --app-cursor-text: url("../cursor/text-dark.svg") 16 16, text;
-  --app-cursor-grab: url("../cursor/grab-dark.svg") 5 3, grab;
+  --app-cursor-default: url("/src/app/shared/styles/cursor/default-dark.svg") 5 3, default;
+  --app-cursor-disabled: url("/src/app/shared/styles/cursor/disabled-dark.svg") 5 3, not-allowed;
+  --app-cursor-pointer: url("/src/app/shared/styles/cursor/pointer-dark.svg") 5 3, pointer;
+  --app-cursor-text: url("/src/app/shared/styles/cursor/text-dark.svg") 16 16, text;
+  --app-cursor-grab: url("/src/app/shared/styles/cursor/grab-dark.svg") 5 3, grab;
   --app-cursor-grabbing: url("/src/app/shared/styles/cursor/grabbing-dark.svg") 18 23, grabbing;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --app-cursor-default: url("../cursor/default-dark.svg") 5 3, default;
-    --app-cursor-disabled: url("../cursor/disabled-dark.svg") 5 3, not-allowed;
-    --app-cursor-pointer: url("../cursor/pointer-dark.svg") 5 3, pointer;
-    --app-cursor-text: url("../cursor/text-dark.svg") 16 16, text;
-    --app-cursor-grab: url("../cursor/grab-dark.svg") 5 3, grab;
+    --app-cursor-default: url("/src/app/shared/styles/cursor/default-dark.svg") 5 3, default;
+    --app-cursor-disabled: url("/src/app/shared/styles/cursor/disabled-dark.svg") 5 3, not-allowed;
+    --app-cursor-pointer: url("/src/app/shared/styles/cursor/pointer-dark.svg") 5 3, pointer;
+    --app-cursor-text: url("/src/app/shared/styles/cursor/text-dark.svg") 16 16, text;
+    --app-cursor-grab: url("/src/app/shared/styles/cursor/grab-dark.svg") 5 3, grab;
     --app-cursor-grabbing: url("/src/app/shared/styles/cursor/grabbing-dark.svg") 18 23, grabbing;
   }
 }
