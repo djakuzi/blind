@@ -497,6 +497,7 @@ onBeforeUnmount(() => {
     opacity: 1;
     transform: scale(1);
     pointer-events: auto;
+    will-change: transform, opacity;
   }
 }
 
