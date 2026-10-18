@@ -54,7 +54,7 @@ const menuActions = computed(() => [
 
 <template>
   <ViewLayout class="view-menu" align="center" justify="center" padding="none">
-    <AppFlex direction="column" align="center" width="100%" :gap="16">
+    <AppFlex direction="column" align="center" width="100%" :gap="8">
       <AppLogo size="big" logo="blindTextRight" width="85rem" height="auto" />
 
       <AppFlex class="view-menu__nav" direction="column" justify="center" align="stretch" :gap="8" width="max-content" max-width="100%">
