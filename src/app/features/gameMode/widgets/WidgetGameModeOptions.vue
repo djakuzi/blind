@@ -10,7 +10,6 @@ import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnect
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import type { iAppSegmentedCardOption } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
-import { LibText } from '@/core/lib/text';
 
 export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
@@ -43,6 +42,7 @@ const emit = defineEmits<{
 
 const gameModeStore = useGameModeStore();
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
+const playerOptionLocale = useLocale((locale) => locale.game.format.playerOptions);
 
 const selectedPlayerOptionKey = ref('');
 const selectedConnectionType = ref<tKeyTypeConnection | ''>('');
@@ -73,7 +73,7 @@ const availableConnections = computed(() => selectedPlayerOption.value?.connecti
 const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
   resolvedPlayerOptions.value.map((option) => ({
     value: option.key,
-    label: LibText.formatGroups(option.players, option.teamSize, ' VS '),
+    label: playerOptionLocale.value[option.key] ?? option.key,
     image: {
       light: option.icon.light,
       dark: option.icon.dark,

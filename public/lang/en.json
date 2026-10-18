@@ -114,6 +114,10 @@
         "many": "{count} players",
         "other": "{count} players"
       },
+      "playerOptions": {
+        "1v1": "1 VS 1",
+        "2v2": "2 VS 2"
+      },
       "rounds": {
         "one": "{count} round",
         "few": "{count} rounds",

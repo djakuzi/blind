@@ -19,6 +19,7 @@ export interface LocaleGame {
   modes: Record<string, iLocaleGameMode>;
   format: {
     players: tLocalePluralForms;
+    playerOptions: Record<string, string>;
     rounds: tLocalePluralForms;
   };
 }
