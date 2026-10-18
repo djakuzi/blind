@@ -1,17 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import BluetoothDark from '@/assets/icons/connectionType/bluetooth-dark.svg?url';
-import BluetoothLight from '@/assets/icons/connectionType/bluetooth-light.svg?url';
-import LanDark from '@/assets/icons/connectionType/lan-dark.svg?url';
-import LanLight from '@/assets/icons/connectionType/lan-light.svg?url';
-import OnlineDark from '@/assets/icons/connectionType/online-dark.svg?url';
-import OnlineLight from '@/assets/icons/connectionType/online-light.svg?url';
+import { useGameModeConnectionOptions } from '@/app/features/gameMode/composables/useGameModeConnectionOptions';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppModal from '@/app/shared/components/interaction/overlay/AppModal.vue';
 import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
-import type { iAppSegmentedCardOption, iAppSegmentedCardOptionImage } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import { TYPE_CONNECTION } from '@/app/shared/constants/game/typeConnection.conts';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 
@@ -28,21 +21,7 @@ const emit = defineEmits<{
 }>();
 
 const modalLocale = useLocale((locale) => locale.views.menu.index.modals.joinSession);
-const connectionLocale = useLocale((locale) => locale.connectionTypes);
-
-const CONNECTION_IMAGES: Record<tKeyTypeConnection, iAppSegmentedCardOptionImage> = {
-  BLUETOOTH: { light: BluetoothLight, dark: BluetoothDark },
-  LAN: { light: LanLight, dark: LanDark },
-  ONLINE: { light: OnlineLight, dark: OnlineDark },
-};
-
-const connectionOptions = computed<iAppSegmentedCardOption[]>(() =>
-  Object.values(TYPE_CONNECTION).map((connection) => ({
-    value: connection,
-    label: connectionLocale.value[connection].title,
-    image: CONNECTION_IMAGES[connection],
-  })),
-);
+const { connectionOptions } = useGameModeConnectionOptions();
 
 function handleSelect(value: string) {
   if (!Object.values(TYPE_CONNECTION).includes(value as tKeyTypeConnection)) {

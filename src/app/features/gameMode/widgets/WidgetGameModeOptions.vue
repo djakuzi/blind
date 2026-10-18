@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import BluetoothDark from '@/assets/icons/connectionType/bluetooth-dark.svg?url';
-import BluetoothLight from '@/assets/icons/connectionType/bluetooth-light.svg?url';
-import LanDark from '@/assets/icons/connectionType/lan-dark.svg?url';
-import LanLight from '@/assets/icons/connectionType/lan-light.svg?url';
-import OnlineDark from '@/assets/icons/connectionType/online-dark.svg?url';
-import OnlineLight from '@/assets/icons/connectionType/online-light.svg?url';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import type { iApiGameModePlayerData } from '@/app/domain/game/type/api/common';
+import { useGameModeConnectionOptions } from '@/app/features/gameMode/composables/useGameModeConnectionOptions';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
-import type { iAppSegmentedCardOption, iAppSegmentedCardOptionImage } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
+import type { iAppSegmentedCardOption } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 export interface PropsWidgetGameModeOptions {
@@ -36,21 +31,6 @@ interface iResolvedPlayerOption extends iApiGameModePlayerData {
   key: string;
 }
 
-const CONNECTION_IMAGES: Record<tKeyTypeConnection, iAppSegmentedCardOptionImage> = {
-  BLUETOOTH: {
-    light: BluetoothLight,
-    dark: BluetoothDark,
-  },
-  LAN: {
-    light: LanLight,
-    dark: LanDark,
-  },
-  ONLINE: {
-    light: OnlineLight,
-    dark: OnlineDark,
-  },
-};
-
 const props = withDefaults(defineProps<PropsWidgetGameModeOptions>(), {
   players: null,
   connection: null,
@@ -62,7 +42,6 @@ const emit = defineEmits<{
 
 const gameModeStore = useGameModeStore();
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
-const connectionLocale = useLocale((locale) => locale.connectionTypes);
 
 const selectedPlayerOptionKey = ref('');
 const selectedConnectionType = ref<tKeyTypeConnection | ''>('');
@@ -103,14 +82,7 @@ const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
 
 const connectionTypes = computed(() => [...new Set(resolvedPlayerOptions.value.flatMap((option) => option.connections))]);
 
-const connectionOptions = computed<iAppSegmentedCardOption[]>(() =>
-  connectionTypes.value.map((connectionType) => ({
-    value: connectionType,
-    label: connectionLocale.value[connectionType].title,
-    image: CONNECTION_IMAGES[connectionType],
-    disabled: !availableConnections.value.includes(connectionType),
-  })),
-);
+const { connectionOptions } = useGameModeConnectionOptions(connectionTypes, availableConnections);
 
 function formatPlayerOption({ players, teamSize }: iApiGameModePlayerData) {
   if (players <= 0 || teamSize <= 0) {
