@@ -24,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
   holdStartDelay: 0,
   initialProgress: 15,
   releaseDuration: 140,
+  resetOnComplete: false,
   progressSound: 'sfx.interaction.hold-progress',
   sound: 'sfx.interaction.hold-complete',
   startSound: 'sfx.interaction.hold-start',
@@ -59,6 +60,7 @@ function handleComplete() {
     :initial-progress="initialProgress"
     :max-width="holdActionMaxWidth"
     :release-duration="releaseDuration"
+    :reset-on-complete="resetOnComplete"
     :progress-sound="progressSound"
     :sound="sound"
     :start-sound="startSound"

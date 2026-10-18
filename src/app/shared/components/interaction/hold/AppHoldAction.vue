@@ -23,6 +23,7 @@ export interface PropsAppHoldAction extends PropsWidth, PropsDisabled {
   initialProgress?: number;
   moveCancelThreshold?: number;
   releaseDuration?: number;
+  resetOnComplete?: boolean;
   progressSound?: tAudioId | null;
   sound?: tAudioId | null;
   startSound?: tAudioId | null;
@@ -39,6 +40,7 @@ const props = withDefaults(defineProps<PropsAppHoldAction>(), {
   maxWidth: '100%',
   moveCancelThreshold: 6,
   releaseDuration: 140,
+  resetOnComplete: false,
   progressSound: 'sfx.interaction.hold-progress',
   sound: 'sfx.interaction.hold-complete',
   startSound: 'sfx.interaction.hold-start',
@@ -276,6 +278,12 @@ function completeHold() {
 
   props.actions?.complete?.();
   emit('complete');
+
+  if (props.resetOnComplete) {
+    resetHoldState(true);
+    hasCompleted.value = false;
+    setProgress(normalizedInitialProgress.value);
+  }
 }
 
 function updateHoldProgress() {

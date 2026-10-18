@@ -57,14 +57,16 @@ const menuActions = computed(() => [
     <AppFlex direction="column" align="center" width="100%" :gap="16">
       <AppLogo size="big" logo="blindTextRight" width="85rem" height="auto" />
 
-      <AppFlex class="view-menu__nav" direction="column" justify="center" align="center" :gap="8" width="100%">
+      <AppFlex class="view-menu__nav" direction="column" justify="center" align="stretch" :gap="8" width="max-content" max-width="100%">
         <AppButtonHold
           v-for="menuAction in menuActions"
           :key="menuAction.key"
           :actions="menuAction.actions"
           :text="menuAction.text"
-          width="70rem"
+          width="100%"
+          max-width="100%"
           size="big"
+          :reset-on-complete="menuAction.key === 'join'"
         />
       </AppFlex>
 
