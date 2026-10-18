@@ -1,11 +1,11 @@
 import { apiClient } from '@/app/shared/api';
 import { ModelGameMode } from '../models/GameMode.model';
-import type { iApiGameModesResourceData } from '../type/api/common';
+import { ModelGameModeOption } from '../models/GameModeOption.model';
 import type { iResponseGameModes } from '../type/api/res';
 
 export interface iGameModesData {
   modes: ModelGameMode[];
-  data: iApiGameModesResourceData;
+  options: Record<string, ModelGameModeOption>;
 }
 
 export class ApiGame {
@@ -21,9 +21,13 @@ export class ApiGame {
       });
     });
 
+    const options = Object.fromEntries(
+      Object.entries(response.data.options).map(([key, option]) => [key, new ModelGameModeOption({ key, ...option })]),
+    );
+
     return {
       modes,
-      data: response.data,
+      options,
     };
   }
 }

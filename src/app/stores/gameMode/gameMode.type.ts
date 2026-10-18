@@ -1,7 +1,7 @@
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
-import type { iApiGameModesResourceData } from '@/app/domain/game/type/api/common';
+import type { iGameModeOption } from '@/app/domain/game/models/GameModeOption.model';
 
 export interface iGameModeState {
   modes: iGameMode[];
-  data: iApiGameModesResourceData | null;
+  options: Record<string, iGameModeOption> | null;
 }

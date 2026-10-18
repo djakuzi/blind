@@ -42,7 +42,7 @@ export function usePreGame() {
   );
 
   function getNormalizedSelection(input: iPreGameSelectionInput) {
-    return normalizePreGameSelection(input, gameModeStore.modes, gameModeStore.data);
+    return normalizePreGameSelection(input, gameModeStore.modes, gameModeStore.options);
   }
 
   function createCurrentRouteQuery(selection: iPreGameSelection): LocationQueryRaw {
@@ -88,7 +88,7 @@ export function usePreGame() {
   }
 
   function syncFromQuery() {
-    if (!gameModeStore.modes.length || !gameModeStore.data) {
+    if (!gameModeStore.modes.length || !gameModeStore.options) {
       return Promise.resolve();
     }
 
@@ -122,7 +122,7 @@ export function usePreGame() {
   }
 
   watch(
-    [() => route.query.mode, () => route.query.players, () => route.query.connection, () => gameModeStore.modes, () => gameModeStore.data],
+    [() => route.query.mode, () => route.query.players, () => route.query.connection, () => gameModeStore.modes, () => gameModeStore.options],
     () => {
       if (!isWritingQuery) {
         syncFromQuery();

@@ -6,7 +6,7 @@ export function createLoadGameModes() {
     const result = await apiGame.getModes();
 
     this.modes = result.modes;
-    this.data = result.data;
+    this.options = result.options;
 
     return result;
   };

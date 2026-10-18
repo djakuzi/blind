@@ -1,6 +1,6 @@
 import type { LocationQueryRaw } from 'vue-router';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
-import type { iApiGameModesResourceData } from '@/app/domain/game/type/api/common';
+import type { iGameModeOption } from '@/app/domain/game/models/GameModeOption.model';
 import type { iPreGameSelection } from '@/app/stores/preGame/preGame.type';
 
 export interface iPreGameSelectionInput {
@@ -22,14 +22,14 @@ export function readPreGameQueryValue(value: unknown): string | null {
 export function normalizePreGameSelection(
   input: iPreGameSelectionInput,
   modes: iGameMode[],
-  data: iApiGameModesResourceData | null,
+  options: Record<string, iGameModeOption> | null,
 ): iPreGameSelection {
   const mode = modes.find((item) => item.key === input.mode) ?? modes[0] ?? null;
-  const availablePlayers = mode?.options.filter((key) => data?.players[key] !== undefined) ?? [];
+  const availablePlayers = mode?.keyOptions.filter((key) => options?.[key] !== undefined) ?? [];
 
   const players = input.players && availablePlayers.includes(input.players) ? input.players : (availablePlayers[0] ?? null);
 
-  const availableConnections = players ? (data?.players[players]?.connections ?? []) : [];
+  const availableConnections = players ? (options?.[players]?.connections ?? []) : [];
 
   const connection = availableConnections.find((connectionType) => connectionType === input.connection) ?? availableConnections[0] ?? null;
 

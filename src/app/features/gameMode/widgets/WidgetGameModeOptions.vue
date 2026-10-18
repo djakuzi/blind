@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
-import type { iApiGameModePlayerData } from '@/app/domain/game/type/api/common';
+import type { iGameModeOption } from '@/app/domain/game/models/GameModeOption.model';
 import { useGameModeConnectionOptions } from '@/app/features/gameMode/composables/useGameModeConnectionOptions';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
@@ -27,10 +27,6 @@ export type iWidgetGameModeOptionsSelection =
       value: tKeyTypeConnection;
     };
 
-interface iResolvedPlayerOption extends iApiGameModePlayerData {
-  key: string;
-}
-
 const props = withDefaults(defineProps<PropsWidgetGameModeOptions>(), {
   players: null,
   connection: null,
@@ -47,23 +43,18 @@ const playersLocale = useLocale((locale) => locale.game.format.players);
 const selectedPlayerOptionKey = ref('');
 const selectedConnectionType = ref<tKeyTypeConnection | ''>('');
 
-function resolvePlayerOption(key: string): iResolvedPlayerOption | null {
-  if (!props.mode.options.includes(key)) {
+function resolvePlayerOption(key: string): iGameModeOption | null {
+  if (!props.mode.keyOptions.includes(key)) {
     return null;
   }
 
-  const option = gameModeStore.data?.players[key];
+  const option = gameModeStore.options?.[key];
 
-  return option
-    ? {
-        key,
-        ...option,
-      }
-    : null;
+  return option ?? null;
 }
 
 const resolvedPlayerOptions = computed(() =>
-  props.mode.options.map(resolvePlayerOption).filter((option): option is iResolvedPlayerOption => option !== null),
+  props.mode.keyOptions.map(resolvePlayerOption).filter((option): option is iGameModeOption => option !== null),
 );
 
 const selectedPlayerOption = computed(() => resolvePlayerOption(selectedPlayerOptionKey.value) ?? resolvedPlayerOptions.value[0] ?? null);

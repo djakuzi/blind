@@ -5,7 +5,7 @@ import type { iGameModeState } from './gameMode.type';
 export const useGameModeStore = defineStore('gameMode', {
   state: (): iGameModeState => ({
     modes: [],
-    data: null,
+    options: null,
   }),
 
   actions: {

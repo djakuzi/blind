@@ -10,7 +10,7 @@ export interface iApiGameModeData {
   key: tGameModeKey;
   name: string;
   rounds: number;
-  options: string[];
+  keyOptions: string[];
   locked: boolean;
 }
 
@@ -18,7 +18,7 @@ export interface iApiGameModeResourceData {
   image: iApiThemeMedia;
 }
 
-export interface iApiGameModePlayerData {
+export interface iApiGameModeOptionData {
   players: number;
   teamSize: number;
   connections: tKeyTypeConnection[];
@@ -27,5 +27,5 @@ export interface iApiGameModePlayerData {
 
 export interface iApiGameModesResourceData {
   modes: Record<tGameModeKey, iApiGameModeResourceData>;
-  players: Record<string, iApiGameModePlayerData>;
+  options: Record<string, iApiGameModeOptionData>;
 }
