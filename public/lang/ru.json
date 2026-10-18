@@ -9,10 +9,16 @@
       "index": {
         "ui": {
           "play": "Играть",
+          "join": "Присоединиться",
           "settings": "Настройки",
           "holdHint": "Зажмите кнопку для выбора"
         },
-        "modals": {}
+        "modals": {
+          "joinSession": {
+            "title": "Способ подключения",
+            "close": "Закрыть"
+          }
+        }
       }
     },
     "preGame": {

@@ -9,10 +9,16 @@
       "index": {
         "ui": {
           "play": "Play",
+          "join": "Join",
           "settings": "Settings",
           "holdHint": "Hold button to select"
         },
-        "modals": {}
+        "modals": {
+          "joinSession": {
+            "title": "Connection type",
+            "close": "Close"
+          }
+        }
       }
     },
     "preGame": {

@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
+import { useSessionJoinOverlay } from '@/app/overlay/sessionJoin/composables/useSessionJoinOverlay';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
@@ -10,11 +11,16 @@ import AppHoldHint from '@/app/shared/components/ui/hint/AppHoldHint.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
 
 const router = useRouter();
+const { open: openSessionJoin } = useSessionJoinOverlay();
 
 const menuLocale = useLocale((locale) => locale.views.menu.index.ui);
 
 function handlePlay() {
   router.push({ name: KEY_ROUTE.preGame.index });
+}
+
+function handleJoin() {
+  openSessionJoin();
 }
 
 function handleSettings() {
@@ -27,6 +33,13 @@ const menuActions = computed(() => [
     text: menuLocale.value.play,
     actions: {
       complete: handlePlay,
+    },
+  },
+  {
+    key: 'join',
+    text: menuLocale.value.join,
+    actions: {
+      complete: handleJoin,
     },
   },
   {
