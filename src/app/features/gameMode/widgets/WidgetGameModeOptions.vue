@@ -10,6 +10,7 @@ import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnect
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import type { iAppSegmentedCardOption } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
+import { LibText } from '@/core/lib/text';
 
 export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
@@ -72,7 +73,7 @@ const availableConnections = computed(() => selectedPlayerOption.value?.connecti
 const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
   resolvedPlayerOptions.value.map((option) => ({
     value: option.key,
-    label: formatPlayerOption(option),
+    label: LibText.formatGroups(option.players, option.teamSize, ' VS '),
     image: {
       light: option.icon.light,
       dark: option.icon.dark,
@@ -83,20 +84,6 @@ const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
 const connectionTypes = computed(() => [...new Set(resolvedPlayerOptions.value.flatMap((option) => option.connections))]);
 
 const { connectionOptions } = useGameModeConnectionOptions(connectionTypes, availableConnections);
-
-function formatPlayerOption({ players, teamSize }: iApiGameModePlayerData) {
-  if (players <= 0 || teamSize <= 0) {
-    return String(players);
-  }
-
-  const teamCount = players / teamSize;
-
-  if (!Number.isInteger(teamCount) || teamCount < 2) {
-    return String(players);
-  }
-
-  return Array(teamCount).fill(teamSize).join(' VS ');
-}
 
 function syncSelections() {
   const playerOption = resolvePlayerOption(props.players ?? '') ?? resolvedPlayerOptions.value[0] ?? null;
