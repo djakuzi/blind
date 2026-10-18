@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
-import type { iGameModeOption } from '@/app/domain/game/models/GameModeOption.model';
 import { useGameModeConnectionOptions } from '@/app/features/gameMode/composables/useGameModeConnectionOptions';
+import { useGameModePlayerOptions } from '@/app/features/gameMode/composables/useGameModePlayerOptions';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
-import type { iAppSegmentedCardOption } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
-import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 export interface PropsWidgetGameModeOptions {
   mode: iGameMode;
@@ -36,42 +34,17 @@ const emit = defineEmits<{
   select: [selection: iWidgetGameModeOptionsSelection];
 }>();
 
-const gameModeStore = useGameModeStore();
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
-const playersLocale = useLocale((locale) => locale.game.format.players);
 
 const selectedPlayerOptionKey = ref('');
 const selectedConnectionType = ref<tKeyTypeConnection | ''>('');
 
-function resolvePlayerOption(key: string): iGameModeOption | null {
-  if (!props.mode.keyOptions.includes(key)) {
-    return null;
-  }
-
-  const option = gameModeStore.options?.[key];
-
-  return option ?? null;
-}
-
-const resolvedPlayerOptions = computed(() =>
-  props.mode.keyOptions.map(resolvePlayerOption).filter((option): option is iGameModeOption => option !== null),
+const { resolvePlayerOption, resolvedPlayerOptions, selectedPlayerOption, playerOptions } = useGameModePlayerOptions(
+  () => props.mode,
+  selectedPlayerOptionKey,
 );
-
-const selectedPlayerOption = computed(() => resolvePlayerOption(selectedPlayerOptionKey.value) ?? resolvedPlayerOptions.value[0] ?? null);
 
 const availableConnections = computed(() => selectedPlayerOption.value?.connections ?? []);
-
-const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
-  resolvedPlayerOptions.value.map((option) => ({
-    value: option.key,
-    label: playersLocale.value[option.key] ?? option.key,
-    image: {
-      light: option.icon.light,
-      dark: option.icon.dark,
-    },
-  })),
-);
-
 const connectionTypes = computed(() => [...new Set(resolvedPlayerOptions.value.flatMap((option) => option.connections))]);
 
 const { connectionOptions } = useGameModeConnectionOptions(connectionTypes, availableConnections);
