@@ -19,9 +19,9 @@
               "connection": {
                 "title": "Connection type"
               },
-              "gameMode": {
-                "title": "Game mode",
-                "placeholder": "Game mode selection will appear here"
+              "lobby": {
+                "title": "Lobby",
+                "placeholder": "Available lobbies will appear here"
               }
             },
             "next": "Next",

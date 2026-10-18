@@ -12,7 +12,7 @@ export interface LocaleViewMenu {
           connection: {
             title: string;
           };
-          gameMode: {
+          lobby: {
             title: string;
             placeholder: string;
           };

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useGameModeConnectionOptions } from '@/app/features/gameMode/composables/useGameModeConnectionOptions';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppModal from '@/app/shared/components/interaction/overlay/AppModal.vue';
-import { useInteractionSteps } from '@/app/shared/components/interaction/steps/useInteractionSteps';
-import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
+import WidgetSteps from '@/app/shared/components/widgets/steps/WidgetSteps.vue';
+import type { iWidgetStepsActions } from '@/app/shared/components/widgets/steps/WidgetSteps.vue';
 import { TYPE_CONNECTION } from '@/app/shared/constants/game/typeConnection.conts';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 
@@ -15,6 +15,10 @@ interface Props {
   modelValue: boolean;
   selectedConnection: tKeyTypeConnection | null;
 }
+
+type tSessionJoinStep = 'connection' | 'lobby';
+
+const STEPS = ['connection', 'lobby'] as const;
 
 const props = defineProps<Props>();
 
@@ -24,10 +28,28 @@ const emit = defineEmits<{
 }>();
 
 const modalLocale = useLocale((locale) => locale.views.menu.index.modals.joinSession);
+const joinText = useLocale((locale) => locale.views.menu.index.ui.join);
 const { connectionOptions } = useGameModeConnectionOptions();
-const { currentStep, next, back, reset } = useInteractionSteps(['connection', 'gameMode'] as const);
 
-const stepTitle = computed(() => modalLocale.value.steps[currentStep.value].title);
+const currentStep = ref<string>('connection');
+const stepTitle = computed(() => modalLocale.value.steps[currentStep.value as tSessionJoinStep].title);
+
+const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
+  connection: {
+    next: {
+      text: modalLocale.value.next,
+      disabled: !props.selectedConnection,
+    },
+  },
+  lobby: {
+    back: {
+      text: modalLocale.value.back,
+    },
+    save: {
+      text: joinText.value,
+    },
+  },
+}));
 
 function handleSelect(value: string) {
   if (!Object.values(TYPE_CONNECTION).includes(value as tKeyTypeConnection)) {
@@ -37,19 +59,15 @@ function handleSelect(value: string) {
   emit('select', value as tKeyTypeConnection);
 }
 
-function handleNext() {
-  if (currentStep.value !== 'connection' || !props.selectedConnection) {
-    return;
-  }
-
-  next();
+function handleSave(_step: string) {
+  // Lobby connection will be implemented here.
 }
 
 watch(
   () => props.modelValue,
   (isOpen) => {
     if (isOpen) {
-      reset();
+      currentStep.value = 'connection';
     }
   },
 );
@@ -59,6 +77,8 @@ watch(
   <AppModal
     :model-value="modelValue"
     :aria-label="stepTitle"
+    :body-padding-x="0"
+    :body-padding-y="0"
     max-width="124rem"
     @update:model-value="emit('update:modelValue', $event)"
   >
@@ -66,28 +86,22 @@ watch(
       <AppTitle :text="stepTitle" tag="h2" font-size="xl" />
     </template>
 
-    <AppSegmentedCard
-      v-if="currentStep === 'connection'"
-      :model-value="selectedConnection ?? ''"
-      :options="connectionOptions"
-      size="middle"
-      width="100%"
-      max-width="100%"
-      @update:model-value="handleSelect"
-    />
+    <WidgetSteps v-model:step="currentStep" :steps="STEPS" :actions="actions" @save="handleSave">
+      <template #connection>
+        <AppSegmentedCard
+          :model-value="selectedConnection ?? ''"
+          :options="connectionOptions"
+          size="middle"
+          width="100%"
+          max-width="100%"
+          @update:model-value="handleSelect"
+        />
+      </template>
 
-    <AppText v-else class="widget-session-join__placeholder" :text="modalLocale.steps.gameMode.placeholder" tag="p" />
-
-    <template #footer>
-      <AppButton
-        v-if="currentStep === 'connection'"
-        :text="modalLocale.next"
-        :disabled="!selectedConnection"
-        width="100%"
-        @click="handleNext"
-      />
-      <AppButton v-else :text="modalLocale.back" variant="secondary" width="100%" @click="back" />
-    </template>
+      <template #lobby>
+        <AppText class="widget-session-join__placeholder" :text="modalLocale.steps.lobby.placeholder" tag="p" />
+      </template>
+    </WidgetSteps>
   </AppModal>
 </template>
 
