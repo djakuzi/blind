@@ -48,7 +48,7 @@ const selectedPlayerOptionKey = ref('');
 const selectedConnectionType = ref<tKeyTypeConnection | ''>('');
 
 function resolvePlayerOption(key: string): iResolvedPlayerOption | null {
-  if (!props.mode.players.includes(key)) {
+  if (!props.mode.options.includes(key)) {
     return null;
   }
 
@@ -63,7 +63,7 @@ function resolvePlayerOption(key: string): iResolvedPlayerOption | null {
 }
 
 const resolvedPlayerOptions = computed(() =>
-  props.mode.players.map(resolvePlayerOption).filter((option): option is iResolvedPlayerOption => option !== null),
+  props.mode.options.map(resolvePlayerOption).filter((option): option is iResolvedPlayerOption => option !== null),
 );
 
 const selectedPlayerOption = computed(() => resolvePlayerOption(selectedPlayerOptionKey.value) ?? resolvedPlayerOptions.value[0] ?? null);

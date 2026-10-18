@@ -25,7 +25,7 @@ export function normalizePreGameSelection(
   data: iApiGameModesResourceData | null,
 ): iPreGameSelection {
   const mode = modes.find((item) => item.key === input.mode) ?? modes[0] ?? null;
-  const availablePlayers = mode?.players.filter((key) => data?.players[key] !== undefined) ?? [];
+  const availablePlayers = mode?.options.filter((key) => data?.players[key] !== undefined) ?? [];
 
   const players = input.players && availablePlayers.includes(input.players) ? input.players : (availablePlayers[0] ?? null);
 

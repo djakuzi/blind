@@ -4,7 +4,7 @@
       "key": "single-hit",
       "name": "DUEL",
       "rounds": 3,
-      "players": [
+      "options": [
         "1v1",
         "2v2"
       ],
@@ -14,7 +14,7 @@
       "key": "health",
       "name": "COMBAT",
       "rounds": 3,
-      "players": [
+      "options": [
         "1v1",
         "2v2"
       ],
@@ -24,7 +24,7 @@
       "key": "survival",
       "name": "SURVIVAL",
       "rounds": 3,
-      "players": [
+      "options": [
         "1v1",
         "2v2"
       ],

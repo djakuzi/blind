@@ -10,7 +10,7 @@ export interface iApiGameModeData {
   key: tGameModeKey;
   name: string;
   rounds: number;
-  players: string[];
+  options: string[];
   locked: boolean;
 }
 
