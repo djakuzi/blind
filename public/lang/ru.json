@@ -15,8 +15,17 @@
         },
         "modals": {
           "joinSession": {
-            "title": "Способ подключения",
-            "close": "Закрыть"
+            "steps": {
+              "connection": {
+                "title": "Способ подключения"
+              },
+              "gameMode": {
+                "title": "Режим игры",
+                "placeholder": "Здесь будет выбор режима игры"
+              }
+            },
+            "next": "Далее",
+            "back": "Назад"
           }
         }
       }

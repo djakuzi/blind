@@ -15,8 +15,17 @@
         },
         "modals": {
           "joinSession": {
-            "title": "Connection type",
-            "close": "Close"
+            "steps": {
+              "connection": {
+                "title": "Connection type"
+              },
+              "gameMode": {
+                "title": "Game mode",
+                "placeholder": "Game mode selection will appear here"
+              }
+            },
+            "next": "Next",
+            "back": "Back"
           }
         }
       }

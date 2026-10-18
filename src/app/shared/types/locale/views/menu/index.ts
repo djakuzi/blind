@@ -8,8 +8,17 @@ export interface LocaleViewMenu {
     };
     modals: {
       joinSession: {
-        title: string;
-        close: string;
+        steps: {
+          connection: {
+            title: string;
+          };
+          gameMode: {
+            title: string;
+            placeholder: string;
+          };
+        };
+        next: string;
+        back: string;
       };
     };
   };
