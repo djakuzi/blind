@@ -42,13 +42,13 @@ const emit = defineEmits<{
 
 const gameModeStore = useGameModeStore();
 const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
-const playerOptionLocale = useLocale((locale) => locale.game.format.playerOptions);
+const playersLocale = useLocale((locale) => locale.game.format.players);
 
 const selectedPlayerOptionKey = ref('');
 const selectedConnectionType = ref<tKeyTypeConnection | ''>('');
 
 function resolvePlayerOption(key: string): iResolvedPlayerOption | null {
-  if (!props.mode.options.includes(key)) {
+  if (!props.mode.players.includes(key)) {
     return null;
   }
 
@@ -63,7 +63,7 @@ function resolvePlayerOption(key: string): iResolvedPlayerOption | null {
 }
 
 const resolvedPlayerOptions = computed(() =>
-  props.mode.options.map(resolvePlayerOption).filter((option): option is iResolvedPlayerOption => option !== null),
+  props.mode.players.map(resolvePlayerOption).filter((option): option is iResolvedPlayerOption => option !== null),
 );
 
 const selectedPlayerOption = computed(() => resolvePlayerOption(selectedPlayerOptionKey.value) ?? resolvedPlayerOptions.value[0] ?? null);
@@ -73,7 +73,7 @@ const availableConnections = computed(() => selectedPlayerOption.value?.connecti
 const playerOptions = computed<iAppSegmentedCardOption[]>(() =>
   resolvedPlayerOptions.value.map((option) => ({
     value: option.key,
-    label: playerOptionLocale.value[option.key] ?? option.key,
+    label: playersLocale.value[option.key] ?? option.key,
     image: {
       light: option.icon.light,
       dark: option.icon.dark,

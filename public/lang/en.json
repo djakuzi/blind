@@ -108,13 +108,13 @@
       }
     },
     "format": {
-      "players": {
+      "playerCount": {
         "one": "{count} player",
         "few": "{count} players",
         "many": "{count} players",
         "other": "{count} players"
       },
-      "playerOptions": {
+      "players": {
         "1v1": "1 VS 1",
         "2v2": "2 VS 2"
       },

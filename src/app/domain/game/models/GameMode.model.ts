@@ -4,7 +4,7 @@ export interface iGameMode {
   readonly key: iApiGameModeData['key'];
   readonly name: string;
   readonly rounds: number;
-  readonly options: string[];
+  readonly players: string[];
   readonly locked: boolean;
   readonly img: iApiThemeMedia;
 }
@@ -17,7 +17,7 @@ export class ModelGameMode implements iGameMode {
   readonly key: iApiGameModeData['key'];
   readonly name: string;
   readonly rounds: number;
-  readonly options: string[];
+  readonly players: string[];
   readonly locked: boolean;
 
   private readonly image: iApiThemeMedia;
@@ -26,7 +26,7 @@ export class ModelGameMode implements iGameMode {
     this.key = payload.key;
     this.name = payload.name;
     this.rounds = payload.rounds;
-    this.options = payload.options;
+    this.players = payload.players;
     this.locked = payload.locked;
     this.image = payload.image;
   }

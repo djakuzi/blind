@@ -108,13 +108,13 @@
       }
     },
     "format": {
-      "players": {
+      "playerCount": {
         "one": "{count} игрок",
         "few": "{count} игрока",
         "many": "{count} игроков",
         "other": "{count} игроков"
       },
-      "playerOptions": {
+      "players": {
         "1v1": "1 VS 1",
         "2v2": "2 VS 2"
       },
