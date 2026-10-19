@@ -32,6 +32,7 @@ const joinText = useLocale((locale) => locale.views.menu.index.ui.join);
 const { connectionOptions } = useGameModeConnectionOptions();
 
 const currentStep = ref<string>('connection');
+const selectedTargetKey = ref<string | null>(null);
 const stepTitle = computed(() => modalLocale.value.steps[currentStep.value as tSessionJoinStep].title);
 
 const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
@@ -47,6 +48,7 @@ const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
     },
     save: {
       text: joinText.value,
+      disabled: !selectedTargetKey.value,
     },
   },
 }));
@@ -68,6 +70,7 @@ watch(
   (isOpen) => {
     if (isOpen) {
       currentStep.value = 'connection';
+      selectedTargetKey.value = null;
     }
   },
 );

@@ -1,17 +1,13 @@
 <script lang="ts">
-import type { tAppButtonVariant } from '@/app/shared/components/ui/button/AppButton.vue';
+import type { PropsAppButton } from '@/app/shared/components/ui/button/AppButton.vue';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import type { tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export type tWidgetStepsAction = 'back' | 'next' | 'save';
 
-export interface iWidgetStepsButton {
-  text: string;
+export interface iWidgetStepsButton extends PropsAppButton {
   visible?: boolean;
-  disabled?: boolean;
-  variant?: tAppButtonVariant;
-  size?: tBaseSizeVariant;
 }
 
 export type iWidgetStepsActions = Partial<Record<tWidgetStepsAction, iWidgetStepsButton>>;
@@ -21,6 +17,7 @@ export interface PropsWidgetSteps {
   actions?: Readonly<Record<string, iWidgetStepsActions>>;
   buttonOrder?: readonly tWidgetStepsAction[];
   buttonSize?: tBaseSizeVariant;
+  buttonProps?: Partial<Omit<PropsAppButton, 'text'>>;
   buttonGap?: tSpaceValue;
   contentPaddingX?: tPaddingValue;
   contentPaddingY?: tPaddingValue;
@@ -38,7 +35,7 @@ import { resolveSpaceValue } from '@/app/shared/styles/contracts/space.contract'
 const props = withDefaults(defineProps<PropsWidgetSteps>(), {
   actions: (): Record<string, iWidgetStepsActions> => ({}),
   buttonOrder: (): tWidgetStepsAction[] => ['back', 'next', 'save'],
-  buttonSize: 'middle',
+  buttonSize: 'small',
   buttonGap: 3,
   contentPaddingX: 6,
   contentPaddingY: 5,
@@ -61,15 +58,28 @@ const visibleButtons = computed(() =>
   props.buttonOrder.flatMap((action) => {
     const config = props.actions[currentStep.value]?.[action];
 
-    if (!config || config.visible === false) {
+    if (!config) {
       return [];
     }
 
-    if ((action === 'back' && stepIndex.value <= 0) || (action === 'next' && stepIndex.value >= props.steps.length - 1)) {
+    const { visible = true, ...actionProps } = config;
+
+    if (!visible || (action === 'back' && stepIndex.value <= 0) || (action === 'next' && stepIndex.value >= props.steps.length - 1)) {
       return [];
     }
 
-    return [{ action, ...config }];
+    const buttonProps: PropsAppButton = {
+      variant: action === 'back' ? 'secondary' : 'primary',
+      size: props.buttonSize,
+      width: 'auto',
+      paddingX: 3,
+      paddingY: 2,
+      fontSize: 'md',
+      ...props.buttonProps,
+      ...actionProps,
+    };
+
+    return [{ action, props: buttonProps }];
   }),
 );
 
@@ -84,7 +94,7 @@ const stepsStyle = computed(() => ({
 function handleAction(action: tWidgetStepsAction) {
   const button = visibleButtons.value.find((item) => item.action === action);
 
-  if (!button || button.disabled || !currentStep.value) {
+  if (!button || button.props.disabled || !currentStep.value) {
     return;
   }
 
@@ -101,7 +111,12 @@ function handleAction(action: tWidgetStepsAction) {
   }
 
   currentStepModel.value = targetStep;
-  emit(action, targetStep);
+
+  if (action === 'back') {
+    emit('back', targetStep);
+  } else {
+    emit('next', targetStep);
+  }
 }
 </script>
 
@@ -115,16 +130,7 @@ function handleAction(action: tWidgetStepsAction) {
 
     <div v-if="visibleButtons.length" class="widget-steps__actions">
       <slot name="actions" :step="currentStep" :buttons="visibleButtons" :handle-action="handleAction">
-        <AppButton
-          v-for="button in visibleButtons"
-          :key="button.action"
-          :text="button.text"
-          :variant="button.variant ?? (button.action === 'back' ? 'secondary' : 'primary')"
-          :size="button.size ?? buttonSize"
-          :disabled="button.disabled"
-          width="100%"
-          @click="handleAction(button.action)"
-        />
+        <AppButton v-for="button in visibleButtons" :key="button.action" v-bind="button.props" @click="handleAction(button.action)" />
       </slot>
     </div>
   </div>
@@ -143,14 +149,15 @@ function handleAction(action: tWidgetStepsAction) {
 
 .widget-steps__actions {
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  justify-content: flex-end;
   min-width: 0;
   gap: var(--cp-steps-button-gap);
   padding: var(--cp-steps-actions-padding-y) var(--cp-steps-actions-padding-x);
 }
 
 .widget-steps__actions > * {
-  flex: 1 1 0;
+  flex: 0 1 auto;
   min-width: 0;
 }
 </style>
