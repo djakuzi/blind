@@ -94,7 +94,7 @@ watch(
         <AppSegmentedCard
           :model-value="selectedConnection ?? ''"
           :options="connectionOptions"
-          size="middle"
+          size="big"
           width="100%"
           max-width="100%"
           @update:model-value="handleSelect"
