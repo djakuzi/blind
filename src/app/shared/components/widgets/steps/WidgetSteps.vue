@@ -1,6 +1,5 @@
 <script lang="ts">
 import type { PropsAppButton } from '@/app/shared/components/ui/button/AppButton.vue';
-import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import type { tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
@@ -16,7 +15,6 @@ export interface PropsWidgetSteps {
   steps: readonly string[];
   actions?: Readonly<Record<string, iWidgetStepsActions>>;
   buttonOrder?: readonly tWidgetStepsAction[];
-  buttonSize?: tBaseSizeVariant;
   buttonProps?: Partial<Omit<PropsAppButton, 'text'>>;
   buttonGap?: tSpaceValue;
   contentPaddingX?: tPaddingValue;
@@ -35,7 +33,6 @@ import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contr
 const props = withDefaults(defineProps<PropsWidgetSteps>(), {
   actions: (): Record<string, iWidgetStepsActions> => ({}),
   buttonOrder: (): tWidgetStepsAction[] => ['back', 'next', 'save'],
-  buttonSize: 'small',
   buttonGap: 3,
   contentPaddingX: 6,
   contentPaddingY: 5,
@@ -70,11 +67,8 @@ const visibleButtons = computed(() =>
 
     const buttonProps: PropsAppButton = {
       variant: action === 'back' ? 'secondary' : 'primary',
-      size: props.buttonSize,
+      size: 'small',
       width: 'auto',
-      paddingX: 3,
-      paddingY: 2,
-      fontSize: 'md',
       ...props.buttonProps,
       ...actionProps,
     };
