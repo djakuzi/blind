@@ -28,9 +28,9 @@ export interface PropsWidgetSteps {
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
 import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
-import { resolveSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 const props = withDefaults(defineProps<PropsWidgetSteps>(), {
   actions: (): Record<string, iWidgetStepsActions> => ({}),
@@ -88,7 +88,6 @@ const stepsStyle = computed(() => ({
   '--cp-steps-content-padding-y': resolvePaddingValue(props.contentPaddingY),
   '--cp-steps-actions-padding-x': resolvePaddingValue(props.actionsPaddingX),
   '--cp-steps-actions-padding-y': resolvePaddingValue(props.actionsPaddingY),
-  '--cp-steps-button-gap': resolveSpaceValue(props.buttonGap),
 }));
 
 function handleAction(action: tWidgetStepsAction) {
@@ -128,11 +127,19 @@ function handleAction(action: tWidgetStepsAction) {
       </slot>
     </div>
 
-    <div v-if="visibleButtons.length" class="widget-steps__actions">
+    <AppFlex
+      v-if="visibleButtons.length"
+      class="widget-steps__actions"
+      align="center"
+      justify="center"
+      wrap="wrap"
+      width="100%"
+      :gap="buttonGap"
+    >
       <slot name="actions" :step="currentStep" :buttons="visibleButtons" :handle-action="handleAction">
         <AppButton v-for="button in visibleButtons" :key="button.action" v-bind="button.props" @click="handleAction(button.action)" />
       </slot>
-    </div>
+    </AppFlex>
   </div>
 </template>
 
@@ -148,16 +155,14 @@ function handleAction(action: tWidgetStepsAction) {
 }
 
 .widget-steps__actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
   min-width: 0;
-  gap: var(--cp-steps-button-gap);
+  box-sizing: border-box;
   padding: var(--cp-steps-actions-padding-y) var(--cp-steps-actions-padding-x);
 }
 
 .widget-steps__actions > * {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   min-width: 0;
+  max-width: 100%;
 }
 </style>
