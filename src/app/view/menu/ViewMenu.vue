@@ -61,12 +61,11 @@ const menuActions = computed(() => [
         <AppButtonHold
           v-for="menuAction in menuActions"
           :key="menuAction.key"
-          :actions="menuAction.actions"
+          :options-hold="{ actions: menuAction.actions, resetOnComplete: menuAction.key === 'join' }"
           :text="menuAction.text"
           width="100%"
           max-width="100%"
           size="big"
-          :reset-on-complete="menuAction.key === 'join'"
         />
       </AppFlex>
 

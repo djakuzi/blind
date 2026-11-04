@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import { computed } from 'vue';
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
@@ -9,31 +11,24 @@ import { LibStyle } from '@/core/lib/style';
 
 type tAppButtonHoldVariant = 'primary';
 
-interface Props extends Omit<PropsAppHoldAction, 'moveCancelThreshold'>, PropsSizeVariant {
+type tAppButtonHoldOptions = Omit<PropsAppHoldAction, 'width' | 'maxWidth' | 'disabled' | 'moveCancelThreshold'>;
+
+interface Props extends PropsWidth, PropsDisabled, PropsSizeVariant {
   bloodFlowFrontDuration?: number;
   variant?: tAppButtonHoldVariant;
   text?: string;
+  optionsHold?: tAppButtonHoldOptions;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  actions: undefined,
   disabled: false,
   bloodFlowFrontDuration: 1200,
-  duration: 450,
-  fillDuration: undefined,
-  holdStartDelay: 0,
-  initialProgress: 15,
-  releaseDuration: 140,
-  resetOnComplete: false,
-  progressSound: 'sfx.interaction.hold-progress',
-  sound: 'sfx.interaction.hold-complete',
-  startSound: 'sfx.interaction.hold-start',
-  vibrationDuration: 45,
   size: 'middle',
   maxWidth: '100%',
   width: '100%',
   variant: 'primary',
   text: undefined,
+  optionsHold: undefined,
 });
 
 const emit = defineEmits<{
@@ -41,6 +36,11 @@ const emit = defineEmits<{
 }>();
 
 const buttonClass = computed(() => ['app-button-hold', `app-button-hold--${props.variant}`, `app-button-hold--size-${props.size}`]);
+
+const holdProps = computed<tAppButtonHoldOptions>(() => ({
+  ...props.optionsHold,
+  duration: props.optionsHold?.duration ?? 450,
+}));
 
 const holdActionWidth = computed(() => LibStyle.toSizeValue(props.width));
 const holdActionMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
@@ -52,19 +52,9 @@ function handleComplete() {
 
 <template>
   <AppHoldAction
-    :actions="actions"
+    v-bind="holdProps"
     :disabled="disabled"
-    :duration="duration"
-    :fill-duration="fillDuration"
-    :hold-start-delay="holdStartDelay"
-    :initial-progress="initialProgress"
     :max-width="holdActionMaxWidth"
-    :release-duration="releaseDuration"
-    :reset-on-complete="resetOnComplete"
-    :progress-sound="progressSound"
-    :sound="sound"
-    :start-sound="startSound"
-    :vibration-duration="vibrationDuration"
     :width="holdActionWidth"
     @complete="handleComplete"
   >
