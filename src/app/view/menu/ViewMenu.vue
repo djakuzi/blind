@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
+import WidgetSliderGameMode from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
 import { useHeaderActions } from '@/app/layouts/composables/common/useHeaderActions';
 import { useSessionJoinOverlay } from '@/app/overlay/sessionJoin/composables/useSessionJoinOverlay';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
@@ -32,7 +33,7 @@ useHeaderActions(
 </script>
 
 <template>
-  <ViewLayout align="center" justify="center" padding="none">
-    Меню
+  <ViewLayout align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
+    <WidgetSliderGameMode />
   </ViewLayout>
 </template>
