@@ -10,6 +10,7 @@
         "ui": {
           "play": "Play",
           "join": "Join",
+          "connection": "Connection",
           "settings": "Settings",
           "holdHint": "Hold button to select"
         },

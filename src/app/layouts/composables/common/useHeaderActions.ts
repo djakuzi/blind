@@ -1,8 +1,11 @@
 import { computed, inject, onScopeDispose, provide, shallowRef, toValue, watch } from 'vue';
 import type { ComputedRef, InjectionKey, MaybeRefOrGetter } from 'vue';
+import type { PropsAppButton } from '@/app/shared/components/ui/button/AppButton.vue';
 
 export interface iHeaderAction {
   key: string;
+  text: string;
+  optionsButton?: Partial<Omit<PropsAppButton, 'text'>>;
   onClick: () => void;
 }
 

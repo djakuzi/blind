@@ -3,6 +3,7 @@ export interface LocaleViewMenu {
     ui: {
       play: string;
       join: string;
+      connection: string;
       settings: string;
       holdHint: string;
     };
