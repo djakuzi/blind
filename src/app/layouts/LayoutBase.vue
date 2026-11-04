@@ -6,10 +6,13 @@ import AppTransitionHeader from '@/app/layouts/components/transition/AppTransiti
 import AppTransitionScreen from '@/app/layouts/components/transition/AppTransitionScreen.vue';
 import WidgetLayoutHeader from '@/app/layouts/components/widgets/WidgetLayoutHeader.vue';
 import { useLayoutHeader } from '@/app/layouts/composables/common/useLayoutHeader';
+import { provideHeaderActions } from '@/app/layouts/composables/common/useHeaderActions';
 import { useLayoutPadding } from '@/app/layouts/composables/common/useLayoutPadding';
 import { useLayoutVersion } from '@/app/layouts/composables/common/useLayoutVersion';
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
 import AppVersion from '@/app/shared/components/ui/version/AppVersion.vue';
+
+provideHeaderActions();
 
 const { hasLayoutHeader } = useLayoutHeader();
 const { hasLayoutVersion } = useLayoutVersion();
