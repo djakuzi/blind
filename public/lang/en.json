@@ -33,7 +33,6 @@
     "preGame": {
       "index": {
         "ui": {
-          "title": "Game mode",
           "accessibilityLabel": "Game mode selection",
           "itemAccessibilityLabel": "{current} of {total}",
           "holdHint": "Hold button to select",
@@ -47,18 +46,11 @@
           "connection": "Connection"
         },
         "modals": {}
-      },
-      "typeConnection": {
-        "ui": {
-          "title": "Connection type"
-        },
-        "modals": {}
       }
     },
     "settings": {
       "index": {
         "ui": {
-          "title": "Settings",
           "theme": "Theme",
           "scale": "Interface size",
           "sound": "Sound",

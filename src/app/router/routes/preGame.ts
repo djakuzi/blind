@@ -19,11 +19,6 @@ export const routePreGame: RouteRecordRaw = {
         lazy: {
           preload: [KEY_ROUTE.preGame.typeConnection],
         },
-        layout: {
-          header: {
-            title: (locale) => locale.views.preGame.index.ui.title,
-          },
-        },
       },
     },
     {
@@ -33,11 +28,6 @@ export const routePreGame: RouteRecordRaw = {
       meta: {
         lazy: {
           preload: [KEY_ROUTE.game.index],
-        },
-        layout: {
-          header: {
-            title: (locale) => locale.views.preGame.typeConnection.ui.title,
-          },
         },
       },
     },

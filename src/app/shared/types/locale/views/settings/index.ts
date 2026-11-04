@@ -1,7 +1,6 @@
 export interface LocaleViewSettings {
   index: {
     ui: {
-      title: string;
       theme: string;
       scale: string;
       sound: string;

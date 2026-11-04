@@ -1,7 +1,6 @@
 export interface LocaleViewPreGame {
   index: {
     ui: {
-      title: string;
       accessibilityLabel: string;
       itemAccessibilityLabel: string;
       holdHint: string;
@@ -13,12 +12,6 @@ export interface LocaleViewPreGame {
       connectionTypesAccessibilityLabel: string;
       players: string;
       connection: string;
-    };
-    modals: Record<string, never>;
-  };
-  typeConnection: {
-    ui: {
-      title: string;
     };
     modals: Record<string, never>;
   };

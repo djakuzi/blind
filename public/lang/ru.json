@@ -33,7 +33,6 @@
     "preGame": {
       "index": {
         "ui": {
-          "title": "Режим игры",
           "accessibilityLabel": "Выбор режима игры",
           "itemAccessibilityLabel": "{current} из {total}",
           "holdHint": "Зажмите кнопку для выбора",
@@ -47,18 +46,11 @@
           "connection": "Подключение"
         },
         "modals": {}
-      },
-      "typeConnection": {
-        "ui": {
-          "title": "Способ подключения"
-        },
-        "modals": {}
       }
     },
     "settings": {
       "index": {
         "ui": {
-          "title": "Настройки",
           "theme": "Тема",
           "scale": "Размер интерфейса",
           "sound": "Звук",
