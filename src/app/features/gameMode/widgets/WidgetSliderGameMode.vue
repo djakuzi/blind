@@ -54,12 +54,14 @@ watch(
       :count="modes.length"
       width="100%"
       max-width="100%"
-      item-width="70rem"
-      item-max-width="70rem"
-      :item-gap="8"
+      :options-item="{
+        width: '70rem',
+        maxWidth: '70rem',
+        gap: 8,
+        inactiveScale: 0.88,
+        inactiveOpacity: 0.42,
+      }"
       size="big"
-      :inactive-scale="0.88"
-      :inactive-opacity="0.42"
       viewport-bleed="8rem"
       :accessibility-label="preGameLocale.accessibilityLabel"
       :item-accessibility-label="formatItemAccessibilityLabel"

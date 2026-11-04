@@ -13,21 +13,29 @@ import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contrac
 import { LibNumber } from '@/core/lib/number';
 import { LibScheduler } from '@/core/lib/scheduler';
 
+export interface iAppSliderItemOptions {
+  width?: tStyleSizeValue;
+  maxWidth?: tStyleSizeValue;
+  gap?: tSpaceValue;
+  inactiveScale?: number;
+  inactiveOpacity?: number;
+}
+
+export interface iAppSliderDotsOptions {
+  gap?: tSpaceValue;
+  size?: tStyleSizeValue;
+  color?: tColorValue;
+  activeColor?: tColorValue;
+}
+
 export interface PropsAppSlider extends PropsWidth, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {
   modelValue: number;
   count: number;
-  itemWidth?: tStyleSizeValue;
-  itemMaxWidth?: tStyleSizeValue;
-  itemGap?: tSpaceValue;
-  inactiveScale?: number;
-  inactiveOpacity?: number;
+  optionsItem?: iAppSliderItemOptions;
   viewportBleed?: tSpaceValue;
   contentDotsGap?: tSpaceValue;
   dotsHintGap?: tSpaceValue;
-  dotsGap?: tSpaceValue;
-  dotSize?: tStyleSizeValue;
-  dotColor?: tColorValue;
-  activeDotColor?: tColorValue;
+  optionsDots?: iAppSliderDotsOptions;
   wheel?: boolean;
   accessibilityLabel: string;
   itemAccessibilityLabel: (index: number, count: number) => string;
@@ -37,18 +45,11 @@ const props = withDefaults(defineProps<PropsAppSlider>(), {
   size: 'middle',
   width: '100%',
   maxWidth: '100%',
-  itemWidth: '70%',
-  itemMaxWidth: '100%',
-  itemGap: 6,
-  inactiveScale: 0.88,
-  inactiveOpacity: 0.45,
+  optionsItem: undefined,
   viewportBleed: 0,
   contentDotsGap: undefined,
   dotsHintGap: 12,
-  dotsGap: 6,
-  dotSize: '1rem',
-  dotColor: 'border-strong',
-  activeDotColor: 'primary',
+  optionsDots: undefined,
   wheel: true,
   disabled: false,
   sound: 'sfx.selection.shift',
@@ -111,23 +112,38 @@ const wheelResetTimer = LibScheduler.createTimeout();
 let wheelGestureActive = false;
 
 const sizeConfig = computed(() => SIZE_MAP[props.size]);
+
+const itemOptions = computed<Required<iAppSliderItemOptions>>(() => ({
+  width: props.optionsItem?.width ?? '70%',
+  maxWidth: props.optionsItem?.maxWidth ?? '100%',
+  gap: props.optionsItem?.gap ?? 6,
+  inactiveScale: props.optionsItem?.inactiveScale ?? 0.88,
+  inactiveOpacity: props.optionsItem?.inactiveOpacity ?? 0.45,
+}));
+
+const dotsOptions = computed<Required<iAppSliderDotsOptions>>(() => ({
+  gap: props.optionsDots?.gap ?? 6,
+  size: props.optionsDots?.size ?? '1rem',
+  color: props.optionsDots?.color ?? 'border-strong',
+  activeColor: props.optionsDots?.activeColor ?? 'primary',
+}));
 const indexes = computed(() => Array.from({ length: Math.max(0, props.count) }, (_, index) => index));
 const maxIndex = computed(() => Math.max(0, props.count - 1));
 const activeIndex = computed(() => LibNumber.clamp(props.modelValue, 0, maxIndex.value));
 
 const sliderWidth = computed(() => LibStyle.toSizeValue(props.width));
 const sliderMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
-const sliderItemWidth = computed(() => LibStyle.toSizeValue(props.itemWidth));
-const sliderItemMaxWidth = computed(() => LibStyle.toSizeValue(props.itemMaxWidth));
-const sliderItemGap = computed(() => resolveSpaceValue(props.itemGap));
+const sliderItemWidth = computed(() => LibStyle.toSizeValue(itemOptions.value.width));
+const sliderItemMaxWidth = computed(() => LibStyle.toSizeValue(itemOptions.value.maxWidth));
+const sliderItemGap = computed(() => resolveSpaceValue(itemOptions.value.gap));
 const sliderContentDotsGap = computed(() => resolveSpaceValue(props.contentDotsGap ?? sizeConfig.value.contentDotsGap));
 const sliderDotsHintGap = computed(() => resolveSpaceValue(props.dotsHintGap ?? sizeConfig.value.dotsHintGap));
-const sliderDotsGap = computed(() => resolveSpaceValue(props.dotsGap ?? sizeConfig.value.dotsGap));
-const sliderDotSize = computed(() => LibStyle.toSizeValue(props.dotSize));
-const sliderDotColor = computed(() => resolveColorValue(props.dotColor));
-const sliderActiveDotColor = computed(() => resolveColorValue(props.activeDotColor));
-const sliderInactiveScale = computed(() => LibNumber.clamp(props.inactiveScale, 0, 1));
-const sliderInactiveOpacity = computed(() => LibNumber.clamp(props.inactiveOpacity, 0, 1));
+const sliderDotsGap = computed(() => resolveSpaceValue(dotsOptions.value.gap));
+const sliderDotSize = computed(() => LibStyle.toSizeValue(dotsOptions.value.size));
+const sliderDotColor = computed(() => resolveColorValue(dotsOptions.value.color));
+const sliderActiveDotColor = computed(() => resolveColorValue(dotsOptions.value.activeColor));
+const sliderInactiveScale = computed(() => LibNumber.clamp(itemOptions.value.inactiveScale, 0, 1));
+const sliderInactiveOpacity = computed(() => LibNumber.clamp(itemOptions.value.inactiveOpacity, 0, 1));
 const sliderViewportClipPath = computed(() => {
   const bleed = resolveSpaceValue(props.viewportBleed) ?? '0px';
 
@@ -367,9 +383,12 @@ function handleKeydown(event: KeyboardEvent) {
   }
 }
 
-watch([activeIndex, () => props.count, () => props.itemWidth, () => props.itemMaxWidth, () => props.itemGap], () => {
-  updateTrackPosition();
-});
+watch(
+  [activeIndex, () => props.count, () => itemOptions.value.width, () => itemOptions.value.maxWidth, () => itemOptions.value.gap],
+  () => {
+    updateTrackPosition();
+  },
+);
 
 useResizeObserver([viewportElement, trackElement], () => {
   updateTrackPosition();
