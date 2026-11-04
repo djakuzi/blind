@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { PropsAppButton } from '@/app/shared/components/ui/button/AppButton.vue';
-import type { tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
 import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export type tWidgetStepsAction = 'back' | 'next' | 'save';
@@ -12,16 +12,18 @@ export interface iWidgetStepsButton {
 
 export type iWidgetStepsActions = Partial<Record<tWidgetStepsAction, iWidgetStepsButton>>;
 
+export interface iWidgetStepsButtonsOptions {
+  order?: readonly tWidgetStepsAction[];
+  props?: Partial<Omit<PropsAppButton, 'text'>>;
+  gap?: tSpaceValue;
+}
+
 export interface PropsWidgetSteps {
   steps: readonly string[];
   actions?: Readonly<Record<string, iWidgetStepsActions>>;
-  buttonOrder?: readonly tWidgetStepsAction[];
-  buttonProps?: Partial<Omit<PropsAppButton, 'text'>>;
-  buttonGap?: tSpaceValue;
-  contentPaddingX?: tPaddingValue;
-  contentPaddingY?: tPaddingValue;
-  actionsPaddingX?: tPaddingValue;
-  actionsPaddingY?: tPaddingValue;
+  optionsButtons?: iWidgetStepsButtonsOptions;
+  optionsContent?: PropsPadding;
+  optionsActions?: PropsPadding;
 }
 </script>
 
@@ -33,13 +35,12 @@ import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contr
 
 const props = withDefaults(defineProps<PropsWidgetSteps>(), {
   actions: (): Record<string, iWidgetStepsActions> => ({}),
-  buttonOrder: (): tWidgetStepsAction[] => ['back', 'next', 'save'],
-  buttonGap: 3,
-  contentPaddingX: 6,
-  contentPaddingY: 5,
-  actionsPaddingX: 6,
-  actionsPaddingY: 5,
+  optionsButtons: undefined,
+  optionsContent: undefined,
+  optionsActions: undefined,
 });
+
+const DEFAULT_BUTTON_ORDER: readonly tWidgetStepsAction[] = ['back', 'next', 'save'];
 
 const currentStepModel = defineModel<string>('step', { default: '' });
 
@@ -52,8 +53,10 @@ const emit = defineEmits<{
 const currentStep = computed(() => (props.steps.includes(currentStepModel.value) ? currentStepModel.value : (props.steps[0] ?? '')));
 const stepIndex = computed(() => props.steps.indexOf(currentStep.value));
 
+const buttonGap = computed(() => props.optionsButtons?.gap ?? 3);
+
 const visibleButtons = computed(() =>
-  props.buttonOrder.flatMap((action) => {
+  (props.optionsButtons?.order ?? DEFAULT_BUTTON_ORDER).flatMap((action) => {
     const config = props.actions[currentStep.value]?.[action];
 
     if (!config) {
@@ -70,7 +73,7 @@ const visibleButtons = computed(() =>
       variant: action === 'back' ? 'secondary' : 'primary',
       size: 'middle',
       width: 'auto',
-      ...props.buttonProps,
+      ...props.optionsButtons?.props,
       ...optionsButton,
     };
 
@@ -79,10 +82,10 @@ const visibleButtons = computed(() =>
 );
 
 const stepsStyle = computed(() => ({
-  '--cp-steps-content-padding-x': resolvePaddingValue(props.contentPaddingX),
-  '--cp-steps-content-padding-y': resolvePaddingValue(props.contentPaddingY),
-  '--cp-steps-actions-padding-x': resolvePaddingValue(props.actionsPaddingX),
-  '--cp-steps-actions-padding-y': resolvePaddingValue(props.actionsPaddingY),
+  '--cp-steps-content-padding-x': resolvePaddingValue(props.optionsContent?.paddingX ?? 6),
+  '--cp-steps-content-padding-y': resolvePaddingValue(props.optionsContent?.paddingY ?? 5),
+  '--cp-steps-actions-padding-x': resolvePaddingValue(props.optionsActions?.paddingX ?? 6),
+  '--cp-steps-actions-padding-y': resolvePaddingValue(props.optionsActions?.paddingY ?? 5),
 }));
 
 function handleAction(action: tWidgetStepsAction) {
