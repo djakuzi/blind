@@ -5,6 +5,7 @@ import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import type { PropsTypography, PropsUppercase } from '@/app/shared/types/props/typography.props';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import AppPulseAttention from '@/app/shared/components/effects/attention/AppPulseAttention.vue';
+import type { PropsAppPulseAttention } from '@/app/shared/components/effects/attention/AppPulseAttention.vue';
 import { LibStyle } from '@/core/lib/style';
 
 import { BASE_SIZE_FONT_PRESET, BASE_SIZE_SPACE_PRESET } from '@/app/shared/styles/presets/base.preset';
@@ -24,8 +25,7 @@ export interface PropsAppHoldHint
   finePointerDirection?: tAppHoldHintDirection;
   finePointerGap?: tSpaceValue;
   pulse?: boolean;
-  pulseDuration?: number;
-  pulseScale?: number;
+  optionsPulse?: Pick<PropsAppPulseAttention, 'duration' | 'scale'>;
 }
 
 const props = withDefaults(defineProps<PropsAppHoldHint>(), {
@@ -39,8 +39,7 @@ const props = withDefaults(defineProps<PropsAppHoldHint>(), {
   color: 'text-secondary',
   fontSize: undefined,
   pulse: true,
-  pulseDuration: 2600,
-  pulseScale: 1.025,
+  optionsPulse: undefined,
   uppercase: true,
 });
 
@@ -67,6 +66,11 @@ const resolvedFinePointerItems = computed<readonly string[]>(() => {
 
   return resolvedItems.value;
 });
+
+const pulseProps = computed<NonNullable<PropsAppHoldHint['optionsPulse']>>(() => ({
+  duration: props.optionsPulse?.duration ?? 2600,
+  scale: props.optionsPulse?.scale ?? 1.025,
+}));
 
 const hintItems = computed(() => {
   return hasFineHoverPointer.value ? resolvedFinePointerItems.value : resolvedItems.value;
@@ -110,7 +114,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <AppPulseAttention :is-active="pulse" :duration="pulseDuration" :scale="pulseScale">
+  <AppPulseAttention v-bind="pulseProps" :is-active="pulse">
     <div
       class="app-hold-hint"
       :class="{

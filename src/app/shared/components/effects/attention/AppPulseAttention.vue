@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-interface Props {
+export interface PropsAppPulseAttention {
   isActive?: boolean;
   duration?: number;
   scale?: number;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppPulseAttention>(), {
   isActive: true,
   duration: 2400,
   scale: 1.035,

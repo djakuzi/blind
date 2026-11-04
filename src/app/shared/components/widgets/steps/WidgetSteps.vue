@@ -5,8 +5,9 @@ import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export type tWidgetStepsAction = 'back' | 'next' | 'save';
 
-export interface iWidgetStepsButton extends PropsAppButton {
+export interface iWidgetStepsButton {
   visible?: boolean;
+  optionsButton: PropsAppButton;
 }
 
 export type iWidgetStepsActions = Partial<Record<tWidgetStepsAction, iWidgetStepsButton>>;
@@ -59,7 +60,7 @@ const visibleButtons = computed(() =>
       return [];
     }
 
-    const { visible = true, ...actionProps } = config;
+    const { visible = true, optionsButton } = config;
 
     if (!visible || (action === 'back' && stepIndex.value <= 0) || (action === 'next' && stepIndex.value >= props.steps.length - 1)) {
       return [];
@@ -70,7 +71,7 @@ const visibleButtons = computed(() =>
       size: 'middle',
       width: 'auto',
       ...props.buttonProps,
-      ...actionProps,
+      ...optionsButton,
     };
 
     return [{ action, props: buttonProps }];

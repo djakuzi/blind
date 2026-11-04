@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
-import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
-import type { PropsSurface } from '@/app/shared/types/props/surface.props';
 import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsFont, PropsUppercase } from '@/app/shared/types/props/typography.props';
 import { computed, useSlots } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
+import type { PropsAppCard } from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 
 import type { tAppStatus } from '@/app/shared/types/status';
@@ -19,13 +18,17 @@ import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export type tAppStatusBlockAlign = 'left' | 'center' | 'right';
 
-export interface PropsAppStatusBlock extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsUppercase {
+export interface PropsAppStatusBlock extends PropsWidth, PropsSizeVariant, PropsFont, PropsUppercase {
   text: string;
   variant?: tAppStatus;
   gap?: tSpaceValue;
   textColor?: tColorValue;
   textAlign?: tAppStatusBlockAlign;
   actionAlign?: tAppStatusBlockAlign;
+  optionsCard?: Pick<
+    PropsAppCard,
+    'paddingX' | 'paddingY' | 'backgroundColor' | 'borderColor' | 'borderWidth' | 'borderStyle' | 'borderRadius'
+  >;
 }
 
 const props = withDefaults(defineProps<PropsAppStatusBlock>(), {
@@ -33,14 +36,8 @@ const props = withDefaults(defineProps<PropsAppStatusBlock>(), {
   size: 'middle',
   width: '100%',
   maxWidth: '100%',
-  paddingX: undefined,
-  paddingY: undefined,
   gap: undefined,
-  backgroundColor: undefined,
-  borderColor: undefined,
-  borderWidth: 'medium',
-  borderStyle: 'solid',
-  borderRadius: 'lg',
+  optionsCard: undefined,
   textColor: undefined,
   fontSize: undefined,
   fontWeight: 'medium',
@@ -103,8 +100,15 @@ const sizeConfig = computed(() => SIZE_MAP[props.size]);
 
 const hasAction = computed(() => Boolean(slots.action));
 
-const statusBackgroundColor = computed(() => props.backgroundColor ?? variantConfig.value.backgroundColor);
-const statusBorderColor = computed(() => props.borderColor ?? variantConfig.value.borderColor);
+const cardProps = computed<NonNullable<PropsAppStatusBlock['optionsCard']>>(() => ({
+  paddingX: props.optionsCard?.paddingX,
+  paddingY: props.optionsCard?.paddingY,
+  backgroundColor: props.optionsCard?.backgroundColor ?? variantConfig.value.backgroundColor,
+  borderColor: props.optionsCard?.borderColor ?? variantConfig.value.borderColor,
+  borderWidth: props.optionsCard?.borderWidth ?? 'medium',
+  borderStyle: props.optionsCard?.borderStyle ?? 'solid',
+  borderRadius: props.optionsCard?.borderRadius ?? 'lg',
+}));
 const statusTextColor = computed(() => props.textColor ?? variantConfig.value.textColor);
 const statusGap = computed(() => props.gap ?? sizeConfig.value.gap);
 const statusFontSize = computed(() => props.fontSize ?? BASE_SIZE_FONT_PRESET[props.size]);
@@ -127,20 +131,7 @@ const actionJustify = computed(() => {
 </script>
 
 <template>
-  <AppCard
-    class="app-status-block"
-    :size="size"
-    :width="width"
-    :max-width="maxWidth"
-    :padding-x="paddingX"
-    :padding-y="paddingY"
-    :background-color="statusBackgroundColor"
-    :border-color="statusBorderColor"
-    :border-width="borderWidth"
-    :border-style="borderStyle"
-    :border-radius="borderRadius"
-    :role="statusRole"
-  >
+  <AppCard v-bind="cardProps" class="app-status-block" :size="size" :width="width" :max-width="maxWidth" :role="statusRole">
     <AppFlex direction="column" :gap="statusGap" width="100%">
       <AppText
         class="app-status-block__text"

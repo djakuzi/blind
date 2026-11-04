@@ -38,17 +38,23 @@ const stepTitle = computed(() => modalLocale.value.steps[currentStep.value as tS
 const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
   connection: {
     next: {
-      text: modalLocale.value.next,
-      disabled: !props.selectedConnection,
+      optionsButton: {
+        text: modalLocale.value.next,
+        disabled: !props.selectedConnection,
+      },
     },
   },
   lobby: {
     back: {
-      text: modalLocale.value.back,
+      optionsButton: {
+        text: modalLocale.value.back,
+      },
     },
     save: {
-      text: joinText.value,
-      disabled: !selectedTargetKey.value,
+      optionsButton: {
+        text: joinText.value,
+        disabled: !selectedTargetKey.value,
+      },
     },
   },
 }));
