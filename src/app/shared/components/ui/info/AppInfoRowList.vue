@@ -34,15 +34,19 @@ export interface iAppInfoRowListItem {
   icon?: tAppInfoRowListItemIcon;
 }
 
+export interface iAppInfoRowListDividerOptions {
+  height?: tStyleSizeValue;
+  width?: tBorderWidthValue;
+  color?: tColorValue;
+}
+
 export interface PropsAppInfoRowList
   extends PropsWidth, PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase, PropsAccessibilityLabel {
   items: readonly iAppInfoRowListItem[];
   optionsRow?: Omit<PropsAppDistributedRow, 'count' | 'width' | 'maxWidth'>;
   iconWidth?: tStyleSizeValue;
   iconGap?: tSpaceValue;
-  dividerHeight?: tStyleSizeValue;
-  dividerWidth?: tBorderWidthValue;
-  dividerColor?: tColorValue;
+  optionsDivider?: iAppInfoRowListDividerOptions;
   textColor?: tColorValue;
 }
 
@@ -55,9 +59,7 @@ const props = withDefaults(defineProps<PropsAppInfoRowList>(), {
   paddingY: 0,
   iconWidth: undefined,
   iconGap: undefined,
-  dividerHeight: undefined,
-  dividerWidth: 'thin',
-  dividerColor: 'currentColor',
+  optionsDivider: undefined,
   fontSize: undefined,
   fontWeight: 'medium',
   textColor: 'inherit',
@@ -84,9 +86,9 @@ const rowProps = computed<NonNullable<PropsAppInfoRowList['optionsRow']>>(() => 
   centerOdd: props.optionsRow?.centerOdd ?? true,
   overflow: props.optionsRow?.overflow ?? 'hidden',
 }));
-const itemDividerHeight = computed(() => LibStyle.toSizeValue(props.dividerHeight ?? BASE_SIZE_MEDIA_WIDTH_PRESET[props.size]));
-const itemDividerWidth = computed(() => resolveBorderWidthValue(props.dividerWidth));
-const itemDividerColor = computed(() => resolveColorValue(props.dividerColor));
+const itemDividerHeight = computed(() => LibStyle.toSizeValue(props.optionsDivider?.height ?? BASE_SIZE_MEDIA_WIDTH_PRESET[props.size]));
+const itemDividerWidth = computed(() => resolveBorderWidthValue(props.optionsDivider?.width ?? 'thin'));
+const itemDividerColor = computed(() => resolveColorValue(props.optionsDivider?.color ?? 'currentColor'));
 
 function getItem(index: number): iAppInfoRowListItem {
   return props.items[index] as iAppInfoRowListItem;

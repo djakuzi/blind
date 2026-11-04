@@ -12,16 +12,20 @@ import type { tPaddingValue } from '@/app/shared/styles/contracts/padding.contra
 
 export type tWidgetListKey = string | number;
 
+export interface iWidgetListDividerOptions {
+  visible?: boolean;
+  showLast?: boolean;
+  color?: tColorValue;
+  width?: tBorderWidthValue;
+  style?: tBorderStyleValue;
+}
+
 export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<string, unknown>>
   extends PropsWidth, PropsPadding, PropsGap, PropsSizeVariant, PropsAccessibilityLabel {
   items: readonly TItem[];
   itemKey?: string | ((item: TItem, index: number) => tWidgetListKey);
   optionsRow?: Pick<PropsAppFlex, 'gap' | 'align' | 'justify' | 'wrap'>;
-  divider?: boolean;
-  dividerColor?: tColorValue;
-  dividerWidth?: tBorderWidthValue;
-  dividerStyle?: tBorderStyleValue;
-  showLastDivider?: boolean;
+  optionsDivider?: iWidgetListDividerOptions;
 }
 </script>
 
@@ -41,11 +45,7 @@ const props = withDefaults(defineProps<PropsWidgetList<TItem>>(), {
   paddingX: 0,
   paddingY: undefined,
   optionsRow: undefined,
-  divider: true,
-  dividerColor: 'border-default',
-  dividerWidth: 'thin',
-  dividerStyle: 'solid',
-  showLastDivider: false,
+  optionsDivider: undefined,
   accessibilityLabel: undefined,
 });
 
@@ -72,11 +72,11 @@ const rowProps = computed<NonNullable<PropsWidgetList<TItem>['optionsRow']>>(() 
   wrap: props.optionsRow?.wrap ?? 'nowrap',
 }));
 
-const listDividerColor = computed(() => resolveColorValue(props.dividerColor));
+const listDividerColor = computed(() => resolveColorValue(props.optionsDivider?.color ?? 'border-default'));
 
-const listDividerWidth = computed(() => resolveBorderWidthValue(props.dividerWidth));
+const listDividerWidth = computed(() => resolveBorderWidthValue(props.optionsDivider?.width ?? 'thin'));
 
-const listDividerStyle = computed(() => resolveBorderStyleValue(props.dividerStyle));
+const listDividerStyle = computed(() => resolveBorderStyleValue(props.optionsDivider?.style ?? 'solid'));
 
 function resolveItemKey(item: TItem, index: number): tWidgetListKey {
   if (typeof props.itemKey === 'function') {
@@ -95,13 +95,13 @@ function resolveItemKey(item: TItem, index: number): tWidgetListKey {
 }
 
 function hasDivider(index: number) {
-  if (!props.divider) {
+  if (!(props.optionsDivider?.visible ?? true)) {
     return false;
   }
 
   const isLast = index === props.items.length - 1;
 
-  return !isLast || props.showLastDivider;
+  return !isLast || (props.optionsDivider?.showLast ?? false);
 }
 </script>
 

@@ -191,8 +191,7 @@ async function handleLanguageChange(value: string) {
       padding-x="0"
       :padding-y="10"
       :options-row="{ gap: 6 }"
-      divider-color="border-default"
-      divider-width="thin"
+      :options-divider="{ color: 'border-default', width: 'thin' }"
       :accessibility-label="settingsLocale.accessibilityLabel"
     >
       <template #item="{ item }">
