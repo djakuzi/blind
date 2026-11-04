@@ -70,9 +70,11 @@ watch(
           :mode="modes[index]"
           :active="active"
           :disabled="!active"
-          :image-loading="active ? 'eager' : 'lazy'"
-          :image-fetch-priority="active ? 'high' : 'low'"
-          :image-should-load="Math.abs(index - activeIndex) <= 1"
+          :options-image="{
+            loading: active ? 'eager' : 'lazy',
+            fetchPriority: active ? 'high' : 'low',
+            shouldLoad: Math.abs(index - activeIndex) <= 1,
+          }"
           :options-accessibility-label="preGameLocale.modeOptionsAccessibilityLabel"
           :connection-types-accessibility-label="preGameLocale.connectionTypesAccessibilityLabel"
           @complete="handleModeComplete"

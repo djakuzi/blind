@@ -6,6 +6,7 @@ import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
+import type { PropsAppImage } from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
 import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
@@ -18,17 +19,13 @@ export interface PropsUiCardGameMode {
   connectionTypesAccessibilityLabel: string;
   active?: boolean;
   disabled?: boolean;
-  imageLoading?: 'eager' | 'lazy';
-  imageFetchPriority?: 'high' | 'low' | 'auto';
-  imageShouldLoad?: boolean;
+  optionsImage?: Pick<PropsAppImage, 'loading' | 'fetchPriority' | 'shouldLoad'>;
 }
 
 const props = withDefaults(defineProps<PropsUiCardGameMode>(), {
   active: false,
   disabled: false,
-  imageLoading: 'lazy',
-  imageFetchPriority: 'low',
-  imageShouldLoad: true,
+  optionsImage: undefined,
 });
 
 const emit = defineEmits<{
@@ -41,6 +38,12 @@ const modeLocale = useLocale((locale) => locale.game.modes[props.mode.key]);
 const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
 const modeDescription = computed(() => modeLocale.value?.description ?? '');
 const isDisabled = computed(() => props.disabled || props.mode.locked);
+
+const imageProps = computed<NonNullable<PropsUiCardGameMode['optionsImage']>>(() => ({
+  loading: props.optionsImage?.loading ?? 'lazy',
+  fetchPriority: props.optionsImage?.fetchPriority ?? 'low',
+  shouldLoad: props.optionsImage?.shouldLoad ?? true,
+}));
 
 function handleComplete() {
   if (isDisabled.value) {
@@ -94,9 +97,7 @@ function handleComplete() {
         height="auto"
         object-fit="contain"
         aspect-ratio="1 / 1"
-        :loading="imageLoading"
-        :fetch-priority="imageFetchPriority"
-        :should-load="imageShouldLoad"
+        v-bind="imageProps"
       />
 
       <AppFillAware
