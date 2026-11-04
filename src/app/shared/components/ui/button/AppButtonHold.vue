@@ -4,6 +4,7 @@ import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import { computed } from 'vue';
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
+import type { PropsAppBloodFill } from '@/app/shared/components/effects/fill/AppBloodFill.vue';
 import AppFillAware from '@/app/shared/components/effects/fill/AppFillAware.vue';
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import type { PropsAppHoldAction } from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
@@ -14,21 +15,21 @@ type tAppButtonHoldVariant = 'primary';
 type tAppButtonHoldOptions = Omit<PropsAppHoldAction, 'width' | 'maxWidth' | 'disabled' | 'moveCancelThreshold'>;
 
 interface Props extends PropsWidth, PropsDisabled, PropsSizeVariant {
-  bloodFlowFrontDuration?: number;
   variant?: tAppButtonHoldVariant;
   text?: string;
   optionsHold?: tAppButtonHoldOptions;
+  optionsBloodFill?: Omit<PropsAppBloodFill, 'isActive' | 'progressRatio'>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
-  bloodFlowFrontDuration: 1200,
   size: 'middle',
   maxWidth: '100%',
   width: '100%',
   variant: 'primary',
   text: undefined,
   optionsHold: undefined,
+  optionsBloodFill: undefined,
 });
 
 const emit = defineEmits<{
@@ -40,6 +41,11 @@ const buttonClass = computed(() => ['app-button-hold', `app-button-hold--${props
 const holdProps = computed<tAppButtonHoldOptions>(() => ({
   ...props.optionsHold,
   duration: props.optionsHold?.duration ?? 450,
+}));
+
+const bloodFillProps = computed<NonNullable<Props['optionsBloodFill']>>(() => ({
+  ...props.optionsBloodFill,
+  flowFrontDuration: props.optionsBloodFill?.flowFrontDuration ?? 1200,
 }));
 
 const holdActionWidth = computed(() => LibStyle.toSizeValue(props.width));
@@ -60,7 +66,7 @@ function handleComplete() {
   >
     <template #default="{ isProgressActive }">
       <button :class="buttonClass" :disabled="disabled" type="button">
-        <AppBloodFill :flow-front-duration="bloodFlowFrontDuration" :is-active="isProgressActive" />
+        <AppBloodFill v-bind="bloodFillProps" :is-active="isProgressActive" />
 
         <AppFillAware class="app-button-hold__content" tag="span" color="inherit" filled-color="on-primary">
           <slot>{{ text }}</slot>

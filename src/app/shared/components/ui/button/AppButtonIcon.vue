@@ -3,6 +3,7 @@ import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimension
 import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
+import type { PropsAppIcon } from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
 import { LibStyle } from '@/core/lib/style';
 import type { tIconGroup, tIconName } from '@/core/media/icons';
@@ -11,21 +12,24 @@ interface Props extends PropsWidth, Pick<PropsHeight, 'height'>, PropsDisabled {
   group: TGroup;
   icon: tIconName<TGroup>;
   width: PropsWidth['width'];
-  iconWidth?: PropsWidth['width'];
-  iconHeight?: PropsHeight['height'];
+  optionsIcon?: Partial<Pick<PropsAppIcon<TGroup>, 'width' | 'height'>>;
   ariaLabel: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   height: undefined,
-  iconWidth: '100%',
-  iconHeight: '100%',
+  optionsIcon: undefined,
   disabled: false,
 });
 
 defineEmits<{
   click: [event: MouseEvent];
 }>();
+
+const iconProps = computed<Pick<PropsAppIcon<TGroup>, 'width' | 'height'>>(() => ({
+  width: props.optionsIcon?.width ?? '100%',
+  height: props.optionsIcon?.height ?? '100%',
+}));
 
 const buttonStyle = computed(() => ({
   '--cp-button-icon-width': LibStyle.toSizeValue(props.width) ?? 'auto',
@@ -43,7 +47,7 @@ const buttonStyle = computed(() => ({
       :aria-label="ariaLabel"
       @click="$emit('click', $event)"
     >
-      <AppIcon :group="group" :icon="icon" :width="iconWidth" :height="iconHeight" />
+      <AppIcon :group="group" :icon="icon" v-bind="iconProps" />
     </button>
   </AppInteractionScale>
 </template>
