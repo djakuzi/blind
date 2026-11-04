@@ -15,9 +15,6 @@ export const routeMenu: RouteRecordRaw = {
         lazy: {
           preload: [KEY_ROUTE.preGame.index, KEY_ROUTE.settings.index],
         },
-        layout: {
-          header: false,
-        },
       },
     },
   ],
