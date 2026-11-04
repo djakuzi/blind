@@ -3,13 +3,12 @@ import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import type { PropsPadding, PropsGap } from '@/app/shared/types/props/spacing.props';
 import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsAccessibilityLabel } from '@/app/shared/types/props/accessibility.props';
-import type { CSSProperties } from 'vue';
+import type { PropsAppFlex } from '@/app/shared/components/atoms/block/AppFlex.vue';
 
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import type { tBorderStyleValue, tBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
 import type { tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import type { tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
-import type { tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export type tWidgetListKey = string | number;
 
@@ -17,10 +16,7 @@ export interface PropsWidgetList<TItem extends Record<string, unknown> = Record<
   extends PropsWidth, PropsPadding, PropsGap, PropsSizeVariant, PropsAccessibilityLabel {
   items: readonly TItem[];
   itemKey?: string | ((item: TItem, index: number) => tWidgetListKey);
-  rowGap?: tSpaceValue;
-  rowAlign?: CSSProperties['alignItems'] | 'start' | 'end';
-  rowJustify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between';
-  rowWrap?: CSSProperties['flexWrap'];
+  optionsRow?: Pick<PropsAppFlex, 'gap' | 'align' | 'justify' | 'wrap'>;
   divider?: boolean;
   dividerColor?: tColorValue;
   dividerWidth?: tBorderWidthValue;
@@ -44,10 +40,7 @@ const props = withDefaults(defineProps<PropsWidgetList<TItem>>(), {
   gap: 0,
   paddingX: 0,
   paddingY: undefined,
-  rowGap: 0,
-  rowAlign: 'center',
-  rowJustify: 'between',
-  rowWrap: 'nowrap',
+  optionsRow: undefined,
   divider: true,
   dividerColor: 'border-default',
   dividerWidth: 'thin',
@@ -71,6 +64,13 @@ const ROW_PADDING_Y_MAP: Record<tBaseSizeVariant, tPaddingValue> = {
 const rowPaddingX = computed(() => resolvePaddingValue(props.paddingX));
 
 const rowPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? ROW_PADDING_Y_MAP[props.size]));
+
+const rowProps = computed<NonNullable<PropsWidgetList<TItem>['optionsRow']>>(() => ({
+  gap: props.optionsRow?.gap ?? 0,
+  align: props.optionsRow?.align ?? 'center',
+  justify: props.optionsRow?.justify ?? 'between',
+  wrap: props.optionsRow?.wrap ?? 'nowrap',
+}));
 
 const listDividerColor = computed(() => resolveColorValue(props.dividerColor));
 
@@ -119,14 +119,11 @@ function hasDivider(index: number) {
       <AppFlex
         v-for="(item, index) in items"
         :key="resolveItemKey(item, index)"
+        v-bind="rowProps"
         class="widget-list__row"
         :class="{
           'widget-list__row--divider': hasDivider(index),
         }"
-        :align="rowAlign"
-        :justify="rowJustify"
-        :wrap="rowWrap"
-        :gap="rowGap"
         width="100%"
         role="listitem"
       >

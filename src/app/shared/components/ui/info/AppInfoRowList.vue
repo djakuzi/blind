@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
 import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsFont, PropsUppercase } from '@/app/shared/types/props/typography.props';
@@ -34,8 +35,9 @@ export interface iAppInfoRowListItem {
 }
 
 export interface PropsAppInfoRowList
-  extends Omit<PropsAppDistributedRow, 'count'>, PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase, PropsAccessibilityLabel {
+  extends PropsWidth, PropsPadding, PropsSizeVariant, PropsFont, PropsUppercase, PropsAccessibilityLabel {
   items: readonly iAppInfoRowListItem[];
+  optionsRow?: Omit<PropsAppDistributedRow, 'count' | 'width' | 'maxWidth'>;
   iconWidth?: tStyleSizeValue;
   iconGap?: tSpaceValue;
   dividerHeight?: tStyleSizeValue;
@@ -48,10 +50,7 @@ const props = withDefaults(defineProps<PropsAppInfoRowList>(), {
   size: 'middle',
   width: 'auto',
   maxWidth: '100%',
-  separatorGap: undefined,
-  centerEven: true,
-  centerOdd: true,
-  overflow: 'hidden',
+  optionsRow: undefined,
   paddingX: 0,
   paddingY: 0,
   iconWidth: undefined,
@@ -79,7 +78,12 @@ const itemFontSize = computed(() => props.fontSize ?? BASE_SIZE_FONT_PRESET[prop
 const itemIconWidth = computed(() => LibStyle.toSizeValue(props.iconWidth ?? BASE_SIZE_MEDIA_WIDTH_PRESET[props.size]));
 const itemIconGap = computed(() => resolveSpaceValue(props.iconGap ?? BASE_SIZE_SPACE_PRESET[props.size]));
 
-const rowSeparatorGap = computed(() => props.separatorGap ?? SEPARATOR_GAP_PRESET[props.size]);
+const rowProps = computed<NonNullable<PropsAppInfoRowList['optionsRow']>>(() => ({
+  separatorGap: props.optionsRow?.separatorGap ?? SEPARATOR_GAP_PRESET[props.size],
+  centerEven: props.optionsRow?.centerEven ?? true,
+  centerOdd: props.optionsRow?.centerOdd ?? true,
+  overflow: props.optionsRow?.overflow ?? 'hidden',
+}));
 const itemDividerHeight = computed(() => LibStyle.toSizeValue(props.dividerHeight ?? BASE_SIZE_MEDIA_WIDTH_PRESET[props.size]));
 const itemDividerWidth = computed(() => resolveBorderWidthValue(props.dividerWidth));
 const itemDividerColor = computed(() => resolveColorValue(props.dividerColor));
@@ -91,14 +95,11 @@ function getItem(index: number): iAppInfoRowListItem {
 
 <template>
   <AppDistributedRow
+    v-bind="rowProps"
     class="app-info-row-list"
     :count="items.length"
     :width="width"
     :max-width="maxWidth"
-    :separator-gap="rowSeparatorGap"
-    :center-even="centerEven"
-    :center-odd="centerOdd"
-    :overflow="overflow"
     role="list"
     :aria-label="accessibilityLabel"
   >

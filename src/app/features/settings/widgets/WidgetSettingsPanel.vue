@@ -190,7 +190,7 @@ async function handleLanguageChange(value: string) {
       width="100%"
       padding-x="0"
       :padding-y="10"
-      :row-gap="6"
+      :options-row="{ gap: 6 }"
       divider-color="border-default"
       divider-width="thin"
       :accessibility-label="settingsLocale.accessibilityLabel"

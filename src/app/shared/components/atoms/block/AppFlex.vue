@@ -9,7 +9,7 @@ import { resolveSpaceValue } from '@/app/shared/styles/contracts/space.contract'
 
 type tAppFlexTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer';
 
-interface Props extends PropsWidth, PropsMargin, PropsGap {
+export interface PropsAppFlex extends PropsWidth, PropsMargin, PropsGap {
   tag?: tAppFlexTag;
   direction?: CSSProperties['flexDirection'];
   align?: CSSProperties['alignItems'] | 'start' | 'end';
@@ -17,7 +17,7 @@ interface Props extends PropsWidth, PropsMargin, PropsGap {
   wrap?: CSSProperties['flexWrap'];
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppFlex>(), {
   tag: 'div',
   direction: 'row',
   align: 'stretch',
@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
   margin: undefined,
 });
 
-function resolveFlexAlign(align: Props['align']) {
+function resolveFlexAlign(align: PropsAppFlex['align']) {
   if (align === 'start') {
     return 'flex-start';
   }
@@ -41,7 +41,7 @@ function resolveFlexAlign(align: Props['align']) {
   return align;
 }
 
-function resolveFlexJustify(justify: Props['justify']) {
+function resolveFlexJustify(justify: PropsAppFlex['justify']) {
   if (justify === 'start') {
     return 'flex-start';
   }
