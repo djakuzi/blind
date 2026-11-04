@@ -59,16 +59,18 @@ function handleComplete() {
       'ui-card-game-mode--locked': mode.locked,
     }"
     :disabled="isDisabled"
-    :color="mode.locked ? 'text-disabled' : 'primary'"
     width="100%"
     max-width="100%"
     size="big"
-    background-color="surface-primary"
-    border-color="border-contrast"
-    border-width="thick"
-    border-radius="lg"
-    overflow="hidden"
-    :initial-progress="0"
+    :options-card="{
+      backgroundColor: 'surface-primary',
+      borderColor: 'border-contrast',
+      borderWidth: 'thick',
+      borderRadius: 'lg',
+      overflow: 'hidden',
+    }"
+    :options-hold="{ initialProgress: 0 }"
+    :options-blood-fill="{ color: mode.locked ? 'text-disabled' : 'primary' }"
     @complete="handleComplete"
   >
     <AppFlex

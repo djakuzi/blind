@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
+import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
+import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
+import { computed } from 'vue';
 import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
 import type { PropsAppCard } from '@/app/shared/components/atoms/card/AppCard.vue';
 import AppBloodFill from '@/app/shared/components/effects/fill/AppBloodFill.vue';
@@ -6,38 +10,37 @@ import type { PropsAppBloodFill } from '@/app/shared/components/effects/fill/App
 import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import type { PropsAppHoldAction } from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 
-export type PropsAppCardHold = PropsAppCard & PropsAppHoldAction & Omit<PropsAppBloodFill, 'isActive' | 'progressRatio'>;
+export interface PropsAppCardHold extends PropsWidth, PropsSizeVariant, PropsDisabled {
+  optionsCard?: Omit<PropsAppCard, 'width' | 'maxWidth' | 'size'>;
+  optionsHold?: Omit<PropsAppHoldAction, 'width' | 'maxWidth' | 'disabled'>;
+  optionsBloodFill?: Omit<PropsAppBloodFill, 'isActive' | 'progressRatio'>;
+}
 
-withDefaults(defineProps<PropsAppCardHold>(), {
-  tag: 'div',
+const props = withDefaults(defineProps<PropsAppCardHold>(), {
   size: 'middle',
   width: '100%',
   maxWidth: '100%',
-  paddingX: undefined,
-  paddingY: undefined,
-  backgroundColor: 'transparent',
-  borderColor: 'border-contrast',
-  borderWidth: 'thick',
-  borderStyle: 'solid',
-  borderRadius: 'lg',
-  overflow: 'hidden',
-  actions: undefined,
   disabled: false,
-  color: 'primary',
-  flowFrontDuration: 1200,
-  waveHeight: 'clamp(3.5rem, 12%, 6rem)',
-  waveLengthScale: 1.3,
-  duration: 650,
-  fillDuration: undefined,
-  holdStartDelay: 40,
-  initialProgress: 15,
-  releaseDuration: 140,
-  resetOnComplete: false,
-  progressSound: 'sfx.interaction.hold-progress',
-  sound: 'sfx.interaction.hold-complete',
-  startSound: 'sfx.interaction.hold-start',
-  vibrationDuration: 45,
+  optionsCard: undefined,
+  optionsHold: undefined,
+  optionsBloodFill: undefined,
 });
+
+const cardProps = computed<NonNullable<PropsAppCardHold['optionsCard']>>(() => ({
+  ...props.optionsCard,
+  overflow: props.optionsCard?.overflow ?? 'hidden',
+}));
+
+const holdProps = computed<NonNullable<PropsAppCardHold['optionsHold']>>(() => ({
+  ...props.optionsHold,
+  holdStartDelay: props.optionsHold?.holdStartDelay ?? 40,
+}));
+
+const bloodFillProps = computed<NonNullable<PropsAppCardHold['optionsBloodFill']>>(() => ({
+  ...props.optionsBloodFill,
+  waveHeight: props.optionsBloodFill?.waveHeight ?? 'clamp(3.5rem, 12%, 6rem)',
+  waveLengthScale: props.optionsBloodFill?.waveLengthScale ?? 1.3,
+}));
 
 const emit = defineEmits<{
   complete: [];
@@ -50,51 +53,26 @@ function handleComplete() {
 
 <template>
   <AppHoldAction
-    :actions="actions"
+    v-bind="holdProps"
     :disabled="disabled"
-    :duration="duration"
-    :fill-duration="fillDuration"
-    :hold-start-delay="holdStartDelay"
-    :initial-progress="initialProgress"
-    :move-cancel-threshold="moveCancelThreshold"
-    :release-duration="releaseDuration"
-    :reset-on-complete="resetOnComplete"
-    :progress-sound="progressSound"
-    :sound="sound"
-    :start-sound="startSound"
-    :vibration-duration="vibrationDuration"
     :width="width"
     :max-width="maxWidth"
     @complete="handleComplete"
   >
     <template #default="{ isProgressActive, isHolding, isComplete }">
       <AppCard
+        v-bind="cardProps"
         class="app-card-hold"
         :class="{
           'app-card-hold--disabled': disabled,
           'app-card-hold--holding': isHolding,
           'app-card-hold--complete': isComplete,
         }"
-        :tag="tag"
         :size="size"
         width="100%"
         max-width="100%"
-        :padding-x="paddingX"
-        :padding-y="paddingY"
-        :background-color="backgroundColor"
-        :border-color="borderColor"
-        :border-width="borderWidth"
-        :border-style="borderStyle"
-        :border-radius="borderRadius"
-        :overflow="overflow"
       >
-        <AppBloodFill
-          :color="color"
-          :flow-front-duration="flowFrontDuration"
-          :is-active="isProgressActive"
-          :wave-height="waveHeight"
-          :wave-length-scale="waveLengthScale"
-        />
+        <AppBloodFill v-bind="bloodFillProps" :is-active="isProgressActive" />
 
         <div class="app-card-hold__content">
           <slot :is-holding="isHolding" :is-complete="isComplete" />
