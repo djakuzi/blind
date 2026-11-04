@@ -73,23 +73,19 @@ const SIZE_MAP: Record<
   {
     contentDotsGap: tSpaceValue;
     dotsHintGap: tSpaceValue;
-    dotsGap: tSpaceValue;
   }
 > = {
   small: {
     contentDotsGap: 4,
     dotsHintGap: 2,
-    dotsGap: 2,
   },
   middle: {
     contentDotsGap: 6,
     dotsHintGap: 3,
-    dotsGap: 3,
   },
   big: {
     contentDotsGap: 8,
     dotsHintGap: 4,
-    dotsGap: 4,
   },
 };
 
@@ -127,6 +123,7 @@ const dotsOptions = computed<Required<iAppSliderDotsOptions>>(() => ({
   color: props.optionsDots?.color ?? 'border-strong',
   activeColor: props.optionsDots?.activeColor ?? 'primary',
 }));
+
 const indexes = computed(() => Array.from({ length: Math.max(0, props.count) }, (_, index) => index));
 const maxIndex = computed(() => Math.max(0, props.count - 1));
 const activeIndex = computed(() => LibNumber.clamp(props.modelValue, 0, maxIndex.value));
@@ -384,7 +381,13 @@ function handleKeydown(event: KeyboardEvent) {
 }
 
 watch(
-  [activeIndex, () => props.count, () => itemOptions.value.width, () => itemOptions.value.maxWidth, () => itemOptions.value.gap],
+  [
+    activeIndex,
+    () => props.count,
+    () => itemOptions.value.width,
+    () => itemOptions.value.maxWidth,
+    () => itemOptions.value.gap,
+  ],
   () => {
     updateTrackPosition();
   },
