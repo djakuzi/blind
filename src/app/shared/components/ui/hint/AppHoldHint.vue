@@ -16,25 +16,27 @@ import { ToolInput } from '@/core/platform';
 
 export type tAppHoldHintDirection = 'row' | 'column';
 
+export interface iAppHoldHintFinePointerOptions {
+  items?: readonly string[];
+  direction?: tAppHoldHintDirection;
+  gap?: tSpaceValue;
+}
+
 export interface PropsAppHoldHint
   extends PropsSizeVariant, PropsGap, Pick<PropsWidth, 'maxWidth'>, Pick<PropsTypography, 'color' | 'fontSize'>, PropsUppercase {
   text?: string;
   items?: readonly string[];
-  finePointerItems?: readonly string[];
   direction?: tAppHoldHintDirection;
-  finePointerDirection?: tAppHoldHintDirection;
-  finePointerGap?: tSpaceValue;
+  optionsFinePointer?: iAppHoldHintFinePointerOptions;
   pulse?: boolean;
   optionsPulse?: Pick<PropsAppPulseAttention, 'duration' | 'scale'>;
 }
 
 const props = withDefaults(defineProps<PropsAppHoldHint>(), {
-  finePointerItems: undefined,
+  optionsFinePointer: undefined,
   size: 'middle',
   direction: 'column',
-  finePointerDirection: undefined,
   gap: undefined,
-  finePointerGap: undefined,
   maxWidth: '100%',
   color: 'text-secondary',
   fontSize: undefined,
@@ -60,8 +62,8 @@ const resolvedItems = computed<readonly string[]>(() => {
 });
 
 const resolvedFinePointerItems = computed<readonly string[]>(() => {
-  if (props.finePointerItems?.length) {
-    return props.finePointerItems;
+  if (props.optionsFinePointer?.items?.length) {
+    return props.optionsFinePointer.items;
   }
 
   return resolvedItems.value;
@@ -78,7 +80,7 @@ const hintItems = computed(() => {
 
 const hintDirection = computed(() => {
   if (hasFineHoverPointer.value) {
-    return props.finePointerDirection ?? props.direction;
+    return props.optionsFinePointer?.direction ?? props.direction;
   }
 
   return props.direction;
@@ -86,7 +88,7 @@ const hintDirection = computed(() => {
 
 const hintGap = computed(() => {
   if (hasFineHoverPointer.value) {
-    return resolveSpaceValue(props.finePointerGap ?? props.gap ?? BASE_SIZE_SPACE_PRESET[props.size]);
+    return resolveSpaceValue(props.optionsFinePointer?.gap ?? props.gap ?? BASE_SIZE_SPACE_PRESET[props.size]);
   }
 
   return resolveSpaceValue(props.gap ?? BASE_SIZE_SPACE_PRESET[props.size]);
