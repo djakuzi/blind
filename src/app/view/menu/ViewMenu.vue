@@ -41,9 +41,12 @@ function handleOptionSelect(selection: iWidgetMatchOptionsSelection) {
     return;
   }
 
-  setSelection({
-    connection: selection.value,
-  });
+    if (selection.key === 'connection') {
+    setSelection({
+      connection: selection.value,
+    });
+    return;
+  }
 }
 
 async function handleModeComplete() {
