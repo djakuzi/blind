@@ -1,20 +1,70 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
+import WidgetGameModeLocked from '@/app/features/gameMode/widgets/WidgetGameModeLocked.vue';
+import WidgetGameModeOptions from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
+import type { iWidgetGameModeOptionsSelection } from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
 import WidgetSliderGameMode from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
+import type { iWidgetSliderGameModeSelection } from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
+import { usePreGame } from '@/app/features/preGame/composables/usePreGame';
 import { useHeaderActions } from '@/app/layouts/composables/common/useHeaderActions';
 import { useSessionJoinOverlay } from '@/app/overlay/sessionJoin/composables/useSessionJoinOverlay';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import AppSwapTransition from '@/app/shared/components/effects/transition/AppSwapTransition.vue';
+import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 const router = useRouter();
+const gameModeStore = useGameModeStore();
+const { mode, players, connection, setSelection } = usePreGame();
+
+const activeModeIndex = ref(0);
+
+const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? null);
+const activeModeStateKey = computed(() => (activeMode.value?.locked ? 'locked' : 'options'));
 const { open: openSessionJoin } = useSessionJoinOverlay();
 const menuLocale = useLocale((locale) => locale.views.menu.index.ui);
+
+function handleModeSelect(selection: iWidgetSliderGameModeSelection) {
+  setSelection({
+    mode: selection.value,
+  });
+}
+
+function handleOptionSelect(selection: iWidgetGameModeOptionsSelection) {
+  if (selection.key === 'players') {
+    setSelection({
+      players: selection.value,
+    });
+    return;
+  }
+
+  setSelection({
+    connection: selection.value,
+  });
+}
 
 function handleSettings() {
   router.push({ name: KEY_ROUTE.settings.index });
 }
+
+watch(
+  mode,
+  (modeKey) => {
+    if (!modeKey) {
+      return;
+    }
+
+    const modeIndex = gameModeStore.modes.findIndex((gameMode) => gameMode.key === modeKey);
+
+    if (modeIndex >= 0 && activeModeIndex.value !== modeIndex) {
+      activeModeIndex.value = modeIndex;
+    }
+  },
+  { immediate: true },
+);
 
 useHeaderActions(
   computed(() => [
@@ -33,7 +83,25 @@ useHeaderActions(
 </script>
 
 <template>
-  <ViewLayout align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
-    <WidgetSliderGameMode />
+  <ViewLayout class="view-menu" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
+    <AppFlex class="view-menu__content" direction="column" align="center" width="100%" :gap="12">
+      <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" />
+
+      <AppSwapTransition v-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
+        <WidgetGameModeLocked v-if="activeMode.locked" :mode="activeMode" />
+
+        <WidgetGameModeOptions v-else :mode="activeMode" :players="players" :connection="connection" @select="handleOptionSelect" />
+      </AppSwapTransition>
+    </AppFlex>
   </ViewLayout>
 </template>
+
+<style scoped>
+.view-menu__content {
+  min-width: 0;
+}
+
+.view-menu__state {
+  min-height: 30rem;
+}
+</style>
