@@ -13,7 +13,7 @@ export const routeMenu: RouteRecordRaw = {
       component: ViewMenu,
       meta: {
         lazy: {
-          preload: [KEY_ROUTE.preGame.index, KEY_ROUTE.settings.index],
+          preload: [KEY_ROUTE.lobby.index, KEY_ROUTE.settings.index],
         },
       },
     },

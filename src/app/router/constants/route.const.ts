@@ -8,9 +8,8 @@ export const KEY_ROUTE = {
   game: {
     index: 'game',
   },
-  preGame: {
-    index: 'mode',
-    typeConnection: 'type-connection',
+  lobby: {
+    index: 'lobby',
   },
 };
 

@@ -18,7 +18,7 @@ import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 const router = useRouter();
 const gameModeStore = useGameModeStore();
-const { mode, players, connection, setSelection } = usePreGame();
+const { mode, players, connection, selectionQuery, setSelection, flushSelection } = usePreGame();
 
 const activeModeIndex = ref(0);
 
@@ -43,6 +43,19 @@ function handleOptionSelect(selection: iWidgetGameModeOptionsSelection) {
 
   setSelection({
     connection: selection.value,
+  });
+}
+
+async function handleModeComplete() {
+  await flushSelection();
+
+  if (!mode.value || !players.value || !connection.value) {
+    return;
+  }
+
+  await router.push({
+    name: KEY_ROUTE.lobby.index,
+    query: selectionQuery.value,
   });
 }
 
@@ -85,7 +98,7 @@ useHeaderActions(
 <template>
   <ViewLayout class="view-menu" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
     <AppFlex class="view-menu__content" direction="column" align="center" width="100%" :gap="12">
-      <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" />
+      <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
 
       <AppSwapTransition v-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
         <WidgetGameModeLocked v-if="activeMode.locked" :mode="activeMode" />
