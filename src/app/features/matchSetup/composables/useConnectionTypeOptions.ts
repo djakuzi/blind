@@ -17,7 +17,7 @@ const CONNECTION_IMAGES: Record<tKeyTypeConnection, iAppSegmentedCardOptionImage
   ONLINE: { light: OnlineLight, dark: OnlineDark },
 };
 
-export function useGameModeConnectionOptions(
+export function useConnectionTypeOptions(
   connections: MaybeRefOrGetter<readonly tKeyTypeConnection[]> = Object.values(TYPE_CONNECTION),
   availableConnections?: MaybeRefOrGetter<readonly tKeyTypeConnection[]>,
 ) {

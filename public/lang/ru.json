@@ -10,9 +10,24 @@
         "ui": {
           "play": "Играть",
           "join": "Подключиться",
-          "connection": "Подключение",
-          "settings": "Настройки",
-          "holdHint": "Зажмите кнопку для выбора"
+          "holdHint": "Зажмите кнопку для выбора",
+          "header": {
+            "connection": "Подключение",
+            "settings": "Настройки"
+          },
+          "matchSetup": {
+            "accessibilityLabel": "Выбор режима игры",
+            "itemAccessibilityLabel": "{current} из {total}",
+            "holdHint": "Зажмите кнопку для выбора",
+            "desktopWheelHint": "Колесо мыши — смена режима",
+            "desktopSelectHint": "Зажмите кнопку для выбора",
+            "loadError": "Не удалось загрузить режимы игры",
+            "loading": "Загрузка...",
+            "modeOptionsAccessibilityLabel": "Параметры режима",
+            "connectionTypesAccessibilityLabel": "Доступные способы подключения",
+            "players": "Игроки",
+            "connection": "Подключение"
+          }
         },
         "modals": {
           "joinSession": {
@@ -36,24 +51,6 @@
         "ui": {
           "title": "Лобби"
         }
-      }
-    },
-    "preGame": {
-      "index": {
-        "ui": {
-          "accessibilityLabel": "Выбор режима игры",
-          "itemAccessibilityLabel": "{current} из {total}",
-          "holdHint": "Зажмите кнопку для выбора",
-          "desktopWheelHint": "Колесо мыши — смена режима",
-          "desktopSelectHint": "Зажмите кнопку для выбора",
-          "loadError": "Не удалось загрузить режимы игры",
-          "loading": "Загрузка...",
-          "modeOptionsAccessibilityLabel": "Параметры режима",
-          "connectionTypesAccessibilityLabel": "Доступные способы подключения",
-          "players": "Игроки",
-          "connection": "Подключение"
-        },
-        "modals": {}
       }
     },
     "settings": {

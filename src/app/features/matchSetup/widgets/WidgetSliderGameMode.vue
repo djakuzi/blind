@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
-import UiCardGameMode from '@/app/features/gameMode/ui/UiCardGameMode.vue';
+import UiCardGameMode from '@/app/features/matchSetup/ui/UiCardGameMode.vue';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 import type { tGameModeKey } from '@/game/types/gameMode.types';
@@ -23,10 +23,10 @@ const activeIndex = defineModel<number>({ default: 0 });
 const modes = computed(() => gameModeStore.modes);
 const activeMode = computed(() => modes.value[activeIndex.value] ?? null);
 
-const preGameLocale = useLocale((locale) => locale.views.preGame.index.ui);
+const matchSetupLocale = useLocale((locale) => locale.views.menu.index.ui.matchSetup);
 
 function formatItemAccessibilityLabel(index: number, count: number) {
-  return preGameLocale.value.itemAccessibilityLabel.replace('{current}', String(index + 1)).replace('{total}', String(count));
+  return matchSetupLocale.value.itemAccessibilityLabel.replace('{current}', String(index + 1)).replace('{total}', String(count));
 }
 
 function handleModeComplete() {
@@ -63,7 +63,7 @@ watch(
       }"
       size="big"
       viewport-bleed="8rem"
-      :accessibility-label="preGameLocale.accessibilityLabel"
+      :accessibility-label="matchSetupLocale.accessibilityLabel"
       :item-accessibility-label="formatItemAccessibilityLabel"
     >
       <template #item="{ index, active }">
@@ -77,8 +77,8 @@ watch(
             fetchPriority: active ? 'high' : 'low',
             shouldLoad: Math.abs(index - activeIndex) <= 1,
           }"
-          :options-accessibility-label="preGameLocale.modeOptionsAccessibilityLabel"
-          :connection-types-accessibility-label="preGameLocale.connectionTypesAccessibilityLabel"
+          :options-accessibility-label="matchSetupLocale.modeOptionsAccessibilityLabel"
+          :connection-types-accessibility-label="matchSetupLocale.connectionTypesAccessibilityLabel"
           @complete="handleModeComplete"
         />
       </template>

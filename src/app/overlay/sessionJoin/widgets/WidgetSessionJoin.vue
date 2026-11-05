@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { useGameModeConnectionOptions } from '@/app/features/gameMode/composables/useGameModeConnectionOptions';
+import { useConnectionTypeOptions } from '@/app/features/matchSetup/composables/useConnectionTypeOptions';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
@@ -29,7 +29,7 @@ const emit = defineEmits<{
 
 const modalLocale = useLocale((locale) => locale.views.menu.index.modals.joinSession);
 const joinText = useLocale((locale) => locale.views.menu.index.ui.join);
-const { connectionOptions } = useGameModeConnectionOptions();
+const { connectionOptions } = useConnectionTypeOptions();
 
 const currentStep = ref<string>('connection');
 const selectedTargetKey = ref<string | null>(null);

@@ -3,9 +3,24 @@ export interface LocaleViewMenu {
     ui: {
       play: string;
       join: string;
-      connection: string;
-      settings: string;
       holdHint: string;
+      header: {
+        connection: string;
+        settings: string;
+      };
+      matchSetup: {
+        accessibilityLabel: string;
+        itemAccessibilityLabel: string;
+        holdHint: string;
+        desktopWheelHint: string;
+        desktopSelectHint: string;
+        loadError: string;
+        loading: string;
+        modeOptionsAccessibilityLabel: string;
+        connectionTypesAccessibilityLabel: string;
+        players: string;
+        connection: string;
+      };
     };
     modals: {
       joinSession: {

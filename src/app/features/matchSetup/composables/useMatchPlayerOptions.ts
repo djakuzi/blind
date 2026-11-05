@@ -6,7 +6,7 @@ import { useLocale } from '@/app/features/locale/composables/useLocale';
 import type { iAppSegmentedCardOption } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
-export function useGameModePlayerOptions(mode: MaybeRefOrGetter<iGameMode>, selectedPlayerOptionKey: MaybeRefOrGetter<string>) {
+export function useMatchPlayerOptions(mode: MaybeRefOrGetter<iGameMode>, selectedPlayerOptionKey: MaybeRefOrGetter<string>) {
   const gameModeStore = useGameModeStore();
   const playersLocale = useLocale((locale) => locale.game.format.players);
 

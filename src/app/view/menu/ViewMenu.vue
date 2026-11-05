@@ -2,11 +2,11 @@
 import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
-import WidgetGameModeLocked from '@/app/features/gameMode/widgets/WidgetGameModeLocked.vue';
-import WidgetGameModeOptions from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
-import type { iWidgetGameModeOptionsSelection } from '@/app/features/gameMode/widgets/WidgetGameModeOptions.vue';
-import WidgetSliderGameMode from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
-import type { iWidgetSliderGameModeSelection } from '@/app/features/gameMode/widgets/WidgetSliderGameMode.vue';
+import WidgetGameModeLocked from '@/app/features/matchSetup/widgets/WidgetGameModeLocked.vue';
+import WidgetMatchOptions from '@/app/features/matchSetup/widgets/WidgetMatchOptions.vue';
+import type { iWidgetMatchOptionsSelection } from '@/app/features/matchSetup/widgets/WidgetMatchOptions.vue';
+import WidgetSliderGameMode from '@/app/features/matchSetup/widgets/WidgetSliderGameMode.vue';
+import type { iWidgetSliderGameModeSelection } from '@/app/features/matchSetup/widgets/WidgetSliderGameMode.vue';
 import { usePreGame } from '@/app/features/preGame/composables/usePreGame';
 import { useHeaderActions } from '@/app/layouts/composables/common/useHeaderActions';
 import { useSessionJoinOverlay } from '@/app/overlay/sessionJoin/composables/useSessionJoinOverlay';
@@ -33,7 +33,7 @@ function handleModeSelect(selection: iWidgetSliderGameModeSelection) {
   });
 }
 
-function handleOptionSelect(selection: iWidgetGameModeOptionsSelection) {
+function handleOptionSelect(selection: iWidgetMatchOptionsSelection) {
   if (selection.key === 'players') {
     setSelection({
       players: selection.value,
@@ -83,12 +83,12 @@ useHeaderActions(
   computed(() => [
     {
       key: 'connection',
-      text: menuLocale.value.connection,
+      text: menuLocale.value.header.connection,
       onClick: openSessionJoin,
     },
     {
       key: 'settings',
-      text: menuLocale.value.settings,
+      text: menuLocale.value.header.settings,
       onClick: handleSettings,
     },
   ]),
@@ -103,7 +103,7 @@ useHeaderActions(
       <AppSwapTransition v-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
         <WidgetGameModeLocked v-if="activeMode.locked" :mode="activeMode" />
 
-        <WidgetGameModeOptions v-else :mode="activeMode" :players="players" :connection="connection" @select="handleOptionSelect" />
+        <WidgetMatchOptions v-else :mode="activeMode" :players="players" :connection="connection" @select="handleOptionSelect" />
       </AppSwapTransition>
     </AppFlex>
   </ViewLayout>
