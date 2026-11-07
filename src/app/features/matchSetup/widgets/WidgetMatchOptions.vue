@@ -97,12 +97,11 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
 </script>
 
 <template>
-  <AppFlex class="widget-match-options" direction="column" align="center" width="100%" :gap="12">
+  <AppFlex class="widget-match-options" direction="row" align="end" justify="between" width="100%" :gap="12">
     <AppFlex
       class="widget-match-options__group"
       direction="column"
       align="center"
-      width="100%"
       :gap="6"
       role="group"
       :aria-label="matchSetupLocale.players"
@@ -124,7 +123,6 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
       class="widget-match-options__group"
       direction="column"
       align="center"
-      width="100%"
       :gap="6"
       role="group"
       :aria-label="matchSetupLocale.connection"
