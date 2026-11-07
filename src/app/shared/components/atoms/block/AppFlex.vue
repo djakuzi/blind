@@ -12,6 +12,7 @@ type tAppFlexTag = 'div' | 'section' | 'article' | 'main' | 'header' | 'footer';
 export interface PropsAppFlex extends PropsWidth, PropsMargin, PropsGap {
   tag?: tAppFlexTag;
   direction?: CSSProperties['flexDirection'];
+  flex?: CSSProperties['flex'];
   align?: CSSProperties['alignItems'] | 'start' | 'end';
   justify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between';
   wrap?: CSSProperties['flexWrap'];
@@ -20,6 +21,7 @@ export interface PropsAppFlex extends PropsWidth, PropsMargin, PropsGap {
 const props = withDefaults(defineProps<PropsAppFlex>(), {
   tag: 'div',
   direction: 'row',
+  flex: undefined,
   align: 'stretch',
   justify: 'start',
   wrap: 'nowrap',
@@ -63,6 +65,7 @@ const flexMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 const flexMargin = computed(() => resolveSpaceValue(props.margin));
 const flexStyle = computed(() => ({
   '--cp-flex-direction': props.direction,
+  '--cp-flex-flex': props.flex,
   '--cp-flex-align': resolveFlexAlign(props.align),
   '--cp-flex-justify': resolveFlexJustify(props.justify),
   '--cp-flex-wrap': props.wrap,
@@ -79,6 +82,7 @@ const flexStyle = computed(() => ({
 .app-flex {
   display: flex;
   flex-direction: var(--cp-flex-direction);
+  flex: var(--cp-flex-flex);
   align-items: var(--cp-flex-align);
   justify-content: var(--cp-flex-justify);
   flex-wrap: var(--cp-flex-wrap);

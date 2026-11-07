@@ -100,7 +100,7 @@ useHeaderActions(
 
 <template>
   <ViewLayout class="view-menu" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
-    <AppFlex class="view-menu__content" direction="column" align="center" justify="between" width="100%" :gap="12">
+    <AppFlex class="view-menu__content" direction="column" align="center" justify="between" flex="1" width="100%" :gap="12">
       <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
 
       <AppSwapTransition v-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
@@ -114,7 +114,6 @@ useHeaderActions(
 
 <style scoped>
 .view-menu__content {
-  flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
 }
