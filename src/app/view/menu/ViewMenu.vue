@@ -12,7 +12,6 @@ import { useHeaderActions } from '@/app/layouts/composables/common/useHeaderActi
 import { useSessionJoinOverlay } from '@/app/overlay/sessionJoin/composables/useSessionJoinOverlay';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
-import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppSwapTransition from '@/app/shared/components/effects/transition/AppSwapTransition.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
@@ -100,24 +99,25 @@ useHeaderActions(
 
 <template>
   <ViewLayout class="view-menu" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
-    <AppFlex class="view-menu__content" direction="column" align="center" width="100%" :gap="12">
-      <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
+    <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
 
-      <AppSwapTransition v-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
-        <WidgetGameModeLocked v-if="activeMode.locked" :mode="activeMode" />
+    <AppSwapTransition v-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
+      <WidgetGameModeLocked v-if="activeMode.locked" :mode="activeMode" />
 
-        <WidgetMatchOptions v-else :mode="activeMode" :players="players" :connection="connection" @select="handleOptionSelect" />
-      </AppSwapTransition>
-    </AppFlex>
+      <WidgetMatchOptions v-else :mode="activeMode" :players="players" :connection="connection" @select="handleOptionSelect" />
+    </AppSwapTransition>
   </ViewLayout>
 </template>
 
 <style scoped>
-.view-menu__content {
-  min-width: 0;
+.view-menu {
+  position: relative;
 }
 
 .view-menu__state {
-  min-height: 30rem;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 </style>
