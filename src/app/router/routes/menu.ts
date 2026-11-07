@@ -15,6 +15,9 @@ export const routeMenu: RouteRecordRaw = {
         lazy: {
           preload: [KEY_ROUTE.lobby.index, KEY_ROUTE.settings.index],
         },
+        layout: {
+          safeArea: 'vertical',
+        },
       },
     },
   ],

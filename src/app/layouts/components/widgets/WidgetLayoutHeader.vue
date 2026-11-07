@@ -58,7 +58,7 @@ function handleBack() {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: var(--cp-layout-padding-vertical, 0px) var(--cp-layout-padding-horizontal, 0px) var(--app-space-2);
+  padding: var(--app-safe-area-vertical) var(--app-safe-area-horizontal) var(--app-space-2);
 }
 
 .layout-header__actions {
