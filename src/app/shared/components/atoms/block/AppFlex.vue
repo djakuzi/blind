@@ -14,7 +14,7 @@ export interface PropsAppFlex extends PropsWidth, PropsMargin, PropsGap {
   direction?: CSSProperties['flexDirection'];
   flex?: CSSProperties['flex'];
   align?: CSSProperties['alignItems'] | 'start' | 'end';
-  justify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between';
+  justify?: CSSProperties['justifyContent'] | 'start' | 'end' | 'between' | 'around';
   wrap?: CSSProperties['flexWrap'];
 }
 
@@ -54,6 +54,10 @@ function resolveFlexJustify(justify: PropsAppFlex['justify']) {
 
   if (justify === 'between') {
     return 'space-between';
+  }
+
+  if (justify === 'around') {
+    return 'space-around';
   }
 
   return justify;
