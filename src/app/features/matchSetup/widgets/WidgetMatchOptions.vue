@@ -97,7 +97,7 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
 </script>
 
 <template>
-  <AppFlex class="widget-match-options" direction="row" align="end" justify="between" width="100%" :gap="12">
+  <AppFlex class="widget-match-options" direction="row" align="end" justify="around" width="100%">
     <AppFlex
       class="widget-match-options__group"
       direction="column"
@@ -146,5 +146,14 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
 .widget-match-options,
 .widget-match-options__group {
   min-width: 0;
+}
+
+.widget-match-options {
+  gap: var(--app-space-12);
+}
+
+.widget-match-options__group {
+  flex: 0 0 auto;
+  width: max-content;
 }
 </style>
