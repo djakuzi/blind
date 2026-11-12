@@ -37,15 +37,27 @@ function handleBack() {
       </AppFlex>
 
       <TransitionGroup name="layout-header-action" tag="div" class="layout-header__actions">
-        <AppButton
-          v-for="action in actions"
-          :key="action.key"
-          variant="secondary"
-          size="small"
-          v-bind="action.optionsButton"
-          :text="action.text"
-          @click="action.onClick"
-        />
+        <template v-for="action in actions" :key="action.key">
+          <AppButton
+            v-if="!action.icon"
+            variant="secondary"
+            size="small"
+            v-bind="action.optionsButton"
+            :text="action.text"
+            @click="action.onClick"
+          />
+          <AppButtonIcon
+            v-else
+            :group="action.icon.group"
+            :icon="action.icon.icon"
+            :framed="true"
+            size="small"
+            width="auto"
+            height="auto"
+            :ariaLabel="action.text"
+            @click="action.onClick"
+          />
+        </template>
       </TransitionGroup>
     </AppFlex>
   </header>

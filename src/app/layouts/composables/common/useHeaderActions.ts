@@ -1,10 +1,19 @@
 import { computed, inject, onScopeDispose, provide, shallowRef, toValue, watch } from 'vue';
 import type { ComputedRef, InjectionKey, MaybeRefOrGetter } from 'vue';
 import type { PropsAppButton } from '@/app/shared/components/ui/button/AppButton.vue';
+import type { tIconGroup, tIconName } from '@/core/media/icons';
+
+type tHeaderActionIcon = {
+  [TGroup in tIconGroup]: {
+    group: TGroup;
+    icon: tIconName<TGroup>;
+  };
+}[tIconGroup];
 
 export interface iHeaderAction {
   key: string;
   text: string;
+  icon?: tHeaderActionIcon;
   optionsButton?: Partial<Omit<PropsAppButton, 'text'>>;
   onClick: () => void;
 }
@@ -48,7 +57,11 @@ export function useHeaderActions(source?: MaybeRefOrGetter<readonly iHeaderActio
   if (source !== undefined) {
     const owner = Symbol('header-actions');
 
-    watch(() => toValue(source), (actions) => context.setActions(owner, actions), { immediate: true });
+    watch(
+      () => toValue(source),
+      (actions) => context.setActions(owner, actions),
+      { immediate: true },
+    );
 
     onScopeDispose(() => context.clearActions(owner));
   }

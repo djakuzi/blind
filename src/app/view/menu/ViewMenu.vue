@@ -93,6 +93,10 @@ useHeaderActions(
     {
       key: 'settings',
       text: menuLocale.value.header.settings,
+      icon: {
+        group: 'settings',
+        icon: 'settings',
+      },
       onClick: handleSettings,
     },
   ]),

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { PropsTypography, PropsTextOverflow } from '@/app/shared/types/props/typography.props';
 import { computed } from 'vue';
+import { resolveLineHeightValue, type tLineHeightValue } from '@/app/shared/styles/contracts/lineHeight.contract';
 import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
 import { resolveFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
@@ -10,6 +11,7 @@ type tAppTextTag = 'p' | 'span' | 'div' | 'label';
 export interface PropsAppText extends PropsTypography, PropsTextOverflow {
   text: string;
   tag?: tAppTextTag;
+  lineHeight?: tLineHeightValue;
 }
 
 const props = withDefaults(defineProps<PropsAppText>(), {
@@ -17,6 +19,7 @@ const props = withDefaults(defineProps<PropsAppText>(), {
   color: 'text-primary',
   fontSize: 'md',
   fontWeight: 'medium',
+  lineHeight: 'body',
   uppercase: false,
   ellipsis: false,
   maxLines: 1,
@@ -39,6 +42,8 @@ const textColor = computed(() => resolveColorValue(props.color));
 const textFontSize = computed(() => resolveFontSizeValue(props.fontSize));
 
 const textFontWeight = computed(() => resolveFontWeightValue(props.fontWeight));
+
+const textLineHeight = computed(() => resolveLineHeightValue(props.lineHeight));
 </script>
 
 <template>
@@ -53,7 +58,7 @@ const textFontWeight = computed(() => resolveFontWeightValue(props.fontWeight));
   color: v-bind(textColor);
   font-size: v-bind(textFontSize);
   font-weight: v-bind(textFontWeight);
-  line-height: var(--app-line-height-body);
+  line-height: v-bind(textLineHeight);
   letter-spacing: var(--app-letter-spacing-wide);
 
   &.app-text--uppercase {

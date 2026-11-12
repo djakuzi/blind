@@ -76,17 +76,17 @@ const VARIANT_MAP: Record<
 const BUTTON_SIZE_PRESET: Record<tBaseSizeVariant, iControlSizePreset> = {
   small: {
     paddingX: 6,
-    paddingY: 3,
+    paddingY: 4,
     fontSize: 'lg',
   },
   middle: {
     paddingX: 8,
-    paddingY: 4,
+    paddingY: 5,
     fontSize: 'xl',
   },
   big: {
     paddingX: 10,
-    paddingY: 5,
+    paddingY: 6,
     fontSize: '2xl',
   },
 };
@@ -137,6 +137,7 @@ const buttonStyle = computed(() => ({
         :uppercase="uppercase"
         :ellipsis="true"
         :max-lines="1"
+        line-height="tight"
       />
     </button>
   </AppInteractionScale>

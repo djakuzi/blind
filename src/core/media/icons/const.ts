@@ -14,6 +14,8 @@ import BlindTextBottomDark from '@/assets/icons/logo/blind-text-bottom-dark.svg?
 import BlindTextBottomLight from '@/assets/icons/logo/blind-text-bottom-light.svg?raw';
 import BlindTextRightDark from '@/assets/icons/logo/blind-text-right-dark.svg?raw';
 import BlindTextRightLight from '@/assets/icons/logo/blind-text-right-light.svg?raw';
+import SettingsDark from '@/assets/icons/settings/settings-dark.svg?raw';
+import SettingsLight from '@/assets/icons/settings/settings-light.svg?raw';
 
 export const ICONS_ASSETS = {
   back: {
@@ -39,5 +41,9 @@ export const ICONS_ASSETS = {
     blindTextBottomLight: BlindTextBottomLight,
     blindTextRightDark: BlindTextRightDark,
     blindTextRightLight: BlindTextRightLight,
+  },
+  settings: {
+    settingsDark: SettingsDark,
+    settingsLight: SettingsLight,
   },
 } as const;
