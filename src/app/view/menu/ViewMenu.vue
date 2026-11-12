@@ -100,24 +100,34 @@ useHeaderActions(
 </script>
 
 <template>
-  <ViewLayout class="view-menu" align="center" justify="center" padding="none" overflow="visible">
-    <AppFlex class="view-menu__content" direction="column" align="center" justify="between" flex="1" width="100%" :gap="12">
+  <ViewLayout class="view-menu" align="center" padding="none" overflow="visible">
+    <AppFlex class="view-menu__slider" align="center" justify="center" width="100%">
       <UiContainer bleed="horizontal">
         <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
       </UiContainer>
-
-      <AppSwapTransition v-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
-        <WidgetGameModeLocked v-if="activeMode.locked" :mode="activeMode" />
-
-        <WidgetMatchOptions v-else :mode="activeMode" :players="players" :connection="connection" @select="handleOptionSelect" />
-      </AppSwapTransition>
     </AppFlex>
+
+    <AppSwapTransition v-if="activeMode?.locked" class="view-menu__locked" :transition-key="activeMode.key">
+      <WidgetGameModeLocked :mode="activeMode" />
+    </AppSwapTransition>
+
+    <AppSwapTransition v-else-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
+      <WidgetMatchOptions :mode="activeMode" :players="players" :connection="connection" @select="handleOptionSelect" />
+    </AppSwapTransition>
   </ViewLayout>
 </template>
 
 <style scoped>
-.view-menu__content {
-  min-width: 0;
-  min-height: 0;
+.view-menu__slider {
+  margin-top: 14rem;
+}
+
+.view-menu__locked {
+  width: 100%;
+  margin-top: var(--app-space-24);
+}
+
+.view-menu__state {
+  margin-top: auto;
 }
 </style>
