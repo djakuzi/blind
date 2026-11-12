@@ -53,7 +53,7 @@ function handleBack() {
 
 <style scoped>
 .layout-header {
-  --cp-layout-header-control-size: 7.5rem;
+  --cp-layout-header-control-size: 6.5rem;
 
   display: flex;
   align-items: center;
