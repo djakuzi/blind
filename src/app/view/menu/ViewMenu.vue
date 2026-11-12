@@ -107,12 +107,18 @@ useHeaderActions(
       </UiContainer>
     </AppFlex>
 
-    <AppSwapTransition v-if="activeMode?.locked" class="view-menu__locked" :transition-key="activeMode.key">
-      <WidgetGameModeLocked :mode="activeMode" />
+    <AppSwapTransition class="view-menu__locked-slot" :transition-key="activeMode?.locked ? 'locked' : 'locked-empty'">
+      <WidgetGameModeLocked v-if="activeMode?.locked" :mode="activeMode" />
     </AppSwapTransition>
 
-    <AppSwapTransition v-else-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
-      <WidgetMatchOptions :mode="activeMode" :players="players" :connection="connection" @select="handleOptionSelect" />
+    <AppSwapTransition class="view-menu__state-slot" :transition-key="activeMode && !activeMode.locked ? 'options' : 'options-empty'">
+      <WidgetMatchOptions
+        v-if="activeMode && !activeMode.locked"
+        :mode="activeMode"
+        :players="players"
+        :connection="connection"
+        @select="handleOptionSelect"
+      />
     </AppSwapTransition>
   </ViewLayout>
 </template>
@@ -122,12 +128,17 @@ useHeaderActions(
   margin-top: 14rem;
 }
 
-.view-menu__locked {
+.view-menu__locked-slot,
+.view-menu__state-slot {
   width: 100%;
+  min-width: 0;
+}
+
+.view-menu__locked-slot {
   margin-top: var(--app-space-24);
 }
 
-.view-menu__state {
+.view-menu__state-slot {
   margin-top: auto;
 }
 </style>
