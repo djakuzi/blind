@@ -47,48 +47,39 @@ watch(
 </script>
 
 <template>
-  <div class="widget-slider-game-mode">
-    <AppSlider
-      v-if="modes.length"
-      v-model="activeIndex"
-      :count="modes.length"
-      width="100%"
-      max-width="100%"
-      :options-item="{
-        width: '70rem',
-        maxWidth: '70rem',
-        gap: 8,
-        inactiveScale: 0.88,
-        inactiveOpacity: 0.42,
-      }"
-      size="big"
-      viewport-bleed="8rem"
-      :accessibility-label="matchSetupLocale.accessibilityLabel"
-      :item-accessibility-label="formatItemAccessibilityLabel"
-    >
-      <template #item="{ index, active }">
-        <UiCardGameMode
-          v-if="modes[index]"
-          :mode="modes[index]"
-          :active="active"
-          :disabled="!active"
-          :options-image="{
-            loading: active ? 'eager' : 'lazy',
-            fetchPriority: active ? 'high' : 'low',
-            shouldLoad: Math.abs(index - activeIndex) <= 1,
-          }"
-          :options-accessibility-label="matchSetupLocale.modeOptionsAccessibilityLabel"
-          :connection-types-accessibility-label="matchSetupLocale.connectionTypesAccessibilityLabel"
-          @complete="handleModeComplete"
-        />
-      </template>
-    </AppSlider>
-  </div>
+  <AppSlider
+    v-if="modes.length"
+    v-model="activeIndex"
+    :count="modes.length"
+    width="100%"
+    max-width="100%"
+    :options-item="{
+      width: '70rem',
+      maxWidth: '70rem',
+      gap: 8,
+      inactiveScale: 0.88,
+      inactiveOpacity: 0.42,
+    }"
+    size="big"
+    viewport-bleed="8rem"
+    :accessibility-label="matchSetupLocale.accessibilityLabel"
+    :item-accessibility-label="formatItemAccessibilityLabel"
+  >
+    <template #item="{ index, active }">
+      <UiCardGameMode
+        v-if="modes[index]"
+        :mode="modes[index]"
+        :active="active"
+        :disabled="!active"
+        :options-image="{
+          loading: active ? 'eager' : 'lazy',
+          fetchPriority: active ? 'high' : 'low',
+          shouldLoad: Math.abs(index - activeIndex) <= 1,
+        }"
+        :options-accessibility-label="matchSetupLocale.modeOptionsAccessibilityLabel"
+        :connection-types-accessibility-label="matchSetupLocale.connectionTypesAccessibilityLabel"
+        @complete="handleModeComplete"
+      />
+    </template>
+  </AppSlider>
 </template>
-
-<style scoped>
-.widget-slider-game-mode {
-  width: 100%;
-  min-width: 0;
-}
-</style>

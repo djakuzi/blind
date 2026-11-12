@@ -11,6 +11,7 @@ import { usePreGame } from '@/app/features/preGame/composables/usePreGame';
 import { useHeaderActions } from '@/app/layouts/composables/common/useHeaderActions';
 import { useSessionJoinOverlay } from '@/app/overlay/sessionJoin/composables/useSessionJoinOverlay';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
+import UiContainer from '@/app/layouts/components/containers/UiContainer.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppSwapTransition from '@/app/shared/components/effects/transition/AppSwapTransition.vue';
@@ -41,7 +42,7 @@ function handleOptionSelect(selection: iWidgetMatchOptionsSelection) {
     return;
   }
 
-    if (selection.key === 'connection') {
+  if (selection.key === 'connection') {
     setSelection({
       connection: selection.value,
     });
@@ -99,9 +100,11 @@ useHeaderActions(
 </script>
 
 <template>
-  <ViewLayout class="view-menu" align="center" justify="center" padding="none" overflow="hidden" bleed="horizontal">
+  <ViewLayout class="view-menu" align="center" justify="center" padding="none" overflow="visible">
     <AppFlex class="view-menu__content" direction="column" align="center" justify="between" flex="1" width="100%" :gap="12">
-      <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
+      <UiContainer bleed="horizontal">
+        <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
+      </UiContainer>
 
       <AppSwapTransition v-if="activeMode" class="view-menu__state" :transition-key="activeModeStateKey">
         <WidgetGameModeLocked v-if="activeMode.locked" :mode="activeMode" />
