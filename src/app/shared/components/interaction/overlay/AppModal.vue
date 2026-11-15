@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimensions.props';
+import type { PropsHeight } from '@/app/shared/types/props/dimensions.props';
 import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
-import type { PropsSurface } from '@/app/shared/types/props/surface.props';
 import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
+import type { PropsAppCard, tAppCardCornerStyle } from '@/app/shared/components/atoms/card/AppCard.vue';
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/core/lib/style';
+import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
 
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveLayerValue, type tLayerValue } from '@/app/shared/styles/contracts/layer.contract';
 import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
 
-type tAppModalLayoutOptions = PropsWidth & Pick<PropsHeight, 'maxHeight'>;
-type tAppModalSurfaceOptions = PropsSurface & { backdropColor?: tColorValue };
+type tAppModalLayoutOptions = Pick<PropsAppCard, 'width' | 'maxWidth'> & Pick<PropsHeight, 'maxHeight'>;
+type tAppModalSurfaceOptions = Pick<PropsAppCard, 'backgroundColor' | 'borderColor' | 'borderWidth' | 'borderStyle' | 'borderRadius'> & {
+  backdropColor?: tColorValue;
+};
 type tAppModalBehaviorOptions = {
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
@@ -22,7 +25,7 @@ type tAppModalBehaviorOptions = {
 
 export interface PropsAppModal {
   modelValue: boolean;
-  cornerStyle?: 'rounded' | 'angular';
+  cornerStyle?: tAppCardCornerStyle;
   layer?: tLayerValue;
   optionsLayout?: tAppModalLayoutOptions;
   optionsSurface?: tAppModalSurfaceOptions;
@@ -59,10 +62,6 @@ const modalSurface = computed(() =>
     borderRadius: props.optionsSurface?.borderRadius ?? '2xl',
   }),
 );
-
-const modalClass = computed(() => ({
-  'app-modal__panel--angular': props.cornerStyle === 'angular',
-}));
 
 const modalStyle = computed(() => ({
   '--cp-modal-layer': resolveLayerValue(props.layer),
@@ -194,7 +193,6 @@ onBeforeUnmount(() => {
         <div
           ref="modalPanelRef"
           class="app-modal__panel"
-          :class="modalClass"
           role="dialog"
           aria-modal="true"
           :aria-label="optionsAccessibility?.ariaLabel"
@@ -202,21 +200,30 @@ onBeforeUnmount(() => {
           :aria-describedby="optionsAccessibility?.ariaDescribedby"
           tabindex="-1"
         >
-          <div class="app-modal__frame">
-            <div class="app-modal__surface">
-              <header v-if="hasHeaderSlot" class="app-modal__header">
-                <slot name="header" />
-              </header>
+          <AppCard
+            class="app-modal__card"
+            :corner-style="cornerStyle"
+            :background-color="optionsSurface?.backgroundColor ?? 'surface-elevated'"
+            :border-color="optionsSurface?.borderColor ?? 'border-contrast'"
+            :border-width="optionsSurface?.borderWidth ?? 'thick'"
+            :border-style="optionsSurface?.borderStyle ?? 'solid'"
+            :border-radius="optionsSurface?.borderRadius ?? '2xl'"
+            padding-x="0"
+            padding-y="0"
+            overflow="hidden"
+          >
+            <header v-if="hasHeaderSlot" class="app-modal__header">
+              <slot name="header" />
+            </header>
 
-              <div class="app-modal__body">
-                <slot />
-              </div>
-
-              <footer v-if="hasFooterSlot" class="app-modal__footer">
-                <slot name="footer" />
-              </footer>
+            <div class="app-modal__body">
+              <slot />
             </div>
-          </div>
+
+            <footer v-if="hasFooterSlot" class="app-modal__footer">
+              <slot name="footer" />
+            </footer>
+          </AppCard>
         </div>
       </div>
     </Transition>
@@ -248,10 +255,7 @@ onBeforeUnmount(() => {
   min-width: 0;
   min-height: 0;
   box-sizing: border-box;
-  border: var(--cp-modal-border-width) var(--cp-modal-border-style) var(--cp-modal-border-color);
-  border-radius: var(--cp-modal-border-radius);
-  background: var(--cp-modal-background-color);
-  overflow: hidden;
+  overflow: visible;
   transform: scale(1);
 
   &:focus {
@@ -264,56 +268,11 @@ onBeforeUnmount(() => {
   }
 }
 
-.app-modal__frame,
-.app-modal__surface {
-  box-sizing: border-box;
-  min-width: 0;
-  height: 100%;
-}
-
-.app-modal__surface {
+.app-modal__card {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
-}
-
-.app-modal__panel--angular {
-  overflow: visible;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-}
-
-.app-modal__panel--angular .app-modal__frame {
-  padding: var(--cp-modal-border-width);
-  border: 0;
-  border-radius: 0;
-  background: var(--cp-modal-border-color);
-  clip-path: polygon(
-    0 var(--cp-modal-border-radius),
-    var(--cp-modal-border-radius) 0,
-    calc(100% - var(--cp-modal-border-radius)) 0,
-    100% var(--cp-modal-border-radius),
-    100% calc(100% - var(--cp-modal-border-radius)),
-    calc(100% - var(--cp-modal-border-radius)) 100%,
-    var(--cp-modal-border-radius) 100%,
-    0 calc(100% - var(--cp-modal-border-radius))
-  );
-}
-
-.app-modal__panel--angular .app-modal__surface {
-  border: 0;
-  border-radius: 0;
-  background: var(--cp-modal-background-color);
-  clip-path: polygon(
-    0 var(--cp-modal-border-radius),
-    var(--cp-modal-border-radius) 0,
-    calc(100% - var(--cp-modal-border-radius)) 0,
-    100% var(--cp-modal-border-radius),
-    100% calc(100% - var(--cp-modal-border-radius)),
-    calc(100% - var(--cp-modal-border-radius)) 100%,
-    var(--cp-modal-border-radius) 100%,
-    0 calc(100% - var(--cp-modal-border-radius))
-  );
+  min-height: 0;
 }
 
 .app-modal__header {
