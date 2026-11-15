@@ -80,11 +80,12 @@ function handleComplete() {
       class="ui-card-game-mode__main"
       direction="column"
       align="center"
+      :gap="10"
       :justify="mode.locked ? 'between' : 'space-evenly'"
       width="100%"
     >
       <AppFillAware :color="mode.locked ? 'text-disabled' : 'text-primary'" :filled-color="mode.locked ? 'text-disabled' : 'on-primary'">
-        <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="3xl" font-weight="bold" />
+        <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="xxl" font-weight="bold" line-height="tight"/>
       </AppFillAware>
 
       <AppImage
@@ -92,7 +93,7 @@ function handleComplete() {
         class="ui-card-game-mode__image"
         :src="imageSource"
         :alt="mode.name"
-        width="15rem"
+        width="20rem"
         max-width="30%"
         height="auto"
         object-fit="contain"
@@ -109,6 +110,7 @@ function handleComplete() {
           :text="modeDescription"
           color="inherit"
           font-size="lg"
+          line-height="tight"
           font-weight="semibold"
           :uppercase="true"
           :ellipsis="true"

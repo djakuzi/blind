@@ -38,11 +38,8 @@ const textClass = computed(() => [
 ]);
 
 const textColor = computed(() => resolveColorValue(props.color));
-
 const textFontSize = computed(() => resolveFontSizeValue(props.fontSize));
-
 const textFontWeight = computed(() => resolveFontWeightValue(props.fontWeight));
-
 const textLineHeight = computed(() => resolveLineHeightValue(props.lineHeight));
 </script>
 
