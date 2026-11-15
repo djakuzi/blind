@@ -129,7 +129,7 @@ useHeaderActions(
 
 <style scoped>
 .view-menu__slider {
-  margin-top: 14rem;
+  margin-top: 10rem;
 }
 
 .view-menu__locked-slot,
