@@ -49,7 +49,7 @@ function handleBack() {
         </TransitionGroup>
 
         <AppButton
-          variant="secondary"
+          variant="danger"
           :options-icon="{ group: 'back', icon: 'backArrow' }"
           size="small"
           :aria-label="commonLocale.navigation.back"
