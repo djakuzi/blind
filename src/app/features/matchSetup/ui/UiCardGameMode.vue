@@ -143,11 +143,11 @@ function handleComplete() {
   --cp-card-border-color: var(--app-color-primary);
 }
 
-.ui-card-game-mode--active :deep(.app-card__frame) {
-  filter: drop-shadow(0 0 0 color-mix(in srgb, var(--app-color-primary) 34%, transparent))
-    drop-shadow(0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent))
-    drop-shadow(0 0 5rem color-mix(in srgb, var(--app-color-primary) 18%, transparent))
-    drop-shadow(0 1rem 5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent));
+.ui-card-game-mode--active {
+  filter: drop-shadow(0 0 0 color-mix(in srgb, var(--app-color-primary) 100%, transparent))
+    drop-shadow(0 0 .5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent))
+    drop-shadow(0 0 1.25rem color-mix(in srgb, var(--app-color-primary) 18%, transparent))
+    drop-shadow(0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent));
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -157,8 +157,7 @@ function handleComplete() {
   }
 }
 
-.ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked)
-  :deep(.app-card-hold:not(.app-card-hold--disabled):hover .app-card__frame) {
+.ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked) {
   filter: drop-shadow(0 0 0 color-mix(in srgb, var(--app-color-primary) 18%, transparent));
 }
 

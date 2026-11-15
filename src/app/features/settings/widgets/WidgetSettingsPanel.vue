@@ -183,7 +183,19 @@ async function handleLanguageChange(value: string) {
 </script>
 
 <template>
-  <AppCard class="widget-settings-panel" tag="section" width="140rem" max-width="100%" :padding-x="10" padding-y="0">
+  <AppCard
+    class="widget-settings-panel"
+    tag="section"
+    width="140rem"
+    max-width="100%"
+    :padding-x="10"
+    padding-y="0"
+    corner-style="angular"
+    background-color="surface-primary"
+    border-color="border-contrast"
+    border-width="thick"
+    border-radius="xl"
+  >
     <WidgetList
       :items="SETTINGS_ITEMS"
       item-key="id"
