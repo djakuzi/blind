@@ -62,17 +62,11 @@ const CARD_PADDING_MAP: Record<
 };
 
 const cardPaddingX = computed(() => resolvePaddingValue(props.paddingX ?? CARD_PADDING_MAP[props.size].x));
-
 const cardPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? CARD_PADDING_MAP[props.size].y));
-
 const cardBackgroundColor = computed(() => resolveColorValue(props.backgroundColor));
-
 const cardBorderColor = computed(() => resolveColorValue(props.borderColor));
-
 const cardBorderWidth = computed(() => resolveBorderWidthValue(props.borderWidth));
-
 const cardBorderStyle = computed(() => resolveBorderStyleValue(props.borderStyle));
-
 const cardBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
 
 const cardClass = computed(() => [
