@@ -277,6 +277,13 @@ onBeforeUnmount(() => {
 }
 
 .app-modal__panel--angular {
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.app-modal__panel--angular .app-modal__frame {
   padding: var(--cp-modal-border-width);
   border: 0;
   border-radius: 0;
