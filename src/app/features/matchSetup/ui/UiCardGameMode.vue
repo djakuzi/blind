@@ -69,7 +69,8 @@ function handleComplete() {
       backgroundColor: 'surface-primary',
       borderColor: 'border-contrast',
       borderWidth: 'thick',
-      borderRadius: 'lg',
+      borderRadius: 'xl',
+      cornerStyle: 'angular',
       overflow: 'hidden',
     }"
     :options-hold="{ initialProgress: 0 }"
@@ -85,7 +86,7 @@ function handleComplete() {
       width="100%"
     >
       <AppFillAware :color="mode.locked ? 'text-disabled' : 'text-primary'" :filled-color="mode.locked ? 'text-disabled' : 'on-primary'">
-        <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="xxl" font-weight="bold" line-height="tight"/>
+        <AppTitle :text="mode.name" tag="h2" color="inherit" font-size="xxl" font-weight="bold" line-height="tight" />
       </AppFillAware>
 
       <AppImage

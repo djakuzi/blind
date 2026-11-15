@@ -14,14 +14,17 @@ import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/con
 import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 
 type tAppCardTag = 'div' | 'section' | 'article';
+export type tAppCardCornerStyle = 'rounded' | 'angular';
 
 export interface PropsAppCard extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant {
   tag?: tAppCardTag;
+  cornerStyle?: tAppCardCornerStyle;
   overflow?: CSSProperties['overflow'];
 }
 
 const props = withDefaults(defineProps<PropsAppCard>(), {
   tag: 'div',
+  cornerStyle: 'rounded',
   size: 'middle',
   width: '100%',
   maxWidth: '100%',
@@ -69,20 +72,43 @@ const cardBorderWidth = computed(() => resolveBorderWidthValue(props.borderWidth
 const cardBorderStyle = computed(() => resolveBorderStyleValue(props.borderStyle));
 
 const cardBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
+
+const cardClass = computed(() => [
+  'app-card',
+  {
+    'app-card--angular': props.cornerStyle === 'angular',
+  },
+]);
 </script>
 
 <template>
-  <AppBlock class="app-card" :tag="tag" :width="width" :max-width="maxWidth" :overflow="overflow">
+  <AppBlock :class="cardClass" :tag="tag" :width="width" :max-width="maxWidth" :overflow="overflow">
     <slot />
   </AppBlock>
 </template>
 
 <style scoped>
 .app-card {
+  --cp-card-corner-cut: v-bind(cardBorderRadius);
+
   min-width: 0;
   padding: v-bind(cardPaddingY) v-bind(cardPaddingX);
   border: v-bind(cardBorderWidth) v-bind(cardBorderStyle) v-bind(cardBorderColor);
   border-radius: v-bind(cardBorderRadius);
   background: v-bind(cardBackgroundColor);
+
+  &.app-card--angular {
+    border-radius: 0;
+    clip-path: polygon(
+      0 var(--cp-card-corner-cut),
+      var(--cp-card-corner-cut) 0,
+      calc(100% - var(--cp-card-corner-cut)) 0,
+      100% var(--cp-card-corner-cut),
+      100% calc(100% - var(--cp-card-corner-cut)),
+      calc(100% - var(--cp-card-corner-cut)) 100%,
+      var(--cp-card-corner-cut) 100%,
+      0 calc(100% - var(--cp-card-corner-cut))
+    );
+  }
 }
 </style>
