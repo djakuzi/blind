@@ -12,6 +12,9 @@ export const routeMenu: RouteRecordRaw = {
       name: KEY_ROUTE.menu.index,
       component: ViewMenu,
       meta: {
+        layout: {
+          back: false,
+        },
         lazy: {
           preload: [KEY_ROUTE.lobby.index, KEY_ROUTE.settings.index],
         },

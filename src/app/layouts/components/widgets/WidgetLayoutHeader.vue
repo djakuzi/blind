@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { useHeaderActions } from '@/app/layouts/composables/common/useHeaderActions';
+import { useLayoutHeader } from '@/app/layouts/composables/common/useLayoutHeader';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
@@ -12,6 +13,7 @@ const { play } = useAudio();
 
 const commonLocale = useLocale((locale) => locale.common);
 const { actions } = useHeaderActions();
+const { hasLayoutBack } = useLayoutHeader();
 
 function handleBack() {
   play('sfx.navigation.back');
@@ -49,6 +51,7 @@ function handleBack() {
         </TransitionGroup>
 
         <AppButton
+          v-if="hasLayoutBack"
           variant="danger"
           :options-icon="{ group: 'back', icon: 'backArrow' }"
           size="small"
