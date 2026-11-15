@@ -5,7 +5,6 @@ import { useAudio } from '@/app/shared/composables/audio/useAudio';
 import { useHeaderActions } from '@/app/layouts/composables/common/useHeaderActions';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
-import AppButtonIcon from '@/app/shared/components/ui/button/AppButtonIcon.vue';
 import AppLogo from '@/app/shared/components/ui/logo/AppLogo.vue';
 
 const router = useRouter();
@@ -38,18 +37,24 @@ function handleBack() {
               :text="action.text"
               @click="action.onClick"
             />
-            <AppButtonIcon
+            <AppButton
               v-else
-              :group="action.icon.group"
-              :icon="action.icon.icon"
+              variant="secondary"
+              :options-icon="action.icon"
               size="small"
-              :ariaLabel="action.text"
+              :aria-label="action.text"
               @click="action.onClick"
             />
           </template>
         </TransitionGroup>
 
-        <AppButtonIcon group="back" icon="backArrow" size="small" :ariaLabel="commonLocale.navigation.back" @click="handleBack" />
+        <AppButton
+          variant="secondary"
+          :options-icon="{ group: 'back', icon: 'backArrow' }"
+          size="small"
+          :aria-label="commonLocale.navigation.back"
+          @click="handleBack"
+        />
       </AppFlex>
     </AppFlex>
   </header>

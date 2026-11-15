@@ -7,6 +7,8 @@ import type { PropsFont, PropsUppercase } from '@/app/shared/types/props/typogra
 import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import AppIcon from '@/app/shared/components/atoms/media/AppIcon.vue';
+import type { PropsAppIcon } from '@/app/shared/components/atoms/media/AppIcon.vue';
 import AppInteractionScale from '@/app/shared/components/effects/interaction/AppInteractionScale.vue';
 import { useControlSize } from '@/app/shared/composables/style/useControlSize';
 import { LibStyle } from '@/core/lib/style';
@@ -16,16 +18,32 @@ import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contrac
 import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
 import type { iControlSizePreset } from '@/app/shared/styles/presets/control.preset';
 import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
+import type { tIconGroup, tIconName } from '@/core/media/icons';
 
 export type tAppButtonVariant = 'primary' | 'secondary' | 'danger';
 
+export type tAppButtonIconOptions = {
+  [TGroup in tIconGroup]: {
+    group: TGroup;
+    icon: tIconName<TGroup>;
+    position?: 'start' | 'end';
+    width?: PropsAppIcon<TGroup>['width'];
+    height?: PropsAppIcon<TGroup>['height'];
+  };
+}[tIconGroup];
+
 export interface PropsAppButton extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsUppercase, PropsDisabled {
-  text: string;
+  text?: string;
+  optionsIcon?: tAppButtonIconOptions;
+  ariaLabel?: string;
   variant?: tAppButtonVariant;
   textColor?: tColorValue;
 }
 
 const props = withDefaults(defineProps<PropsAppButton>(), {
+  text: undefined,
+  optionsIcon: undefined,
+  ariaLabel: undefined,
   variant: 'primary',
   size: 'middle',
   width: 'auto',
@@ -122,23 +140,47 @@ const buttonStyle = computed(() => ({
   '--cp-button-padding-y': buttonPaddingY.value,
   '--cp-button-font-size': buttonFontSize.value,
 }));
+
+const iconStyle = computed<Pick<PropsAppIcon, 'height'>>(() => ({
+  height: props.optionsIcon?.height ?? resolveFontSizeValue(fontSize.value),
+}));
+
+const buttonClass = computed(() => [
+  'app-button',
+  {
+    'app-button--icon-only': !props.text && Boolean(props.optionsIcon),
+    'app-button--icon-end': props.optionsIcon?.position === 'end',
+  },
+]);
 </script>
 
 <template>
   <AppInteractionScale :disabled="disabled" :style="interactionStyle">
-    <button class="app-button" :style="buttonStyle" :disabled="disabled" type="button" @click="$emit('click', $event)">
-      <AppText
-        class="app-button__text"
-        :text="text"
-        tag="span"
-        color="inherit"
-        font-size="inherit"
-        :font-weight="fontWeight"
-        :uppercase="uppercase"
-        :ellipsis="true"
-        :max-lines="1"
-        line-height="tight"
-      />
+    <button
+      :class="buttonClass"
+      :style="buttonStyle"
+      :disabled="disabled"
+      :aria-label="ariaLabel"
+      type="button"
+      @click="$emit('click', $event)"
+    >
+      <span class="app-button__content">
+        <AppIcon v-if="optionsIcon" class="app-button__icon" :group="optionsIcon.group" :icon="optionsIcon.icon" v-bind="iconStyle" />
+
+        <AppText
+          v-if="text"
+          class="app-button__text"
+          :text="text"
+          tag="span"
+          color="inherit"
+          font-size="inherit"
+          :font-weight="fontWeight"
+          :uppercase="uppercase"
+          :ellipsis="true"
+          :max-lines="1"
+          line-height="tight"
+        />
+      </span>
     </button>
   </AppInteractionScale>
 </template>
@@ -197,5 +239,29 @@ const buttonStyle = computed(() => ({
 .app-button__text {
   min-width: 0;
   max-width: 100%;
+}
+
+.app-button__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  max-width: 100%;
+  gap: var(--app-space-3);
+}
+
+.app-button--icon-end .app-button__content {
+  flex-direction: row-reverse;
+}
+
+.app-button--icon-only {
+  aspect-ratio: 1;
+  padding: var(--cp-button-padding-y);
+}
+
+.app-button__icon {
+  flex: 0 0 auto;
+  max-width: 100%;
+  max-height: 100%;
 }
 </style>

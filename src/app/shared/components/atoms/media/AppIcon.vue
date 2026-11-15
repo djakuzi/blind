@@ -9,12 +9,13 @@ import { MediaIcons, type tIconGroup, type tIconName } from '@/core/media/icons'
 export interface PropsAppIcon<TGroup extends tIconGroup = tIconGroup> extends PropsWidth, Pick<PropsHeight, 'height'> {
   group: TGroup;
   icon: tIconName<TGroup>;
-  width: PropsWidth['width'];
+  width?: PropsWidth['width'];
   display?: CSSProperties['display'];
   alt?: string;
 }
 
 const props = withDefaults(defineProps<PropsAppIcon<TGroup>>(), {
+  width: 'auto',
   height: 'auto',
   maxWidth: '100%',
   display: 'block',
