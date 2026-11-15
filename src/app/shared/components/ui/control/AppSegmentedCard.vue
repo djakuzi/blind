@@ -7,13 +7,22 @@ import type { PropsDisabled, PropsSelectionFeedback } from '@/app/shared/types/p
 import { computed } from 'vue';
 import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import type { PropsAppText } from '@/app/shared/components/atoms/typography/AppText.vue';
 import { useSelectionFeedback } from '@/app/shared/composables/interaction/useSelectionFeedback';
-import { useControlSize } from '@/app/shared/composables/style/useControlSize';
 import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode';
 import { LibStyle } from '@/core/lib/style';
 import type { tStyleSizeValue } from '@/core/lib/style';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
-import { resolveRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
+import {
+  resolveBorderStyleValue,
+  resolveBorderWidthValue,
+  type tBorderStyleValue,
+  type tBorderWidthValue,
+} from '@/app/shared/styles/contracts/border.contract';
+import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
+import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { CONTROL_SIZE_PRESET } from '@/app/shared/styles/presets/control.preset';
+import { resolveRadiusValue, type tRadiusValue } from '@/app/shared/styles/contracts/radius.contract';
 import { resolveSpaceValue, type tSpaceValue } from '@/app/shared/styles/contracts/space.contract';
 
 export interface iAppSegmentedCardOptionImage {
@@ -30,13 +39,30 @@ export interface iAppSegmentedCardOption {
   disabled?: boolean;
 }
 
-export interface PropsAppSegmentedCard
-  extends PropsWidth, PropsPadding, PropsBorderRadius, PropsSizeVariant, PropsGap, PropsDisabled, PropsSelectionFeedback {
+export interface PropsAppSegmentedCard extends PropsBorderRadius, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {
   modelValue: string;
   options: readonly iAppSegmentedCardOption[];
+  optionsText?: tAppSegmentedCardTextOptions;
+  optionsImage?: iAppSegmentedCardImageOptions;
+  optionsLayout?: PropsWidth & PropsPadding & PropsGap & { minWidth?: tStyleSizeValue };
+  optionsFrame?: iAppSegmentedCardFrameOptions;
   equalWidth?: boolean;
-  imageTextGap?: tSpaceValue;
-  imageSize?: tStyleSizeValue;
+}
+
+export type tAppSegmentedCardTextOptions = Pick<PropsAppText, 'color' | 'fontSize' | 'fontWeight' | 'uppercase' | 'lineHeight'>;
+
+export interface iAppSegmentedCardImageOptions {
+  size?: tStyleSizeValue;
+  textGap?: tSpaceValue;
+}
+
+export interface iAppSegmentedCardFrameOptions {
+  enabled?: boolean;
+  padding?: tPaddingValue;
+  borderColor?: tColorValue;
+  borderWidth?: tBorderWidthValue;
+  borderStyle?: tBorderStyleValue;
+  borderRadius?: tRadiusValue;
 }
 
 const props = withDefaults(defineProps<PropsAppSegmentedCard>(), {
@@ -44,15 +70,12 @@ const props = withDefaults(defineProps<PropsAppSegmentedCard>(), {
   sound: 'sfx.selection.default',
   vibration: true,
   size: 'middle',
-  width: 'auto',
-  maxWidth: '100%',
   equalWidth: true,
-  gap: 2,
-  imageTextGap: 3,
-  paddingX: undefined,
-  paddingY: undefined,
   borderRadius: 'md',
-  imageSize: undefined,
+  optionsText: undefined,
+  optionsImage: undefined,
+  optionsLayout: undefined,
+  optionsFrame: undefined,
 });
 
 const emit = defineEmits<{
@@ -65,16 +88,40 @@ const IMAGE_SIZE_PRESET: Record<tBaseSizeVariant, tStyleSizeValue> = {
   big: '5rem',
 };
 
+const FRAME_PRESET: Record<tBaseSizeVariant, { padding: tPaddingValue; borderWidth: tBorderWidthValue }> = {
+  small: {
+    padding: 1,
+    borderWidth: 'thin',
+  },
+  middle: {
+    padding: 1,
+    borderWidth: 'thin',
+  },
+  big: {
+    padding: 2,
+    borderWidth: 'thin',
+  },
+};
+
 const { triggerSelectionFeedback } = useSelectionFeedback(props);
 const { resolvedThemeMode } = useAppThemeMode();
 
-const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
-const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
-const controlGap = computed(() => resolveSpaceValue(props.gap));
-const itemImageTextGap = computed(() => resolveSpaceValue(props.imageTextGap));
+const controlWidth = computed(() => LibStyle.toSizeValue(props.optionsLayout?.width ?? 'auto'));
+const controlMinWidth = computed(() => LibStyle.toSizeValue(props.optionsLayout?.minWidth ?? '0'));
+const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.optionsLayout?.maxWidth ?? '100%'));
+const controlGap = computed(() => resolveSpaceValue(props.optionsLayout?.gap ?? 2));
+const itemImageTextGap = computed(() => resolveSpaceValue(props.optionsImage?.textGap ?? 3));
 const itemBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
-const { paddingX: itemPaddingX, paddingY: itemPaddingY, fontSize: itemFontSize } = useControlSize(props);
-const resolvedImageSize = computed(() => LibStyle.toSizeValue(props.imageSize ?? IMAGE_SIZE_PRESET[props.size]));
+const frameEnabled = computed(() => props.optionsFrame?.enabled ?? false);
+const framePadding = computed(() => resolvePaddingValue(props.optionsFrame?.padding ?? FRAME_PRESET[props.size].padding));
+const frameBorderColor = computed(() => resolveColorValue(props.optionsFrame?.borderColor ?? 'border-strong'));
+const frameBorderWidth = computed(() => resolveBorderWidthValue(props.optionsFrame?.borderWidth ?? FRAME_PRESET[props.size].borderWidth));
+const frameBorderStyle = computed(() => resolveBorderStyleValue(props.optionsFrame?.borderStyle ?? 'solid'));
+const frameBorderRadius = computed(() => resolveRadiusValue(props.optionsFrame?.borderRadius ?? props.borderRadius));
+const itemPaddingX = computed(() => resolvePaddingValue(props.optionsLayout?.paddingX ?? CONTROL_SIZE_PRESET[props.size].paddingX));
+const itemPaddingY = computed(() => resolvePaddingValue(props.optionsLayout?.paddingY ?? CONTROL_SIZE_PRESET[props.size].paddingY));
+const itemFontSize = computed(() => props.optionsText?.fontSize ?? CONTROL_SIZE_PRESET[props.size].fontSize);
+const resolvedImageSize = computed(() => LibStyle.toSizeValue(props.optionsImage?.size ?? IMAGE_SIZE_PRESET[props.size]));
 
 function isOptionSelected(option: iAppSegmentedCardOption) {
   return option.value === props.modelValue;
@@ -107,6 +154,7 @@ function handleSelect(option: iAppSegmentedCardOption) {
   <div
     class="app-segmented-card"
     :class="{
+      'app-segmented-card--framed': frameEnabled,
       'app-segmented-card--disabled': disabled,
       'app-segmented-card--equal-width': equalWidth,
     }"
@@ -141,10 +189,11 @@ function handleSelect(option: iAppSegmentedCardOption) {
         class="app-segmented-card__text"
         :text="option.label"
         tag="span"
-        color="inherit"
-        :font-size="itemFontSize"
-        font-weight="bold"
-        :uppercase="true"
+        :color="optionsText?.color ?? 'inherit'"
+        :font-size="optionsText?.fontSize ?? itemFontSize"
+        :font-weight="optionsText?.fontWeight ?? 'bold'"
+        :uppercase="optionsText?.uppercase ?? true"
+        :line-height="optionsText?.lineHeight"
         :ellipsis="true"
       />
     </button>
@@ -156,8 +205,14 @@ function handleSelect(option: iAppSegmentedCardOption) {
   display: inline-flex;
   width: v-bind(controlWidth);
   max-width: v-bind(controlMaxWidth);
-  min-width: 0;
+  min-width: v-bind(controlMinWidth);
   gap: v-bind(controlGap);
+}
+
+.app-segmented-card--framed {
+  padding: v-bind(framePadding);
+  border: v-bind(frameBorderWidth) v-bind(frameBorderStyle) v-bind(frameBorderColor);
+  border-radius: v-bind(frameBorderRadius);
 }
 
 .app-segmented-card--equal-width {
@@ -175,7 +230,7 @@ function handleSelect(option: iAppSegmentedCardOption) {
   box-sizing: border-box;
   gap: v-bind(itemImageTextGap);
   padding: v-bind(itemPaddingY) v-bind(itemPaddingX);
-  border: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-border-strong);
+  border: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-border-subtle);
   border-radius: v-bind(itemBorderRadius);
   background: var(--app-color-surface-primary);
   color: var(--app-color-text-primary);

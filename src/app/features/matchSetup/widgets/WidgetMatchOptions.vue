@@ -98,14 +98,7 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
 
 <template>
   <AppFlex class="widget-match-options" direction="row" align="end" justify="around" width="100%">
-    <AppFlex
-      class="widget-match-options__group"
-      direction="column"
-      align="center"
-      :gap="6"
-      role="group"
-      :aria-label="matchSetupLocale.players"
-    >
+    <AppFlex class="widget-match-options__group" direction="column" :gap="2" role="group" :aria-label="matchSetupLocale.players">
       <AppTitle :text="matchSetupLocale.players" tag="h3" font-size="lg" font-weight="medium" />
 
       <AppSegmentedCard
@@ -113,20 +106,13 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
         :options="playerOptions"
         :disabled="mode.locked"
         size="big"
-        min-width="60rem"
-        max-width="100%"
+        :options-layout="{ minWidth: '60rem', maxWidth: '100%' }"
+        :options-frame="{ enabled: true }"
         @update:model-value="handlePlayerOptionChange"
       />
     </AppFlex>
 
-    <AppFlex
-      class="widget-match-options__group"
-      direction="column"
-      align="center"
-      :gap="6"
-      role="group"
-      :aria-label="matchSetupLocale.connection"
-    >
+    <AppFlex class="widget-match-options__group" direction="column" :gap="2" role="group" :aria-label="matchSetupLocale.connection">
       <AppTitle :text="matchSetupLocale.connection" tag="h3" font-size="lg" font-weight="medium" />
 
       <AppSegmentedCard
@@ -134,7 +120,8 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
         :options="connectionOptions"
         :disabled="mode.locked"
         size="big"
-        max-width="100%"
+        :options-layout="{ maxWidth: '100%' }"
+        :options-frame="{ enabled: true }"
         :equal-width="false"
         @update:model-value="handleConnectionChange"
       />
