@@ -4,12 +4,14 @@ import { computed } from 'vue';
 import { resolveColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
 import { resolveFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
+import { resolveLineHeightValue, type tLineHeightValue } from '@/app/shared/styles/contracts/lineHeight.contract';
 
 export type tAppTitleTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
 export interface PropsAppTitle extends PropsTypography {
   text: string;
   tag?: tAppTitleTag;
+  lineHeight?: tLineHeightValue;
 }
 
 const props = withDefaults(defineProps<PropsAppTitle>(), {
@@ -17,6 +19,7 @@ const props = withDefaults(defineProps<PropsAppTitle>(), {
   color: 'text-secondary',
   fontSize: '2xl',
   fontWeight: 'medium',
+  lineHeight: 'heading',
   uppercase: true,
 });
 
@@ -28,10 +31,9 @@ const titleClass = computed(() => [
 ]);
 
 const titleColor = computed(() => resolveColorValue(props.color));
-
 const titleFontSize = computed(() => resolveFontSizeValue(props.fontSize));
-
 const titleFontWeight = computed(() => resolveFontWeightValue(props.fontWeight));
+const titleLineHeight = computed(() => resolveLineHeightValue(props.lineHeight));
 </script>
 
 <template>
@@ -46,7 +48,7 @@ const titleFontWeight = computed(() => resolveFontWeightValue(props.fontWeight))
   color: v-bind(titleColor);
   font-size: v-bind(titleFontSize);
   font-weight: v-bind(titleFontWeight);
-  line-height: var(--app-line-height-heading);
+  line-height: v-bind(titleLineHeight);
   letter-spacing: var(--app-letter-spacing-wider);
 
   &.app-title--uppercase {
