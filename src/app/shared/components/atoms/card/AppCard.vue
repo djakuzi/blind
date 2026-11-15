@@ -103,10 +103,7 @@ const cardClass = computed(() => [
 }
 
 .app-card--glow {
-  filter: drop-shadow(0 0 0 color-mix(in srgb, var(--app-color-primary) 100%, transparent))
-    drop-shadow(0 0 1rem color-mix(in srgb, var(--app-color-primary) 50%, transparent))
-    drop-shadow(0 0 1.25rem color-mix(in srgb, var(--app-color-primary) 34%, transparent))
-    drop-shadow(0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent));
+  filter: drop-shadow(0 0 .75rem var(--app-color-primary));
 }
 
 .app-card:not(.app-card--angular) {
