@@ -257,5 +257,6 @@ watch(
 .widget-search-picker__empty {
   display: block;
   padding: var(--app-padding-6);
+  text-align: center;
 }
 </style>
