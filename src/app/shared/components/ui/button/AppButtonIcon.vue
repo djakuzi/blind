@@ -22,15 +22,30 @@ interface iIconButtonSizePreset {
 }
 
 const ICON_BUTTON_SIZE_PRESET: Record<tBaseSizeVariant, iIconButtonSizePreset> = {
-  small: { paddingX: 3, paddingY: 3, width: '3rem', height: '3rem' },
-  middle: { paddingX: 4, paddingY: 4, width: 'var(--app-font-size-xl)', height: 'var(--app-font-size-xl)' },
-  big: { paddingX: 5, paddingY: 5, width: '', height: 'var(--app-font-size-2xl)' },
+  small: {
+    paddingX: 3,
+    paddingY: 3,
+    width: 'calc(var(--app-padding-4) * 2 + var(--app-font-size-lg) * var(--app-line-height-tight))',
+    height: 'calc(var(--app-padding-4) * 2 + var(--app-font-size-lg) * var(--app-line-height-tight))',
+  },
+  middle: {
+    paddingX: 4,
+    paddingY: 4,
+    width: 'calc(var(--app-padding-5) * 2 + var(--app-font-size-xl) * var(--app-line-height-tight))',
+    height: 'calc(var(--app-padding-5) * 2 + var(--app-font-size-xl) * var(--app-line-height-tight))',
+  },
+  big: {
+    paddingX: 5,
+    paddingY: 5,
+    width: 'calc(var(--app-padding-6) * 2 + var(--app-font-size-2xl) * var(--app-line-height-tight))',
+    height: 'calc(var(--app-padding-6) * 2 + var(--app-font-size-2xl) * var(--app-line-height-tight))',
+  },
 };
 
 interface Props extends PropsWidth, Pick<PropsHeight, 'height'>, PropsPadding, PropsSizeVariant, PropsDisabled {
   group: TGroup;
   icon: tIconName<TGroup>;
-  width: PropsWidth['width'];
+  width?: PropsWidth['width'];
   framed?: boolean;
   optionsIcon?: Partial<Pick<PropsAppIcon<TGroup>, 'width' | 'height'>>;
   ariaLabel: string;
@@ -56,8 +71,8 @@ const iconProps = computed<Pick<PropsAppIcon<TGroup>, 'width' | 'height'>>(() =>
 }));
 
 const buttonStyle = computed(() => ({
-  '--cp-button-icon-width': LibStyle.toSizeValue(props.width) ?? 'auto',
-  '--cp-button-icon-height': LibStyle.toSizeValue(props.height) ?? 'auto',
+  '--cp-button-icon-width': LibStyle.toSizeValue(props.width ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].width) ?? 'auto',
+  '--cp-button-icon-height': LibStyle.toSizeValue(props.height ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].height) ?? 'auto',
   '--cp-button-icon-padding-x': props.framed
     ? resolvePaddingValue(props.paddingX ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].paddingX)
     : '0px',

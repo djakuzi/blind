@@ -24,41 +24,41 @@ function handleBack() {
   <header class="layout-header">
     <AppFlex align="center" justify="between" :gap="4" width="100%">
       <AppFlex align="center" :gap="4">
-        <AppButtonIcon
-          group="back"
-          icon="backArrow"
-          width="var(--cp-layout-header-control-size)"
-          height="var(--cp-layout-header-control-size)"
-          :ariaLabel="commonLocale.navigation.back"
-          @click="handleBack"
-        />
-
         <AppLogo size="small" />
       </AppFlex>
 
-      <TransitionGroup name="layout-header-action" tag="div" class="layout-header__actions">
-        <template v-for="action in actions" :key="action.key">
-          <AppButton
-            v-if="!action.icon"
-            variant="secondary"
-            size="small"
-            v-bind="action.optionsButton"
-            :text="action.text"
-            @click="action.onClick"
-          />
-          <AppButtonIcon
-            v-else
-            :group="action.icon.group"
-            :icon="action.icon.icon"
-            :framed="true"
-            size="small"
-            width="auto"
-            height="auto"
-            :ariaLabel="action.text"
-            @click="action.onClick"
-          />
-        </template>
-      </TransitionGroup>
+      <AppFlex align="center" :gap="3">
+        <TransitionGroup name="layout-header-action" tag="div" class="layout-header__actions">
+          <template v-for="action in actions" :key="action.key">
+            <AppButton
+              v-if="!action.icon"
+              variant="secondary"
+              size="small"
+              v-bind="action.optionsButton"
+              :text="action.text"
+              @click="action.onClick"
+            />
+            <AppButtonIcon
+              v-else
+              :group="action.icon.group"
+              :icon="action.icon.icon"
+              :framed="true"
+              size="small"
+              :ariaLabel="action.text"
+              @click="action.onClick"
+            />
+          </template>
+        </TransitionGroup>
+
+        <AppButtonIcon
+          group="back"
+          icon="backArrow"
+          :framed="true"
+          size="small"
+          :ariaLabel="commonLocale.navigation.back"
+          @click="handleBack"
+        />
+      </AppFlex>
     </AppFlex>
   </header>
 </template>
