@@ -46,8 +46,6 @@ interface Props extends PropsWidth, Pick<PropsHeight, 'height'>, PropsPadding, P
   group: TGroup;
   icon: tIconName<TGroup>;
   width?: PropsWidth['width'];
-  framed?: boolean;
-  optionsIcon?: Partial<Pick<PropsAppIcon<TGroup>, 'width' | 'height'>>;
   ariaLabel: string;
 }
 
@@ -56,8 +54,6 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'middle',
   paddingX: undefined,
   paddingY: undefined,
-  framed: false,
-  optionsIcon: undefined,
   disabled: false,
 });
 
@@ -66,19 +62,15 @@ defineEmits<{
 }>();
 
 const iconProps = computed<Pick<PropsAppIcon<TGroup>, 'width' | 'height'>>(() => ({
-  width: props.optionsIcon?.width ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].width,
-  height: props.optionsIcon?.height ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].height,
+  width: ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].width,
+  height: ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].height,
 }));
 
 const buttonStyle = computed(() => ({
   '--cp-button-icon-width': LibStyle.toSizeValue(props.width ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].width) ?? 'auto',
   '--cp-button-icon-height': LibStyle.toSizeValue(props.height ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].height) ?? 'auto',
-  '--cp-button-icon-padding-x': props.framed
-    ? resolvePaddingValue(props.paddingX ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].paddingX)
-    : '0px',
-  '--cp-button-icon-padding-y': props.framed
-    ? resolvePaddingValue(props.paddingY ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].paddingY)
-    : '0px',
+  '--cp-button-icon-padding-x': resolvePaddingValue(props.paddingX ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].paddingX),
+  '--cp-button-icon-padding-y': resolvePaddingValue(props.paddingY ?? ICON_BUTTON_SIZE_PRESET[props.size ?? 'middle'].paddingY),
 }));
 </script>
 
@@ -86,7 +78,6 @@ const buttonStyle = computed(() => ({
   <AppInteractionScale :disabled="disabled">
     <button
       class="app-button-icon"
-      :class="{ 'app-button-icon--framed': props.framed }"
       type="button"
       :style="buttonStyle"
       :disabled="disabled"
@@ -106,17 +97,12 @@ const buttonStyle = computed(() => ({
   width: var(--cp-button-icon-width);
   height: var(--cp-button-icon-height);
   padding: var(--cp-button-icon-padding-y) var(--cp-button-icon-padding-x);
-  border: 0;
-  background: transparent;
-  cursor: var(--app-cursor-pointer);
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.app-button-icon--framed {
   border: var(--app-border-width-medium) solid var(--app-color-border-contrast);
   border-radius: var(--app-radius-md);
   background: var(--app-color-surface-primary);
+  cursor: var(--app-cursor-pointer);
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .app-button-icon :deep(svg) {

@@ -42,7 +42,6 @@ function handleBack() {
               v-else
               :group="action.icon.group"
               :icon="action.icon.icon"
-              :framed="true"
               size="small"
               :ariaLabel="action.text"
               @click="action.onClick"
@@ -50,14 +49,7 @@ function handleBack() {
           </template>
         </TransitionGroup>
 
-        <AppButtonIcon
-          group="back"
-          icon="backArrow"
-          :framed="true"
-          size="small"
-          :ariaLabel="commonLocale.navigation.back"
-          @click="handleBack"
-        />
+        <AppButtonIcon group="back" icon="backArrow" size="small" :ariaLabel="commonLocale.navigation.back" @click="handleBack" />
       </AppFlex>
     </AppFlex>
   </header>
