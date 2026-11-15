@@ -85,10 +85,9 @@ watch(
 <template>
   <AppModal
     :model-value="modelValue"
-    :aria-label="stepTitle"
-    :body-padding-x="0"
-    :body-padding-y="0"
-    max-width="124rem"
+    :options-accessibility="{ ariaLabel: stepTitle }"
+    :options-body="{ paddingX: 0, paddingY: 0 }"
+    :options-layout="{ maxWidth: '124rem' }"
     @update:model-value="emit('update:modelValue', $event)"
   >
     <template #header>

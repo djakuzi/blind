@@ -258,7 +258,7 @@ async function handleLanguageChange(value: string) {
             :empty-text="changeLanguageModalLocale.emptyText"
             :trigger-aria-label="settingsLocale.changeLanguage"
             :modal="{
-              maxWidth: '50rem',
+              optionsLayout: { maxWidth: '50rem' },
             }"
             :search="{
               placeholder: changeLanguageModalLocale.searchPlaceholder,

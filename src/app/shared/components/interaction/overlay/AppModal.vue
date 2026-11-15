@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PropsWidth, PropsHeight } from '@/app/shared/types/props/dimensions.props';
+import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
 import type { PropsSurface } from '@/app/shared/types/props/surface.props';
 import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
@@ -8,47 +9,33 @@ import { LibStyle } from '@/core/lib/style';
 
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveLayerValue, type tLayerValue } from '@/app/shared/styles/contracts/layer.contract';
-import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
+import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
 
-export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'>, PropsSurface, PropsAccessibility {
-  modelValue: boolean;
-  layer?: tLayerValue;
-  backdropColor?: tColorValue;
-  headerPaddingX?: tPaddingValue;
-  headerPaddingY?: tPaddingValue;
-  bodyPaddingX?: tPaddingValue;
-  bodyPaddingY?: tPaddingValue;
-  footerPaddingX?: tPaddingValue;
-  footerPaddingY?: tPaddingValue;
+type tAppModalLayoutOptions = PropsWidth & Pick<PropsHeight, 'maxHeight'>;
+type tAppModalSurfaceOptions = PropsSurface & { backdropColor?: tColorValue };
+type tAppModalBehaviorOptions = {
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   lockScroll?: boolean;
+};
+
+export interface PropsAppModal {
+  modelValue: boolean;
+  cornerStyle?: 'rounded' | 'angular';
+  layer?: tLayerValue;
+  optionsLayout?: tAppModalLayoutOptions;
+  optionsSurface?: tAppModalSurfaceOptions;
+  optionsHeader?: PropsPadding;
+  optionsBody?: PropsPadding;
+  optionsFooter?: PropsPadding;
+  optionsBehavior?: tAppModalBehaviorOptions;
+  optionsAccessibility?: PropsAccessibility;
 }
 
 const props = withDefaults(defineProps<PropsAppModal>(), {
-  width: '100%',
-  maxWidth: '100rem',
-  maxHeight: '100%',
+  cornerStyle: 'angular',
   layer: 'modal',
-  backdropColor: 'surface-overlay',
-  backgroundColor: 'surface-elevated',
-  borderColor: 'border-contrast',
-  borderWidth: 'thick',
-  borderStyle: 'solid',
-  borderRadius: '2xl',
-  headerPaddingX: 6,
-  headerPaddingY: 5,
-  bodyPaddingX: 6,
-  bodyPaddingY: 5,
-  footerPaddingX: 6,
-  footerPaddingY: 5,
-  closeOnBackdrop: true,
-  closeOnEscape: true,
-  lockScroll: true,
-  ariaLabel: undefined,
-  ariaLabelledby: undefined,
-  ariaDescribedby: undefined,
 });
 
 const emit = defineEmits<{
@@ -63,25 +50,37 @@ const isScrollLocked = ref(false);
 
 const hasHeaderSlot = computed(() => Boolean(slots.header));
 const hasFooterSlot = computed(() => Boolean(slots.footer));
-const modalSurface = computed(() => resolveSurface(props));
+const modalSurface = computed(() =>
+  resolveSurface({
+    backgroundColor: props.optionsSurface?.backgroundColor ?? 'surface-elevated',
+    borderColor: props.optionsSurface?.borderColor ?? 'border-contrast',
+    borderWidth: props.optionsSurface?.borderWidth ?? 'thick',
+    borderStyle: props.optionsSurface?.borderStyle ?? 'solid',
+    borderRadius: props.optionsSurface?.borderRadius ?? '2xl',
+  }),
+);
+
+const modalClass = computed(() => ({
+  'app-modal__panel--angular': props.cornerStyle === 'angular',
+}));
 
 const modalStyle = computed(() => ({
   '--cp-modal-layer': resolveLayerValue(props.layer),
-  '--cp-modal-width': LibStyle.toSizeValue(props.width),
-  '--cp-modal-max-width': LibStyle.toSizeValue(props.maxWidth),
-  '--cp-modal-max-height': LibStyle.toSizeValue(props.maxHeight),
-  '--cp-modal-backdrop-color': resolveColorValue(props.backdropColor),
+  '--cp-modal-width': LibStyle.toSizeValue(props.optionsLayout?.width ?? '100%'),
+  '--cp-modal-max-width': LibStyle.toSizeValue(props.optionsLayout?.maxWidth ?? '100rem'),
+  '--cp-modal-max-height': LibStyle.toSizeValue(props.optionsLayout?.maxHeight ?? '100%'),
+  '--cp-modal-backdrop-color': resolveColorValue(props.optionsSurface?.backdropColor ?? 'surface-overlay'),
   '--cp-modal-background-color': modalSurface.value.backgroundColor,
   '--cp-modal-border-color': modalSurface.value.borderColor,
   '--cp-modal-border-width': modalSurface.value.borderWidth,
   '--cp-modal-border-style': modalSurface.value.borderStyle,
   '--cp-modal-border-radius': modalSurface.value.borderRadius,
-  '--cp-modal-header-padding-x': resolvePaddingValue(props.headerPaddingX),
-  '--cp-modal-header-padding-y': resolvePaddingValue(props.headerPaddingY),
-  '--cp-modal-body-padding-x': resolvePaddingValue(props.bodyPaddingX),
-  '--cp-modal-body-padding-y': resolvePaddingValue(props.bodyPaddingY),
-  '--cp-modal-footer-padding-x': resolvePaddingValue(props.footerPaddingX),
-  '--cp-modal-footer-padding-y': resolvePaddingValue(props.footerPaddingY),
+  '--cp-modal-header-padding-x': resolvePaddingValue(props.optionsHeader?.paddingX ?? 6),
+  '--cp-modal-header-padding-y': resolvePaddingValue(props.optionsHeader?.paddingY ?? 5),
+  '--cp-modal-body-padding-x': resolvePaddingValue(props.optionsBody?.paddingX ?? 6),
+  '--cp-modal-body-padding-y': resolvePaddingValue(props.optionsBody?.paddingY ?? 5),
+  '--cp-modal-footer-padding-x': resolvePaddingValue(props.optionsFooter?.paddingX ?? 6),
+  '--cp-modal-footer-padding-y': resolvePaddingValue(props.optionsFooter?.paddingY ?? 5),
 }));
 
 function closeModal() {
@@ -89,7 +88,7 @@ function closeModal() {
 }
 
 function handleBackdropClick(event: MouseEvent) {
-  if (!props.closeOnBackdrop || event.target !== event.currentTarget) {
+  if (!(props.optionsBehavior?.closeOnBackdrop ?? true) || event.target !== event.currentTarget) {
     return;
   }
 
@@ -97,7 +96,7 @@ function handleBackdropClick(event: MouseEvent) {
 }
 
 function handleKeydown(event: KeyboardEvent) {
-  if (!props.modelValue || !props.closeOnEscape || event.key !== 'Escape') {
+  if (!props.modelValue || !(props.optionsBehavior?.closeOnEscape ?? true) || event.key !== 'Escape') {
     return;
   }
 
@@ -107,7 +106,7 @@ function handleKeydown(event: KeyboardEvent) {
 }
 
 function lockBodyScroll() {
-  if (!props.lockScroll || isScrollLocked.value) {
+  if (!(props.optionsBehavior?.lockScroll ?? true) || isScrollLocked.value) {
     return;
   }
 
@@ -195,24 +194,29 @@ onBeforeUnmount(() => {
         <div
           ref="modalPanelRef"
           class="app-modal__panel"
+          :class="modalClass"
           role="dialog"
           aria-modal="true"
-          :aria-label="ariaLabel"
-          :aria-labelledby="ariaLabelledby"
-          :aria-describedby="ariaDescribedby"
+          :aria-label="optionsAccessibility?.ariaLabel"
+          :aria-labelledby="optionsAccessibility?.ariaLabelledby"
+          :aria-describedby="optionsAccessibility?.ariaDescribedby"
           tabindex="-1"
         >
-          <header v-if="hasHeaderSlot" class="app-modal__header">
-            <slot name="header" />
-          </header>
+          <div class="app-modal__frame">
+            <div class="app-modal__surface">
+              <header v-if="hasHeaderSlot" class="app-modal__header">
+                <slot name="header" />
+              </header>
 
-          <div class="app-modal__body">
-            <slot />
+              <div class="app-modal__body">
+                <slot />
+              </div>
+
+              <footer v-if="hasFooterSlot" class="app-modal__footer">
+                <slot name="footer" />
+              </footer>
+            </div>
           </div>
-
-          <footer v-if="hasFooterSlot" class="app-modal__footer">
-            <slot name="footer" />
-          </footer>
         </div>
       </div>
     </Transition>
@@ -258,6 +262,51 @@ onBeforeUnmount(() => {
     outline: var(--app-border-width-medium) var(--app-border-style-solid) var(--app-color-primary);
     outline-offset: 2px;
   }
+}
+
+.app-modal__frame,
+.app-modal__surface {
+  box-sizing: border-box;
+  min-width: 0;
+  height: 100%;
+}
+
+.app-modal__surface {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-modal__panel--angular {
+  padding: var(--cp-modal-border-width);
+  border: 0;
+  border-radius: 0;
+  background: var(--cp-modal-border-color);
+  clip-path: polygon(
+    0 var(--cp-modal-border-radius),
+    var(--cp-modal-border-radius) 0,
+    calc(100% - var(--cp-modal-border-radius)) 0,
+    100% var(--cp-modal-border-radius),
+    100% calc(100% - var(--cp-modal-border-radius)),
+    calc(100% - var(--cp-modal-border-radius)) 100%,
+    var(--cp-modal-border-radius) 100%,
+    0 calc(100% - var(--cp-modal-border-radius))
+  );
+}
+
+.app-modal__panel--angular .app-modal__surface {
+  border: 0;
+  border-radius: 0;
+  background: var(--cp-modal-background-color);
+  clip-path: polygon(
+    0 var(--cp-modal-border-radius),
+    var(--cp-modal-border-radius) 0,
+    calc(100% - var(--cp-modal-border-radius)) 0,
+    100% var(--cp-modal-border-radius),
+    100% calc(100% - var(--cp-modal-border-radius)),
+    calc(100% - var(--cp-modal-border-radius)) 100%,
+    var(--cp-modal-border-radius) 100%,
+    0 calc(100% - var(--cp-modal-border-radius))
+  );
 }
 
 .app-modal__header {

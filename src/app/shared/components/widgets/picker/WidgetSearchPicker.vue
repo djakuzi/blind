@@ -70,9 +70,8 @@ const triggerStyle = computed(() => ({
 }));
 
 const modalProps = computed<Omit<PropsAppModal, 'modelValue'>>(() => ({
-  bodyPaddingX: 0,
-  bodyPaddingY: 0,
-  ariaLabel: props.modal?.ariaLabel ?? props.title,
+  optionsBody: { paddingX: 0, paddingY: 0 },
+  optionsAccessibility: { ariaLabel: props.modal?.optionsAccessibility?.ariaLabel ?? props.title },
   ...props.modal,
 }));
 
