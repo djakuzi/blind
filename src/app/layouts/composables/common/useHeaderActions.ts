@@ -14,7 +14,7 @@ export interface iHeaderAction {
   key: string;
   text: string;
   icon?: tHeaderActionIcon;
-  optionsButton?: Partial<Omit<PropsAppButton, 'text'>>;
+  optionsButton?: Partial<PropsAppButton>;
   onClick: () => void;
 }
 

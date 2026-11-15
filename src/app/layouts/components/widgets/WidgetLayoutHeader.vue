@@ -34,7 +34,7 @@ function handleBack() {
               variant="secondary"
               size="small"
               v-bind="action.optionsButton"
-              :text="action.text"
+              :options-text="{ text: action.text }"
               @click="action.onClick"
             />
             <AppButton

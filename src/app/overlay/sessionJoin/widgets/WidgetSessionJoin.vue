@@ -39,7 +39,7 @@ const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
   connection: {
     next: {
       optionsButton: {
-        text: modalLocale.value.next,
+        optionsText: { text: modalLocale.value.next },
         disabled: !props.selectedConnection,
       },
     },
@@ -47,12 +47,12 @@ const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
   lobby: {
     back: {
       optionsButton: {
-        text: modalLocale.value.back,
+        optionsText: { text: modalLocale.value.back },
       },
     },
     save: {
       optionsButton: {
-        text: joinText.value,
+        optionsText: { text: joinText.value },
         disabled: !selectedTargetKey.value,
       },
     },

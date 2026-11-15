@@ -3,7 +3,7 @@ import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
 import type { PropsSurface } from '@/app/shared/types/props/surface.props';
 import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
-import type { PropsFont, PropsUppercase } from '@/app/shared/types/props/typography.props';
+import type { PropsAppText } from '@/app/shared/components/atoms/typography/AppText.vue';
 import type { PropsDisabled } from '@/app/shared/types/props/interaction.props';
 import { computed } from 'vue';
 import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
@@ -16,6 +16,7 @@ import { LibStyle } from '@/core/lib/style';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
+import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import type { iControlSizePreset } from '@/app/shared/styles/presets/control.preset';
 import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
 import type { tIconGroup, tIconName } from '@/core/media/icons';
@@ -32,34 +33,30 @@ export type tAppButtonIconOptions = {
   };
 }[tIconGroup];
 
-export interface PropsAppButton extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsUppercase, PropsDisabled {
-  text?: string;
+export type tAppButtonTextOptions = Pick<PropsAppText, 'text' | 'color' | 'fontSize' | 'fontWeight' | 'uppercase' | 'lineHeight'>;
+export type tAppButtonSurfaceOptions = PropsSurface & { textColor?: tColorValue };
+export type tAppButtonLayoutOptions = PropsWidth & PropsPadding;
+
+export interface PropsAppButton extends PropsSizeVariant, PropsDisabled {
+  optionsText?: tAppButtonTextOptions;
   optionsIcon?: tAppButtonIconOptions;
+  optionsSurface?: tAppButtonSurfaceOptions;
+  optionsLayout?: tAppButtonLayoutOptions;
   ariaLabel?: string;
   variant?: tAppButtonVariant;
-  textColor?: tColorValue;
 }
 
 const props = withDefaults(defineProps<PropsAppButton>(), {
-  text: undefined,
+  optionsText: undefined,
   optionsIcon: undefined,
+  optionsSurface: undefined,
+  optionsLayout: undefined,
   ariaLabel: undefined,
   variant: 'primary',
   size: 'middle',
   width: 'auto',
   maxWidth: '100%',
   disabled: false,
-  backgroundColor: undefined,
-  borderColor: undefined,
-  textColor: undefined,
-  borderWidth: 'medium',
-  borderStyle: 'solid',
-  borderRadius: 'md',
-  paddingX: undefined,
-  paddingY: undefined,
-  fontSize: undefined,
-  fontWeight: 'medium',
-  uppercase: true,
 });
 
 defineEmits<{
@@ -114,19 +111,19 @@ const { paddingX: buttonPaddingX, paddingY: buttonPaddingY, fontSize } = useCont
 
 const buttonSurface = computed(() =>
   resolveSurface({
-    backgroundColor: props.backgroundColor ?? variantConfig.value.backgroundColor,
-    borderColor: props.borderColor ?? variantConfig.value.borderColor,
-    borderWidth: props.borderWidth,
-    borderStyle: props.borderStyle,
-    borderRadius: props.borderRadius,
+    backgroundColor: props.optionsSurface?.backgroundColor ?? variantConfig.value.backgroundColor,
+    borderColor: props.optionsSurface?.borderColor ?? variantConfig.value.borderColor,
+    borderWidth: props.optionsSurface?.borderWidth ?? 'medium',
+    borderStyle: props.optionsSurface?.borderStyle ?? 'solid',
+    borderRadius: props.optionsSurface?.borderRadius ?? 'md',
   }),
 );
-const buttonTextColor = computed(() => resolveColorValue(props.textColor ?? variantConfig.value.textColor));
+const buttonTextColor = computed(() => resolveColorValue(props.optionsSurface?.textColor ?? variantConfig.value.textColor));
 const buttonFontSize = computed(() => resolveFontSizeValue(fontSize.value));
 
 const interactionStyle = computed(() => ({
-  width: LibStyle.toSizeValue(props.width),
-  maxWidth: LibStyle.toSizeValue(props.maxWidth),
+  width: LibStyle.toSizeValue(props.optionsLayout?.width ?? 'auto'),
+  maxWidth: LibStyle.toSizeValue(props.optionsLayout?.maxWidth ?? '100%'),
 }));
 
 const buttonStyle = computed(() => ({
@@ -136,8 +133,10 @@ const buttonStyle = computed(() => ({
   '--cp-button-border-width': buttonSurface.value.borderWidth,
   '--cp-button-border-style': buttonSurface.value.borderStyle,
   '--cp-button-border-radius': buttonSurface.value.borderRadius,
-  '--cp-button-padding-x': buttonPaddingX.value,
-  '--cp-button-padding-y': buttonPaddingY.value,
+  '--cp-button-padding-x':
+    props.optionsLayout?.paddingX !== undefined ? resolvePaddingValue(props.optionsLayout.paddingX) : buttonPaddingX.value,
+  '--cp-button-padding-y':
+    props.optionsLayout?.paddingY !== undefined ? resolvePaddingValue(props.optionsLayout.paddingY) : buttonPaddingY.value,
   '--cp-button-font-size': buttonFontSize.value,
 }));
 
@@ -148,7 +147,7 @@ const iconStyle = computed<Pick<PropsAppIcon, 'height'>>(() => ({
 const buttonClass = computed(() => [
   'app-button',
   {
-    'app-button--icon-only': !props.text && Boolean(props.optionsIcon),
+    'app-button--icon-only': !props.optionsText?.text && Boolean(props.optionsIcon),
     'app-button--icon-end': props.optionsIcon?.position === 'end',
   },
 ]);
@@ -168,17 +167,17 @@ const buttonClass = computed(() => [
         <AppIcon v-if="optionsIcon" class="app-button__icon" :group="optionsIcon.group" :icon="optionsIcon.icon" v-bind="iconStyle" />
 
         <AppText
-          v-if="text"
+          v-if="optionsText?.text"
           class="app-button__text"
-          :text="text"
+          :text="optionsText.text"
           tag="span"
-          color="inherit"
-          font-size="inherit"
-          :font-weight="fontWeight"
-          :uppercase="uppercase"
+          :color="optionsText?.color ?? 'inherit'"
+          :font-size="optionsText?.fontSize ?? 'inherit'"
+          :font-weight="optionsText?.fontWeight ?? 'medium'"
+          :uppercase="optionsText?.uppercase ?? true"
           :ellipsis="true"
           :max-lines="1"
-          line-height="tight"
+          :line-height="optionsText?.lineHeight ?? 'tight'"
         />
       </span>
     </button>

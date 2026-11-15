@@ -14,7 +14,7 @@ export type iWidgetStepsActions = Partial<Record<tWidgetStepsAction, iWidgetStep
 
 export interface iWidgetStepsButtonsOptions {
   order?: readonly tWidgetStepsAction[];
-  props?: Partial<Omit<PropsAppButton, 'text'>>;
+  props?: Partial<PropsAppButton>;
   gap?: tSpaceValue;
 }
 
@@ -72,7 +72,7 @@ const visibleButtons = computed(() =>
     const buttonProps: PropsAppButton = {
       variant: action === 'back' ? 'secondary' : 'primary',
       size: 'middle',
-      width: 'auto',
+      optionsLayout: { width: 'auto' },
       ...props.optionsButtons?.props,
       ...optionsButton,
     };
