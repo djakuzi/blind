@@ -71,6 +71,7 @@ function handleComplete() {
       borderWidth: 'thick',
       borderRadius: 'xl',
       cornerStyle: 'angular',
+      glow: active && !mode.locked,
       overflow: 'hidden',
     }"
     :options-hold="{ initialProgress: 0 }"
@@ -135,19 +136,8 @@ function handleComplete() {
   height: 100%;
 }
 
-.ui-card-game-mode :deep(.app-card__frame) {
-  transition: filter var(--app-motion-duration-medium) var(--app-motion-ease-default);
-}
-
 .ui-card-game-mode--active :deep(.app-card-hold) {
   --cp-card-border-color: var(--app-color-primary);
-}
-
-.ui-card-game-mode--active {
-  filter: drop-shadow(0 0 0 color-mix(in srgb, var(--app-color-primary) 100%, transparent))
-    drop-shadow(0 0 .5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent))
-    drop-shadow(0 0 1.25rem color-mix(in srgb, var(--app-color-primary) 18%, transparent))
-    drop-shadow(0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent));
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -155,10 +145,6 @@ function handleComplete() {
     :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
     --cp-card-border-color: var(--app-color-primary);
   }
-}
-
-.ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked) {
-  filter: drop-shadow(0 0 0 color-mix(in srgb, var(--app-color-primary) 18%, transparent));
 }
 
 .ui-card-game-mode :deep(.app-card-hold__content) {

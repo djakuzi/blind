@@ -19,12 +19,14 @@ export type tAppCardCornerStyle = 'rounded' | 'angular';
 export interface PropsAppCard extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant {
   tag?: tAppCardTag;
   cornerStyle?: tAppCardCornerStyle;
+  glow?: boolean;
   overflow?: CSSProperties['overflow'];
 }
 
 const props = withDefaults(defineProps<PropsAppCard>(), {
   tag: 'div',
   cornerStyle: 'rounded',
+  glow: false,
   size: 'middle',
   width: '100%',
   maxWidth: '100%',
@@ -77,6 +79,7 @@ const cardClass = computed(() => [
   'app-card',
   {
     'app-card--angular': props.cornerStyle === 'angular',
+    'app-card--glow': props.glow,
   },
 ]);
 </script>
@@ -95,8 +98,15 @@ const cardClass = computed(() => [
 .app-card {
   --cp-card-border-color: v-bind(cardBorderColor);
   --cp-card-corner-cut: v-bind(cardBorderRadius);
-
   min-width: 0;
+  transition: filter var(--app-motion-duration-medium) var(--app-motion-ease-default);
+}
+
+.app-card--glow {
+  filter: drop-shadow(0 0 0 color-mix(in srgb, var(--app-color-primary) 100%, transparent))
+    drop-shadow(0 0 0.5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent))
+    drop-shadow(0 0 1.25rem color-mix(in srgb, var(--app-color-primary) 18%, transparent))
+    drop-shadow(0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent));
 }
 
 .app-card:not(.app-card--angular) {
@@ -132,7 +142,7 @@ const cardClass = computed(() => [
     var(--cp-card-corner-cut) 100%,
     0 calc(100% - var(--cp-card-corner-cut))
   );
-  transition: .3s background-color linear;
+  transition: 0.3s background-color linear;
 }
 
 .app-card.app-card--angular .app-card__surface {

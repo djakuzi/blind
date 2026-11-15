@@ -208,6 +208,7 @@ onBeforeUnmount(() => {
             :border-width="optionsSurface?.borderWidth ?? 'thick'"
             :border-style="optionsSurface?.borderStyle ?? 'solid'"
             :border-radius="optionsSurface?.borderRadius ?? '2xl'"
+            :glow="true"
             padding-x="0"
             padding-y="0"
             overflow="hidden"
