@@ -83,32 +83,71 @@ const cardClass = computed(() => [
 
 <template>
   <AppBlock :class="cardClass" :tag="tag" :width="width" :max-width="maxWidth" :overflow="overflow">
-    <slot />
+    <div class="app-card__frame">
+      <div class="app-card__surface">
+        <slot />
+      </div>
+    </div>
   </AppBlock>
 </template>
 
 <style scoped>
 .app-card {
+  --cp-card-border-color: v-bind(cardBorderColor);
   --cp-card-corner-cut: v-bind(cardBorderRadius);
 
   min-width: 0;
+}
+
+.app-card:not(.app-card--angular) {
+  border-radius: v-bind(cardBorderRadius);
+}
+
+.app-card__frame,
+.app-card__surface {
+  box-sizing: border-box;
+  min-width: 0;
+  height: 100%;
+}
+
+.app-card__surface {
   padding: v-bind(cardPaddingY) v-bind(cardPaddingX);
-  border: v-bind(cardBorderWidth) v-bind(cardBorderStyle) v-bind(cardBorderColor);
+  border: v-bind(cardBorderWidth) v-bind(cardBorderStyle) var(--cp-card-border-color);
   border-radius: v-bind(cardBorderRadius);
   background: v-bind(cardBackgroundColor);
+}
 
-  &.app-card--angular {
-    border-radius: 0;
-    clip-path: polygon(
-      0 var(--cp-card-corner-cut),
-      var(--cp-card-corner-cut) 0,
-      calc(100% - var(--cp-card-corner-cut)) 0,
-      100% var(--cp-card-corner-cut),
-      100% calc(100% - var(--cp-card-corner-cut)),
-      calc(100% - var(--cp-card-corner-cut)) 100%,
-      var(--cp-card-corner-cut) 100%,
-      0 calc(100% - var(--cp-card-corner-cut))
-    );
-  }
+.app-card.app-card--angular .app-card__frame {
+  padding: v-bind(cardBorderWidth);
+  border: 0;
+  border-radius: 0;
+  background-color: var(--cp-card-border-color);
+  clip-path: polygon(
+    0 var(--cp-card-corner-cut),
+    var(--cp-card-corner-cut) 0,
+    calc(100% - var(--cp-card-corner-cut)) 0,
+    100% var(--cp-card-corner-cut),
+    100% calc(100% - var(--cp-card-corner-cut)),
+    calc(100% - var(--cp-card-corner-cut)) 100%,
+    var(--cp-card-corner-cut) 100%,
+    0 calc(100% - var(--cp-card-corner-cut))
+  );
+  transition: .3s background-color linear;
+}
+
+.app-card.app-card--angular .app-card__surface {
+  border: 0;
+  border-radius: 0;
+  background: v-bind(cardBackgroundColor);
+  clip-path: polygon(
+    0 var(--cp-card-corner-cut),
+    var(--cp-card-corner-cut) 0,
+    calc(100% - var(--cp-card-corner-cut)) 0,
+    100% var(--cp-card-corner-cut),
+    100% calc(100% - var(--cp-card-corner-cut)),
+    calc(100% - var(--cp-card-corner-cut)) 100%,
+    var(--cp-card-corner-cut) 100%,
+    0 calc(100% - var(--cp-card-corner-cut))
+  );
 }
 </style>

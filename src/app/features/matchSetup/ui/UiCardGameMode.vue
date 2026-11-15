@@ -133,27 +133,33 @@ function handleComplete() {
 <style scoped>
 .ui-card-game-mode :deep(.app-card-hold) {
   height: 100%;
-  transition:
-    border-color var(--app-motion-duration-medium) var(--app-motion-ease-default),
-    box-shadow var(--app-motion-duration-medium) var(--app-motion-ease-default),
-    background-color var(--app-motion-duration-medium) var(--app-motion-ease-default);
+}
+
+.ui-card-game-mode :deep(.app-card__frame) {
+  transition: filter var(--app-motion-duration-medium) var(--app-motion-ease-default);
 }
 
 .ui-card-game-mode--active :deep(.app-card-hold) {
-  border-color: var(--app-color-primary);
-  box-shadow:
-    0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 34%, transparent),
-    0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent),
-    0 0 5rem color-mix(in srgb, var(--app-color-primary) 18%, transparent),
-    0 1rem 5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent);
+  --cp-card-border-color: var(--app-color-primary);
+}
+
+.ui-card-game-mode--active :deep(.app-card__frame) {
+  filter: drop-shadow(0 0 0 color-mix(in srgb, var(--app-color-primary) 34%, transparent))
+    drop-shadow(0 0 1.5rem color-mix(in srgb, var(--app-color-primary) 34%, transparent))
+    drop-shadow(0 0 5rem color-mix(in srgb, var(--app-color-primary) 18%, transparent))
+    drop-shadow(0 1rem 5rem color-mix(in srgb, var(--app-color-primary) 16%, transparent));
 }
 
 @media (hover: hover) and (pointer: fine) {
   .ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked)
     :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
-    border-color: var(--app-color-primary);
-    box-shadow: 0 0 0 var(--app-border-width-medium) color-mix(in srgb, var(--app-color-primary) 18%, transparent);
+    --cp-card-border-color: var(--app-color-primary);
   }
+}
+
+.ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked)
+  :deep(.app-card-hold:not(.app-card-hold--disabled):hover .app-card__frame) {
+  filter: drop-shadow(0 0 0 color-mix(in srgb, var(--app-color-primary) 18%, transparent));
 }
 
 .ui-card-game-mode :deep(.app-card-hold__content) {
