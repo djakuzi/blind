@@ -1,18 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none">
-  <g
-    stroke="#F7F7F8"
-    stroke-width="5"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <circle cx="64" cy="64" r="46"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none" aria-hidden="true">
 
-    <path d="M64 18C50 31 42 47 42 64C42 81 50 97 64 110"/>
-    <path d="M64 18C78 31 86 47 86 64C86 81 78 97 64 110"/>
+<!-- Angular targeting brackets; no enclosing circle -->
+<path d="M43 16H32L16 32V45H23V37L35 24H38Z" fill="#F7F7F8"/>
+<path d="M85 16H96L112 32V45H105V37L93 24H90Z" fill="#F7F7F8"/>
+<path d="M16 83V96L32 112H43L38 104H35L23 91V83Z" fill="#F7F7F8"/>
+<path d="M112 83V96L96 112H85L90 104H93L105 91V83Z" fill="#F7F7F8"/>
+<!-- Top and bottom calibration markers -->
+<path d="M61 6H67L68 8V16L66 18H62L60 16V8Z M61 112H67L68 114V122L66 124H62L60 122V114Z" fill="#F7F7F8"/>
+<!-- Solid-filled globe with true transparent openings, generated as exact vector regions -->
+<path d="M100.00,63.41L99.69,59.30L98.99,55.54L89.75,54.84L80.53,54.34L81.06,59.19L81.30,63.95L81.11,68.16L80.53,73.66L89.75,73.16L98.99,72.46L99.76,68.11Z" fill="#F7F7F8" fill-rule="evenodd"/>
+<path d="M96.50,48.51L94.57,44.99L92.56,42.08L90.28,39.39L87.29,36.55L84.49,34.40L81.49,32.53L78.32,30.97L74.99,29.72L77.44,38.50L79.42,47.49Z" fill="#F7F7F8" fill-rule="evenodd"/>
+<path d="M67.53,28.17L64.00,28.00L60.42,28.18L57.46,38.19L55.34,47.29L72.66,47.29L70.37,37.56Z" fill="#F7F7F8" fill-rule="evenodd"/>
+<path d="M52.99,29.73L49.68,30.97L46.51,32.53L43.51,34.40L40.26,36.93L37.72,39.39L35.44,42.08L33.43,44.99L31.50,48.51L48.58,47.49L50.40,39.15Z" fill="#F7F7F8" fill-rule="evenodd"/>
+<path d="M29.01,55.54L28.24,59.89L28.00,64.00L28.24,68.11L29.01,72.46L38.25,73.16L47.47,73.66L46.94,68.81L46.70,64.05L46.89,59.84L47.47,54.34L32.16,55.28Z" fill="#F7F7F8" fill-rule="evenodd"/>
+<path d="M31.50,79.49L33.43,83.01L35.80,86.38L38.13,89.04L40.71,91.45L43.51,93.60L46.51,95.47L49.68,97.03L53.01,98.28L50.56,89.50L48.58,80.51Z" fill="#F7F7F8" fill-rule="evenodd"/>
+<path d="M60.47,99.83L64.00,100.00L67.58,99.82L70.54,89.81L72.66,80.71L55.34,80.71L57.63,90.44Z" fill="#F7F7F8" fill-rule="evenodd"/>
+<path d="M75.01,98.27L78.86,96.79L82.00,95.18L84.97,93.26L87.74,91.07L90.28,88.61L92.56,85.92L94.57,83.01L96.50,79.49L79.42,80.51L77.60,88.85Z" fill="#F7F7F8" fill-rule="evenodd"/>
+<path d="M54.16,54.12L53.52,59.73L53.30,64.00L53.52,68.27L54.16,73.88L64.00,74.00L73.84,73.88L74.48,68.27L74.70,64.00L74.48,59.73L73.84,54.12L64.00,54.00Z" fill="#F7F7F8" fill-rule="evenodd"/>
 
-    <path d="M20 64H108"/>
-
-    <path d="M29 40Q64 54 99 40"/>
-    <path d="M29 88Q64 74 99 88"/>
-  </g>
 </svg>

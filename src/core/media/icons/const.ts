@@ -4,6 +4,12 @@ import BluetoothDark from '@/assets/icons/connectionType/bluetooth-dark.svg?raw'
 import BluetoothLight from '@/assets/icons/connectionType/bluetooth-light.svg?raw';
 import LanDark from '@/assets/icons/connectionType/lan-dark.svg?raw';
 import LanLight from '@/assets/icons/connectionType/lan-light.svg?raw';
+import OldBluetoothDark from '@/assets/icons/connectionType/old-bluetooth-dark.svg?raw';
+import OldBluetoothLight from '@/assets/icons/connectionType/old-bluetooth-light.svg?raw';
+import OldLanDark from '@/assets/icons/connectionType/old-lan-dark.svg?raw';
+import OldLanLight from '@/assets/icons/connectionType/old-lan-light.svg?raw';
+import OldOnlineDark from '@/assets/icons/connectionType/old-online-dark.svg?raw';
+import OldOnlineLight from '@/assets/icons/connectionType/old-online-light.svg?raw';
 import OnlineDark from '@/assets/icons/connectionType/online-dark.svg?raw';
 import OnlineLight from '@/assets/icons/connectionType/online-light.svg?raw';
 import LockDark from '@/assets/icons/locked/lock-dark.svg?raw';
@@ -27,6 +33,12 @@ export const ICONS_ASSETS = {
     bluetoothLight: BluetoothLight,
     lanDark: LanDark,
     lanLight: LanLight,
+    oldBluetoothDark: OldBluetoothDark,
+    oldBluetoothLight: OldBluetoothLight,
+    oldLanDark: OldLanDark,
+    oldLanLight: OldLanLight,
+    oldOnlineDark: OldOnlineDark,
+    oldOnlineLight: OldOnlineLight,
     onlineDark: OnlineDark,
     onlineLight: OnlineLight,
   },

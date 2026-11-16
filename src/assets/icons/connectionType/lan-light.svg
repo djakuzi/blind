@@ -1,9 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none">
-  <g stroke="#111114" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="48" y="14" width="32" height="26" rx="5"/>
-    <path d="M64 40V58"/>
-    <path d="M32 74V66C32 61.6 35.6 58 40 58H88C92.4 58 96 61.6 96 66V74"/>
-    <rect x="16" y="74" width="32" height="26" rx="5"/>
-    <rect x="80" y="74" width="32" height="26" rx="5"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+
+<!-- Single top alignment marker -->
+<path d="M61 6H67L68 8V16L66 18H62L60 16V8Z" fill="#111114"/>
+<!-- Minimal upper-left and upper-right brackets -->
+<path d="M17 40L27 30H41L34 36H29L23 42V47H17Z M111 40L101 30H87L94 36H99L105 42V47H111Z" fill="#111114"/>
+<!-- Thick, flush joined communication path; placed underneath the endpoints -->
+<path d="M61 54H67V68H70V73L87 83L84 90L64 79L44 90L41 83L58 73V68H61Z" fill="#111114"/>
+<!-- Square connection hub at junction -->
+<path d="M58 68H70L72 70V78H56V70Z" fill="#111114"/>
+<!-- Octagonal terminals with squared negative-space cores -->
+<path fill="#111114" fill-rule="evenodd" d="M52 24H76L81 29V51L76 56H52L47 51V29Z M56 33V47H72V33Z M19 80H43L48 85V107L43 112H19L14 107V85Z M23 89V103H39V89Z M85 80H109L114 85V107L109 112H85L80 107V85Z M89 89V103H105V89Z"/>
+
 </svg>

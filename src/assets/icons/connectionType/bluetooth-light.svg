@@ -1,9 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none">
-  <g stroke="#111114" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M62 16V112"/>
-    <path d="M62 64L30 32"/>
-    <path d="M62 64L30 96"/>
-    <path d="M62 16L94 48L62 64"/>
-    <path d="M62 64L94 80L62 112"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+
+<!-- Tight octagonal aiming brackets, cut ends -->
+<path d="M43 33H32L17 48V84L32 100H43L37 94H35L23 82V50L35 39H37Z" fill="#111114"/>
+<path d="M85 33H96L111 48V84L96 100H85L91 94H93L105 82V50L93 39H91Z" fill="#111114"/>
+<!-- Calibration dashes -->
+<path d="M61 6H67L68 8V16L66 18H62L60 16V8Z M61 112H67L68 114V122L66 124H62L60 122V114Z" fill="#111114"/>
+<path d="M31 61H38L41 64L38 67H31L29 65V63Z M90 61H97L99 63V65L97 67H90L87 64Z" fill="#111114"/>
+<!-- BLUETOOTH monogram: solid triangular blades, two open windows -->
+<path fill="#111114" fill-rule="evenodd" d="M61 23L89 47L70 64L89 81L61 105V70L46 84L40 79L57 64L40 49L46 44L61 58Z M68 40V54L77 47Z M68 74V88L77 81Z"/>
+
 </svg>
