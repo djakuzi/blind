@@ -5,7 +5,7 @@ import { useConnectionTypeOptions } from '@/app/features/matchSetup/composables/
 import { useMatchPlayerOptions } from '@/app/features/matchSetup/composables/useMatchPlayerOptions';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
+import AppTitle from '@/app/shared/components/elements/typography/AppTitle.vue';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 

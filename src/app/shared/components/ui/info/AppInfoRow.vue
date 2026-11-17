@@ -4,9 +4,9 @@ import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
 import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsFont, PropsUppercase, PropsTextOverflow } from '@/app/shared/types/props/typography.props';
 import { computed, useSlots } from 'vue';
-import AppImage from '@/app/shared/components/atoms/media/AppImage.vue';
-import type { PropsAppImage } from '@/app/shared/components/atoms/media/AppImage.vue';
-import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import AppImage from '@/app/shared/components/elements/media/AppImage.vue';
+import type { PropsAppImage } from '@/app/shared/components/elements/media/AppImage.vue';
+import AppText from '@/app/shared/components/elements/typography/AppText.vue';
 import { LibStyle } from '@/core/lib/style';
 import type { tStyleSizeValue } from '@/core/lib/style';
 

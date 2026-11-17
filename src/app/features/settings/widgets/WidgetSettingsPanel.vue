@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
-import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
+import AppCard from '@/app/shared/components/elements/card/AppCard.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
 import WidgetList from '@/app/shared/components/widgets/list/WidgetList.vue';
 import WidgetSearchPicker from '@/app/shared/components/widgets/picker/WidgetSearchPicker.vue';

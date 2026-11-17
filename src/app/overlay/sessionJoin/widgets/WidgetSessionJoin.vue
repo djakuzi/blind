@@ -2,8 +2,8 @@
 import { computed, ref, watch } from 'vue';
 import { useConnectionTypeOptions } from '@/app/features/matchSetup/composables/useConnectionTypeOptions';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
-import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
-import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
+import AppText from '@/app/shared/components/elements/typography/AppText.vue';
+import AppTitle from '@/app/shared/components/elements/typography/AppTitle.vue';
 import AppModal from '@/app/shared/components/interaction/overlay/AppModal.vue';
 import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import WidgetSteps from '@/app/shared/components/widgets/steps/WidgetSteps.vue';

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PropsTypography } from '@/app/shared/types/props/typography.props';
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
-import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import AppText from '@/app/shared/components/elements/typography/AppText.vue';
 import { useResizeObserver } from '@/app/shared/composables/dom/useResizeObserver';
 import { resolvePaddingValue, type tPaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 

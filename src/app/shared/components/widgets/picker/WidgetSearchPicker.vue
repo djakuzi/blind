@@ -4,7 +4,7 @@ import type { PropsSelectionFeedback } from '@/app/shared/types/props/interactio
 import { computed, ref, watch } from 'vue';
 import { useSelectionFeedback } from '@/app/shared/composables/interaction/useSelectionFeedback';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import AppText from '@/app/shared/components/elements/typography/AppText.vue';
 import AppModal from '@/app/shared/components/interaction/overlay/AppModal.vue';
 import type { PropsAppModal } from '@/app/shared/components/interaction/overlay/AppModal.vue';
 import AppInfoRow from '@/app/shared/components/ui/info/AppInfoRow.vue';

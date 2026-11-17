@@ -4,9 +4,9 @@ import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import type { PropsFont, PropsUppercase } from '@/app/shared/types/props/typography.props';
 import { computed, useSlots } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
-import type { PropsAppCard } from '@/app/shared/components/atoms/card/AppCard.vue';
-import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
+import AppCard from '@/app/shared/components/elements/card/AppCard.vue';
+import type { PropsAppCard } from '@/app/shared/components/elements/card/AppCard.vue';
+import AppText from '@/app/shared/components/elements/typography/AppText.vue';
 
 import type { tAppStatus } from '@/app/shared/types/status';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';

@@ -2,11 +2,11 @@
 import type { PropsHeight } from '@/app/shared/types/props/dimensions.props';
 import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
 import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
-import type { PropsAppCard, tAppCardCornerStyle } from '@/app/shared/components/atoms/card/AppCard.vue';
+import type { PropsAppCard, tAppCardCornerStyle } from '@/app/shared/components/elements/card/AppCard.vue';
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/core/lib/style';
-import AppCard from '@/app/shared/components/atoms/card/AppCard.vue';
+import AppCard from '@/app/shared/components/elements/card/AppCard.vue';
 
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveLayerValue, type tLayerValue } from '@/app/shared/styles/contracts/layer.contract';

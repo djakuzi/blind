@@ -3,8 +3,8 @@ import { computed } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
-import AppText from '@/app/shared/components/atoms/typography/AppText.vue';
-import AppTitle from '@/app/shared/components/atoms/typography/AppTitle.vue';
+import AppText from '@/app/shared/components/elements/typography/AppText.vue';
+import AppTitle from '@/app/shared/components/elements/typography/AppTitle.vue';
 
 export interface PropsWidgetGameModeLocked {
   mode: iGameMode;
