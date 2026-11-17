@@ -15,7 +15,7 @@ import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.con
 import { resolveFontWeightValue } from '@/app/shared/styles/contracts/fontWeight.contract';
 import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
 
-export interface PropsInputSearch
+export interface PropsAppInputSearch
   extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsFont, PropsDisabled, PropsAccessibility {
   modelValue: string;
   placeholder?: string;
@@ -26,7 +26,7 @@ export interface PropsInputSearch
   autocomplete?: string;
 }
 
-const props = withDefaults(defineProps<PropsInputSearch>(), {
+const props = withDefaults(defineProps<PropsAppInputSearch>(), {
   placeholder: undefined,
   disabled: false,
   readonly: false,

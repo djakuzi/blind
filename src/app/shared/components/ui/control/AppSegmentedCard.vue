@@ -39,12 +39,13 @@ export interface iAppSegmentedCardOption {
   disabled?: boolean;
 }
 
-export interface PropsAppSegmentedCard extends PropsBorderRadius, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {
+export interface PropsAppSegmentedCard
+  extends PropsWidth, PropsPadding, PropsGap, PropsBorderRadius, PropsSizeVariant, PropsDisabled, PropsSelectionFeedback {
   modelValue: string;
   options: readonly iAppSegmentedCardOption[];
   optionsText?: tAppSegmentedCardTextOptions;
   optionsImage?: iAppSegmentedCardImageOptions;
-  optionsLayout?: PropsWidth & PropsPadding & PropsGap & { minWidth?: tStyleSizeValue };
+  minWidth?: tStyleSizeValue;
   optionsFrame?: iAppSegmentedCardFrameOptions;
   equalWidth?: boolean;
 }
@@ -72,9 +73,14 @@ const props = withDefaults(defineProps<PropsAppSegmentedCard>(), {
   size: 'middle',
   equalWidth: true,
   borderRadius: 'md',
+  width: 'auto',
+  minWidth: '0',
+  maxWidth: '100%',
+  gap: 2,
+  paddingX: undefined,
+  paddingY: undefined,
   optionsText: undefined,
   optionsImage: undefined,
-  optionsLayout: undefined,
   optionsFrame: undefined,
 });
 
@@ -106,10 +112,10 @@ const FRAME_PRESET: Record<tBaseSizeVariant, { padding: tPaddingValue; borderWid
 const { triggerSelectionFeedback } = useSelectionFeedback(props);
 const { resolvedThemeMode } = useAppThemeMode();
 
-const controlWidth = computed(() => LibStyle.toSizeValue(props.optionsLayout?.width ?? 'auto'));
-const controlMinWidth = computed(() => LibStyle.toSizeValue(props.optionsLayout?.minWidth ?? '0'));
-const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.optionsLayout?.maxWidth ?? '100%'));
-const controlGap = computed(() => resolveSpaceValue(props.optionsLayout?.gap ?? 2));
+const controlWidth = computed(() => LibStyle.toSizeValue(props.width));
+const controlMinWidth = computed(() => LibStyle.toSizeValue(props.minWidth));
+const controlMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
+const controlGap = computed(() => resolveSpaceValue(props.gap));
 const itemImageTextGap = computed(() => resolveSpaceValue(props.optionsImage?.textGap ?? 3));
 const itemBorderRadius = computed(() => resolveRadiusValue(props.borderRadius));
 const frameEnabled = computed(() => props.optionsFrame?.enabled ?? false);
@@ -118,8 +124,8 @@ const frameBorderColor = computed(() => resolveColorValue(props.optionsFrame?.bo
 const frameBorderWidth = computed(() => resolveBorderWidthValue(props.optionsFrame?.borderWidth ?? FRAME_PRESET[props.size].borderWidth));
 const frameBorderStyle = computed(() => resolveBorderStyleValue(props.optionsFrame?.borderStyle ?? 'solid'));
 const frameBorderRadius = computed(() => resolveRadiusValue(props.optionsFrame?.borderRadius ?? props.borderRadius));
-const itemPaddingX = computed(() => resolvePaddingValue(props.optionsLayout?.paddingX ?? CONTROL_SIZE_PRESET[props.size].paddingX));
-const itemPaddingY = computed(() => resolvePaddingValue(props.optionsLayout?.paddingY ?? CONTROL_SIZE_PRESET[props.size].paddingY));
+const itemPaddingX = computed(() => resolvePaddingValue(props.paddingX ?? CONTROL_SIZE_PRESET[props.size].paddingX));
+const itemPaddingY = computed(() => resolvePaddingValue(props.paddingY ?? CONTROL_SIZE_PRESET[props.size].paddingY));
 const itemFontSize = computed(() => props.optionsText?.fontSize ?? CONTROL_SIZE_PRESET[props.size].fontSize);
 const resolvedImageSize = computed(() => LibStyle.toSizeValue(props.optionsImage?.size ?? IMAGE_SIZE_PRESET[props.size]));
 

@@ -72,7 +72,7 @@ const visibleButtons = computed(() =>
     const buttonProps: PropsAppButton = {
       variant: action === 'back' ? 'secondary' : 'primary',
       size: 'middle',
-      optionsLayout: { width: 'auto' },
+      width: 'auto',
       ...props.optionsButtons?.props,
       ...optionsButton,
     };

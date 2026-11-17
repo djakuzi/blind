@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { PropsHeight } from '@/app/shared/types/props/dimensions.props';
+import type { PropsHeight, PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import type { PropsPadding } from '@/app/shared/types/props/spacing.props';
 import type { PropsAccessibility } from '@/app/shared/types/props/accessibility.props';
-import type { PropsAppCard, tAppCardCornerStyle } from '@/app/shared/components/elements/card/AppCard.vue';
+import type { PropsAppCard } from '@/app/shared/components/elements/card/AppCard.vue';
 import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue';
 import { useEventListener } from '@/app/shared/composables/dom/useEventListener';
 import { LibStyle } from '@/core/lib/style';
@@ -11,34 +11,41 @@ import AppCard from '@/app/shared/components/elements/card/AppCard.vue';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveLayerValue, type tLayerValue } from '@/app/shared/styles/contracts/layer.contract';
 import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
-import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
 
-type tAppModalLayoutOptions = Pick<PropsAppCard, 'width' | 'maxWidth'> & Pick<PropsHeight, 'maxHeight'>;
-type tAppModalSurfaceOptions = Pick<PropsAppCard, 'backgroundColor' | 'borderColor' | 'borderWidth' | 'borderStyle' | 'borderRadius'> & {
+export type tAppModalCardOptions = Pick<
+  PropsAppCard,
+  'cornerStyle' | 'glow' | 'backgroundColor' | 'borderColor' | 'borderWidth' | 'borderStyle' | 'borderRadius'
+>;
+
+export interface PropsAppModal extends PropsWidth, Pick<PropsHeight, 'maxHeight'>, PropsAccessibility {
+  modelValue: boolean;
+  layer?: tLayerValue;
   backdropColor?: tColorValue;
-};
-type tAppModalBehaviorOptions = {
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   lockScroll?: boolean;
-};
-
-export interface PropsAppModal {
-  modelValue: boolean;
-  cornerStyle?: tAppCardCornerStyle;
-  layer?: tLayerValue;
-  optionsLayout?: tAppModalLayoutOptions;
-  optionsSurface?: tAppModalSurfaceOptions;
+  optionsCard?: tAppModalCardOptions;
   optionsHeader?: PropsPadding;
   optionsBody?: PropsPadding;
   optionsFooter?: PropsPadding;
-  optionsBehavior?: tAppModalBehaviorOptions;
-  optionsAccessibility?: PropsAccessibility;
 }
 
 const props = withDefaults(defineProps<PropsAppModal>(), {
-  cornerStyle: 'angular',
   layer: 'modal',
+  width: '100%',
+  maxWidth: '100rem',
+  maxHeight: '100%',
+  backdropColor: 'surface-overlay',
+  closeOnBackdrop: true,
+  closeOnEscape: true,
+  lockScroll: true,
+  ariaLabel: undefined,
+  ariaLabelledby: undefined,
+  ariaDescribedby: undefined,
+  optionsCard: undefined,
+  optionsHeader: undefined,
+  optionsBody: undefined,
+  optionsFooter: undefined,
 });
 
 const emit = defineEmits<{
@@ -53,27 +60,24 @@ const isScrollLocked = ref(false);
 
 const hasHeaderSlot = computed(() => Boolean(slots.header));
 const hasFooterSlot = computed(() => Boolean(slots.footer));
-const modalSurface = computed(() =>
-  resolveSurface({
-    backgroundColor: props.optionsSurface?.backgroundColor ?? 'surface-elevated',
-    borderColor: props.optionsSurface?.borderColor ?? 'border-contrast',
-    borderWidth: props.optionsSurface?.borderWidth ?? 'thick',
-    borderStyle: props.optionsSurface?.borderStyle ?? 'solid',
-    borderRadius: props.optionsSurface?.borderRadius ?? '2xl',
-  }),
-);
+
+const cardProps = computed<NonNullable<PropsAppModal['optionsCard']>>(() => ({
+  ...props.optionsCard,
+  cornerStyle: props.optionsCard?.cornerStyle ?? 'angular',
+  glow: props.optionsCard?.glow ?? true,
+  backgroundColor: props.optionsCard?.backgroundColor ?? 'surface-elevated',
+  borderColor: props.optionsCard?.borderColor ?? 'border-contrast',
+  borderWidth: props.optionsCard?.borderWidth ?? 'thick',
+  borderStyle: props.optionsCard?.borderStyle ?? 'solid',
+  borderRadius: props.optionsCard?.borderRadius ?? 'xl',
+}));
 
 const modalStyle = computed(() => ({
   '--cp-modal-layer': resolveLayerValue(props.layer),
-  '--cp-modal-width': LibStyle.toSizeValue(props.optionsLayout?.width ?? '100%'),
-  '--cp-modal-max-width': LibStyle.toSizeValue(props.optionsLayout?.maxWidth ?? '100rem'),
-  '--cp-modal-max-height': LibStyle.toSizeValue(props.optionsLayout?.maxHeight ?? '100%'),
-  '--cp-modal-backdrop-color': resolveColorValue(props.optionsSurface?.backdropColor ?? 'surface-overlay'),
-  '--cp-modal-background-color': modalSurface.value.backgroundColor,
-  '--cp-modal-border-color': modalSurface.value.borderColor,
-  '--cp-modal-border-width': modalSurface.value.borderWidth,
-  '--cp-modal-border-style': modalSurface.value.borderStyle,
-  '--cp-modal-border-radius': modalSurface.value.borderRadius,
+  '--cp-modal-width': LibStyle.toSizeValue(props.width),
+  '--cp-modal-max-width': LibStyle.toSizeValue(props.maxWidth),
+  '--cp-modal-max-height': LibStyle.toSizeValue(props.maxHeight),
+  '--cp-modal-backdrop-color': resolveColorValue(props.backdropColor),
   '--cp-modal-header-padding-x': resolvePaddingValue(props.optionsHeader?.paddingX ?? 6),
   '--cp-modal-header-padding-y': resolvePaddingValue(props.optionsHeader?.paddingY ?? 5),
   '--cp-modal-body-padding-x': resolvePaddingValue(props.optionsBody?.paddingX ?? 6),
@@ -87,7 +91,7 @@ function closeModal() {
 }
 
 function handleBackdropClick(event: MouseEvent) {
-  if (!(props.optionsBehavior?.closeOnBackdrop ?? true) || event.target !== event.currentTarget) {
+  if (!props.closeOnBackdrop || event.target !== event.currentTarget) {
     return;
   }
 
@@ -95,7 +99,7 @@ function handleBackdropClick(event: MouseEvent) {
 }
 
 function handleKeydown(event: KeyboardEvent) {
-  if (!props.modelValue || !(props.optionsBehavior?.closeOnEscape ?? true) || event.key !== 'Escape') {
+  if (!props.modelValue || !props.closeOnEscape || event.key !== 'Escape') {
     return;
   }
 
@@ -105,7 +109,7 @@ function handleKeydown(event: KeyboardEvent) {
 }
 
 function lockBodyScroll() {
-  if (!(props.optionsBehavior?.lockScroll ?? true) || isScrollLocked.value) {
+  if (!props.lockScroll || isScrollLocked.value) {
     return;
   }
 
@@ -195,24 +199,12 @@ onBeforeUnmount(() => {
           class="app-modal__panel"
           role="dialog"
           aria-modal="true"
-          :aria-label="optionsAccessibility?.ariaLabel"
-          :aria-labelledby="optionsAccessibility?.ariaLabelledby"
-          :aria-describedby="optionsAccessibility?.ariaDescribedby"
+          :aria-label="ariaLabel"
+          :aria-labelledby="ariaLabelledby"
+          :aria-describedby="ariaDescribedby"
           tabindex="-1"
         >
-          <AppCard
-            class="app-modal__card"
-            :corner-style="cornerStyle"
-            :background-color="optionsSurface?.backgroundColor ?? 'surface-elevated'"
-            :border-color="optionsSurface?.borderColor ?? 'border-contrast'"
-            :border-width="optionsSurface?.borderWidth ?? 'thick'"
-            :border-style="optionsSurface?.borderStyle ?? 'solid'"
-            :border-radius="optionsSurface?.borderRadius ?? 'xl'"
-            :glow="true"
-            padding-x="0"
-            padding-y="0"
-            overflow="hidden"
-          >
+          <AppCard v-bind="cardProps" class="app-modal__card" padding-x="0" padding-y="0" overflow="hidden">
             <header v-if="hasHeaderSlot" class="app-modal__header">
               <slot name="header" />
             </header>

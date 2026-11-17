@@ -15,7 +15,7 @@ import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode
 
 export interface PropsUiCardGameMode {
   mode: iGameMode;
-  optionsAccessibilityLabel: string;
+  modeOptionsAccessibilityLabel: string;
   connectionTypesAccessibilityLabel: string;
   active?: boolean;
   disabled?: boolean;

@@ -10,7 +10,7 @@ import type { PropsAppModal } from '@/app/shared/components/interaction/overlay/
 import AppInfoRow from '@/app/shared/components/ui/info/AppInfoRow.vue';
 import type { iAppInfoRowImage, PropsAppInfoRow } from '@/app/shared/components/ui/info/AppInfoRow.vue';
 import AppInputSearch from '@/app/shared/components/ui/input/AppInputSearch.vue';
-import type { PropsInputSearch } from '@/app/shared/components/ui/input/AppInputSearch.vue';
+import type { PropsAppInputSearch } from '@/app/shared/components/ui/input/AppInputSearch.vue';
 import { LibStyle } from '@/core/lib/style';
 
 export interface iWidgetSearchPickerItem {
@@ -28,9 +28,9 @@ export interface PropsWidgetSearchPicker extends PropsWidth, PropsSelectionFeedb
   title?: string;
   emptyText?: string;
   triggerAriaLabel?: string;
-  modal?: Omit<PropsAppModal, 'modelValue'>;
-  search?: Omit<PropsInputSearch, 'modelValue'>;
-  row?: Omit<PropsAppInfoRow, 'text' | 'image'>;
+  optionsModal?: Omit<PropsAppModal, 'modelValue'>;
+  optionsSearch?: Omit<PropsAppInputSearch, 'modelValue'>;
+  optionsRow?: Omit<PropsAppInfoRow, 'text' | 'image'>;
 }
 
 const props = withDefaults(defineProps<PropsWidgetSearchPicker>(), {
@@ -42,9 +42,9 @@ const props = withDefaults(defineProps<PropsWidgetSearchPicker>(), {
   maxWidth: '100%',
   sound: 'sfx.selection.default',
   vibration: true,
-  modal: undefined,
-  search: undefined,
-  row: undefined,
+  optionsModal: undefined,
+  optionsSearch: undefined,
+  optionsRow: undefined,
 });
 
 const { triggerSelectionFeedback } = useSelectionFeedback(props);
@@ -70,20 +70,20 @@ const triggerStyle = computed(() => ({
 }));
 
 const modalProps = computed<Omit<PropsAppModal, 'modelValue'>>(() => ({
-  optionsBody: { paddingX: 0, paddingY: 0 },
-  optionsAccessibility: { ariaLabel: props.modal?.optionsAccessibility?.ariaLabel ?? props.title },
-  ...props.modal,
+  ...props.optionsModal,
+  optionsBody: props.optionsModal?.optionsBody ?? { paddingX: 0, paddingY: 0 },
+  ariaLabel: props.optionsModal?.ariaLabel ?? props.title,
 }));
 
-const searchProps = computed<Omit<PropsInputSearch, 'modelValue'>>(() => ({
-  width: '100%',
-  ...props.search,
+const searchProps = computed<Omit<PropsAppInputSearch, 'modelValue'>>(() => ({
+  ...props.optionsSearch,
+  width: props.optionsSearch?.width ?? '100%',
 }));
 
 const rowProps = computed<Omit<PropsAppInfoRow, 'text' | 'image'>>(() => ({
-  paddingX: 6,
-  paddingY: 4,
-  ...props.row,
+  ...props.optionsRow,
+  paddingX: props.optionsRow?.paddingX ?? 6,
+  paddingY: props.optionsRow?.paddingY ?? 4,
 }));
 
 const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLocaleLowerCase());

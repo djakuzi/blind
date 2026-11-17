@@ -257,15 +257,15 @@ async function handleLanguageChange(value: string) {
             :title="changeLanguageModalLocale.title"
             :empty-text="changeLanguageModalLocale.emptyText"
             :trigger-aria-label="settingsLocale.changeLanguage"
-            :modal="{
-              optionsLayout: { maxWidth: '50rem' },
+            :options-modal="{
+              maxWidth: '50rem',
             }"
-            :search="{
+            :options-search="{
               placeholder: changeLanguageModalLocale.searchPlaceholder,
               ariaLabel: changeLanguageModalLocale.searchPlaceholder,
               size: 'big',
             }"
-            :row="{
+            :options-row="{
               size: 'big',
             }"
             @select="handleLanguageChange"

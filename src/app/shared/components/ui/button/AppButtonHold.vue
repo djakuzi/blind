@@ -10,18 +10,18 @@ import AppHoldAction from '@/app/shared/components/interaction/hold/AppHoldActio
 import type { PropsAppHoldAction } from '@/app/shared/components/interaction/hold/AppHoldAction.vue';
 import { LibStyle } from '@/core/lib/style';
 
-type tAppButtonHoldVariant = 'primary';
+export type tAppButtonHoldVariant = 'primary';
 
-type tAppButtonHoldOptions = Omit<PropsAppHoldAction, 'width' | 'maxWidth' | 'disabled' | 'moveCancelThreshold'>;
+export type tAppButtonHoldOptions = Omit<PropsAppHoldAction, 'width' | 'maxWidth' | 'disabled' | 'moveCancelThreshold'>;
 
-interface Props extends PropsWidth, PropsDisabled, PropsSizeVariant {
+export interface PropsAppButtonHold extends PropsWidth, PropsDisabled, PropsSizeVariant {
   variant?: tAppButtonHoldVariant;
   text?: string;
   optionsHold?: tAppButtonHoldOptions;
   optionsBloodFill?: Omit<PropsAppBloodFill, 'isActive' | 'progressRatio'>;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppButtonHold>(), {
   disabled: false,
   size: 'middle',
   maxWidth: '100%',
@@ -43,7 +43,7 @@ const holdProps = computed<tAppButtonHoldOptions>(() => ({
   duration: props.optionsHold?.duration ?? 450,
 }));
 
-const bloodFillProps = computed<NonNullable<Props['optionsBloodFill']>>(() => ({
+const bloodFillProps = computed<NonNullable<PropsAppButtonHold['optionsBloodFill']>>(() => ({
   ...props.optionsBloodFill,
   flowFrontDuration: props.optionsBloodFill?.flowFrontDuration ?? 1200,
 }));

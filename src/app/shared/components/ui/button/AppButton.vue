@@ -16,7 +16,6 @@ import { LibStyle } from '@/core/lib/style';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import { resolveColorValue, type tColorValue } from '@/app/shared/styles/contracts/color.contract';
 import { resolveFontSizeValue } from '@/app/shared/styles/contracts/fontSize.contract';
-import { resolvePaddingValue } from '@/app/shared/styles/contracts/padding.contract';
 import type { iControlSizePreset } from '@/app/shared/styles/presets/control.preset';
 import { resolveSurface } from '@/app/shared/styles/helpers/resolveSurface.helper';
 import type { tIconGroup, tIconName } from '@/core/media/icons';
@@ -34,14 +33,11 @@ export type tAppButtonIconOptions = {
 }[tIconGroup];
 
 export type tAppButtonTextOptions = Pick<PropsAppText, 'text' | 'color' | 'fontSize' | 'fontWeight' | 'uppercase' | 'lineHeight'>;
-export type tAppButtonSurfaceOptions = PropsSurface & { textColor?: tColorValue };
-export type tAppButtonLayoutOptions = PropsWidth & PropsPadding;
 
-export interface PropsAppButton extends PropsSizeVariant, PropsDisabled {
+export interface PropsAppButton extends PropsWidth, PropsPadding, PropsSurface, PropsSizeVariant, PropsDisabled {
   optionsText?: tAppButtonTextOptions;
   optionsIcon?: tAppButtonIconOptions;
-  optionsSurface?: tAppButtonSurfaceOptions;
-  optionsLayout?: tAppButtonLayoutOptions;
+  textColor?: tColorValue;
   ariaLabel?: string;
   variant?: tAppButtonVariant;
 }
@@ -49,13 +45,19 @@ export interface PropsAppButton extends PropsSizeVariant, PropsDisabled {
 const props = withDefaults(defineProps<PropsAppButton>(), {
   optionsText: undefined,
   optionsIcon: undefined,
-  optionsSurface: undefined,
-  optionsLayout: undefined,
+  textColor: undefined,
   ariaLabel: undefined,
   variant: 'primary',
   size: 'middle',
   width: 'auto',
   maxWidth: '100%',
+  paddingX: undefined,
+  paddingY: undefined,
+  backgroundColor: undefined,
+  borderColor: undefined,
+  borderWidth: 'medium',
+  borderStyle: 'solid',
+  borderRadius: 'md',
   disabled: false,
 });
 
@@ -111,19 +113,19 @@ const { paddingX: buttonPaddingX, paddingY: buttonPaddingY, fontSize } = useCont
 
 const buttonSurface = computed(() =>
   resolveSurface({
-    backgroundColor: props.optionsSurface?.backgroundColor ?? variantConfig.value.backgroundColor,
-    borderColor: props.optionsSurface?.borderColor ?? variantConfig.value.borderColor,
-    borderWidth: props.optionsSurface?.borderWidth ?? 'medium',
-    borderStyle: props.optionsSurface?.borderStyle ?? 'solid',
-    borderRadius: props.optionsSurface?.borderRadius ?? 'md',
+    backgroundColor: props.backgroundColor ?? variantConfig.value.backgroundColor,
+    borderColor: props.borderColor ?? variantConfig.value.borderColor,
+    borderWidth: props.borderWidth,
+    borderStyle: props.borderStyle,
+    borderRadius: props.borderRadius,
   }),
 );
-const buttonTextColor = computed(() => resolveColorValue(props.optionsSurface?.textColor ?? variantConfig.value.textColor));
+const buttonTextColor = computed(() => resolveColorValue(props.textColor ?? variantConfig.value.textColor));
 const buttonFontSize = computed(() => resolveFontSizeValue(fontSize.value));
 
 const interactionStyle = computed(() => ({
-  width: LibStyle.toSizeValue(props.optionsLayout?.width ?? 'auto'),
-  maxWidth: LibStyle.toSizeValue(props.optionsLayout?.maxWidth ?? '100%'),
+  width: LibStyle.toSizeValue(props.width),
+  maxWidth: LibStyle.toSizeValue(props.maxWidth),
 }));
 
 const buttonStyle = computed(() => ({
@@ -133,10 +135,8 @@ const buttonStyle = computed(() => ({
   '--cp-button-border-width': buttonSurface.value.borderWidth,
   '--cp-button-border-style': buttonSurface.value.borderStyle,
   '--cp-button-border-radius': buttonSurface.value.borderRadius,
-  '--cp-button-padding-x':
-    props.optionsLayout?.paddingX !== undefined ? resolvePaddingValue(props.optionsLayout.paddingX) : buttonPaddingX.value,
-  '--cp-button-padding-y':
-    props.optionsLayout?.paddingY !== undefined ? resolvePaddingValue(props.optionsLayout.paddingY) : buttonPaddingY.value,
+  '--cp-button-padding-x': buttonPaddingX.value,
+  '--cp-button-padding-y': buttonPaddingY.value,
   '--cp-button-font-size': buttonFontSize.value,
 }));
 

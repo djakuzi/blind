@@ -162,7 +162,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
                   <AppButton
                     v-for="(action, index) in error.actions"
                     :key="`${action.title}-${index}`"
-                    :text="action.title"
+                    :options-text="{ text: action.title }"
                     :variant="index === 0 ? 'primary' : 'secondary'"
                     :disabled="isActionRunning"
                     size="small"
