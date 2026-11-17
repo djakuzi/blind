@@ -462,7 +462,7 @@ shared
 - colors;
 - responsive primitives.
 
-Styles описывают визуальные правила и не должны зависеть от feature logic. CSS-токены являются source of truth для генерируемых contracts; правила их изменения описаны в [CSS Style](../../contributing/sections/cssStyle.md).
+Styles описывают визуальные правила и не должны зависеть от feature logic. CSS-токены являются source of truth для генерируемых contracts; правила их изменения описаны в [CSS Style](../../code/rules/cssStyle.md).
 
 ## Допустимые Зависимости
 

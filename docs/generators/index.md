@@ -1,7 +1,10 @@
 # Генераторы
 
 Раздел посвящен [генераторам проекта](../../scripts/generators/).
-Правила работы с генераторами находятся [здесь](../contributing/sections/generateRule.md).
+
+## Правила
+
+- [Правила Generate](./rules/generateRule.md)
 
 ## Разделы
 

@@ -27,9 +27,11 @@
 
 ## Где брать информацию
 
+Каждый раздел `docs` устроен одинаково: `index.md` — обзор раздела, `rules/` — общие правила работы, `sections/` — описания конкретных сущностей или подтем. Новые документы раскладываются по этому же принципу в раздел своей темы.
+
 - общий обзор архитектуры - `docs/architecture/index.md`
 - структура `src/app`, app-flow, views, layouts, features, stores, providers и overlays - `docs/architecture/sections/app-flow.md`
-- CSS, scoped styles, tokens, contracts, responsive и правила написания стилей - `docs/contributing/sections/cssStyle.md`
+- CSS, scoped styles, tokens, contracts, responsive и правила написания стилей - `docs/code/rules/cssStyle.md`
 - UI scale, единицы измерения интерфейса и построение размеров UI - `docs/interface/index.md`
 - локализация, языки интерфейса, Locale, Static Locale, переводы, pluralization и language switch - `docs/interface/sections/localization.md`
 - `src/core`, platform/runtime/tool, `core/media`, `MediaAudio`, `MediaIcons` и SDK-обертки - `docs/architecture/sections/core-flow.md`
@@ -38,16 +40,17 @@
 - генерация icons registry - `docs/generators/sections/generate-icons.md`
 - игровой контур и game-логика - `docs/architecture/sections/game-flow.md`
 - setup, запуск, Web, Android, iOS, Desktop, Capacitor, Electron и CLI - `docs/projectSetup/index.md`
-- правила Capacitor plugins - `docs/contributing/sections/capacitorPluginRule.md`
-- правила Electron plugins - `docs/contributing/sections/electronPluginRule.md`
+- правила Capacitor plugins - `docs/plugins/rules/capacitorPluginRule.md`
+- правила Electron plugins - `docs/plugins/rules/electronPluginRule.md`
 - описания конкретных plugins - `docs/plugins`
-- генераторы и auto-generated файлы - `docs/generators` и `docs/contributing/sections/generateRule.md`
+- генераторы и auto-generated файлы - `docs/generators` и `docs/generators/rules/generateRule.md`
 - env, property и настройки проекта - `docs/settingsProject`
-- именование и общий code style - `docs/contributing/sections/codeStyle.md`
-- форматирование - `docs/contributing/sections/codeFormatting.md`
-- git-процесс - `docs/contributing/sections/gitRule.md`
-- правила для задач и коммуникации - `docs/contributing/sections/requestRule.md`
-- правила самого `AGENTS.md` - `docs/contributing/sections/agentRule.md`
+- именование и общий code style - `docs/code/rules/codeStyle.md`
+- форматирование - `docs/code/rules/codeFormatting.md`
+- git-процесс - `docs/workflow/rules/gitRule.md`
+- правила для задач и коммуникации - `docs/workflow/rules/requestRule.md` и `docs/workflow/rules/issueRule.md`
+- правила самого `AGENTS.md` - `docs/agents/rules/agentRule.md`
+- agent skills, плагин `.ai-core`, подключение к Claude Code и Codex, когда обновлять skills - `docs/agents/rules/skillRule.md`
 
 ## Как выбирать документацию
 
@@ -60,12 +63,13 @@
 7. Если задача меняет audio assets или icons assets, читать соответствующий раздел в `docs/generators/sections/` до изменения generated registry.
 8. Если задача связана с игровыми правилами, игровым состоянием, игровыми моделями или render/game контуром, читать game-flow.
 9. Если задача связана с запуском проекта, платформами, Capacitor, Electron или CLI-командами, читать projectSetup.
-10. Если задача связана с Capacitor plugin, читать `docs/contributing/sections/capacitorPluginRule.md`.
-11. Если задача связана с Electron plugin, preload, IPC или bridge capability, читать `docs/contributing/sections/electronPluginRule.md` и при необходимости core-flow.
+10. Если задача связана с Capacitor plugin, читать `docs/plugins/rules/capacitorPluginRule.md`.
+11. Если задача связана с Electron plugin, preload, IPC или bridge capability, читать `docs/plugins/rules/electronPluginRule.md` и при необходимости core-flow.
 12. Если задача связана с конкретным plugin и для него есть отдельное описание, читать соответствующий документ в `docs/plugins`.
 13. Если задача затрагивает generated files, scripts или генераторы, читать generateRule и docs/generators до изменения generated-файлов.
 14. Если задача связана с env/property, читать docs/settingsProject.
-15. Если задача меняет правила работы агентов или сам `AGENTS.md`, читать `docs/contributing/sections/agentRule.md` и при необходимости обновлять его тоже.
+15. Если задача меняет правила работы агентов или сам `AGENTS.md`, читать `docs/agents/rules/agentRule.md` и при необходимости обновлять его тоже.
+16. Если задача меняет skills в `.ai-core` или их подключение, читать `docs/agents/rules/skillRule.md`.
 
 ## Базовые правила
 
@@ -77,10 +81,23 @@
 6. Реализация конкретного platform-инструмента должна оставаться в соответствующем Tool; runtime используется только как инфраструктура среды.
 7. Если изменение затрагивает архитектуру, процесс, публичный API или соглашения, проверить, нужно ли обновить документацию.
 8. Если после выполнения задачи нужно обновить документацию, сначала сообщить об этом пользователю и запросить разрешение на документационное изменение.
-9. Если изменение касается правил для агентов, проверить `docs/contributing/sections/agentRule.md` и при необходимости предложить или внести синхронную правку.
+9. Если изменение касается правил для агентов, проверить `docs/agents/rules/agentRule.md` и при необходимости предложить или внести синхронную правку.
 10. Если код и документация расходятся, не выбирать молча. Нужно отметить расхождение и предложить безопасный способ привести проект к одному правилу.
 11. Если рядом с изменяемым кодом есть локальный стиль или паттерн, использовать его, а не вводить новый.
 12. Реальный соседний код является важным источником контекста: документация задает правила, а смежные реализации показывают, как эти правила применяются в проекте.
+
+## Skills
+
+1. Skills проекта лежат только в `.ai-core/skills` и подключаются как плагин `blind`. Правила — `docs/agents/rules/skillRule.md`.
+2. Перед специализированной задачей агент использует подходящий skill. Если плагин недоступен, агент читает `.ai-core/skills/<skill>/SKILL.md` напрямую:
+   - экраны, меню, HUD, модалки, взаимодействия — `ui-ux-design`;
+   - SVG, иконки, курсоры, игровая графика — `visual-asset-design`;
+   - аудит и доводка готового интерфейса — `visual-review`;
+   - анимации и переходы — `ui-animation`;
+   - Web, Capacitor, Electron, platform Tools — `platform-bridge`;
+   - механики и архитектура игры — `game-design`, `game-architecture` (пока заготовки).
+3. Если skill устарел, расходится с кодом или `docs`, или для задачи нужен новый skill, агент предлагает его обновить. Молча skills не меняются.
+4. После изменения skills агент напоминает, что в Codex плагин нужно обновить: перезапустить приложение, при необходимости поднять версию или переустановить плагин.
 
 ## Визуальная проверка
 

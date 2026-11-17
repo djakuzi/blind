@@ -30,6 +30,9 @@ npm run desktop:dev
 
 - [Настройка проекта](docs/settingsProject/index.md)
 - [Работа над проектом](CONTRIBUTING.md)
+- [Код](docs/code/index.md)
+- [Процесс работы](docs/workflow/index.md)
+- [Агенты](docs/agents/index.md)
 - [Архитектура](docs/architecture/index.md)
 - [CLI](docs/cli/index.md)
 - [Плагины](docs/plugins/index.md)
