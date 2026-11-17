@@ -36,7 +36,7 @@ const props = withDefaults(defineProps<PropsAppCard>(), {
   borderColor: 'border-contrast',
   borderWidth: 'thick',
   borderStyle: 'solid',
-  borderRadius: 'lg',
+  borderRadius: 'md',
   overflow: 'visible',
 });
 

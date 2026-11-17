@@ -41,7 +41,7 @@ const props = withDefaults(defineProps<PropsInputSearch>(), {
   borderColor: 'border-contrast',
   borderWidth: 'thick',
   borderStyle: 'solid',
-  borderRadius: 'lg',
+  borderRadius: 'md',
   fontSize: undefined,
   fontWeight: 'medium',
   name: undefined,

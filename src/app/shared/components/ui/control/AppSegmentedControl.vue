@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<PropsAppSegmentedControl>(), {
   maxWidth: '100%',
   paddingX: undefined,
   paddingY: undefined,
-  borderRadius: 'lg',
+  borderRadius: 'md',
 });
 
 const { triggerSelectionFeedback } = useSelectionFeedback(props);

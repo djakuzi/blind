@@ -223,7 +223,7 @@ watch(
   box-sizing: border-box;
   padding: 0;
   border: var(--app-border-width-thick) var(--app-border-style-solid) var(--app-color-border-contrast);
-  border-radius: var(--app-radius-lg);
+  border-radius: var(--app-radius-md);
   background: var(--app-color-surface-primary);
   color: var(--app-color-text-primary);
   text-align: left;
