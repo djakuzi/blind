@@ -1,0 +1,20 @@
+{
+  "name": "blind-local",
+  "interface": {
+    "displayName": "Blind"
+  },
+  "plugins": [
+    {
+      "name": "blind",
+      "source": {
+        "source": "local",
+        "path": "./.ai-core"
+      },
+      "policy": {
+        "installation": "INSTALLED_BY_DEFAULT",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

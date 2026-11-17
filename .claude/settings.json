@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "blind-local": {
+      "source": {
+        "source": "directory",
+        "path": "./.ai-core"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "blind@blind-local": true
+  }
+}

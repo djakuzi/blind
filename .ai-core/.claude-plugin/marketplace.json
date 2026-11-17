@@ -1,0 +1,14 @@
+{
+  "name": "blind-local",
+  "description": "Локальный marketplace проекта Blind: один плагин со skills из .ai-core.",
+  "owner": {
+    "name": "djakuzi"
+  },
+  "plugins": [
+    {
+      "name": "blind",
+      "source": "./",
+      "description": "Skills проекта Blind."
+    }
+  ]
+}
