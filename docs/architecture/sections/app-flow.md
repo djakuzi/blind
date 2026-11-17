@@ -429,6 +429,26 @@ shared
 → не знает о конкретном feature/view/route
 ```
 
+## Shared Components
+
+`src/app/shared/components` разделён на слои. Слой определяет, что компонент может импортировать из других компонентов.
+
+| Слой | Что внутри | Может импортировать |
+| --- | --- | --- |
+| `atoms` | Раскладка и форма без контента: `AppBlock`, `AppFlex`, `AppGrid`, `AppPosition` | ничего |
+| `effects` | Визуальные эффекты и transitions: `AppBloodFill`, `AppPulseAttention`, `App*Transition` | ничего |
+| `elements` | Элементы без поведения: `AppCard`, `AppImage`, `AppIcon`, `AppText`, `AppTitle`, `AppDistributedRow` | `atoms` |
+| `interaction` | Поведение и overlays: `AppHoldAction`, `AppSlider`, `AppModal`, `AppBottomSheet` | `atoms`, `effects`, `elements` |
+| `ui` | Компоненты, которые реагируют на пользователя: кнопки, controls, `AppCardHold` | `atoms`, `effects`, `elements`, `interaction`, `ui` |
+| `widgets` | Generic-сборки из нескольких компонентов: `WidgetSearchPicker`, `WidgetList` | любой слой `components` |
+
+Правила:
+
+1. `atoms` и `effects` — нижние слои: их могут использовать все, сами они не импортируют другие компоненты.
+2. `elements` не имеет поведения. Если компоненту нужно состояние или реакция на ввод, его место в `ui` или `interaction`.
+3. Импорт внутри одного слоя допустим только в `ui` и `widgets` и без циклов.
+4. Feature, view, overlay и app-level `layouts` могут импортировать любой слой `shared/components`.
+
 ## Shared Styles
 
 `src/app/shared/styles` содержит общую дизайн-систему приложения, которую используют переиспользуемые UI-компоненты:

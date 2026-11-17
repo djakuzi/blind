@@ -7,8 +7,8 @@ import type { PropsAccessibilityLabel } from '@/app/shared/types/props/accessibi
 import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/elements/media/AppIcon.vue';
 import AppText from '@/app/shared/components/elements/typography/AppText.vue';
-import AppDistributedRow from '@/app/shared/components/layout/row/AppDistributedRow.vue';
-import type { PropsAppDistributedRow } from '@/app/shared/components/layout/row/AppDistributedRow.vue';
+import AppDistributedRow from '@/app/shared/components/elements/row/AppDistributedRow.vue';
+import type { PropsAppDistributedRow } from '@/app/shared/components/elements/row/AppDistributedRow.vue';
 import { LibStyle } from '@/core/lib/style';
 import type { tStyleSizeValue } from '@/core/lib/style';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
