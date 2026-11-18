@@ -8,6 +8,6 @@
     }
   },
   "enabledPlugins": {
-    "blind@blind-local": true
+    "blind-client@blind-local": true
   }
 }

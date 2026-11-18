@@ -4,10 +4,10 @@
 
 ## Код
 
-- [Code Style](./docs/code/rules/codeStyle.md) — именование и общие правила.
-- [Props компонентов](./docs/code/rules/componentProps.md) — публичный API Vue-компонента.
-- [CSS Style](./docs/code/rules/cssStyle.md) — стили, tokens, contracts.
-- [Форматирование кода](./docs/code/rules/codeFormatting.md) — Prettier и ESLint.
+- [Code Style](./docs/client/code/rules/codeStyle.md) — именование и общие правила.
+- [Props компонентов](./docs/client/code/rules/componentProps.md) — публичный API Vue-компонента.
+- [CSS Style](./docs/client/code/rules/cssStyle.md) — стили, tokens, contracts.
+- [Форматирование кода](./docs/client/code/rules/codeFormatting.md) — Prettier и ESLint.
 
 ## Процесс работы
 
@@ -18,12 +18,12 @@
 
 ## Генераторы
 
-- [Правила Generate](./docs/generators/rules/generateRule.md) — требования к генераторам.
+- [Правила Generate](./docs/client/generators/rules/generateRule.md) — требования к генераторам.
 
 ## Плагины
 
-- [Правила Capacitor plugins](./docs/plugins/rules/capacitorPluginRule.md)
-- [Правила Electron plugins](./docs/plugins/rules/electronPluginRule.md)
+- [Правила Capacitor plugins](./docs/client/plugins/rules/capacitorPluginRule.md)
+- [Правила Electron plugins](./docs/client/plugins/rules/electronPluginRule.md)
 
 ## Агенты
 

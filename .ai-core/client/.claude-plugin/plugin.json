@@ -1,0 +1,9 @@
+{
+  "name": "blind-client",
+  "displayName": "Blind Client Skills",
+  "version": "0.2.0",
+  "description": "Skills клиента Blind: UI/UX игровых экранов, SVG и визуальные ассеты, визуальный аудит, анимации, Web + Capacitor + Electron, заготовки геймдизайна и архитектуры игры.",
+  "author": {
+    "name": "djakuzi"
+  }
+}

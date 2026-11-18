@@ -28,25 +28,29 @@ jobs:
             command: npm run desktop:package:mac
             artifact_name: blind-macos
             artifact_path: |
-              release/desktop/*.dmg
+              apps/client/release/desktop/*.dmg
 
           - name: Windows
             os: windows-latest
             command: npm run desktop:package:win
             artifact_name: blind-windows
             artifact_path: |
-              release/desktop/*.exe
+              apps/client/release/desktop/*.exe
 
           - name: Linux
             os: ubuntu-latest
             command: npm run desktop:package:linux
             artifact_name: blind-linux
             artifact_path: |
-              release/desktop/*.AppImage
-              release/desktop/*.deb
+              apps/client/release/desktop/*.AppImage
+              apps/client/release/desktop/*.deb
 
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+    defaults:
+      run:
+        working-directory: apps/client
 
     steps:
       - name: Checkout
@@ -57,6 +61,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: apps/client/package-lock.json
 
       - name: Install dependencies
         run: npm ci

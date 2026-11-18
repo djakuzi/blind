@@ -1,2 +1,2 @@
-[plugins."blind@blind-local"]
+[plugins."blind-client@blind-local"]
 enabled = true

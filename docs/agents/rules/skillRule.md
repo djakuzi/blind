@@ -6,27 +6,33 @@ Skill — папка с `SKILL.md` (инструкция для агента) и
 
 ## Где лежат
 
-Единственный источник — `.ai-core`, оформленный как плагин `blind`. В `.claude`, `.agents`, `.codex` — только настройки подключения.
+Единственный источник — `.ai-core`. У каждого приложения свой плагин: `.ai-core/<приложение>` → `blind-<приложение>`. В `.claude`, `.agents`, `.codex` — только настройки подключения.
 
 ```text
 .ai-core/
-├── .claude-plugin/   plugin.json, marketplace.json — для Claude Code
-├── .codex-plugin/    plugin.json — для Codex
-└── skills/<name>/
-    ├── SKILL.md      главный файл
-    ├── references/   подробности, читаются по необходимости
-    └── tools/        вспомогательные файлы, если нужны
+├── .claude-plugin/marketplace.json   marketplace blind-local со всеми плагинами
+└── client/                           плагин blind-client
+    ├── .claude-plugin/plugin.json    для Claude Code
+    ├── .codex-plugin/plugin.json     для Codex
+    └── skills/<name>/
+        ├── SKILL.md                  главный файл
+        ├── references/               подробности, читаются по необходимости
+        └── tools/                    вспомогательные файлы, если нужны
 ```
+
+Пути в skill приложения: к коду — от папки приложения (`apps/client`), к документации и `.ai-core` — от корня репозитория.
+
+Новое приложение получает свою папку `.ai-core/<приложение>`, запись в обоих marketplace и включение плагина в `.claude/` и `.codex/` своего приложения.
 
 ## Подключение
 
 | | Claude Code | Codex |
 |---|---|---|
-| Настройки в репо | `.claude/settings.json` — marketplace `blind-local` и плагин `blind@blind-local` | `.agents/plugins/marketplace.json`, `.codex/config.toml` |
-| Первый запуск | подтвердить доверие к папке проекта | один раз добавить marketplace (см. ниже) и установить «Blind Skills» |
-| Откуда читает | прямо из `.ai-core` | из своей копии в `~/.codex/plugins/cache/blind-local/blind/<version>/` |
+| Настройки в репо | `.claude/settings.json` в корне и в `apps/<приложение>` — marketplace `blind-local` и плагин `blind-<приложение>@blind-local` | `.agents/plugins/marketplace.json`, `.codex/config.toml` в корне и в `apps/<приложение>` |
+| Первый запуск | подтвердить доверие к папке проекта | один раз добавить marketplace (см. ниже) и установить плагин приложения |
+| Откуда читает | прямо из `.ai-core` | из своей копии в `~/.codex/plugins/cache/blind-local/<плагин>/<version>/` |
 | Применение правок | новая сессия или `/reload-plugins` | перезапуск приложения |
-| Вызов | `/blind:<skill>` | `$<skill>` |
+| Вызов | `/blind-client:<skill>` | `$<skill>` |
 
 Добавить marketplace в Codex — через раздел плагинов приложения или в `~/.codex/config.toml`:
 
@@ -36,7 +42,7 @@ source_type = "local"
 source = "<путь к репозиторию>"
 ```
 
-> **Codex не подхватил правки** после перезапуска — поднять `version` в `.ai-core/.codex-plugin/plugin.json` или переустановить плагин. Проверка: сравнить папку кэша с `.ai-core/skills`.
+> **Codex не подхватил правки** после перезапуска — поднять `version` в `.ai-core/<приложение>/.codex-plugin/plugin.json` или переустановить плагин. Проверка: сравнить папку кэша с `.ai-core/<приложение>/skills`.
 
 ## Как писать skill
 

@@ -1,65 +1,51 @@
 # AGENTS
 
-Входная инструкция для coding agents, которые работают с репозиторием `blind`.
+Входная инструкция для coding agents, которые работают с репозиторием `blind`. Здесь — общие правила. Правила конкретного приложения — в его `AGENTS.md`.
+
+## Структура репозитория
+
+| Путь | Что |
+|---|---|
+| `apps/client` | клиент: Vue + Capacitor (iOS, Android) + Electron. Правила — [apps/client/AGENTS.md](apps/client/AGENTS.md) |
+| `apps/<name>` | будущие серверы и другие приложения — каждое со своим `AGENTS.md` |
+| `docs` | документация: общие разделы и `docs/<приложение>/` |
+| `.ai-core` | skills проекта, по плагину на приложение |
+| `.github` | CI, шаблоны PR и issue |
+
+1. Каждое приложение собирается и запускается из своей папки. Команды (`npm run …`) выполняются в `apps/<name>`.
+2. Приложения не делят код. Изменение одного приложения не трогает другое.
+3. Общее — в корне: документация процесса, правила агентов, skills, CI.
 
 ## Как работать
 
-1. Понять задачу, затронутые файлы и слои: app, core, game, docs, generators, plugins, setup, styles, stores.
-2. Прочитать только документы, относящиеся к задаче (таблица ниже). Появилась новая непонятная область — дочитать её документацию до продолжения.
+1. Понять задачу, затронутое приложение и его слои.
+2. Прочитать `AGENTS.md` приложения и только документы, относящиеся к задаче. Появилась новая непонятная область — дочитать её документацию до продолжения.
 3. Посмотреть соседние реализации в том же слое: документация задаёт правила, соседний код показывает, как они применяются. Локальный стиль важнее нового.
 4. Не придумывать архитектуру, которая уже есть в коде или `docs`.
 5. Вносить минимально достаточные изменения. Без крупных рефакторингов без прямого запроса. Простые задачи — точечно и самостоятельно, неоднозначные — сначала согласовать направление.
 6. Проверить результат: тест, сборка, линтер, diff — что подходит.
 7. В ответе кратко: что изменено, где, какие проверки выполнены.
 
-## Где брать информацию
+## Общая документация
 
-Разделы `docs` устроены одинаково: `index.md` — обзор, `rules/` — общие правила, `sections/` — конкретные сущности или подтемы. Новые документы раскладываются так же — по [Правилам документации](docs/workflow/rules/docsRule.md).
+Разделы `docs` устроены одинаково: `index.md` — обзор, `rules/` — общие правила, `sections/` — конкретные сущности или подтемы. Новые документы раскладываются так же — по [Правилам документации](docs/workflow/rules/docsRule.md). Пути к документации — от корня репозитория.
 
 | Задача | Документ |
 |---|---|
-| слои `src/app`, views, layouts, features, stores, providers, overlays, shared components | `docs/architecture/sections/app-flow.md` |
-| запуск приложения, setup, готовность, loader | `docs/architecture/sections/app-lifecycle.md` |
-| `src/core`, platform runtime/tool, `media`, SDK-обёртки | `docs/architecture/sections/core-flow.md` |
-| игровая логика, состояние, рендер | `docs/architecture/sections/game-flow.md` |
-| именование, общий code style | `docs/code/rules/codeStyle.md` |
-| props Vue-компонентов | `docs/code/rules/componentProps.md` |
-| CSS, tokens, contracts, safe area, responsive | `docs/code/rules/cssStyle.md` |
-| форматирование | `docs/code/rules/codeFormatting.md` |
-| масштаб UI, единицы размеров | `docs/interface/sections/ui-scale.md` |
-| тексты UI, переводы, языки, aria-тексты, `Intl` | `docs/interface/sections/localization.md` |
-| звук из UI, `useAudio`, prop `sound` | `docs/interface/index.md` и `docs/audio` |
-| generated-файлы, генераторы, audio и icons ассеты | `docs/generators` — до изменения generated-файлов |
-| Capacitor plugin | `docs/plugins/rules/capacitorPluginRule.md` |
-| Electron plugin, preload, IPC, bridge | `docs/plugins/rules/electronPluginRule.md` и core-flow |
-| конкретный plugin | `docs/plugins` — раздел «Разделы» |
-| запуск, платформы, CLI | `docs/projectSetup/index.md`, `docs/cli` |
-| env, нативные настройки | `docs/settingsProject` |
-| git, реквесты, issue | `docs/workflow/rules` |
+| git, реквесты, issue, оформление документации | `docs/workflow/rules` |
 | `AGENTS.md` | `docs/agents/rules/agentRule.md` |
-| skills, плагин `.ai-core` | `docs/agents/rules/skillRule.md` |
+| skills, плагины `.ai-core` | `docs/agents/rules/skillRule.md` |
 
 ## Базовые правила
 
 1. Не менять публичные соглашения проекта молча.
-2. `src/core/platform/runtime` не зависит от `src/core/platform/tool`. Реализация инструмента — в его Tool, runtime — только инфраструктура среды.
-3. Изменение затрагивает архитектуру, процесс, публичный API или соглашения — проверить, нужно ли обновить документацию. Обновление документации — после разрешения пользователя.
-4. Изменились правила для агентов — синхронно проверить `docs/agents/rules/agentRule.md`.
+2. Изменение затрагивает архитектуру, процесс, публичный API или соглашения — проверить, нужно ли обновить документацию. Обновление документации — после разрешения пользователя.
+3. Изменились правила для агентов — синхронно проверить `docs/agents/rules/agentRule.md`.
 
 ## Skills
 
-1. Skills лежат только в `.ai-core/skills` и подключаются как плагин `blind`.
-2. Перед специализированной задачей — подходящий skill. Плагин недоступен — читать `.ai-core/skills/<skill>/SKILL.md` напрямую.
-
-| Задача | Skill |
-|---|---|
-| экраны, меню, HUD, модалки, взаимодействия | `ui-ux-design` |
-| SVG, иконки, курсоры, игровая графика | `visual-asset-design` |
-| аудит и доводка готового интерфейса | `visual-review` |
-| анимации и переходы | `ui-animation` |
-| Web, Capacitor, Electron, platform Tools | `platform-bridge` |
-| механики и архитектура игры | `game-design`, `game-architecture` (заготовки) |
-
+1. Skills лежат в `.ai-core/<приложение>/skills` и подключаются плагином этого приложения (`blind-client` для клиента).
+2. Перед специализированной задачей — подходящий skill из таблицы в `AGENTS.md` приложения. Плагин недоступен — читать `SKILL.md` напрямую.
 3. Skill устарел, расходится с кодом или `docs`, или нужен новый — предложить обновление. Молча skills не меняются.
 4. После изменения skills — напомнить обновить плагин в Codex.
 

@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "blind",
+      "name": "blind-client",
       "source": {
         "source": "local",
-        "path": "./.ai-core"
+        "path": "./.ai-core/client"
       },
       "policy": {
         "installation": "INSTALLED_BY_DEFAULT",
