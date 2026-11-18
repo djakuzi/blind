@@ -1,116 +1,116 @@
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="1950"
-  height="900"
-  viewBox="430 0 1950 900"
-  preserveAspectRatio="xMidYMid meet"
->
+<svg xmlns="http://www.w3.org/2000/svg" width="1373" height="354.24" viewBox="830 272.88 1373 354.24" preserveAspectRatio="xMidYMid meet">
+  <g transform="translate(830 272.88) scale(0.611940299) translate(-292.14 -160.56)">
+  <!-- Top segment -->
+  <path
+    d="
+      M 325.26 160.56
 
-  <!-- BLIND icon: unchanged -->
-  <g transform="translate(120 -3) scale(0.72)">
-    <g transform="translate(0 10)">
-      <path
-        d="M 470 214
-           H 690
-           C 772 214 833 275 833 356
-           C 833 431 782 492 713 494
-           C 692 495 675 488 660 474
-           L 463 286
-           C 451 275 445 264 445 249
-           V 239
-           C 445 225 455 214 470 214
-           Z"
-        fill="#F7F7F8"
-      />
-    </g>
+      H 483.66
 
-    <path
-      d="M 392 435
-         C 382 426 378 432 378 447
-         V 800
-         C 378 816 385 822 397 812
-         L 566 649
-         C 579 637 579 614 566 602
-         Z"
-      fill="#F7F7F8"
-      transform="translate(46 0)"
-    />
+      C 540.52 160.56
+        586.62 206.66
+        586.62 262.80
 
-    <g transform="translate(0 -10)">
-      <path
-        d="M 470 1038
-           H 690
-           C 772 1038 833 977 833 896
-           C 833 821 782 760 713 758
-           C 692 757 675 764 660 778
-           L 463 966
-           C 451 977 445 988 445 1003
-           V 1013
-           C 445 1027 455 1038 470 1038
-           Z"
-        fill="#F7F7F8"
-      />
-    </g>
+      C 586.62 317.26
+        545.42 360.70
+        493.02 362.16
 
-    <circle
-      cx="800"
-      cy="626"
-      r="62.5"
-      fill="#D92D32"
-    />
-  </g>
+      C 473.82 362.70
+        456.54 355.98
+        442.62 342.66
 
-  <!--
-    BLIND wordmark
-    Production principles:
-    - final coordinates, no scale/translate on letters;
-    - integer coordinates;
-    - no masks, filters or strokes;
-    - minimum useful anchor points;
-    - mathematically smooth curves;
-    - principal diagonals are 45 degrees where the design allows it.
-  -->
-  <g
+      L 319.14 224.70
+
+      C 311.46 217.38
+        307.26 207.18
+        307.26 196.56
+
+      V 178.56
+
+      C 307.26 168.48
+        314.46 160.56
+        325.26 160.56
+
+      Z
+    "
     fill="#F7F7F8"
-    shape-rendering="geometricPrecision"
-  >
-    <!-- B -->
-    <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
-      d="
-        M 866 306
-        H 1117
-        A 44 44 0 0 1 1161 350
-        V 380
-        C 1161 399 1152 414 1136 424
-        C 1152 434 1161 449 1161 468
-        V 550
-        A 44 44 0 0 1 1117 594
-        H 874
-        A 44 44 0 0 1 830 550
-        V 417
-        H 1080
-        C 1097 417 1107 407 1107 393
-        C 1107 379 1097 369 1080 369
-        H 830
-        L 840 337
-        C 845 319 853 306 866 306
-        Z
+  />
 
-        M 900 480
-        H 1080
-        C 1096 480 1106 490 1106 504
-        V 514
-        C 1106 528 1096 538 1080 538
-        H 900
-        C 886 538 878 529 878 516
-        V 502
-        C 878 489 886 480 900 480
-        Z
-      "
-    />
+  <!-- Center wedge -->
+  <path
+    d="
+      M 302.22 312.48
 
+      C 295.54 307.28
+        292.14 312.22
+        292.14 321.12
+
+      V 575.28
+
+      C 292.14 584.02
+        295.62 589.02
+        302.22 583.92
+
+      L 426.78 466.56
+
+      C 431.16 462.48
+        433.50 456.54
+        433.50 450.00
+
+      C 433.50 443.46
+        431.16 437.52
+        426.78 433.44
+
+      Z
+    "
+    fill="#F7F7F8"
+  />
+
+  <!-- Bottom segment -->
+  <path
+    d="
+      M 325.26 739.44
+
+      H 483.66
+
+      C 540.52 739.44
+        586.62 693.34
+        586.62 637.20
+
+      C 586.62 582.74
+        545.42 539.30
+        493.02 537.84
+
+      C 473.82 537.30
+        456.54 544.02
+        442.62 557.34
+
+      L 319.14 675.30
+
+      C 311.46 682.62
+        307.26 692.82
+        307.26 703.44
+
+      V 721.44
+
+      C 307.26 731.52
+        314.46 739.44
+        325.26 739.44
+
+      Z
+    "
+    fill="#F7F7F8"
+  />
+
+  <!-- Red brand point -->
+  <circle
+    cx="562.86"
+    cy="450"
+    r="45"
+    fill="#D92D32"
+  />
+  </g>
+  <g fill="#F7F7F8" shape-rendering="geometricPrecision" transform="translate(-175 33.12)">
     <!-- L -->
     <path
       d="
