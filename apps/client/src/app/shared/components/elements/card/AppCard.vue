@@ -6,6 +6,7 @@ import type { PropsSizeVariant } from '@/app/shared/types/props/size.props';
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
 import AppBlock from '@/app/shared/components/atoms/block/AppBlock.vue';
+import AppAngularFrame from '@/app/shared/components/atoms/shape/AppAngularFrame.vue';
 
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 import { resolveBorderStyleValue, resolveBorderWidthValue } from '@/app/shared/styles/contracts/border.contract';
@@ -80,24 +81,25 @@ const cardClass = computed(() => [
 
 <template>
   <AppBlock :class="cardClass" :tag="tag" :width="width" :max-width="maxWidth" :overflow="overflow">
-    <div class="app-card__frame">
-      <div class="app-card__surface">
-        <slot />
-      </div>
-    </div>
+    <component
+      :is="cornerStyle === 'angular' ? AppAngularFrame : 'div'"
+      class="app-card__frame"
+      v-bind="cornerStyle === 'angular' ? { borderColor, borderWidth, borderRadius } : {}"
+    >
+      <div class="app-card__surface"><slot /></div>
+    </component>
   </AppBlock>
 </template>
 
 <style scoped>
 .app-card {
   --cp-card-border-color: v-bind(cardBorderColor);
-  --cp-card-corner-cut: v-bind(cardBorderRadius);
   min-width: 0;
   transition: filter var(--app-motion-duration-medium) var(--app-motion-ease-default);
 }
 
 .app-card--glow {
-  filter: drop-shadow(0 0 .75rem var(--app-color-primary));
+  filter: drop-shadow(0 0 0.75rem var(--app-color-primary));
 }
 
 .app-card:not(.app-card--angular) {
@@ -118,37 +120,9 @@ const cardClass = computed(() => [
   background: v-bind(cardBackgroundColor);
 }
 
-.app-card.app-card--angular .app-card__frame {
-  padding: v-bind(cardBorderWidth);
-  border: 0;
-  border-radius: 0;
-  background-color: var(--cp-card-border-color);
-  clip-path: polygon(
-    0 var(--cp-card-corner-cut),
-    var(--cp-card-corner-cut) 0,
-    calc(100% - var(--cp-card-corner-cut)) 0,
-    100% var(--cp-card-corner-cut),
-    100% calc(100% - var(--cp-card-corner-cut)),
-    calc(100% - var(--cp-card-corner-cut)) 100%,
-    var(--cp-card-corner-cut) 100%,
-    0 calc(100% - var(--cp-card-corner-cut))
-  );
-  transition: 0.3s background-color linear;
-}
-
 .app-card.app-card--angular .app-card__surface {
   border: 0;
   border-radius: 0;
   background: v-bind(cardBackgroundColor);
-  clip-path: polygon(
-    0 var(--cp-card-corner-cut),
-    var(--cp-card-corner-cut) 0,
-    calc(100% - var(--cp-card-corner-cut)) 0,
-    100% var(--cp-card-corner-cut),
-    100% calc(100% - var(--cp-card-corner-cut)),
-    calc(100% - var(--cp-card-corner-cut)) 100%,
-    var(--cp-card-corner-cut) 100%,
-    0 calc(100% - var(--cp-card-corner-cut))
-  );
 }
 </style>

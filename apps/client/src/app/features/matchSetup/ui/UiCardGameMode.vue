@@ -60,6 +60,7 @@ function handleComplete() {
     :class="{
       'ui-card-game-mode--active': active && !mode.locked,
       'ui-card-game-mode--locked': mode.locked,
+      'ui-card-game-mode--disabled': isDisabled,
     }"
     :disabled="isDisabled"
     width="100%"
@@ -67,7 +68,7 @@ function handleComplete() {
     size="big"
     :options-card="{
       backgroundColor: 'surface-primary',
-      borderColor: 'border-contrast',
+      borderColor: active && !mode.locked ? 'primary' : 'var(--cp-game-mode-border-color)',
       borderWidth: 'thick',
       borderRadius: 'xl',
       cornerStyle: 'angular',
@@ -132,18 +133,17 @@ function handleComplete() {
 </template>
 
 <style scoped>
+.ui-card-game-mode {
+  --cp-game-mode-border-color: var(--app-color-border-contrast);
+}
+
 .ui-card-game-mode :deep(.app-card-hold) {
   height: 100%;
 }
 
-.ui-card-game-mode--active :deep(.app-card-hold) {
-  --cp-card-border-color: var(--app-color-primary);
-}
-
 @media (hover: hover) and (pointer: fine) {
-  .ui-card-game-mode:not(.ui-card-game-mode--active):not(.ui-card-game-mode--locked)
-    :deep(.app-card-hold:not(.app-card-hold--disabled):hover) {
-    --cp-card-border-color: var(--app-color-primary);
+  .ui-card-game-mode:not(.ui-card-game-mode--disabled):hover {
+    --cp-game-mode-border-color: var(--app-color-primary);
   }
 }
 
