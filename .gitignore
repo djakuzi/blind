@@ -32,3 +32,6 @@ release
 
 # other
 .development_data
+
+# Vite cache
+.vite
