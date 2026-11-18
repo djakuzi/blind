@@ -5,7 +5,7 @@ import { computed } from 'vue';
 import AppIcon from '@/app/shared/components/elements/media/AppIcon.vue';
 import type { tBaseSizeVariant } from '@/app/shared/styles/contracts/base';
 
-type tAppLogoVariant = 'blind' | 'blindTextBottom' | 'blindTextRight';
+type tAppLogoVariant = 'blind' | 'blindTextRight';
 
 interface Props extends PropsWidth, Pick<PropsHeight, 'height'>, PropsSizeVariant {
   logo?: tAppLogoVariant;
