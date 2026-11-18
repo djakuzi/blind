@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
@@ -38,6 +38,18 @@ const modeLocale = useLocale((locale) => locale.game.modes[props.mode.key]);
 const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
 const modeDescription = computed(() => modeLocale.value?.description ?? '');
 const isDisabled = computed(() => props.disabled || props.mode.locked);
+const isHovered = ref(false);
+const borderColor = computed(() =>
+  (props.active && !props.mode.locked) || (!isDisabled.value && isHovered.value) ? 'primary' : 'border-contrast',
+);
+
+function handlePointerEnter(event: PointerEvent) {
+  isHovered.value = event.pointerType === 'mouse' && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+}
+
+function handlePointerLeave() {
+  isHovered.value = false;
+}
 
 const imageProps = computed<NonNullable<PropsUiCardGameMode['optionsImage']>>(() => ({
   loading: props.optionsImage?.loading ?? 'lazy',
@@ -60,7 +72,6 @@ function handleComplete() {
     :class="{
       'ui-card-game-mode--active': active && !mode.locked,
       'ui-card-game-mode--locked': mode.locked,
-      'ui-card-game-mode--disabled': isDisabled,
     }"
     :disabled="isDisabled"
     width="100%"
@@ -68,7 +79,7 @@ function handleComplete() {
     size="big"
     :options-card="{
       backgroundColor: 'surface-primary',
-      borderColor: active && !mode.locked ? 'primary' : 'var(--cp-game-mode-border-color)',
+      borderColor,
       borderWidth: 'thick',
       borderRadius: 'xl',
       cornerStyle: 'angular',
@@ -77,6 +88,8 @@ function handleComplete() {
     }"
     :options-hold="{ initialProgress: 0 }"
     :options-blood-fill="{ color: mode.locked ? 'text-disabled' : 'primary' }"
+    @pointerenter="handlePointerEnter"
+    @pointerleave="handlePointerLeave"
     @complete="handleComplete"
   >
     <AppFlex
@@ -133,18 +146,8 @@ function handleComplete() {
 </template>
 
 <style scoped>
-.ui-card-game-mode {
-  --cp-game-mode-border-color: var(--app-color-border-contrast);
-}
-
 .ui-card-game-mode :deep(.app-card-hold) {
   height: 100%;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .ui-card-game-mode:not(.ui-card-game-mode--disabled):hover {
-    --cp-game-mode-border-color: var(--app-color-primary);
-  }
 }
 
 .ui-card-game-mode :deep(.app-card-hold__content) {
