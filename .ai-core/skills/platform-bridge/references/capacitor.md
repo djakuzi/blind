@@ -46,6 +46,6 @@
 - **Белый экран:** не выполнен `build` перед `cap sync`; ошибка JS при старте — смотри Safari Web Inspector (iOS) или `chrome://inspect` (Android).
 - **Plugin «not implemented»:** не выполнен `cap sync` после установки или plugin не поддерживает платформу.
 
-## Возможное расхождение с документацией
+## Окружение
 
-`docs/projectSetup` указывает CocoaPods для iOS и JDK 17+ / Android Studio 2025.1.3, тогда как проект использует SPM (`CapApp-SPM`), а сторонние гайды для Capacitor 8 называют JDK 21 и Android Studio Otter (2025.2.1+). Перед советами по окружению сверь с официальным upgrade guide Capacitor 8 и сообщи пользователю о расхождении, не исправляй `docs/` молча.
+Требования к окружению — `docs/projectSetup/index.md`: Android собирается с Java 21 (`JavaVersion.VERSION_21` в `android/app/capacitor.build.gradle`), iOS использует SPM и открывается через `ios/App/App.xcodeproj`. Перед советом по версиям инструментов сверь с этими файлами; если они расходятся с документацией — сообщи пользователю, не исправляй `docs/` молча.

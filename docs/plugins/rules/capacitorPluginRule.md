@@ -1,14 +1,17 @@
 # Правила Capacitor plugins
 
-Capacitor plugins используются для native-возможностей мобильных приложений.
+Как использовать Capacitor plugins для native-возможностей iOS и Android.
 
-Основные правила:
+## Правила
 
-1. Прямой вызов Capacitor plugin должен находиться внутри соответствующего `core/platform/tool`, если для возможности существует Tool.
-2. Platform-specific работа размещается в mobile adapter соответствующего Tool.
-3. Общая семантика инструмента остается в `tool.ts`.
-4. App и game слои не должны напрямую зависеть от Capacitor SDK, если интеграция уже закрыта Tool.
-5. Общую логику не нужно дублировать между mobile implementation и другими platform implementations, если ее можно безопасно переиспользовать внутри Tool.
-6. После изменений native dependencies или plugin configuration нужно синхронизировать соответствующую Capacitor-платформу.
+1. Plugin вызывается только в mobile adapter соответствующего Tool в `src/core/platform/tool/`.
+2. Общая семантика инструмента — в `tool.ts` этого Tool, а не в adapter.
+3. App- и game-код не импортирует Capacitor SDK, если возможность закрыта Tool.
+4. Общая логика не дублируется между mobile и другими adapters.
+5. После изменения native-зависимостей или настроек plugin — `npx cap sync`.
 
-Capacitor plugin является способом реализации mobile adapter, а не отдельным архитектурным слоем приложения.
+Capacitor plugin — способ реализовать mobile adapter, а не отдельный слой приложения.
+
+## Связанные разделы
+
+- [Архитектура core-слоя](../../architecture/sections/core-flow.md) — как устроены Tool и adapters, внутри которых используется plugin.

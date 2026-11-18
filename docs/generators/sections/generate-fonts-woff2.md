@@ -1,23 +1,15 @@
 # Генератор WOFF2-шрифтов
 
-## Описание
+Конвертирует исходные `.ttf`-шрифты в `.woff2`.
 
-[Генератор WOFF2-шрифтов](../../../scripts/generators/generateFontsWoff2.js) запускается через команду `npm run app:generate:fonts-woff2`.
-
-Генератор автоматически преобразует исходные `.ttf`-шрифты проекта в формат `.woff2`.
-
-Он рекурсивно сканирует директорию `src/assets/fonts/`, находит все `.ttf`-файлы и создаёт рядом с каждым исходным файлом соответствующий `.woff2`-файл.
-
-Например:
-
-```text
-src/assets/fonts/comfortaa/Comfortaa-Medium.ttf
-```
-
-## Source of truth
-
-Исходные шрифты находятся в `src/assets/fonts/`. Созданные `.woff2`-файлы размещаются рядом с соответствующими `.ttf`.
+| | |
+|---|---|
+| Скрипт | [generateFontsWoff2.js](../../../scripts/generators/generateFontsWoff2.js) |
+| Команда | `npm run app:generate:fonts-woff2` |
+| Источник | все `.ttf` в `src/assets/fonts/` (рекурсивно) |
+| Создаёт | `.woff2` рядом с каждым `.ttf` |
 
 ## Когда запускать
 
-Запускайте `npm run app:generate:fonts-woff2` после добавления, замены или изменения исходных `.ttf`-файлов, а также для восстановления производных `.woff2`.
+1. Добавлен, заменён или изменён `.ttf`.
+2. Нужно восстановить `.woff2`.

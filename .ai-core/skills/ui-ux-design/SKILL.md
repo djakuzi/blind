@@ -47,6 +47,7 @@ description: >
 
 - `docs/code/rules/cssStyle.md` — BEM, `--app-` / `--cp-` переменные, tokens, safe area, theme, contracts, responsive через CSS.
 - `docs/interface/sections/ui-scale.md` — единый масштаб UI через `rem`, design reference `2560 × 1318`, UI scale отдельно от render scale.
+- `docs/code/rules/componentProps.md` — публичный API компонента: верхний уровень, общие фрагменты props, группы `options*`.
 - `docs/architecture/sections/app-flow.md` — где живёт UI и правила импорта между слоями `shared` (atoms, effects, elements, interaction, ui, widgets), `features`, `view`, `layouts`, `overlay`, `providers`.
 - `docs/interface/sections/localization.md` — любой видимый текст и accessibility label идут через Locale, без hardcoded строк.
 - `docs/audio/sections/ui-audio.md` и `docs/interface/index.md` — звук и haptic как часть обратной связи.

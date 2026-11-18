@@ -1,52 +1,17 @@
 # Генератор style contracts
 
-## Описание
+Создаёт TypeScript contracts для стилевых tokens, чтобы props компонентов принимали только существующие значения.
 
-[Генератор style contracts](../../../scripts/generators/generateStyleContracts.js) запускается через команду `npm run app:generate:style-contracts`.
+| | |
+|---|---|
+| Скрипт | [generateStyleContracts.js](../../../scripts/generators/generateStyleContracts.js) |
+| Команда | `npm run app:generate:style-contracts` |
+| Источник | `src/app/shared/styles/tokens/` — colors, typography, radius, spacing, padding, safearea, borders |
+| Обновляет | `src/app/shared/styles/contracts/*.contract.ts` для этих tokens |
 
-Генератор формирует contract-файлы для стилевых токенов проекта и поддерживает их в синхронизации с `src/app/shared/styles/tokens/*`.
+## Когда запускать
 
-## Source of truth
+1. Изменились tokens.
+2. Нужно восстановить contracts в актуальное состояние.
 
-Источником данных для генератора являются:
-
-- `src/app/shared/styles/tokens/colors.css`
-- `src/app/shared/styles/tokens/typography.css`
-- `src/app/shared/styles/tokens/radius.css`
-- `src/app/shared/styles/tokens/spacing.css`
-- `src/app/shared/styles/tokens/padding.css`
-- `src/app/shared/styles/tokens/safearea.css`
-- `src/app/shared/styles/tokens/borders.css`
-
-Если нужно изменить доступные tokens или типы для props, сначала меняются соответствующие файлы в `tokens`, а затем повторно запускается генератор.
-
-## Что обновляет генератор
-
-Генератор обновляет следующие файлы:
-
-- `src/app/shared/styles/contracts/color.contract.ts`
-- `src/app/shared/styles/contracts/fontSize.contract.ts`
-- `src/app/shared/styles/contracts/fontWeight.contract.ts`
-- `src/app/shared/styles/contracts/radius.contract.ts`
-- `src/app/shared/styles/contracts/space.contract.ts`
-- `src/app/shared/styles/contracts/padding.contract.ts`
-- `src/app/shared/styles/contracts/safeArea.contract.ts`
-- `src/app/shared/styles/contracts/border.contract.ts`
-
-## Когда использовать
-
-Генератор нужно запускать, если:
-
-- изменились токены в `src/app/shared/styles/tokens/*`;
-- нужно пересобрать contracts после правок дизайн-системы;
-- нужно восстановить contract-файлы в актуальное состояние.
-
-## Важное правило
-
-Файлы, которые обновляет генератор, не должны редактироваться вручную.
-
-Если нужно изменить их содержимое, сначала нужно изменить source of truth в `tokens`, а затем снова запустить:
-
-```bash
-npm run app:generate:style-contracts
-```
+Contracts руками не правятся: меняются tokens, затем запускается генератор.

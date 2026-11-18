@@ -1,7 +1,7 @@
 {
   "name": "blind",
   "displayName": "Blind Skills",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Skills проекта Blind: UI/UX игровых экранов, SVG и визуальные ассеты, визуальный аудит, анимации, Web + Capacitor + Electron, заготовки геймдизайна и архитектуры игры.",
   "author": {
     "name": "djakuzi"

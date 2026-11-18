@@ -1,13 +1,8 @@
 # Агенты
 
-Раздел описывает работу с coding agents в `blind`: входной файл `AGENTS.md` и skills проекта в `.ai-core`.
+Работа с coding agents: входной файл `AGENTS.md` и skills проекта в `.ai-core`.
 
 ## Правила
 
-- [Правила AGENTS](./rules/agentRule.md)
-- [Правила Skills](./rules/skillRule.md)
-
-## Смежные разделы
-
-- [Процесс работы](../workflow/index.md)
-- [Код](../code/index.md)
+- [Правила AGENTS](./rules/agentRule.md) — что писать во входной файл для агентов.
+- [Правила Skills](./rules/skillRule.md) — где лежат skills, как подключаются, когда обновляются.

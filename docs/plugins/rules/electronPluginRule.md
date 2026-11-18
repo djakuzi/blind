@@ -1,22 +1,29 @@
 # Правила Electron plugins
 
-Electron plugins используются для desktop-возможностей, которым нужен доступ к Electron main process или privileged API.
+Как выносить desktop-возможности, которым нужен main process или privileged API.
 
-Обычно plugin находится в `electron/plugin/<name>` и может содержать:
+## Структура
 
-- `channel.ts` — IPC channels;
-- `main.ts` — privileged реализацию в main process;
-- `preload.ts` — безопасный renderer facade;
-- `type.ts` — контракт capability;
-- `helpers` — внутренние части plugin, если они нужны.
+`electron/plugin/<name>/`:
 
-Основные правила:
+| Файл | Назначение |
+|---|---|
+| `channel.ts` | IPC-каналы |
+| `main.ts` | реализация в main process |
+| `preload.ts` | безопасный API для renderer |
+| `type.ts` | контракт возможности |
+| `helpers/` | внутренние части, если нужны |
 
-1. Electron plugin не должен дублировать полный Tool без необходимости.
-2. В plugin выносится только та часть desktop-реализации, которой действительно нужен Electron boundary.
-3. Tool остается владельцем публичного API, общей семантики и orchestration инструмента.
-4. Renderer получает Electron capabilities через preload bridge, а platform Tool обращается к ним через desktop runtime bridge.
-5. Прямой `ipcRenderer` не должен распространяться по `src`.
-6. Входные данные privileged IPC должны проверяться на стороне main process.
-7. Platform-specific security checks не заменяются общей валидацией Tool.
-8. При изменении публичного plugin contract нужно синхронно обновлять его типы, bridge и связанную документацию.
+## Правила
+
+1. В plugin выносится только то, что требует Electron boundary. Полный API Tool не дублируется.
+2. Tool остаётся владельцем API, семантики и orchestration.
+3. Renderer получает возможность через preload bridge, Tool — через desktop runtime bridge.
+4. `ipcRenderer` не используется в `src`.
+5. Входные данные IPC проверяются в main process.
+6. Платформенные проверки безопасности не заменяются общей валидацией Tool.
+7. Изменился контракт plugin — синхронно обновляются типы, bridge и документация.
+
+## Связанные разделы
+
+- [Архитектура core-слоя](../../architecture/sections/core-flow.md) — как Tool и desktop adapter обращаются к plugin.

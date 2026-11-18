@@ -1,89 +1,34 @@
 # Запуск Desktop
 
-Эта инструкция описывает запуск, production-сборку и создание desktop-дистрибутивов через Electron.
+Запуск, сборка и дистрибутивы Electron-версии.
 
-## Шаг 1. Подготовьте проект
+## Команды
 
-Если зависимости еще не установлены, установите их в корне `blind`:
+| Команда | Что делает |
+|---|---|
+| `npm run desktop:dev` | запуск для разработки (по умолчанию на весь экран) |
+| `npm run desktop:build` | проверка типов и production-сборка, без установщика |
+| `npm run desktop:package` | установщик для текущей ОС |
+| `npm run desktop:package:mac` / `:win` / `:linux` | установщик для конкретной ОС |
 
-```bash
-npm install
-```
+## Дистрибутивы
 
-## Шаг 2. Запуск в режиме разработки
+Результат — в `release/desktop`.
 
-```bash
-npm run desktop:dev
-```
+| ОС | Формат |
+|---|---|
+| macOS | `.dmg`, universal (Intel и Apple Silicon) |
+| Windows | `.exe`, NSIS, x64 |
+| Linux | `.AppImage` и `.deb`, x64 |
 
-Electron-приложение запускается в полноэкранном режиме по умолчанию.
-
-## Шаг 3. Production-сборка
-
-```bash
-npm run desktop:build
-```
-
-Команда выполняет проверку TypeScript и production-сборку desktop-версии.
-
-Она создает файлы приложения, но не готовый установщик.
-
-## Шаг 4. Создание дистрибутива
-
-Для текущей операционной системы:
-
-```bash
-npm run desktop:package
-```
-
-Для конкретной платформы:
-
-```bash
-npm run desktop:package:mac
-npm run desktop:package:win
-npm run desktop:package:linux
-```
-
-Готовые файлы сохраняются в:
-
-```text
-release/desktop
-```
-
-Форматы:
-
-- macOS — `.dmg`, universal-сборка для Intel и Apple Silicon;
-- Windows — `.exe` установщик NSIS для x64;
-- Linux — `.AppImage` для переносимого запуска и `.deb` для Debian/Ubuntu x64.
-
-Для стабильной сборки рекомендуется создавать дистрибутив на соответствующей операционной системе или использовать CI.
-
-На macOS и Windows неподписанные сборки могут показывать системное предупреждение. Подписание и notarization настраиваются отдельно перед публичным релизом.
-
+1. Надёжнее собирать на целевой ОС или в CI.
+2. Неподписанные сборки на macOS и Windows показывают системное предупреждение. Подпись и notarization настраиваются перед публичным релизом.
 
 ## GitHub Actions
 
-Desktop-сборки также создаются через workflow `.github/workflows/desktop.yml`.
+Workflow — `.github/workflows/desktop.yml`.
 
-После того как workflow находится в default-ветке, его можно запустить вручную:
-
-```text
-GitHub → Actions → Desktop → Run workflow
-```
-
-Ручной запуск создает три artifacts:
-
-- `blind-macos`;
-- `blind-windows`;
-- `blind-linux`.
-
-Artifacts хранятся 14 дней.
-
-При push тега формата `v*.*.*`, например:
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-GitHub собирает все три платформы и автоматически создает GitHub Release. Версия приложения для такой сборки берется из имени тега.
+| Запуск | Результат |
+|---|---|
+| вручную: Actions → Desktop → Run workflow (из default-ветки) | artifacts для трёх ОС, хранятся 14 дней |
+| push тега `v*.*.*` | сборка трёх ОС и GitHub Release, версия — из тега |

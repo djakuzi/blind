@@ -1,199 +1,67 @@
 # Генератор аудио
 
-## Описание
+Собирает аудиофайлы в типизированный реестр с id и группами для `MediaAudio`.
 
-[Генератор аудио](../../../scripts/generators/generateAudioProject.js) запускается через команду:
+| | |
+|---|---|
+| Скрипт | [generateAudioProject.js](../../../scripts/generators/generateAudioProject.js) |
+| Команда | `npm run app:generate:audio-assets` |
+| Источник | `src/assets/audio/` — `.mp3` и `.wav` внутри `sfx/` или `music/` |
+| Обновляет | `src/core/media/audio/const.ts`, `type.ts` |
+| Не трогает | `tool.ts`, `index.ts` — ручная часть API |
 
-```bash
-npm run app:generate:audio-assets
-```
+## id
 
-Генератор рекурсивно собирает аудиофайлы проекта и формирует типизированный registry, ID и группы для `MediaAudio`.
-
-## Source of truth
-
-Источником данных является:
-
-- `src/assets/audio/`
-
-Поддерживаемые форматы:
-
-- `.mp3`
-- `.wav`
-
-Аудиофайл должен находиться внутри одной из верхнеуровневых директорий:
-
-- `sfx/`
-- `music/`
-
-Файлы других типов, например `*.license.md`, генератор не включает в audio registry.
-
-## Что обновляет генератор
-
-Генератор обновляет только:
-
-- `src/core/media/audio/const.ts`
-- `src/core/media/audio/type.ts`
-
-`src/core/media/audio/tool.ts` и `src/core/media/audio/index.ts` являются ручной частью API и генератором не перезаписываются.
-
-### `const.ts`
-
-Содержит imports, `AUDIO_ASSETS` и `AUDIO_GROUPS`.
-
-Пример:
-
-```ts
-export const AUDIO_ASSETS = {
-  'sfx.interaction.hold-complete': {
-    id: 'sfx.interaction.hold-complete',
-    src: AudioAsset1,
-    type: 'sfx',
-  },
-} as const;
-
-export const AUDIO_GROUPS = {
-  sfx: [
-    'sfx.interaction.hold-complete',
-  ],
-  'sfx.interaction': [
-    'sfx.interaction.hold-complete',
-  ],
-} as const;
-```
-
-### `type.ts`
-
-Типы вычисляются из generated registry:
-
-```ts
-export type tAudioId = keyof typeof AUDIO_ASSETS;
-export type tAudioGroupId = keyof typeof AUDIO_GROUPS;
-export type tAudioType = 'sfx' | 'music';
-```
-
-## Формирование audio ID
-
-ID строится из относительного пути к файлу:
-
-1. расширение удаляется;
-2. разделители директорий заменяются на точки.
-
-Например:
+id — относительный путь без расширения, разделители заменены точками.
 
 ```text
-src/assets/audio/sfx/interaction/hold-complete.wav
+sfx/example/action.wav → sfx.example.action
 ```
 
-превращается в:
+Два файла с одинаковым id — генератор падает с ошибкой.
 
-```text
-sfx.interaction.hold-complete
-```
+## Группы
 
-Если два файла создают одинаковый ID, генератор завершается с ошибкой.
-
-## Формирование групп
-
-Для каждой директории автоматически создается группа, включающая все аудиофайлы внутри нее рекурсивно.
-
-Для:
+Каждая папка становится группой со всеми файлами внутри (рекурсивно).
 
 ```text
 sfx/
-├── interaction/
-│   ├── hold-complete.wav
-│   └── click.wav
-└── game/
-    └── shot.wav
+├── first/a.wav
+└── second/b.wav
+
+группы: sfx (a, b), sfx.first (a), sfx.second (b)
 ```
 
-будут доступны, среди прочих:
+## Что генерируется
 
-```text
-sfx
-sfx.interaction
-sfx.game
-```
+| Файл | Содержимое |
+|---|---|
+| `const.ts` | `AUDIO_ASSETS` (id, путь, тип, каналы, `volume`) и `AUDIO_GROUPS` |
+| `type.ts` | `tAudioId`, `tAudioGroupId`, `tAudioType` — выводятся из реестра |
 
-Группа `sfx` содержит все SFX из вложенных директорий, а `sfx.interaction` - только ресурсы своей ветки.
+## Использование
 
-## Публичный API
+| Задача | Как |
+|---|---|
+| воспроизвести в компоненте | `useAudio().play(<tAudioId>)` |
+| получить ресурс или группу | `MediaAudio.getAudio(id)`, `MediaAudio.getAudioGroup(id)` |
+| preload | `ToolAudio.preload(ресурс или массив)` — идемпотентный, параллельные запросы одного ресурса объединяются |
 
-Generated registry скрыт за `MediaAudio`:
+Какие группы загружать заранее, решает код приложения, а не генератор.
 
-```ts
-import { MediaAudio } from '@/core/media/audio';
+## Лицензии
 
-MediaAudio.getAudio('sfx.interaction.hold-complete');
-MediaAudio.getAudioGroup('sfx.interaction');
-```
+1. Правила учёта лицензий — `src/assets/audio/LICENSES.md`.
+2. Внешний или сгенерированный файл может иметь рядом `<имя>.license.md`. Такие файлы в реестр не попадают.
 
-В обычном Vue-компоненте playback должен выполняться через `useAudio` по `tAudioId`, а не через ручной вызов `MediaAudio.getAudio(...)`.
+## Когда запускать
 
-Например:
+Файл добавлен, удалён, переименован или перенесён; изменилась структура папок; нужно восстановить `const.ts` и `type.ts`.
 
-```ts
-const { play } = useAudio();
+## Ручные правки
 
-play('sfx.interaction.hold-complete');
-```
+`const.ts` и `type.ts` руками не правятся, **кроме `volume`** в `const.ts` — генератор сохраняет его для существующего id.
 
-`MediaAudio.getAudioGroup(...)` используется там, где нужен набор ресурсов, например для preload.
+## Связанные разделы
 
-## Preload
-
-`ToolAudio.preload` принимает один ресурс или массив ресурсов.
-
-Preload сделан идемпотентным: повторный запрос одного и того же `assetId` не должен повторно загружать уже загруженный ресурс, а параллельные запросы одного ресурса используют общий активный preload request.
-
-Пример:
-
-```ts
-await ToolAudio.preload(
-  MediaAudio.getAudioGroup('sfx.interaction'),
-);
-```
-
-Какие именно группы preload'ить на старте или перед конкретным сценарием, определяется кодом приложения, а не генератором.
-
-## Лицензии и provenance
-
-Правила учета лицензий аудио находятся в:
-
-- `src/assets/audio/LICENSES.md`
-
-Внешние или AI-generated аудиофайлы могут иметь sidecar-файл вида:
-
-```text
-hold-complete.wav
-hold-complete.license.md
-```
-
-Такие `.md`-файлы не участвуют в генерации audio registry.
-
-## Когда использовать
-
-Генератор нужно запускать, если:
-
-- добавлен аудиофайл;
-- удален аудиофайл;
-- изменено имя аудиофайла;
-- изменено расположение аудиофайла;
-- изменена структура audio-директорий;
-- нужно восстановить generated `const.ts` и `type.ts`.
-
-## Важное правило
-
-Generated-файлы:
-
-- `src/core/media/audio/const.ts`
-- `src/core/media/audio/type.ts`
-
-не редактируются вручную, **кроме поля `volume`** в `const.ts`. Генератор сохраняет вручную заданную громкость существующего audio ID при повторном запуске.
-
-Для изменения структуры audio registry нужно изменить source of truth в `src/assets/audio/` и запустить:
-
-```bash
-npm run app:generate:audio-assets
-```
+- [Аудио-ассеты и громкость](../../audio/sections/assets.md) — как работает `volume` и как он сочетается с громкостью при воспроизведении.

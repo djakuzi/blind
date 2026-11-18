@@ -1,14 +1,10 @@
 # Код
 
-Раздел описывает, как писать код в `blind`: именование, Vue-компоненты и props, CSS и форматирование.
+Как писать код: именование, props компонентов, CSS и форматирование.
 
 ## Правила
 
-- [Code Style](./rules/codeStyle.md)
-- [CSS Style](./rules/cssStyle.md)
-- [Форматирование кода](./rules/codeFormatting.md)
-
-## Смежные разделы
-
-- [Архитектура](../architecture/index.md)
-- [Интерфейс](../interface/index.md)
+- [Code Style](./rules/codeStyle.md) — именование и общие правила.
+- [Props компонентов](./rules/componentProps.md) — публичный API Vue-компонента.
+- [CSS Style](./rules/cssStyle.md) — стили, tokens, contracts, адаптивность.
+- [Форматирование кода](./rules/codeFormatting.md) — Prettier и ESLint.

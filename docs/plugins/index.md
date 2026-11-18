@@ -1,17 +1,12 @@
 # Плагины
 
-Раздел описывает platform plugins `blind`: общие правила разработки и описания конкретных plugins, которые используются или реализованы в проекте.
+Platform plugins: общие правила разработки и описания конкретных plugins проекта.
 
 ## Правила
 
-- [Правила Capacitor plugins](./rules/capacitorPluginRule.md)
-- [Правила Electron plugins](./rules/electronPluginRule.md)
+- [Правила Capacitor plugins](./rules/capacitorPluginRule.md) — native-возможности iOS и Android.
+- [Правила Electron plugins](./rules/electronPluginRule.md) — desktop-возможности через main process.
 
 ## Разделы
 
-Описания конкретных plugins размещаются в `./sections/`.
-
-## Смежные разделы
-
-- [Архитектура core-слоя](../architecture/sections/core-flow.md)
-- [Разворачивание проекта](../projectSetup/index.md)
+Описания конкретных plugins кладутся в `./sections/`.
