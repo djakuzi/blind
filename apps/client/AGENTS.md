@@ -18,6 +18,7 @@ app, core, game, generators, plugins, setup, styles, stores.
 | слои `src/app`, views, layouts, features, stores, providers, overlays, shared components | `docs/client/architecture/sections/app-flow.md` |
 | запуск приложения, setup, готовность, loader | `docs/client/architecture/sections/app-lifecycle.md` |
 | `src/core`, platform runtime/tool, `media`, SDK-обёртки | `docs/client/architecture/sections/core-flow.md` |
+| концепция Blind и текущее состояние игры | `docs/client/game/index.md` |
 | игровая логика, состояние, рендер | `docs/client/architecture/sections/game-flow.md` |
 | именование, общий code style | `docs/client/code/rules/codeStyle.md` |
 | props Vue-компонентов | `docs/client/code/rules/componentProps.md` |
@@ -29,7 +30,7 @@ app, core, game, generators, plugins, setup, styles, stores.
 | generated-файлы, генераторы, audio и icons ассеты | `docs/client/generators` — до изменения generated-файлов |
 | Capacitor plugin | `docs/client/plugins/rules/capacitorPluginRule.md` |
 | Electron plugin, preload, IPC, bridge | `docs/client/plugins/rules/electronPluginRule.md` и core-flow |
-| конкретный plugin | `docs/client/plugins` — раздел «Разделы» |
+| конкретный plugin | `docs/client/plugins` — общие правила и, при наличии, описание и код plugin |
 | запуск, платформы, CLI | `docs/client/projectSetup/index.md`, `docs/client/cli` |
 | env, нативные настройки | `docs/client/settingsProject` |
 

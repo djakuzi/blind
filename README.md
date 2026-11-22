@@ -44,6 +44,7 @@ npm run desktop:dev
 
 Клиент:
 
+- [Контекст Blind](./docs/client/game/index.md) — концепция игры и текущее состояние.
 - [Настройка проекта](./docs/client/settingsProject/index.md)
 - [Код](./docs/client/code/index.md)
 - [Архитектура](./docs/client/architecture/index.md)
