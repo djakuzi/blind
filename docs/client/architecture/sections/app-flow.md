@@ -12,19 +12,20 @@
 | providers | `src/app/providers` | глобальные механизмы, живущие вне route: loader, toast, dialog | содержать логику конкретной feature |
 | overlay | `src/app/overlay` | механизмы поверх интерфейса: state, composable API, provider, presentation | описывать конкретный бизнес-сценарий |
 | view | `src/app/view` | точка сборки экрана: layout + features + связка с route | содержать основную логику сценария |
-| features | `src/app/features` | законченные сценарии: UI, composables, связка store с shared/core, подготовка данных | владеть другой feature напрямую |
+| features | `src/app/features` | законченные сценарии: UI, composables, связка store с shared/core, подготовка данных | импортировать другие features или overlay |
 | stores | `src/app/stores` | состояние приложения: state, getters, actions, persistence, связь с domain | владеть side effects UI (DOM, presentation) |
 | domain | `src/app/domain` | предметные сущности, модели, API-абстракции, маппинг данных | зависеть от UI |
 | shared | `src/app/shared` | общие компоненты, дизайн-система, utilities, contracts, composables | знать о features, views, routes |
 
 1. Feature не обязана быть экранным блоком: её API можно использовать из setup, provider или view, если нет циклов.
-2. Side effects окружения (DOM, platform presentation) применяет feature или orchestration поверх store, а не сам store.
+2. Разные features не импортируют друг друга. View связывает их через props и события; импорты внутри одной feature допустимы.
+3. Side effects окружения (DOM, platform presentation) применяет feature или orchestration поверх store, а не сам store.
 
 ## Router и lazy-маршруты
 
 1. View маршрута подключается лениво. Механизм — `src/core/app/route/lazy`.
 2. Следующие вероятные маршруты объявляются в `meta.lazy.preload`.
-3. После навигации preload запускается по одному маршруту: первый — после анимации перехода, остальные — в idle браузера. Новая навигация прерывает очередь. Цепочки зависимостей не загружаются рекурсивно.
+3. После навигации preload запускается по одному маршруту: для первого сначала выдерживается небольшая задержка, затем ожидается idle браузера; остальные также ожидают idle. Новая навигация прерывает очередь. Цепочки зависимостей не загружаются рекурсивно.
 4. Preload — только оптимизация: без него маршрут загрузится при переходе.
 
 ## Shared components
@@ -66,7 +67,7 @@
 
 ### Нежелательные связи
 
-1. feature → feature, если одна начинает владеть другой.
+1. feature → другая feature или overlay.
 2. shared → feature, view, router, layout.
 3. domain → UI.
 4. router → логика сценариев.
