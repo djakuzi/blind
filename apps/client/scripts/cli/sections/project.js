@@ -71,10 +71,7 @@ function platformChecks(platform) {
     ];
   }
   if (platform === 'ios') {
-    return [
-      ['Xcode', 'xcodebuild', ['-version']],
-      ['CocoaPods', 'pod', ['--version']],
-    ];
+    return [['Xcode', 'xcodebuild', ['-version']]];
   }
   if (platform === 'desktop' || platform === 'web') return [];
   throw new Error('Usage: project doctor [web|desktop|android|ios]');

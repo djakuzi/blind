@@ -26,7 +26,7 @@ const iconFiles = collectSvgFiles(iconsDir)
   });
 
 const importsBlock = iconFiles
-  .map(({ importName, relativePath }) => `import ${importName} from '@/assets/icons/${relativePath}?raw'`)
+  .map(({ importName, relativePath }) => `import ${importName} from '@/assets/icons/${relativePath}?raw';`)
   .join('\n');
 
 const groupedIcons = Object.groupBy(iconFiles, ({ groupName }) => groupName);
@@ -45,7 +45,7 @@ const constContent = `${importsBlock}
 
 export const ICONS_ASSETS = {
 ${iconsBlock}
-} as const
+} as const;
 `;
 
 const typeContent = `import type { ICONS_ASSETS } from './const';
