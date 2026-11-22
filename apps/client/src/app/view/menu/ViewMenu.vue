@@ -28,6 +28,8 @@ const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? 
 const optionsMeasureMode = computed(() => gameModeStore.modes.find((gameMode) => !gameMode.locked) ?? null);
 const { open: openSessionJoin } = useSessionJoinOverlay();
 const menuLocale = useLocale((locale) => locale.views.menu.index.ui);
+const gameLocale = useLocale((locale) => locale.game);
+const localeConnection = useLocale((locale) => locale.connectionTypes);
 
 function handleModeSelect(selection: iWidgetSliderGameModeSelection) {
   setSelection({
@@ -109,12 +111,17 @@ useHeaderActions(
     <AppFlex class="view-menu__slider-area" align="center" justify="center" width="100%">
       <AppPosition class="view-menu__slider" type="relative" width="100%">
         <UiContainer bleed="horizontal">
-          <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
+          <WidgetSliderGameMode
+            v-model="activeModeIndex"
+            :locale="{ matchSetup: menuLocale.matchSetup, modes: gameLocale.modes }"
+            @select="handleModeSelect"
+            @complete="handleModeComplete"
+          />
         </UiContainer>
 
         <AppPosition type="absolute" width="100%" :position="{ top: 'calc(100% + var(--app-space-24))' }">
           <AppSwapTransition :transition-key="activeMode?.locked ? 'locked' : 'locked-empty'">
-            <WidgetGameModeLocked v-if="activeMode?.locked" :mode="activeMode" />
+            <WidgetGameModeLocked v-if="activeMode?.locked" :mode="activeMode" :locale-mode="gameLocale.modes[activeMode.key]" />
           </AppSwapTransition>
         </AppPosition>
       </AppPosition>
@@ -125,6 +132,7 @@ useHeaderActions(
         v-if="optionsMeasureMode"
         class="view-menu__options-measure"
         :mode="optionsMeasureMode"
+        :locale="{ matchSetup: menuLocale.matchSetup, players: gameLocale.format.players, connection: localeConnection }"
         aria-hidden="true"
         inert
       />
@@ -134,6 +142,7 @@ useHeaderActions(
           <WidgetMatchOptions
             v-if="activeMode && !activeMode.locked"
             :mode="activeMode"
+            :locale="{ matchSetup: menuLocale.matchSetup, players: gameLocale.format.players, connection: localeConnection }"
             :players="players"
             :connection="connection"
             @select="handleOptionSelect"

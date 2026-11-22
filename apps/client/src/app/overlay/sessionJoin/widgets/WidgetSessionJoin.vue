@@ -29,7 +29,8 @@ const emit = defineEmits<{
 
 const modalLocale = useLocale((locale) => locale.views.menu.index.modals.joinSession);
 const joinText = useLocale((locale) => locale.views.menu.index.ui.join);
-const { connectionOptions } = useConnectionTypeOptions();
+const localeConnection = useLocale((locale) => locale.connectionTypes);
+const { connectionOptions } = useConnectionTypeOptions(localeConnection);
 
 const currentStep = ref<string>('connection');
 const selectedTargetKey = ref<string | null>(null);

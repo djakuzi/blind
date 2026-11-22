@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import AppCard from '@/app/shared/components/elements/card/AppCard.vue';
@@ -10,18 +10,24 @@ import type { iWidgetSearchPickerItem } from '@/app/shared/components/widgets/pi
 import { APP_SCALE_SYSTEM_MODE, isAppScaleMode } from '@/app/shared/styles/contracts/appScale.contract';
 import { isAppThemeMode } from '@/app/shared/styles/contracts/appTheme.contract';
 import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
-import { useAppLanguage } from '@/app/features/locale/composables/useAppLanguage';
-import { useLocale } from '@/app/features/locale/composables/useLocale';
+import type { Locale } from '@/app/shared/types/locale';
 import { LibText } from '@/core/lib/text';
 import { SETTINGS_SCALE_VALUES, SETTINGS_SOUND_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
 import { useSettings } from '../composables/useSettings';
 
-export type tSettingsOperation =
-  | { key: string; state: 'start'; title: string }
-  | { key: string; state: 'success' }
-  | { key: string; state: 'error'; title: string; retryTitle: string; cancelTitle: string; retry: () => Promise<void> };
+export interface PropsWidgetSettingsPanel {
+  locale: {
+    settings: Locale['settings'];
+    ui: Locale['views']['settings']['index']['ui'];
+    languageModal: Locale['views']['settings']['index']['modals']['changeLanguage'];
+  };
+  languages: readonly ModelLanguage[];
+  currentLanguage: ModelLanguage | null;
+}
 
-const emit = defineEmits<{ operation: [operation: tSettingsOperation] }>();
+const props = defineProps<PropsWidgetSettingsPanel>();
+const emit = defineEmits<{ 'select-language': [code: string] }>();
+const isLanguagePickerOpen = defineModel<boolean>('languagePickerOpen', { default: false });
 
 const SETTINGS_ITEMS = [
   {
@@ -40,50 +46,39 @@ const SETTINGS_ITEMS = [
 
 const { appThemeMode, appScaleMode, soundEnabled, setAppThemeMode, setAppScaleMode, setSoundEnabled } = useSettings();
 
-const { languages, currentLanguage, setAppLanguage } = useAppLanguage();
-
-const isLanguagePickerOpen = ref(false);
-const isLanguageChangeRunning = ref(false);
-
-const locale = useLocale();
-
 const currentLanguageCode = computed(() => {
-  if (!currentLanguage.value) {
+  if (!props.currentLanguage) {
     throw new Error('Current language is not initialized');
   }
 
-  return currentLanguage.value.key;
+  return props.currentLanguage.key;
 });
 
-const settingsLocale = computed(() => locale.value.views.settings.index.ui);
-
-const changeLanguageModalLocale = computed(() => locale.value.views.settings.index.modals.changeLanguage);
-
 const settingsLabelMap = computed(() => ({
-  theme: settingsLocale.value.theme,
-  scale: settingsLocale.value.scale,
-  sound: settingsLocale.value.sound,
-  language: settingsLocale.value.language,
+  theme: props.locale.ui.theme,
+  scale: props.locale.ui.scale,
+  sound: props.locale.ui.sound,
+  language: props.locale.ui.language,
 }));
 
 const themeOptions = computed(() =>
   SETTINGS_THEME_VALUES.map((value) => ({
     value,
-    label: locale.value.settings.theme[value],
+    label: props.locale.settings.theme[value],
   })),
 );
 
 const scaleOptions = computed(() =>
   SETTINGS_SCALE_VALUES.map((value) => ({
     value,
-    label: locale.value.settings.scale[value],
+    label: props.locale.settings.scale[value],
   })),
 );
 
 const soundOptions = computed(() =>
   SETTINGS_SOUND_VALUES.map((value) => ({
     value,
-    label: locale.value.settings.sound[value],
+    label: props.locale.settings.sound[value],
   })),
 );
 
@@ -105,7 +100,7 @@ function createLanguagePickerItem(language: ModelLanguage): iWidgetSearchPickerI
   };
 }
 
-const languagePickerItems = computed(() => languages.value.map(createLanguagePickerItem));
+const languagePickerItems = computed(() => props.languages.map(createLanguagePickerItem));
 
 async function handleThemeModeChange(value: string) {
   if (!isAppThemeMode(value)) {
@@ -129,34 +124,6 @@ function handleSoundEnabledChange(value: string) {
   }
 
   setSoundEnabled(value === 'on');
-}
-
-async function handleLanguageChange(value: string) {
-  if (isLanguageChangeRunning.value) {
-    return;
-  }
-
-  isLanguageChangeRunning.value = true;
-
-  emit('operation', { key: 'language', state: 'start', title: changeLanguageModalLocale.value.loading });
-
-  try {
-    await setAppLanguage(value);
-
-    isLanguagePickerOpen.value = false;
-    emit('operation', { key: 'language', state: 'success' });
-  } catch {
-    emit('operation', {
-      key: 'language',
-      state: 'error',
-      title: changeLanguageModalLocale.value.loadError,
-      retryTitle: changeLanguageModalLocale.value.retry,
-      cancelTitle: changeLanguageModalLocale.value.cancel,
-      retry: () => handleLanguageChange(value),
-    });
-  } finally {
-    isLanguageChangeRunning.value = false;
-  }
 }
 </script>
 
@@ -182,7 +149,7 @@ async function handleLanguageChange(value: string) {
       :padding-y="10"
       :options-row="{ gap: 6 }"
       :options-divider="{ color: 'border-default', width: 'thin' }"
-      :accessibility-label="settingsLocale.accessibilityLabel"
+      :accessibility-label="locale.ui.accessibilityLabel"
     >
       <template #item="{ item }">
         <AppMarqueeText
@@ -232,21 +199,21 @@ async function handleLanguageChange(value: string) {
             max-width="100%"
             :items="languagePickerItems"
             :selected-value="currentLanguage?.key"
-            :title="changeLanguageModalLocale.title"
-            :empty-text="changeLanguageModalLocale.emptyText"
-            :trigger-aria-label="settingsLocale.changeLanguage"
+            :title="locale.languageModal.title"
+            :empty-text="locale.languageModal.emptyText"
+            :trigger-aria-label="locale.ui.changeLanguage"
             :options-modal="{
               maxWidth: '50rem',
             }"
             :options-search="{
-              placeholder: changeLanguageModalLocale.searchPlaceholder,
-              ariaLabel: changeLanguageModalLocale.searchPlaceholder,
+              placeholder: locale.languageModal.searchPlaceholder,
+              ariaLabel: locale.languageModal.searchPlaceholder,
               size: 'big',
             }"
             :options-row="{
               size: 'big',
             }"
-            @select="handleLanguageChange"
+            @select="emit('select-language', $event)"
           />
         </AppFlex>
       </template>

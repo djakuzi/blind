@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
 import { useConnectionTypeOptions } from '@/app/features/matchSetup/composables/useConnectionTypeOptions';
 import { useMatchPlayerOptions } from '@/app/features/matchSetup/composables/useMatchPlayerOptions';
-import { useLocale } from '@/app/features/locale/composables/useLocale';
+import type { Locale } from '@/app/shared/types/locale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppTitle from '@/app/shared/components/elements/typography/AppTitle.vue';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
@@ -11,6 +11,11 @@ import AppSegmentedCard from '@/app/shared/components/ui/control/AppSegmentedCar
 
 export interface PropsWidgetMatchOptions {
   mode: iGameMode;
+  locale: {
+    matchSetup: Locale['views']['menu']['index']['ui']['matchSetup'];
+    players: Locale['game']['format']['players'];
+    connection: Locale['connectionTypes'];
+  };
   players?: string | null;
   connection?: tKeyTypeConnection | null;
 }
@@ -34,20 +39,19 @@ const emit = defineEmits<{
   select: [selection: iWidgetMatchOptionsSelection];
 }>();
 
-const matchSetupLocale = useLocale((locale) => locale.views.menu.index.ui.matchSetup);
-
 const selectedPlayerOptionKey = ref('');
 const selectedConnectionType = ref<tKeyTypeConnection | ''>('');
 
 const { resolvePlayerOption, resolvedPlayerOptions, selectedPlayerOption, playerOptions } = useMatchPlayerOptions(
   () => props.mode,
   selectedPlayerOptionKey,
+  () => props.locale.players,
 );
 
 const availableConnections = computed(() => selectedPlayerOption.value?.connections ?? []);
 const connectionTypes = computed(() => [...new Set(resolvedPlayerOptions.value.flatMap((option) => option.connections))]);
 
-const { connectionOptions } = useConnectionTypeOptions(connectionTypes, availableConnections);
+const { connectionOptions } = useConnectionTypeOptions(() => props.locale.connection, connectionTypes, availableConnections);
 
 function syncSelections() {
   const playerOption = resolvePlayerOption(props.players ?? '') ?? resolvedPlayerOptions.value[0] ?? null;
@@ -98,8 +102,8 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
 
 <template>
   <AppFlex class="widget-match-options" direction="row" align="end" justify="around" width="100%">
-    <AppFlex class="widget-match-options__group" direction="column" :gap="2" role="group" :aria-label="matchSetupLocale.players">
-      <AppTitle :text="matchSetupLocale.players" tag="h3" font-size="lg" font-weight="medium" />
+    <AppFlex class="widget-match-options__group" direction="column" :gap="2" role="group" :aria-label="locale.matchSetup.players">
+      <AppTitle :text="locale.matchSetup.players" tag="h3" font-size="lg" font-weight="medium" />
 
       <AppSegmentedCard
         :model-value="selectedPlayerOptionKey"
@@ -112,8 +116,8 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
       />
     </AppFlex>
 
-    <AppFlex class="widget-match-options__group" direction="column" :gap="2" role="group" :aria-label="matchSetupLocale.connection">
-      <AppTitle :text="matchSetupLocale.connection" tag="h3" font-size="lg" font-weight="medium" />
+    <AppFlex class="widget-match-options__group" direction="column" :gap="2" role="group" :aria-label="locale.matchSetup.connection">
+      <AppTitle :text="locale.matchSetup.connection" tag="h3" font-size="lg" font-weight="medium" />
 
       <AppSegmentedCard
         :model-value="selectedConnectionType"

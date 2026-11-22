@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
-import { useLocale } from '@/app/features/locale/composables/useLocale';
+import type { Locale } from '@/app/shared/types/locale';
 import UiCardGameMode from '@/app/features/matchSetup/ui/UiCardGameMode.vue';
 import AppSlider from '@/app/shared/components/interaction/slider/AppSlider.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
@@ -10,6 +10,15 @@ export interface iWidgetSliderGameModeSelection {
   key: 'mode';
   value: tGameModeKey;
 }
+
+export interface PropsWidgetSliderGameMode {
+  locale: {
+    matchSetup: Locale['views']['menu']['index']['ui']['matchSetup'];
+    modes: Locale['game']['modes'];
+  };
+}
+
+const props = defineProps<PropsWidgetSliderGameMode>();
 
 const emit = defineEmits<{
   select: [selection: iWidgetSliderGameModeSelection];
@@ -23,10 +32,8 @@ const activeIndex = defineModel<number>({ default: 0 });
 const modes = computed(() => gameModeStore.modes);
 const activeMode = computed(() => modes.value[activeIndex.value] ?? null);
 
-const matchSetupLocale = useLocale((locale) => locale.views.menu.index.ui.matchSetup);
-
 function formatItemAccessibilityLabel(index: number, count: number) {
-  return matchSetupLocale.value.itemAccessibilityLabel.replace('{current}', String(index + 1)).replace('{total}', String(count));
+  return props.locale.matchSetup.itemAccessibilityLabel.replace('{current}', String(index + 1)).replace('{total}', String(count));
 }
 
 function handleModeComplete() {
@@ -62,13 +69,14 @@ watch(
     }"
     size="big"
     viewport-bleed="8rem"
-    :accessibility-label="matchSetupLocale.accessibilityLabel"
+    :accessibility-label="locale.matchSetup.accessibilityLabel"
     :item-accessibility-label="formatItemAccessibilityLabel"
   >
     <template #item="{ index, active }">
       <UiCardGameMode
         v-if="modes[index]"
         :mode="modes[index]"
+        :locale-mode="locale.modes[modes[index].key]"
         :active="active"
         :disabled="!active"
         :options-image="{
@@ -76,8 +84,8 @@ watch(
           fetchPriority: active ? 'high' : 'low',
           shouldLoad: Math.abs(index - activeIndex) <= 1,
         }"
-        :mode-options-accessibility-label="matchSetupLocale.modeOptionsAccessibilityLabel"
-        :connection-types-accessibility-label="matchSetupLocale.connectionTypesAccessibilityLabel"
+        :mode-options-accessibility-label="locale.matchSetup.modeOptionsAccessibilityLabel"
+        :connection-types-accessibility-label="locale.matchSetup.connectionTypesAccessibilityLabel"
         @complete="handleModeComplete"
       />
     </template>

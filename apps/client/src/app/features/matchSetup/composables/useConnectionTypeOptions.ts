@@ -6,7 +6,7 @@ import LanDark from '@/assets/icons/connectionType/lan-dark.svg?url';
 import LanLight from '@/assets/icons/connectionType/lan-light.svg?url';
 import OnlineDark from '@/assets/icons/connectionType/online-dark.svg?url';
 import OnlineLight from '@/assets/icons/connectionType/online-light.svg?url';
-import { useLocale } from '@/app/features/locale/composables/useLocale';
+import type { Locale } from '@/app/shared/types/locale';
 import type { iAppSegmentedCardOption, iAppSegmentedCardOptionImage } from '@/app/shared/components/ui/control/AppSegmentedCard.vue';
 import { TYPE_CONNECTION } from '@/app/shared/constants/game/typeConnection.conts';
 import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnection.conts';
@@ -18,17 +18,16 @@ const CONNECTION_IMAGES: Record<tKeyTypeConnection, iAppSegmentedCardOptionImage
 };
 
 export function useConnectionTypeOptions(
+  localeConnection: MaybeRefOrGetter<Locale['connectionTypes']>,
   connections: MaybeRefOrGetter<readonly tKeyTypeConnection[]> = Object.values(TYPE_CONNECTION),
   availableConnections?: MaybeRefOrGetter<readonly tKeyTypeConnection[]>,
 ) {
-  const connectionLocale = useLocale((locale) => locale.connectionTypes);
-
   const connectionOptions = computed<iAppSegmentedCardOption[]>(() => {
     const available = availableConnections === undefined ? null : toValue(availableConnections);
 
     return toValue(connections).map((connection) => ({
       value: connection,
-      label: connectionLocale.value[connection].title,
+      label: toValue(localeConnection)[connection].title,
       image: CONNECTION_IMAGES[connection],
       ...(available === null ? {} : { disabled: !available.includes(connection) }),
     }));

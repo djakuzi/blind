@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
-import { useLocale } from '@/app/features/locale/composables/useLocale';
+import type { Locale } from '@/app/shared/types/locale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppText from '@/app/shared/components/elements/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/elements/typography/AppTitle.vue';
 
 export interface PropsWidgetGameModeLocked {
   mode: iGameMode;
+  localeMode?: Locale['game']['modes'][iGameMode['key']];
 }
 
 const props = defineProps<PropsWidgetGameModeLocked>();
 
-const modeLocale = useLocale((locale) => locale.game.modes[props.mode.key]);
-
-const lockedTitle = computed(() => modeLocale.value?.locked?.title ?? '');
-const lockedDescription = computed(() => modeLocale.value?.locked?.description ?? '');
+const lockedTitle = computed(() => props.localeMode?.locked?.title ?? '');
+const lockedDescription = computed(() => props.localeMode?.locked?.description ?? '');
 </script>
 
 <template>

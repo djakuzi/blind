@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
-import { useLocale } from '@/app/features/locale/composables/useLocale';
+import type { Locale } from '@/app/shared/types/locale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
 import AppIcon from '@/app/shared/components/elements/media/AppIcon.vue';
@@ -15,6 +15,7 @@ import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode
 
 export interface PropsUiCardGameMode {
   mode: iGameMode;
+  localeMode?: Locale['game']['modes'][iGameMode['key']];
   modeOptionsAccessibilityLabel: string;
   connectionTypesAccessibilityLabel: string;
   active?: boolean;
@@ -26,6 +27,7 @@ const props = withDefaults(defineProps<PropsUiCardGameMode>(), {
   active: false,
   disabled: false,
   optionsImage: undefined,
+  localeMode: undefined,
 });
 
 const emit = defineEmits<{
@@ -33,10 +35,9 @@ const emit = defineEmits<{
 }>();
 
 const { resolvedThemeMode } = useAppThemeMode();
-const modeLocale = useLocale((locale) => locale.game.modes[props.mode.key]);
 
 const imageSource = computed(() => props.mode.img[resolvedThemeMode.value]);
-const modeDescription = computed(() => modeLocale.value?.description ?? '');
+const modeDescription = computed(() => props.localeMode?.description ?? '');
 const isDisabled = computed(() => props.disabled || props.mode.locked);
 const isHovered = ref(false);
 const borderColor = computed(() =>
