@@ -40,7 +40,9 @@ async function create(context, args) {
     if (!type) return 0;
     const readline = createInterface({ input: stdin, output: stdout });
     try {
-      suffix = (await readline.question('Task number and description (e.g. 123-new-menu): ', { signal: context.signal })).trim();
+      suffix = (
+        await readline.question('Description with optional task number (e.g. new-menu or 123-new-menu): ', { signal: context.signal })
+      ).trim();
     } finally {
       readline.close();
     }
