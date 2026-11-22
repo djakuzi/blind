@@ -1,9 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import { registerElectronPlugins } from './main/plugins';
-import {
-  registerElectronProtocols,
-  registerElectronProtocolSchemes,
-} from './main/protocol';
+import { registerElectronProtocols, registerElectronProtocolSchemes } from './main/protocol';
 import { createMainWindow } from './main/window';
 
 registerElectronProtocolSchemes();

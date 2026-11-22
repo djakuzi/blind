@@ -1,10 +1,4 @@
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  nativeTheme,
-  screen,
-} from 'electron';
+import { app, BrowserWindow, ipcMain, nativeTheme, screen } from 'electron';
 import type { WebContents } from 'electron';
 import { SYSTEM_CHANNEL } from './channel';
 import type { tElectronSystemThemeSource } from './type';
@@ -28,10 +22,7 @@ function getSystemLanguage() {
 }
 
 function isThemeSource(value: unknown): value is tElectronSystemThemeSource {
-  return (
-    typeof value === 'string' &&
-    THEME_SOURCE_LIST.includes(value as tElectronSystemThemeSource)
-  );
+  return typeof value === 'string' && THEME_SOURCE_LIST.includes(value as tElectronSystemThemeSource);
 }
 
 export function registerSystemPlugin() {
@@ -54,14 +45,11 @@ export function registerSystemPlugin() {
     };
   });
 
-  ipcMain.handle(
-    SYSTEM_CHANNEL.setThemeSource,
-    (_event, themeSource: unknown) => {
-      if (!isThemeSource(themeSource)) {
-        throw new Error('Invalid system theme source');
-      }
+  ipcMain.handle(SYSTEM_CHANNEL.setThemeSource, (_event, themeSource: unknown) => {
+    if (!isThemeSource(themeSource)) {
+      throw new Error('Invalid system theme source');
+    }
 
-      nativeTheme.themeSource = themeSource;
-    },
-  );
+    nativeTheme.themeSource = themeSource;
+  });
 }

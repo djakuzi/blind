@@ -4,10 +4,7 @@ import { POWER_CHANNEL } from './channel';
 let blockerId: number | undefined;
 
 function keepAwake() {
-  if (
-    blockerId !== undefined &&
-    powerSaveBlocker.isStarted(blockerId)
-  ) {
+  if (blockerId !== undefined && powerSaveBlocker.isStarted(blockerId)) {
     return;
   }
 

@@ -8,9 +8,7 @@ function resolveFileAssetUrl(baseUrl: URL, src: string) {
   baseUrl.search = '';
 
   const root = dirname(fileURLToPath(baseUrl));
-  const targetUrl = src.startsWith('file:')
-    ? new URL(src)
-    : new URL(src.startsWith('/') ? `.${src}` : src, baseUrl);
+  const targetUrl = src.startsWith('file:') ? new URL(src) : new URL(src.startsWith('/') ? `.${src}` : src, baseUrl);
 
   targetUrl.hash = '';
   targetUrl.search = '';

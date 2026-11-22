@@ -1,7 +1,4 @@
-import {
-  registerRendererProtocol,
-  registerRendererProtocolScheme,
-} from './renderer';
+import { registerRendererProtocol, registerRendererProtocolScheme } from './renderer';
 
 export function registerElectronProtocolSchemes() {
   registerRendererProtocolScheme();

@@ -27,8 +27,7 @@ function resolveRendererFileUrl(rootDirectory: string, input: string | URL) {
   }
 
   const pathname = decodeURIComponent(url.pathname);
-  const relativePath =
-    pathname.replace(/^\/+/, '') || ELECTRON_CONFIG.renderer.entryFile;
+  const relativePath = pathname.replace(/^\/+/, '') || ELECTRON_CONFIG.renderer.entryFile;
 
   if (relativePath.includes('\0')) {
     throw new Error('Renderer path contains an invalid null byte');

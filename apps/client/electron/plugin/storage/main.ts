@@ -10,11 +10,7 @@ type tStorageData = Record<string, string>;
 let mutationQueue: Promise<void> = Promise.resolve();
 
 function getStoragePath() {
-  return join(
-    app.getPath('userData'),
-    ELECTRON_CONFIG.storage.directory,
-    ELECTRON_CONFIG.storage.fileName,
-  );
+  return join(app.getPath('userData'), ELECTRON_CONFIG.storage.directory, ELECTRON_CONFIG.storage.fileName);
 }
 
 function isStorageData(value: unknown): value is tStorageData {

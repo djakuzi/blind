@@ -19,31 +19,19 @@ export function registerRendererProtocolScheme() {
 }
 
 export function registerRendererProtocol() {
-  const rootDirectory = HelperRenderer.getRendererRootDirectory(
-    app.getAppPath(),
-  );
+  const rootDirectory = HelperRenderer.getRendererRootDirectory(app.getAppPath());
 
-  protocol.handle(
-    ELECTRON_CONFIG.renderer.protocol.scheme,
-    async (request) => {
-      try {
-        const fileUrl = HelperRenderer.resolveRendererFileUrl(
-          rootDirectory,
-          request.url,
-        );
+  protocol.handle(ELECTRON_CONFIG.renderer.protocol.scheme, async (request) => {
+    try {
+      const fileUrl = HelperRenderer.resolveRendererFileUrl(rootDirectory, request.url);
 
-        return await net.fetch(fileUrl);
-      } catch (error) {
-        console.error(
-          'Failed to handle Electron renderer protocol request:',
-          request.url,
-          error,
-        );
+      return await net.fetch(fileUrl);
+    } catch (error) {
+      console.error('Failed to handle Electron renderer protocol request:', request.url, error);
 
-        return new Response(null, {
-          status: 404,
-        });
-      }
-    },
-  );
+      return new Response(null, {
+        status: 404,
+      });
+    }
+  });
 }
