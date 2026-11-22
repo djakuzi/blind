@@ -12,7 +12,7 @@ function assertNoArgs(args, command) {
   if (args.length) throw new Error(`Usage: ${command}`);
 }
 
-async function checkAll(context, args, runGeneratedCheck) {
+async function checkAll(context, args, runGeneratedCheck, runLocaleCheck) {
   assertNoArgs(args, 'verify all');
   let failures = 0;
   for (const item of CHECKS) {
@@ -23,6 +23,12 @@ async function checkAll(context, args, runGeneratedCheck) {
     printLine(`${item.name}: ${code === 0 ? 'PASS' : `FAIL (exit ${code})`}`);
     if (code !== 0) failures += 1;
   }
+  if (context.signal.aborted) return 130;
+  printLine('\nChecking localization...');
+  const localeCode = await runLocaleCheck(context, []);
+  if (localeCode === 130) return 130;
+  printLine(`Localization: ${localeCode === 0 ? 'PASS' : `FAIL (exit ${localeCode})`}`);
+  if (localeCode !== 0) failures += 1;
   printLine('\nChecking generated files...');
   const code = await runGeneratedCheck(context, []);
   if (code === 130) return 130;
@@ -48,6 +54,8 @@ export function registerVerifySection(registry) {
 
   const generated = registry.find(['generate', 'check']);
   if (!generated) throw new Error('Generate section must be registered before Verify.');
+  const locale = registry.find(['locale', 'check']);
+  if (!locale) throw new Error('Localization section must be registered before Verify.');
   registry.addCommand({
     section: 'verify',
     id: 'generated',
@@ -61,7 +69,7 @@ export function registerVerifySection(registry) {
     section: 'verify',
     id: 'all',
     description: 'Run every quality check',
-    run: (context, args) => checkAll(context, args, generated.run),
+    run: (context, args) => checkAll(context, args, generated.run, locale.run),
   });
 
   registry.addSection({ id: 'fix', title: 'Fix', description: 'Explicit formatting and lint repairs' });

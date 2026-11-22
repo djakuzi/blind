@@ -10,7 +10,11 @@ const GENERATORS = [
   { id: 'icons', script: 'app:generate:icons-assets', outputs: ['src/core/media/icons/const.ts', 'src/core/media/icons/type.ts'] },
   { id: 'audio', script: 'app:generate:audio-assets', outputs: ['src/core/media/audio/const.ts', 'src/core/media/audio/type.ts'] },
   { id: 'fonts', script: 'app:generate:fonts-woff2', outputs: ['src/assets/fonts'] },
-  { id: 'docs', script: 'app:generate:docs-versions', outputs: ['../../docs/client/architecture/sections/stack.md', '../../docs/client/projectSetup/index.md'] },
+  {
+    id: 'docs',
+    script: 'app:generate:docs-versions',
+    outputs: ['../../docs/client/architecture/sections/stack.md', '../../docs/client/projectSetup/index.md'],
+  },
 ];
 
 async function inventory(root, target) {

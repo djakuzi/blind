@@ -113,6 +113,7 @@ async function syncDocsVersions() {
   const filePaths = [...new Set(MARKERS.map(({ filePath }) => filePath))];
   let updatedFilesCount = 0;
   let updatedMarkersCount = 0;
+  const updates = [];
 
   for (const filePath of filePaths) {
     const source = await readFile(filePath, 'utf8');
@@ -124,7 +125,7 @@ async function syncDocsVersions() {
       const matches = [...nextSource.matchAll(markerRegExp)];
 
       if (matches.length === 0) {
-        continue;
+        throw new Error(`В документе ${filePath} не найдена пара маркеров ${markerConfig.marker}`);
       }
 
       const value = markerConfig.value(packageJson);
@@ -138,15 +139,15 @@ async function syncDocsVersions() {
     }
 
     if (nextSource !== source) {
-      await writeFile(filePath, nextSource, 'utf8');
-      updatedFilesCount += 1;
+      updates.push({ filePath, nextSource });
     }
 
     updatedMarkersCount += fileMarkersCount;
   }
 
-  if (updatedMarkersCount === 0) {
-    throw new Error('В документации не найдены маркеры версий');
+  for (const { filePath, nextSource } of updates) {
+    await writeFile(filePath, nextSource, 'utf8');
+    updatedFilesCount += 1;
   }
 
   console.log(`Updated markers: ${updatedMarkersCount}`);

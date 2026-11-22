@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as prettier from 'prettier';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const audioDir = resolve(root, 'src/assets/audio');
@@ -81,8 +82,13 @@ export type tAudioType = 'sfx' | 'music';
 `;
 
 mkdirSync(outputDirectory, { recursive: true });
-writeFileSync(outputConstPath, constContent);
-writeFileSync(outputTypePath, typeContent);
+for (const [filePath, content] of [
+  [outputConstPath, constContent],
+  [outputTypePath, typeContent],
+]) {
+  const config = (await prettier.resolveConfig(filePath)) ?? {};
+  writeFileSync(filePath, await prettier.format(content, { ...config, filepath: filePath }));
+}
 
 console.log(`audio generated: ${audioFiles.length}`);
 

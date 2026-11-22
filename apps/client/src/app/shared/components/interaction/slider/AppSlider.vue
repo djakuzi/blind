@@ -381,13 +381,7 @@ function handleKeydown(event: KeyboardEvent) {
 }
 
 watch(
-  [
-    activeIndex,
-    () => props.count,
-    () => itemOptions.value.width,
-    () => itemOptions.value.maxWidth,
-    () => itemOptions.value.gap,
-  ],
+  [activeIndex, () => props.count, () => itemOptions.value.width, () => itemOptions.value.maxWidth, () => itemOptions.value.gap],
   () => {
     updateTrackPosition();
   },

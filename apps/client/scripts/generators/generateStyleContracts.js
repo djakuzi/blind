@@ -1,4 +1,5 @@
 import { readFile, writeFile } from 'node:fs/promises';
+import * as prettier from 'prettier';
 import path from 'node:path';
 
 const ROOT_PATH = process.cwd();
@@ -281,7 +282,8 @@ function renderBorderContract(borderWidthTokens, borderStyleTokens) {
 
 async function writeContract(fileName, content) {
   const filePath = path.resolve(CONTRACTS_PATH, fileName);
-  await writeFile(filePath, content, 'utf8');
+  const config = (await prettier.resolveConfig(filePath)) ?? {};
+  await writeFile(filePath, await prettier.format(content, { ...config, filepath: filePath }), 'utf8');
   console.log(`Updated ${path.relative(ROOT_PATH, filePath)}`);
 }
 

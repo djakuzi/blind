@@ -122,7 +122,13 @@ export function usePreGame() {
   }
 
   watch(
-    [() => route.query.mode, () => route.query.players, () => route.query.connection, () => gameModeStore.modes, () => gameModeStore.options],
+    [
+      () => route.query.mode,
+      () => route.query.players,
+      () => route.query.connection,
+      () => gameModeStore.modes,
+      () => gameModeStore.options,
+    ],
     () => {
       if (!isWritingQuery) {
         syncFromQuery();

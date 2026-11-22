@@ -27,8 +27,8 @@ try {
   registerPlatformSection(registry);
   registerBuildSection(registry);
   registerGenerateSection(registry);
-  registerVerifySection(registry);
   registerLocalizationSection(registry);
+  registerVerifySection(registry);
   registerGitSection(registry);
   registerCleanSection(registry);
   const context = createContext({ root, signal: controller.signal });

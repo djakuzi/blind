@@ -52,13 +52,7 @@ function handleComplete() {
 </script>
 
 <template>
-  <AppHoldAction
-    v-bind="holdProps"
-    :disabled="disabled"
-    :width="width"
-    :max-width="maxWidth"
-    @complete="handleComplete"
-  >
+  <AppHoldAction v-bind="holdProps" :disabled="disabled" :width="width" :max-width="maxWidth" @complete="handleComplete">
     <template #default="{ isProgressActive, isHolding, isComplete }">
       <AppCard
         v-bind="cardProps"
