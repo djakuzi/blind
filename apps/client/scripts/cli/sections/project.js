@@ -1,6 +1,7 @@
 import { readFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { loadEnv } from 'vite';
 import { printLine } from '../core/terminal.js';
 
 const ENV_FILES = ['.env.debug', '.env.prod'];
@@ -59,6 +60,17 @@ async function checkEnvironment(root) {
     const missing = required.filter((key) => !keys.has(key));
     healthy =
       report(name, missing.length === 0, missing.length ? `missing keys: ${missing.join(', ')}` : 'all required keys present') && healthy;
+    const mode = name.slice('.env.'.length);
+    const env = loadEnv(mode, root, ['APP_', 'API_']);
+    healthy = report(`${name} APP_MODE`, env.APP_MODE === mode, `expected ${mode}`) && healthy;
+    let apiValid = false;
+    try {
+      const url = new URL(env.API_TARGET);
+      apiValid = url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+      // Report the invalid value without exposing it.
+    }
+    healthy = report(`${name} API_TARGET`, apiValid, apiValid ? 'valid HTTP(S) URL' : 'expected an HTTP(S) URL') && healthy;
   }
   return healthy;
 }
@@ -82,8 +94,12 @@ async function doctor(context, args) {
   const target = args[0] ?? 'web';
   const checks = platformChecks(target);
   const pkg = await getPackage(context.root);
-  const requiredNode = Number(pkg.engines.node.match(/\d+/)?.[0] ?? 22);
-  const nodeOk = Number(process.versions.node.split('.')[0]) >= requiredNode;
+  const requiredNode = pkg.engines.node.match(/^>=(\d+)\.(\d+)\.(\d+)$/);
+  if (!requiredNode) throw new Error('Unsupported Node.js engine requirement');
+  const actualParts = process.versions.node.split('.').map(Number);
+  const requiredParts = requiredNode.slice(1).map(Number);
+  const firstDifference = actualParts.findIndex((part, index) => part !== requiredParts[index]);
+  const nodeOk = firstDifference === -1 || actualParts[firstDifference] > requiredParts[firstDifference];
   let healthy = report('Node.js', nodeOk, `${process.version} (requires ${pkg.engines.node})`);
   healthy = report('npm', Boolean(runVersion(process.platform === 'win32' ? 'npm.cmd' : 'npm'))) && healthy;
   healthy = report('Git', Boolean(runVersion('git'))) && healthy;
