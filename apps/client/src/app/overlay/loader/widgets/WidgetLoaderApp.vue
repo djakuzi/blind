@@ -150,7 +150,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
   >
     <AppFadeTransition :active="phase === 'leaving'" :duration="2300" hold-until-end>
       <AppGrid :class="loaderClass" place-items="center" min-height="100dvh">
-        <AppFlex class="widget-loader-app__content" direction="column" align="center" max-width="100%" width="100%">
+        <AppFlex direction="column" align="center" max-width="100%" width="100%" :gap="24">
           <AppFadeTransition :active="phase === 'leaving'">
             <AppLogo class="widget-loader-app__wordmark" logo="blindTextRight" width="100rem" height="auto" />
           </AppFadeTransition>
@@ -188,7 +188,7 @@ async function handleErrorAction(action: iLoaderErrorAction) {
         </AppFlex>
 
         <AppRevealTransition :active="phase === 'leaving'" :duration="2100" :delay="120">
-          <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="58rem" height="58rem" />
+          <AppLogo class="widget-loader-app__exit-logo" logo="blind" width="25rem" height="58rem" />
         </AppRevealTransition>
 
         <AppFadeTransition :active="phase === 'leaving'">
@@ -218,11 +218,6 @@ async function handleErrorAction(action: iLoaderErrorAction) {
 
 .widget-loader-app--leaving {
   pointer-events: none;
-}
-
-.widget-loader-app__content {
-  gap: var(--app-space-5);
-  transform: translateY(-2dvh);
 }
 
 .widget-loader-app__exit-logo {
