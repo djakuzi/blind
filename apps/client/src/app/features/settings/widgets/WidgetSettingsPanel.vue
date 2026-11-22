@@ -12,13 +12,16 @@ import { isAppThemeMode } from '@/app/shared/styles/contracts/appTheme.contract'
 import type { ModelLanguage } from '@/app/domain/lang/models/Language.model';
 import { useAppLanguage } from '@/app/features/locale/composables/useAppLanguage';
 import { useLocale } from '@/app/features/locale/composables/useLocale';
-import { useLoaderRegistry } from '@/app/overlay/loader/composables/useLoaderRegistry';
 import { LibText } from '@/core/lib/text';
 import { SETTINGS_SCALE_VALUES, SETTINGS_SOUND_VALUES, SETTINGS_THEME_VALUES } from '../constants/settingsOptions.const';
 import { useSettings } from '../composables/useSettings';
 
-const LANGUAGE_CHANGE_SCOPE_KEY = 'app-language-change';
-const LANGUAGE_CHANGE_RESOURCE_KEY = 'language';
+export type tSettingsOperation =
+  | { key: string; state: 'start'; title: string }
+  | { key: string; state: 'success' }
+  | { key: string; state: 'error'; title: string; retryTitle: string; cancelTitle: string; retry: () => Promise<void> };
+
+const emit = defineEmits<{ operation: [operation: tSettingsOperation] }>();
 
 const SETTINGS_ITEMS = [
   {
@@ -43,7 +46,6 @@ const isLanguagePickerOpen = ref(false);
 const isLanguageChangeRunning = ref(false);
 
 const locale = useLocale();
-const loader = useLoaderRegistry();
 
 const currentLanguageCode = computed(() => {
   if (!currentLanguage.value) {
@@ -129,10 +131,6 @@ function handleSoundEnabledChange(value: string) {
   setSoundEnabled(value === 'on');
 }
 
-function cancelLanguageChange() {
-  loader.clearScope(LANGUAGE_CHANGE_SCOPE_KEY);
-}
-
 async function handleLanguageChange(value: string) {
   if (isLanguageChangeRunning.value) {
     return;
@@ -140,41 +138,21 @@ async function handleLanguageChange(value: string) {
 
   isLanguageChangeRunning.value = true;
 
-  const resourcePayload = {
-    scopeKey: LANGUAGE_CHANGE_SCOPE_KEY,
-    resourceKey: LANGUAGE_CHANGE_RESOURCE_KEY,
-  };
-
-  loader.registerScope({
-    scopeKey: LANGUAGE_CHANGE_SCOPE_KEY,
-    title: changeLanguageModalLocale.value.loading,
-    progressMode: 'indeterminate',
-    resources: {
-      [LANGUAGE_CHANGE_RESOURCE_KEY]: 'pending',
-    },
-  });
+  emit('operation', { key: 'language', state: 'start', title: changeLanguageModalLocale.value.loading });
 
   try {
     await setAppLanguage(value);
 
     isLanguagePickerOpen.value = false;
-    loader.setResourceLoaded(resourcePayload);
+    emit('operation', { key: 'language', state: 'success' });
   } catch {
-    loader.setResourceError({
-      ...resourcePayload,
-      error: {
-        title: changeLanguageModalLocale.value.loadError,
-        actions: [
-          {
-            title: changeLanguageModalLocale.value.retry,
-            callback: () => handleLanguageChange(value),
-          },
-          {
-            title: changeLanguageModalLocale.value.cancel,
-            callback: cancelLanguageChange,
-          },
-        ],
-      },
+    emit('operation', {
+      key: 'language',
+      state: 'error',
+      title: changeLanguageModalLocale.value.loadError,
+      retryTitle: changeLanguageModalLocale.value.retry,
+      cancelTitle: changeLanguageModalLocale.value.cancel,
+      retry: () => handleLanguageChange(value),
     });
   } finally {
     isLanguageChangeRunning.value = false;
