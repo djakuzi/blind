@@ -15,7 +15,7 @@ create app → Pinia → setup registry
 → все blocking = loaded → isReady → route UI
 ```
 
-1. Глобальные providers смонтированы всегда, `RouterView` показывается только при `isReady`.
+1. `ProviderLoaderApp` монтируется сразу; `RouterView` и `ProviderSessionJoin` — только при `isReady`.
 2. Если blocking-задача упала, приложение остаётся смонтированным, route UI закрыт, loader показывает ошибку и даёт повторить.
 
 ## Фазы setup
