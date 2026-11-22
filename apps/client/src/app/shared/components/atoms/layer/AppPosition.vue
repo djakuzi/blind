@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { LibStyle } from '@/core/lib/style';
+import type { PropsWidth } from '@/app/shared/types/props/dimensions.props';
 import type { tLayerValue } from '@/app/shared/styles/contracts/layer.contract';
 import { resolveLayerValue } from '@/app/shared/styles/contracts/layer.contract';
 import type { tSafeAreaToken } from '@/app/shared/styles/contracts/safeArea.contract';
@@ -18,7 +20,7 @@ interface iAppPositionOffsets {
   left?: tAppPositionOffsetValue;
 }
 
-interface Props {
+export interface PropsAppPosition extends PropsWidth {
   type?: tAppPositionType;
   position?: iAppPositionOffsets;
   center?: tAppPositionCenter;
@@ -26,15 +28,19 @@ interface Props {
   isShow?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PropsAppPosition>(), {
   type: 'fixed',
   position: undefined,
   center: undefined,
   layer: 'base',
   isShow: true,
+  width: undefined,
+  maxWidth: undefined,
 });
 
 const positionClass = computed(() => ['app-position', props.center ? `app-position--center-${props.center}` : undefined]);
+const positionWidth = computed(() => LibStyle.toSizeValue(props.width));
+const positionMaxWidth = computed(() => LibStyle.toSizeValue(props.maxWidth));
 
 function resolvePositionOffsetValue(value?: tAppPositionOffsetValue) {
   return typeof value === 'string' && isSafeAreaToken(value) ? safeAreaTokenVar(value) : resolveSpaceValue(value);
@@ -66,6 +72,8 @@ const positionStyle = computed(() => {
   --cp-position-transform: none;
 
   position: var(--cp-position-type);
+  width: v-bind(positionWidth);
+  max-width: v-bind(positionMaxWidth);
   z-index: var(--cp-position-layer);
   top: var(--cp-position-top);
   right: var(--cp-position-right);

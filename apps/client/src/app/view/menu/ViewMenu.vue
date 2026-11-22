@@ -14,6 +14,7 @@ import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import UiContainer from '@/app/layouts/components/containers/UiContainer.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import AppPosition from '@/app/shared/components/atoms/layer/AppPosition.vue';
 import AppSwapTransition from '@/app/shared/components/effects/transition/AppSwapTransition.vue';
 import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
@@ -24,7 +25,7 @@ const { mode, players, connection, selectionQuery, setSelection, flushSelection 
 const activeModeIndex = ref(0);
 
 const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? null);
-const activeModeStateKey = computed(() => (activeMode.value?.locked ? 'locked' : 'options'));
+const optionsMeasureMode = computed(() => gameModeStore.modes.find((gameMode) => !gameMode.locked) ?? null);
 const { open: openSessionJoin } = useSessionJoinOverlay();
 const menuLocale = useLocale((locale) => locale.views.menu.index.ui);
 
@@ -105,44 +106,64 @@ useHeaderActions(
 
 <template>
   <ViewLayout class="view-menu" align="center" padding="none" overflow="visible">
-    <AppFlex class="view-menu__slider" align="center" justify="center" width="100%">
-      <UiContainer bleed="horizontal">
-        <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
-      </UiContainer>
+    <AppFlex class="view-menu__slider-area" align="center" justify="center" width="100%">
+      <AppPosition class="view-menu__slider" type="relative" width="100%">
+        <UiContainer bleed="horizontal">
+          <WidgetSliderGameMode v-model="activeModeIndex" @select="handleModeSelect" @complete="handleModeComplete" />
+        </UiContainer>
+
+        <AppPosition type="absolute" width="100%" :position="{ top: 'calc(100% + var(--app-space-24))' }">
+          <AppSwapTransition :transition-key="activeMode?.locked ? 'locked' : 'locked-empty'">
+            <WidgetGameModeLocked v-if="activeMode?.locked" :mode="activeMode" />
+          </AppSwapTransition>
+        </AppPosition>
+      </AppPosition>
     </AppFlex>
 
-    <AppSwapTransition class="view-menu__locked-slot" :transition-key="activeMode?.locked ? 'locked' : 'locked-empty'">
-      <WidgetGameModeLocked v-if="activeMode?.locked" :mode="activeMode" />
-    </AppSwapTransition>
-
-    <AppSwapTransition class="view-menu__state-slot" :transition-key="activeMode && !activeMode.locked ? 'options' : 'options-empty'">
+    <AppPosition class="view-menu__options-area" type="relative" width="100%">
       <WidgetMatchOptions
-        v-if="activeMode && !activeMode.locked"
-        :mode="activeMode"
-        :players="players"
-        :connection="connection"
-        @select="handleOptionSelect"
+        v-if="optionsMeasureMode"
+        class="view-menu__options-measure"
+        :mode="optionsMeasureMode"
+        aria-hidden="true"
+        inert
       />
-    </AppSwapTransition>
+
+      <AppPosition class="view-menu__state-slot" type="absolute" :position="{ top: 0, right: 0, bottom: 0, left: 0 }">
+        <AppSwapTransition :transition-key="activeMode && !activeMode.locked ? 'options' : 'options-empty'">
+          <WidgetMatchOptions
+            v-if="activeMode && !activeMode.locked"
+            :mode="activeMode"
+            :players="players"
+            :connection="connection"
+            @select="handleOptionSelect"
+          />
+        </AppSwapTransition>
+      </AppPosition>
+    </AppPosition>
   </ViewLayout>
 </template>
 
 <style scoped>
-.view-menu__slider {
-  margin-top: 10rem;
+.view-menu__slider-area {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
-.view-menu__locked-slot,
-.view-menu__state-slot {
-  width: 100%;
+.view-menu__slider {
   min-width: 0;
 }
 
-.view-menu__locked-slot {
-  margin-top: var(--app-space-24);
+.view-menu__options-area {
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .view-menu__state-slot {
-  margin-top: auto;
+  min-width: 0;
+}
+
+.view-menu__options-measure {
+  visibility: hidden;
 }
 </style>
