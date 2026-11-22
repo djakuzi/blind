@@ -106,7 +106,7 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
         :options="playerOptions"
         :disabled="mode.locked"
         size="big"
-        :options-layout="{ minWidth: '60rem', maxWidth: '100%' }"
+        max-width="100%"
         :options-frame="{ enabled: true }"
         @update:model-value="handlePlayerOptionChange"
       />
@@ -120,7 +120,7 @@ watch(() => [props.mode.key, props.players, props.connection], syncSelections, {
         :options="connectionOptions"
         :disabled="mode.locked"
         size="big"
-        :options-layout="{ maxWidth: '100%' }"
+        max-width="100%"
         :options-frame="{ enabled: true }"
         :equal-width="false"
         @update:model-value="handleConnectionChange"
