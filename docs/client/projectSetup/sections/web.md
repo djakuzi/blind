@@ -1,7 +1,7 @@
 # Запуск в браузере
 
 ```bash
-npm install
+npm ci
 ```
 
 ```bash

@@ -5,7 +5,7 @@
 1. Установить зависимости:
 
 ```bash
-npm install
+npm ci
 ```
 
 2. Собрать web-часть (`npm run build:debug` — debug-сборка):

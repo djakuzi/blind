@@ -2,37 +2,11 @@
 
 Кроссплатформенная PvP-аркада для Web, Desktop, Android и iOS.
 
-## Структура
+## Быстрый старт
 
-| Папка | Что |
-|---|---|
-| `apps/client` | клиент: Vue 3, TypeScript, Vite, Capacitor, Electron |
-| `docs` | документация: общие разделы и `docs/client` |
-| `.ai-core` | skills для coding agents |
-
-Каждое приложение собирается и запускается из своей папки.
-
-## Быстрый старт клиента
-
-Требуются Node.js >=22.12.0, npm и Git.
-
-```bash
-git clone https://github.com/djakuzi/blind.git
-cd blind/apps/client
-npm ci
-npm run cli
-```
-
-Перед запуском настройте `.env.debug` и `.env.prod` по `.env.template` в `apps/client`. Для мобильных платформ нужны соответствующие SDK и локальные конфигурации.
-
-Без CLI (из `apps/client`):
-
-```bash
-npm run dev
-npm run desktop:dev
-```
-
-Подробнее: [развёртывание](./docs/client/projectSetup/index.md) · [запуск через CLI](./docs/client/projectSetup/sections/cli.md) · [справочник CLI](./docs/client/cli/index.md).
+- [Подготовка и требования](./docs/client/projectSetup/index.md)
+- [Запуск через CLI](./docs/client/projectSetup/sections/cli.md)
+- Запуск вручную: [Web](./docs/client/projectSetup/sections/web.md), [Desktop](./docs/client/projectSetup/sections/desktop.md), [Android](./docs/client/projectSetup/sections/android.md), [iOS](./docs/client/projectSetup/sections/ios.md).
 
 ## Документация
 
