@@ -3,7 +3,6 @@ import type { iStaticLocale } from './locale.type';
 export const STATIC_LOCALE_REGISTRY = {
   en: {
     loading: {
-      base: 'Loading',
       language: 'Finding the right words',
       languageError: 'Failed to load language',
       audio: 'Tuning your hearing',
@@ -15,7 +14,6 @@ export const STATIC_LOCALE_REGISTRY = {
   },
   ru: {
     loading: {
-      base: 'Загрузка',
       language: 'Подбираем слова',
       languageError: 'Не удалось загрузить язык',
       audio: 'Настраиваем слух',

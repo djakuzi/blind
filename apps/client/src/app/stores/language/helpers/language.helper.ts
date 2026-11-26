@@ -12,14 +12,12 @@ function getLanguageFilePath(code: string) {
   return `${LANGUAGE_FILE_DIR}/${code}.json`;
 }
 
-export const normalizeLanguageCodes = LibLocale.normalizeCode;
-
 export function findLanguageByCode(languages: ModelLanguage[], code: string | null) {
   if (!code) {
     return null;
   }
 
-  const normalizedCodes = normalizeLanguageCodes(code);
+  const normalizedCodes = LibLocale.normalizeCode(code);
 
   return (
     languages.find((language) => language.key.toLowerCase() === normalizedCodes.exact) ??
