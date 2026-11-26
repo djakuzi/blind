@@ -27,7 +27,7 @@ export interface PropsAppStatusBlock extends PropsWidth, PropsSizeVariant, Props
   actionAlign?: tAppStatusBlockAlign;
   optionsCard?: Pick<
     PropsAppCard,
-    'paddingX' | 'paddingY' | 'backgroundColor' | 'borderColor' | 'borderWidth' | 'borderStyle' | 'borderRadius'
+    'paddingX' | 'paddingY' | 'backgroundColor' | 'borderColor' | 'borderWidth' | 'borderStyle' | 'borderRadius' | 'cornerStyle'
   >;
 }
 
@@ -108,6 +108,7 @@ const cardProps = computed<NonNullable<PropsAppStatusBlock['optionsCard']>>(() =
   borderWidth: props.optionsCard?.borderWidth ?? 'medium',
   borderStyle: props.optionsCard?.borderStyle ?? 'solid',
   borderRadius: props.optionsCard?.borderRadius ?? 'lg',
+  cornerStyle: props.optionsCard?.cornerStyle ?? 'angular',
 }));
 const statusTextColor = computed(() => props.textColor ?? variantConfig.value.textColor);
 const statusGap = computed(() => props.gap ?? sizeConfig.value.gap);
@@ -131,7 +132,7 @@ const actionJustify = computed(() => {
 </script>
 
 <template>
-  <AppCard v-bind="cardProps" class="app-status-block" :size="size" :width="width" :max-width="maxWidth" :role="statusRole" :cornerStyle="'angular'">
+  <AppCard v-bind="cardProps" class="app-status-block" :size="size" :width="width" :max-width="maxWidth" :role="statusRole">
     <AppFlex direction="column" :gap="statusGap" width="100%">
       <AppText
         class="app-status-block__text"
