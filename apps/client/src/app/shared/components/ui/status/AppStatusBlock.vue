@@ -131,7 +131,7 @@ const actionJustify = computed(() => {
 </script>
 
 <template>
-  <AppCard v-bind="cardProps" class="app-status-block" :size="size" :width="width" :max-width="maxWidth" :role="statusRole">
+  <AppCard v-bind="cardProps" class="app-status-block" :size="size" :width="width" :max-width="maxWidth" :role="statusRole" :cornerStyle="'angular'">
     <AppFlex direction="column" :gap="statusGap" width="100%">
       <AppText
         class="app-status-block__text"
