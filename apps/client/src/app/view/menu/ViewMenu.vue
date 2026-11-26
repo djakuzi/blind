@@ -7,10 +7,11 @@ import WidgetMatchOptions from '@/app/features/matchSetup/widgets/WidgetMatchOpt
 import type { iWidgetMatchOptionsSelection } from '@/app/features/matchSetup/widgets/WidgetMatchOptions.vue';
 import WidgetSliderGameMode from '@/app/features/matchSetup/widgets/WidgetSliderGameMode.vue';
 import type { iWidgetSliderGameModeSelection } from '@/app/features/matchSetup/widgets/WidgetSliderGameMode.vue';
+import { useCreateLobby } from '@/app/features/lobby/composables/useCreateLobby';
 import { usePreGame } from '@/app/features/preGame/composables/usePreGame';
 import { useHeaderActions } from '@/app/layouts/composables/common/useHeaderActions';
 import { useSessionJoinOverlay } from '@/app/features/lobby/composables/useSessionJoinOverlay';
-import ProviderSessionJoin from '@/app/features/lobby/providers/ProviderSessionJoin.vue';
+import { useOnlineEntryOverlay } from '@/app/features/lobby/composables/useOnlineEntryOverlay';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import UiContainer from '@/app/layouts/components/containers/UiContainer.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
@@ -21,13 +22,15 @@ import { useGameModeStore } from '@/app/stores/gameMode/gameMode.store';
 
 const router = useRouter();
 const gameModeStore = useGameModeStore();
-const { mode, players, connection, selectionQuery, setSelection, flushSelection } = usePreGame();
+const { mode, players, connection, setSelection, flushSelection } = usePreGame();
 
 const activeModeIndex = ref(0);
 
 const activeMode = computed(() => gameModeStore.modes[activeModeIndex.value] ?? null);
 const optionsMeasureMode = computed(() => gameModeStore.modes.find((gameMode) => !gameMode.locked) ?? null);
 const { open: openSessionJoin } = useSessionJoinOverlay();
+const { open: openOnlineEntry } = useOnlineEntryOverlay();
+const { createLobby } = useCreateLobby();
 const menuLocale = useLocale((locale) => locale.views.menu.index.ui);
 const gameLocale = useLocale((locale) => locale.game);
 const localeConnection = useLocale((locale) => locale.connectionTypes);
@@ -61,10 +64,12 @@ async function handleModeComplete() {
     return;
   }
 
-  await router.push({
-    name: KEY_ROUTE.lobby.index,
-    query: selectionQuery.value,
-  });
+  if (connection.value === 'ONLINE') {
+    openOnlineEntry();
+    return;
+  }
+
+  await createLobby({ mode: mode.value, players: players.value, connection: connection.value });
 }
 
 function handleSettings() {
@@ -151,7 +156,6 @@ useHeaderActions(
         </AppSwapTransition>
       </AppPosition>
     </AppPosition>
-    <ProviderSessionJoin />
   </ViewLayout>
 </template>
 

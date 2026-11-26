@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { mockLobbyService } from '@/app/features/lobby/services/MockLobby.service';
+import type { tLobbyTarget } from '@/app/domain/game/type/lobby/lobby.types';
+import { KEY_ROUTE } from '@/app/router/constants/route.const';
+import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
+import AppButton from '@/app/shared/components/ui/button/AppButton.vue';
+import AppInputSearch from '@/app/shared/components/ui/input/AppInputSearch.vue';
 import { useConnectionTypeOptions } from '@/app/shared/composables/useConnectionTypeOptions';
-import { useLocale } from '@/app/features/locale/composables/useLocale';
+import type { Locale } from '@/app/shared/types/locale';
 import AppText from '@/app/shared/components/elements/typography/AppText.vue';
 import AppTitle from '@/app/shared/components/elements/typography/AppTitle.vue';
 import AppModal from '@/app/shared/components/interaction/overlay/AppModal.vue';
@@ -14,6 +21,11 @@ import type { tKeyTypeConnection } from '@/app/shared/constants/game/typeConnect
 interface Props {
   modelValue: boolean;
   selectedConnection: tKeyTypeConnection | null;
+  locale: {
+    modal: Locale['views']['menu']['index']['modals']['joinSession'];
+    join: string;
+    connection: Locale['connectionTypes'];
+  };
 }
 
 type tSessionJoinStep = 'connection' | 'lobby';
@@ -27,20 +39,21 @@ const emit = defineEmits<{
   select: [connection: tKeyTypeConnection];
 }>();
 
-const modalLocale = useLocale((locale) => locale.views.menu.index.modals.joinSession);
-const joinText = useLocale((locale) => locale.views.menu.index.ui.join);
-const localeConnection = useLocale((locale) => locale.connectionTypes);
-const { connectionOptions } = useConnectionTypeOptions(localeConnection);
+const { connectionOptions } = useConnectionTypeOptions(() => props.locale.connection);
 
+const router = useRouter();
 const currentStep = ref<string>('connection');
-const selectedTargetKey = ref<string | null>(null);
-const stepTitle = computed(() => modalLocale.value.steps[currentStep.value as tSessionJoinStep].title);
+const code = ref('');
+const targets = ref<tLobbyTarget[]>([]);
+const selectedTarget = ref<tLobbyTarget | null>(null);
+const isJoining = ref(false);
+const stepTitle = computed(() => props.locale.modal.steps[currentStep.value as tSessionJoinStep].title);
 
 const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
   connection: {
     next: {
       optionsButton: {
-        optionsText: { text: modalLocale.value.next },
+        optionsText: { text: props.locale.modal.next },
         disabled: !props.selectedConnection,
       },
     },
@@ -48,13 +61,13 @@ const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
   lobby: {
     back: {
       optionsButton: {
-        optionsText: { text: modalLocale.value.back },
+        optionsText: { text: props.locale.modal.back },
       },
     },
     save: {
       optionsButton: {
-        optionsText: { text: joinText.value },
-        disabled: !selectedTargetKey.value,
+        optionsText: { text: props.locale.join },
+        disabled: isJoining.value || (props.selectedConnection === 'BLUETOOTH' ? !selectedTarget.value : !code.value.trim()),
       },
     },
   },
@@ -68,8 +81,30 @@ function handleSelect(value: string) {
   emit('select', value as tKeyTypeConnection);
 }
 
-function handleSave(_step: string) {
-  // Lobby connection will be implemented here.
+async function handleNext(step: string) {
+  if (step !== 'lobby' || props.selectedConnection !== 'BLUETOOTH') return;
+  const result = await mockLobbyService.find({ connection: 'BLUETOOTH' });
+  targets.value = result.status === 'success' ? result.value : [];
+}
+
+async function handleSave() {
+  if (!props.selectedConnection || isJoining.value) return;
+  isJoining.value = true;
+  try {
+    let target = selectedTarget.value;
+    if (props.selectedConnection !== 'BLUETOOTH') {
+      const result = await mockLobbyService.find({ connection: props.selectedConnection, code: code.value.trim() });
+      target = result.status === 'success' ? (result.value[0] ?? null) : null;
+    }
+    if (!target) return;
+    const result = await mockLobbyService.join(target);
+    if (result.status === 'success') {
+      emit('update:modelValue', false);
+      await router.push({ name: KEY_ROUTE.lobby.index });
+    }
+  } finally {
+    isJoining.value = false;
+  }
 }
 
 watch(
@@ -77,7 +112,9 @@ watch(
   (isOpen) => {
     if (isOpen) {
       currentStep.value = 'connection';
-      selectedTargetKey.value = null;
+      selectedTarget.value = null;
+      targets.value = [];
+      code.value = '';
     }
   },
 );
@@ -95,7 +132,7 @@ watch(
       <AppTitle :text="stepTitle" tag="h2" font-size="xl" />
     </template>
 
-    <WidgetSteps v-model:step="currentStep" :steps="STEPS" :actions="actions" @save="handleSave">
+    <WidgetSteps v-model:step="currentStep" :steps="STEPS" :actions="actions" @save="handleSave" @next="handleNext">
       <template #connection>
         <AppSegmentedCard
           :model-value="selectedConnection ?? ''"
@@ -108,14 +145,20 @@ watch(
       </template>
 
       <template #lobby>
-        <AppText class="widget-session-join__placeholder" :text="modalLocale.steps.lobby.placeholder" tag="p" />
+        <AppFlex direction="column" :gap="4">
+          <AppText :text="locale.modal.demo" tag="p" />
+          <template v-if="selectedConnection === 'BLUETOOTH'">
+            <AppButton
+              v-for="target in targets"
+              :key="target.connection === 'BLUETOOTH' ? target.deviceId : target.code"
+              :options-text="{ text: locale.modal.demoDevice }"
+              :variant="selectedTarget === target ? 'primary' : 'secondary'"
+              @click="selectedTarget = target"
+            />
+          </template>
+          <AppInputSearch v-else v-model="code" :placeholder="locale.modal.code" :aria-label="locale.modal.code" />
+        </AppFlex>
       </template>
     </WidgetSteps>
   </AppModal>
 </template>
-
-<style scoped>
-.widget-session-join__placeholder {
-  text-align: center;
-}
-</style>

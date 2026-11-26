@@ -32,7 +32,17 @@
               }
             },
             "next": "Next",
-            "back": "Back"
+            "back": "Back",
+            "code": "Room code",
+            "demoDevice": "Demo device",
+            "demo": "Demo mode: no real connection will be made."
+          },
+          "onlineEntry": {
+            "title": "Online game",
+            "create": "Create lobby",
+            "quickMatch": "Quick match",
+            "unavailable": "Coming soon",
+            "demo": "Demo mode: no real lobby will be created."
           }
         }
       }
@@ -40,7 +50,8 @@
     "lobby": {
       "index": {
         "ui": {
-          "title": "Lobby"
+          "title": "Lobby",
+          "demo": "Demo lobby: no connection to other players has been established."
         }
       }
     },

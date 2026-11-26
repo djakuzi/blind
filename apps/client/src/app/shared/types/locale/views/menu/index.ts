@@ -14,6 +14,7 @@ export interface LocaleViewMenu {
       };
     };
     modals: {
+      onlineEntry: { title: string; create: string; quickMatch: string; demo: string };
       joinSession: {
         steps: {
           connection: {
@@ -24,6 +25,9 @@ export interface LocaleViewMenu {
             placeholder: string;
           };
         };
+        code: string;
+        demoDevice: string;
+        demo: string;
         next: string;
         back: string;
       };
