@@ -84,8 +84,6 @@ watch(
           fetchPriority: active ? 'high' : 'low',
           shouldLoad: Math.abs(index - activeIndex) <= 1,
         }"
-        :mode-options-accessibility-label="locale.matchSetup.modeOptionsAccessibilityLabel"
-        :connection-types-accessibility-label="locale.matchSetup.connectionTypesAccessibilityLabel"
         @complete="handleModeComplete"
       />
     </template>

@@ -8,9 +8,7 @@
     "menu": {
       "index": {
         "ui": {
-          "play": "Играть",
           "join": "Подключиться",
-          "holdHint": "Зажмите кнопку для выбора",
           "header": {
             "connection": "Подключение",
             "settings": "Настройки"
@@ -18,13 +16,6 @@
           "matchSetup": {
             "accessibilityLabel": "Выбор режима игры",
             "itemAccessibilityLabel": "{current} из {total}",
-            "holdHint": "Зажмите кнопку для выбора",
-            "desktopWheelHint": "Колесо мыши — смена режима",
-            "desktopSelectHint": "Зажмите кнопку для выбора",
-            "loadError": "Не удалось загрузить режимы игры",
-            "loading": "Загрузка...",
-            "modeOptionsAccessibilityLabel": "Параметры режима",
-            "connectionTypesAccessibilityLabel": "Доступные способы подключения",
             "players": "Игроки",
             "connection": "Подключение"
           }
@@ -62,7 +53,6 @@
           "soundSaveError": "Настройка звука могла не сохраниться после перезапуска приложения.",
           "language": "Язык",
           "accessibilityLabel": "Настройки",
-          "changeTheme": "Сменить тему",
           "changeLanguage": "Сменить язык"
         },
         "modals": {

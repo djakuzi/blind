@@ -7,7 +7,6 @@ export interface LocaleViewSettings {
       soundSaveError: string;
       language: string;
       accessibilityLabel: string;
-      changeTheme: string;
       changeLanguage: string;
     };
     modals: {

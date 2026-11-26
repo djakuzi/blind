@@ -8,9 +8,7 @@
     "menu": {
       "index": {
         "ui": {
-          "play": "Play",
           "join": "Join",
-          "holdHint": "Hold button to select",
           "header": {
             "connection": "Connection",
             "settings": "Settings"
@@ -18,13 +16,6 @@
           "matchSetup": {
             "accessibilityLabel": "Game mode selection",
             "itemAccessibilityLabel": "{current} of {total}",
-            "holdHint": "Hold button to select",
-            "desktopWheelHint": "Mouse wheel — change mode",
-            "desktopSelectHint": "Hold button to select",
-            "loadError": "Failed to load game modes",
-            "loading": "Loading...",
-            "modeOptionsAccessibilityLabel": "Game mode parameters",
-            "connectionTypesAccessibilityLabel": "Available connection methods",
             "players": "Players",
             "connection": "Connection"
           }
@@ -62,7 +53,6 @@
           "soundSaveError": "Your sound setting may not be saved after restarting the app.",
           "language": "Language",
           "accessibilityLabel": "Settings",
-          "changeTheme": "Change theme",
           "changeLanguage": "Change language"
         },
         "modals": {

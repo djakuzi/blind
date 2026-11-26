@@ -16,8 +16,6 @@ import { useAppThemeMode } from '@/app/shared/composables/system/useAppThemeMode
 export interface PropsUiCardGameMode {
   mode: iGameMode;
   localeMode?: Locale['game']['modes'][iGameMode['key']];
-  modeOptionsAccessibilityLabel: string;
-  connectionTypesAccessibilityLabel: string;
   active?: boolean;
   disabled?: boolean;
   optionsImage?: Pick<PropsAppImage, 'loading' | 'fetchPriority' | 'shouldLoad'>;
