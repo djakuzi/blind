@@ -19,6 +19,7 @@ export function useSettings() {
   const appScaleMode = computed(() => settingsStore.appScaleMode);
 
   const soundEnabled = computed(() => settingsStore.soundEnabled);
+  const soundSaveError = computed(() => settingsStore.soundSaveError);
 
   async function setAppThemeMode(value: tAppThemeMode) {
     const savePromise = settingsStore.setAppThemeMode(value);
@@ -31,12 +32,12 @@ export function useSettings() {
     await Promise.all([settingsStore.setAppScaleMode(value), applyAppScaleMode(value)]);
   }
 
-  function setSoundEnabled(value: boolean) {
-    settingsStore.setSoundEnabled(value);
+  async function setSoundEnabled(value: boolean) {
+    await settingsStore.setSoundEnabled(value);
   }
 
-  function toggleSoundEnabled() {
-    setSoundEnabled(!settingsStore.soundEnabled);
+  async function toggleSoundEnabled() {
+    await setSoundEnabled(!settingsStore.soundEnabled);
   }
 
   async function updateSettings(patch: iSettingsPatch) {
@@ -51,7 +52,7 @@ export function useSettings() {
     }
 
     if (patch.soundEnabled !== undefined) {
-      setSoundEnabled(patch.soundEnabled);
+      operations.push(setSoundEnabled(patch.soundEnabled));
     }
 
     await Promise.all(operations);
@@ -61,6 +62,7 @@ export function useSettings() {
     appThemeMode,
     appScaleMode,
     soundEnabled,
+    soundSaveError,
     setAppThemeMode,
     setAppScaleMode,
     setSoundEnabled,

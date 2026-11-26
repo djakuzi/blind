@@ -4,6 +4,7 @@ export interface LocaleViewSettings {
       theme: string;
       scale: string;
       sound: string;
+      soundSaveError: string;
       language: string;
       accessibilityLabel: string;
       changeTheme: string;

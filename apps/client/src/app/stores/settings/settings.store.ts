@@ -3,6 +3,7 @@ import { APP_SCALE_SYSTEM_MODE } from '@/app/shared/styles/contracts/appScale.co
 import { APP_THEME_SYSTEM_MODE } from '@/app/shared/styles/contracts/appTheme.contract';
 import { createLoadAppScaleMode } from './actions/createLoadAppScaleMode';
 import { createLoadAppThemeMode } from './actions/createLoadAppThemeMode';
+import { createLoadSoundEnabled } from './actions/createLoadSoundEnabled';
 import { createSetAppScaleMode } from './actions/createSetAppScaleMode';
 import { createSetAppThemeMode } from './actions/createSetAppThemeMode';
 import { createSetSoundEnabled } from './actions/createSetSoundEnabled';
@@ -13,11 +14,13 @@ export const useSettingsStore = defineStore('settings', {
     appScaleMode: APP_SCALE_SYSTEM_MODE,
     appThemeMode: APP_THEME_SYSTEM_MODE,
     soundEnabled: true,
+    soundSaveError: false,
   }),
 
   actions: {
     loadAppScaleMode: createLoadAppScaleMode(),
     loadAppThemeMode: createLoadAppThemeMode(),
+    loadSoundEnabled: createLoadSoundEnabled(),
     setAppScaleMode: createSetAppScaleMode(),
     setAppThemeMode: createSetAppThemeMode(),
     setSoundEnabled: createSetSoundEnabled(),

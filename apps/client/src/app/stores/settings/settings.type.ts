@@ -5,4 +5,5 @@ export interface iSettingsState {
   appScaleMode: tAppScaleMode;
   appThemeMode: tAppThemeMode;
   soundEnabled: boolean;
+  soundSaveError: boolean;
 }

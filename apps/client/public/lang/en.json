@@ -59,6 +59,7 @@
           "theme": "Theme",
           "scale": "Interface size",
           "sound": "Sound",
+          "soundSaveError": "Your sound setting may not be saved after restarting the app.",
           "language": "Language",
           "accessibilityLabel": "Settings",
           "changeTheme": "Change theme",

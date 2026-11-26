@@ -4,6 +4,7 @@ import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
 import AppMarqueeText from '@/app/shared/components/ui/text/AppMarqueeText.vue';
 import AppCard from '@/app/shared/components/elements/card/AppCard.vue';
 import AppSegmentedControl from '@/app/shared/components/ui/control/AppSegmentedControl.vue';
+import AppStatusBlock from '@/app/shared/components/ui/status/AppStatusBlock.vue';
 import WidgetList from '@/app/shared/components/widgets/list/WidgetList.vue';
 import WidgetSearchPicker from '@/app/shared/components/widgets/picker/WidgetSearchPicker.vue';
 import type { iWidgetSearchPickerItem } from '@/app/shared/components/widgets/picker/WidgetSearchPicker.vue';
@@ -44,7 +45,7 @@ const SETTINGS_ITEMS = [
   },
 ] as const;
 
-const { appThemeMode, appScaleMode, soundEnabled, setAppThemeMode, setAppScaleMode, setSoundEnabled } = useSettings();
+const { appThemeMode, appScaleMode, soundEnabled, soundSaveError, setAppThemeMode, setAppScaleMode, setSoundEnabled } = useSettings();
 
 const currentLanguageCode = computed(() => {
   if (!props.currentLanguage) {
@@ -118,12 +119,16 @@ async function handleScaleModeChange(value: string) {
   await setAppScaleMode(value);
 }
 
-function handleSoundEnabledChange(value: string) {
+async function handleSoundEnabledChange(value: string) {
   if (value !== 'on' && value !== 'off') {
     return;
   }
 
-  setSoundEnabled(value === 'on');
+  try {
+    await setSoundEnabled(value === 'on');
+  } catch (error) {
+    console.error('Failed to save sound setting:', error);
+  }
 }
 </script>
 
@@ -218,6 +223,7 @@ function handleSoundEnabledChange(value: string) {
         </AppFlex>
       </template>
     </WidgetList>
+    <AppStatusBlock v-if="soundSaveError" :text="locale.ui.soundSaveError" variant="warning" :uppercase="false" />
   </AppCard>
 </template>
 

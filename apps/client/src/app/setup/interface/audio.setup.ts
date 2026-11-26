@@ -99,6 +99,7 @@ export function createAudioSetup(pinia: Pinia): iSetup {
     async preMount() {
       setupAudioActivation();
 
+      await settingsStore.loadSoundEnabled();
       await ToolAudio.setMuted(!settingsStore.soundEnabled);
 
       loaderStore.registerScope({
