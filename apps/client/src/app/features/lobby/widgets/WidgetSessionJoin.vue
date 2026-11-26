@@ -50,14 +50,7 @@ const isJoining = ref(false);
 const stepTitle = computed(() => props.locale.modal.steps[currentStep.value as tSessionJoinStep].title);
 
 const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
-  connection: {
-    next: {
-      optionsButton: {
-        optionsText: { text: props.locale.modal.next },
-        disabled: !props.selectedConnection,
-      },
-    },
-  },
+  connection: {},
   lobby: {
     back: {
       optionsButton: {
@@ -73,18 +66,23 @@ const actions = computed<Record<tSessionJoinStep, iWidgetStepsActions>>(() => ({
   },
 }));
 
-function handleSelect(value: string) {
+async function handleSelect(value: string) {
   if (!Object.values(TYPE_CONNECTION).includes(value as tKeyTypeConnection)) {
     return;
   }
 
   emit('select', value as tKeyTypeConnection);
-}
+  selectedTarget.value = null;
+  targets.value = [];
+  code.value = '';
+  currentStep.value = 'lobby';
 
-async function handleNext(step: string) {
-  if (step !== 'lobby' || props.selectedConnection !== 'BLUETOOTH') return;
-  const result = await mockLobbyService.find({ connection: 'BLUETOOTH' });
-  targets.value = result.status === 'success' ? result.value : [];
+  if (value === TYPE_CONNECTION.BLUETOOTH) {
+    const result = await mockLobbyService.find({ connection: 'BLUETOOTH' });
+    if (props.modelValue && currentStep.value === 'lobby' && props.selectedConnection === TYPE_CONNECTION.BLUETOOTH) {
+      targets.value = result.status === 'success' ? result.value : [];
+    }
+  }
 }
 
 async function handleSave() {
@@ -125,18 +123,19 @@ watch(
     :model-value="modelValue"
     :aria-label="stepTitle"
     :options-body="{ paddingX: 0, paddingY: 0 }"
-    max-width="124rem"
+    max-width="60rem"
     @update:model-value="emit('update:modelValue', $event)"
   >
     <template #header>
       <AppTitle :text="stepTitle" tag="h2" font-size="xl" />
     </template>
 
-    <WidgetSteps v-model:step="currentStep" :steps="STEPS" :actions="actions" @save="handleSave" @next="handleNext">
+    <WidgetSteps v-model:step="currentStep" :steps="STEPS" :actions="actions" @save="handleSave">
       <template #connection>
         <AppSegmentedCard
-          :model-value="selectedConnection ?? ''"
+          model-value=""
           :options="connectionOptions"
+          direction="column"
           size="big"
           width="100%"
           max-width="100%"

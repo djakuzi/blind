@@ -48,6 +48,7 @@ export interface PropsAppSegmentedCard
   minWidth?: tStyleSizeValue;
   optionsFrame?: iAppSegmentedCardFrameOptions;
   equalWidth?: boolean;
+  direction?: 'row' | 'column';
 }
 
 export type tAppSegmentedCardTextOptions = Pick<PropsAppText, 'color' | 'fontSize' | 'fontWeight' | 'uppercase' | 'lineHeight'>;
@@ -72,6 +73,7 @@ const props = withDefaults(defineProps<PropsAppSegmentedCard>(), {
   vibration: true,
   size: 'middle',
   equalWidth: true,
+  direction: 'row',
   borderRadius: 'md',
   width: 'auto',
   minWidth: '0',
@@ -163,6 +165,7 @@ function handleSelect(option: iAppSegmentedCardOption) {
       'app-segmented-card--framed': frameEnabled,
       'app-segmented-card--disabled': disabled,
       'app-segmented-card--equal-width': equalWidth,
+      'app-segmented-card--column': direction === 'column',
     }"
     role="radiogroup"
   >
@@ -224,6 +227,15 @@ function handleSelect(option: iAppSegmentedCardOption) {
 .app-segmented-card--equal-width {
   display: inline-grid;
   grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+.app-segmented-card--column {
+  flex-direction: column;
+}
+
+.app-segmented-card--equal-width.app-segmented-card--column {
+  grid-auto-flow: row;
   grid-auto-columns: minmax(0, 1fr);
 }
 
