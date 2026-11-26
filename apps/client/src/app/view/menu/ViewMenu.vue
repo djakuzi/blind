@@ -9,7 +9,8 @@ import WidgetSliderGameMode from '@/app/features/matchSetup/widgets/WidgetSlider
 import type { iWidgetSliderGameModeSelection } from '@/app/features/matchSetup/widgets/WidgetSliderGameMode.vue';
 import { usePreGame } from '@/app/features/preGame/composables/usePreGame';
 import { useHeaderActions } from '@/app/layouts/composables/common/useHeaderActions';
-import { useSessionJoinOverlay } from '@/app/overlay/sessionJoin/composables/useSessionJoinOverlay';
+import { useSessionJoinOverlay } from '@/app/features/lobby/composables/useSessionJoinOverlay';
+import ProviderSessionJoin from '@/app/features/lobby/providers/ProviderSessionJoin.vue';
 import ViewLayout from '@/app/layouts/components/view/ViewLayout.vue';
 import UiContainer from '@/app/layouts/components/containers/UiContainer.vue';
 import { KEY_ROUTE } from '@/app/router/constants/route.const';
@@ -150,6 +151,7 @@ useHeaderActions(
         </AppSwapTransition>
       </AppPosition>
     </AppPosition>
+    <ProviderSessionJoin />
   </ViewLayout>
 </template>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useSessionJoinOverlay } from '@/app/overlay/sessionJoin/composables/useSessionJoinOverlay';
-import WidgetSessionJoin from '@/app/overlay/sessionJoin/widgets/WidgetSessionJoin.vue';
+import { useSessionJoinOverlay } from '@/app/features/lobby/composables/useSessionJoinOverlay';
+import WidgetSessionJoin from '@/app/features/lobby/widgets/WidgetSessionJoin.vue';
 
 const { isOpen, selectedConnection, close, select } = useSessionJoinOverlay();
 

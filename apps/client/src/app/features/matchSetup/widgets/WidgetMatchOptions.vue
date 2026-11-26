@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import type { iGameMode } from '@/app/domain/game/models/GameMode.model';
-import { useConnectionTypeOptions } from '@/app/features/matchSetup/composables/useConnectionTypeOptions';
+import { useConnectionTypeOptions } from '@/app/shared/composables/useConnectionTypeOptions';
 import { useMatchPlayerOptions } from '@/app/features/matchSetup/composables/useMatchPlayerOptions';
 import type { Locale } from '@/app/shared/types/locale';
 import AppFlex from '@/app/shared/components/atoms/block/AppFlex.vue';
