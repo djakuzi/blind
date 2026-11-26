@@ -43,7 +43,7 @@ async function handleCreate(entry: 'create' | 'quickMatch' = 'create') {
     <template #header><AppTitle :text="locale.title" tag="h2" font-size="xl" /></template>
     <AppFlex direction="column" :gap="4">
       <AppText :text="locale.demo" />
-      <AppSegmentedCard model-value="" :options="options" direction="column" width="100%" @update:model-value="handleSelect" />
+      <AppSegmentedCard model-value="" :options="options" direction="column" width="100%" @update:model-value="handleSelect" size="big" />
     </AppFlex>
   </AppModal>
 </template>
